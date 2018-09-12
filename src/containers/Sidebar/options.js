@@ -1,17 +1,30 @@
 const options = [
   {
     key: "clients",
-    label: "sidebar.clients",
+    label: "Clients",
     leftIcon: "ion-android-contacts",
     children: [
       {
         key: 'clients/list',
-        leftIcon: "ion-android-contacts",
         label: 'List',
       },
       {
         key: 'clients/create',
-        leftIcon: "ion-android-contacts",
+        label: 'Create',
+      }
+    ]
+  },
+  {
+    key: "Users",
+    label: "Users",
+    leftIcon: "ion-person",
+    children: [
+      {
+        key: 'users/list',
+        label: 'List',
+      },
+      {
+        key: 'users/create',
         label: 'Create',
       }
     ]
