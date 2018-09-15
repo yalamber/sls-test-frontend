@@ -6,6 +6,7 @@ import {Icon} from 'antd';
 import {
   ActionWrapper,
 } from '../crud.style';
+import {clientValidation} from "../../../Validations/clientValidation";
 
 const FormItem = Form.Item;
 
@@ -34,34 +35,12 @@ class ClientForm extends Component {
       <div>
         <Form onSubmit={this.handleSubmit} id="clientForm">
           <FormItem hasFeedback label="Client Name" style={{marginBottom: '0px'}}>
-            {getFieldDecorator('name', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please input client name',
-                },
-              ],
-            })(<Input
-              prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
-              label="Name"
-              name="name"
-              placeholder="Enter Client Name"
-            />)}
+            {getFieldDecorator('name', {rules: clientValidation.name})(
+              <Input placeholder="Enter Client Name"/>)}
           </FormItem>
           <FormItem hasFeedback label="Client Location" style={{marginBottom: '0px'}}>
-            {getFieldDecorator('location', {
-              rules: [
-                {
-                  required: true,
-                  message: 'Please input client Location.',
-                },
-              ],
-            })(<Input
-              prefix={<Icon type="environment" style={{color: 'rgba(0,0,0,.25)'}}/>}
-              label="Location"
-              name="location"
-              placeholder="Enter Client Location"
-            />)}
+            {getFieldDecorator('location', {rules: clientValidation.location})(
+              <Input placeholder="Enter Client Location"/>)}
           </FormItem>
           <ActionWrapper style={margin}>
             <Button id="btnSubmit" type="primary" style={margin} htmlType="submit">

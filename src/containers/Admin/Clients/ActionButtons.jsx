@@ -4,13 +4,17 @@ import Popconfirms from '../../../components/feedback/popconfirm';
 import {
   ActionWrapper,
 } from '../crud.style';
+import {Tooltip} from "antd";
 
 export default function ActionButtons(props) {
   return (
     <ActionWrapper>
-      <a onClick={() => alert(JSON.stringify(props.row))}>
-        <i className="ion-android-create"/>
-      </a>
+      <Tooltip placement="topLeft" title="Edit Record">
+        <a onClick={() => alert(JSON.stringify(props.row))}>
+          <i className="ion-android-create"/>
+        </a>
+      </Tooltip>
+      <Tooltip placement="topLeft" title="Delete Record">
       <Popconfirms
         title="Are you sure to delete this article？"
         okText="Yes"
@@ -22,6 +26,7 @@ export default function ActionButtons(props) {
           <i className="ion-android-delete"/>
         </a>
       </Popconfirms>
+      </Tooltip>
     </ActionWrapper>
   );
 }

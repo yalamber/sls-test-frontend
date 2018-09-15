@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import { Table } from 'antd';
+import {Table} from 'antd';
 import {Row, Col, Icon} from 'antd';
 import LayoutWrapper from '../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../settings/basicStyle';
 import Box from '../../../components/utility/box';
-import ActionButtons from "./ActionButtons";
+import ActionButtons from "./partials/ActionButtons";
 
 import {
   ActionBtn,
@@ -19,14 +19,21 @@ export default class extends Component {
     this.state = {
       columns: [
         {
-          title: 'Client ID',
-          dataIndex: 'id',
-          key: 'id',
-        }, {
-          title: 'Name',
-          dataIndex: 'name',
-          key: 'name',
-        }, {
+          title: 'User ID',
+          dataIndex: 'userId',
+          key: 'userId',
+        },
+        {
+          title: 'Client Name',
+          dataIndex: 'clientName',
+          key: 'clientName',
+        },
+        {
+          title: 'Status',
+          dataIndex: 'status',
+          key: 'status',
+        },
+        {
           title: 'Location',
           dataIndex: 'location',
           key: 'location',
@@ -40,15 +47,25 @@ export default class extends Component {
       dataSource: [
         {
           key: '1',
-          id: 32,
-          name: 'Mike',
+          userId: 32,
+          clientName: 'Yalamber',
+          status: 'Active',
           location: '10 Downing Street'
         }, {
           key: '2',
-          id: 35,
-          name: 'Mike',
+          userId: 35,
+          clientName: 'Amrit',
+          status: 'Active',
           location: '10 Downing Street'
-        }]
+        },
+        {
+          key: '3',
+          userId: 35,
+          clientName: 'Pat',
+          status: 'Active',
+          location: '10 Downing Street'
+        }
+        ]
     }
   }
 
@@ -61,12 +78,14 @@ export default class extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Clients List</ComponentTitle>
+                <ComponentTitle>Users List</ComponentTitle>
 
                 <ButtonHolders>
-                  <ActionBtn type="primary" onClick={()=>{console.log(this.props.history.push('create'))}}>
+                  <ActionBtn type="primary" onClick={() => {
+                    console.log(this.props.history.push('create'))
+                  }}>
                     <Icon type="plus"/>
-                    Add new client
+                    Add new user
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import IntlMessages from '../utility/intlMessages';
+/*
 import { InputSearch } from '../uielements/input';
+*/
 import DeleteButton from './deleteButton';
 import { PropTypes } from 'prop-types';
 import { ContactListWrapper } from './contactList.style';
@@ -50,17 +52,9 @@ export default class ContactList extends Component {
     const contacts = filterContacts(this.props.contacts, search);
     return (
       <ContactListWrapper className="isoContactListWrapper">
-        <InputSearch
-          placeholder={this.context.intl.formatMessage({
-            id: 'contactlist.searchContacts',
-          })}
-          value={search}
-          onChange={this.onChange}
-          className="isoSearchBar"
-        />
         {contacts && contacts.length > 0 ? (
           <div className="isoContactList">
-            <Scrollbar className="contactListScrollbar">
+            <Scrollbar>
               {contacts.map(contact => this.singleContact(contact))}
             </Scrollbar>
           </div>
