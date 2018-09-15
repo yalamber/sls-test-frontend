@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { palette } from 'styled-theme';
+import {palette} from 'styled-theme';
 import Buttons from '../../components/uielements/button';
+import {Table} from 'antd';
 
 
 const StatusTag = styled.span`
@@ -60,6 +61,19 @@ const ActionBtn = styled(Buttons)`
       }
     }
   }
+`;
+
+const TableClickable = styled(Table)`
+    &&{
+      tbody {
+        tr {
+            cursor: pointer;
+            &.selected {
+              background-color:#f5f5f5;
+            }
+        }
+      }
+    }
 `;
 
 const Fieldset = styled.div`
@@ -125,4 +139,5 @@ export {
   ActionWrapper,
   ComponentTitle,
   StatusTag,
+  TableClickable
 };

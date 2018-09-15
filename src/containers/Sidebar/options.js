@@ -1,7 +1,7 @@
 const options = [
   {
     key: "clients",
-    label: "Clients",
+    label: "Software Company",
     leftIcon: "ion-android-contacts",
     children: [
       {
