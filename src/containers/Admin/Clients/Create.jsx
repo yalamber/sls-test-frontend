@@ -9,7 +9,7 @@ import {
 } from '../crud.style';
 
 import Box from '../../../components/utility/box';
-import ClientForm from "./ClientForm";
+import ClientForm from "./partials/ClientForm";
 
 export default class extends Component {
   render() {

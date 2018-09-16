@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
-import { Table } from 'antd';
 import {Row, Col, Icon} from 'antd';
 import LayoutWrapper from '../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../settings/basicStyle';
 import Box from '../../../components/utility/box';
-import ActionButtons from "./ActionButtons";
+import ActionButtons from "./partials/ActionButtons";
 
 import {
   ActionBtn,
   TitleWrapper,
   ButtonHolders,
   ComponentTitle,
+  TableClickable as Table
 } from '../crud.style';
 
 export default class extends Component {
@@ -41,13 +41,13 @@ export default class extends Component {
         {
           key: '1',
           id: 32,
-          name: 'Mike',
-          location: '10 Downing Street'
+          name: 'Capital Eye Pvt. Ltd.',
+          location: 'Jawalakhel Lalitpur, Nepal'
         }, {
           key: '2',
           id: 35,
-          name: 'Mike',
-          location: '10 Downing Street'
+          name: 'EB Pearls Pvt. Ltd.',
+          location: 'Kupandol Kathmandu, Nepal'
         }]
     }
   }
@@ -74,6 +74,7 @@ export default class extends Component {
                 pagination={true}
                 columns={this.state.columns}
                 dataSource={this.state.dataSource}
+                onRowClick={(row)=>{this.props.history.push('details/'+row.id)}}
               />
             </Box>
 

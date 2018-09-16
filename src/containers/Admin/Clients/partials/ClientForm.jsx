@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {Input} from 'antd';
-import Form from '../../../components/uielements/form';
-import Button from '../../../components/uielements/button';
+import Form from '../../../../components/uielements/form';
+import Button from '../../../../components/uielements/button';
 import {Icon} from 'antd';
 import {
   ActionWrapper,
-} from '../crud.style';
-import {clientValidation} from "../../../Validations/clientValidation";
+} from '../../crud.style';
+import {clientValidation} from "../../../../Validations/clientValidation";
 
 const FormItem = Form.Item;
 

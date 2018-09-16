@@ -13,4 +13,8 @@ export default [
     path: "clients/create",
     component: asyncComponent(() => import("../../Admin/Clients/Create"))
   },
+  {
+    path: "clients/details/:id",
+    component: asyncComponent(() => import("../../Admin/Clients/CompanyDetails"))
+  },
 ]
