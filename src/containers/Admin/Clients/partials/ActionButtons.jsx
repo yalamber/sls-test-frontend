@@ -27,6 +27,11 @@ export default function ActionButtons(props) {
         </a>
       </Popconfirms>
       </Tooltip>
+      <Tooltip placement="topLeft" title="Show Details">
+        <a onClick={() => alert(JSON.stringify(props.row))}>
+          <i className="ion-information-circled"/>
+        </a>
+      </Tooltip>
     </ActionWrapper>
   );
 }

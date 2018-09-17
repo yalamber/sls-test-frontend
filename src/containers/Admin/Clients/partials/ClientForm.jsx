@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Input} from 'antd';
+import {withRouter} from 'react-router-dom';
+import {Input, message} from 'antd';
 import Form from '../../../../components/uielements/form';
 import Button from '../../../../components/uielements/button';
 import {Icon} from 'antd';
@@ -7,6 +8,7 @@ import {
   ActionWrapper,
 } from '../../crud.style';
 import {clientValidation} from "../../../../Validations/clientValidation";
+import {addClient} from "../../../../actions/clientActions";
 
 const FormItem = Form.Item;
 
@@ -20,7 +22,12 @@ class ClientForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        alert(JSON.stringify(values));
+        addClient(values).then(res => {
+          if (res.status) {
+            message.success(res.message);
+            this.props.form.resetFields();
+          }
+        });
       }
     });
 
@@ -43,6 +50,9 @@ class ClientForm extends Component {
               <Input placeholder="Enter Client Location"/>)}
           </FormItem>
           <ActionWrapper style={margin}>
+            <Button type="primary" style={margin} icon="left" onClick={() => this.props.history.goBack()}>
+              Cancel
+            </Button>
             <Button id="btnSubmit" type="primary" style={margin} htmlType="submit">
               <Icon type="save"/> Submit
             </Button>
@@ -53,4 +63,5 @@ class ClientForm extends Component {
   }
 }
 
-export default Form.create()(ClientForm)
+const form = Form.create()(ClientForm);
+export default withRouter(form);

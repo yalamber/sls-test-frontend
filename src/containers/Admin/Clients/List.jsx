@@ -12,6 +12,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../crud.style';
+import {getClients} from "../../../actions/clientActions";
 
 export default class extends Component {
   constructor(props) {
@@ -37,19 +38,14 @@ export default class extends Component {
           render: (row) => <ActionButtons row={row}/>
         }
       ],
-      dataSource: [
-        {
-          key: '1',
-          id: 32,
-          name: 'Capital Eye Pvt. Ltd.',
-          location: 'Jawalakhel Lalitpur, Nepal'
-        }, {
-          key: '2',
-          id: 35,
-          name: 'EB Pearls Pvt. Ltd.',
-          location: 'Kupandol Kathmandu, Nepal'
-        }]
+      dataSource: []
     }
+  }
+
+  componentDidMount() {
+    getClients().then(res => {
+      this.setState({dataSource: res.data})
+    })
   }
 
   render() {
@@ -64,7 +60,9 @@ export default class extends Component {
                 <ComponentTitle>Clients List</ComponentTitle>
 
                 <ButtonHolders>
-                  <ActionBtn type="primary" onClick={()=>{console.log(this.props.history.push('create'))}}>
+                  <ActionBtn type="primary" onClick={() => {
+                    console.log(this.props.history.push('create'))
+                  }}>
                     <Icon type="plus"/>
                     Add new client
                   </ActionBtn>
@@ -74,7 +72,9 @@ export default class extends Component {
                 pagination={true}
                 columns={this.state.columns}
                 dataSource={this.state.dataSource}
-                onRowClick={(row)=>{this.props.history.push('details/'+row.id)}}
+                onRowClick={(row) => {
+                  this.props.history.push('details/' + row.id)
+                }}
               />
             </Box>
 

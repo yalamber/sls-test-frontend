@@ -1,11 +1,11 @@
 import React, {Component} from "react";
 import {Route} from "react-router-dom";
-import userRoutes from './Routes/UserRoutes';
+import testingProviderRoutes from './Routes/TestingProvidersRoutes';
 import clientRoutes from './Routes/ClientRoutes';
 
 const routes = [
   ...clientRoutes,
-  ...userRoutes
+  ...testingProviderRoutes
 ];
 
 class AppRouter extends Component {
