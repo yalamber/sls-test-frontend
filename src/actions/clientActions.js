@@ -8,6 +8,11 @@ export const addClient = (client) => {
   return Promise.resolve(response.saveSuccess())
 };
 
+export const addClientUser = (user) => {
+  //API call
+  return Promise.resolve(response.saveSuccess());
+};
+
 export const getClients = () => {
   //API Call here
   return Promise.resolve(response.getDataSuccess(clients))

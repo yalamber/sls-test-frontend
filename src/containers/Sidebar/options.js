@@ -15,17 +15,13 @@ const options = [
     ]
   },
   {
-    key: "Users",
-    label: "Users",
+    key: "Testing-Providers",
+    label: "Testing Providers",
     leftIcon: "ion-person",
     children: [
       {
-        key: 'users/list',
-        label: 'List',
-      },
-      {
-        key: 'users/create',
-        label: 'Create',
+        key: 'testing-providers/teams',
+        label: 'Teams',
       }
     ]
   }

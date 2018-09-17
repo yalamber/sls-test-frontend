@@ -56,3 +56,18 @@ export const teams = [
     ]
   },
 ];
+
+export const testingProviderTeams = [
+  {
+    key: 1,
+    name: 'Team Nepal',
+    teamAdmin: 'Yalamber',
+    rating: 5
+  },
+  {
+    key: 2,
+    name: 'Utah Team',
+    teamAdmin: 'Pat Halman',
+    rating: 5
+  },
+];

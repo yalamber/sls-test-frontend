@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {Row, Col, Icon} from 'antd';
 import LayoutWrapper from '../../../components/utility/layoutWrapper.js';
+import PageHeader from "../../../components/utility/pageHeader";
+import {withRouter} from 'react-router-dom'
+
 import basicStyle from '../../../settings/basicStyle';
 import {
   TitleWrapper,
@@ -12,7 +15,7 @@ import Box from '../../../components/utility/box';
 import ActionButtons from "./partials/ActionButtons";
 import {getTeams} from "../../../actions/clientActions";
 
-export default class extends Component {
+class CompanyDetails extends Component {
   constructor() {
     super();
     this.state = {
@@ -21,6 +24,7 @@ export default class extends Component {
           title: 'Teams',
           dataIndex: 'name',
           key: 'name',
+          render: text => <p><Icon type="team"/>  {text}</p>,
         },
         {
           title: 'Actions',
@@ -95,24 +99,27 @@ export default class extends Component {
     };
     return (
       <LayoutWrapper>
+        <PageHeader>ACME Software Company</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
-              <TitleWrapper style={margin}>
-                <ComponentTitle>
-                  EB Pearls Pvt. Ltd. (Kathmandu, Nepal)
-                </ComponentTitle>
-                <ButtonHolders>
-                  <ActionBtn type="primary">
-                    <Icon type="plus"/>
-                    Add Team
-                  </ActionBtn>
-                  <ActionBtn type="primary">
-                    <Icon type="plus"/>
-                    Add User
-                  </ActionBtn>
-                </ButtonHolders>
-              </TitleWrapper>
+                <TitleWrapper style={margin}>
+                  <ComponentTitle>
+                    <ActionBtn type="secondary" onClick={()=>this.props.history.goBack()}>
+                      <Icon type="left"/>Go Back
+                    </ActionBtn>
+                  </ComponentTitle>
+                  <ButtonHolders>
+                    <ActionBtn type="primary">
+                      <Icon type="usergroup-add"/>
+                      Add Team
+                    </ActionBtn>
+                    <ActionBtn type="primary"onClick={()=>{this.props.history.push('/dashboard/clients/details/23/users/create')}}>
+                      <Icon type="user-add"/>
+                      Add User
+                    </ActionBtn>
+                  </ButtonHolders>
+                </TitleWrapper>
               <Col md={8} sm={24} xs={24}>
                 <Table
                   size="middle"
@@ -146,3 +153,5 @@ export default class extends Component {
     );
   }
 }
+
+export default withRouter(CompanyDetails)

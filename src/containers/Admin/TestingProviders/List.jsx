@@ -12,6 +12,7 @@ import {
   ButtonHolders,
   ComponentTitle,
 } from '../crud.style';
+import {getTestingProviderTeams} from "../../../actions/testingProviderActions";
 
 export default class extends Component {
   constructor(props) {
@@ -19,24 +20,19 @@ export default class extends Component {
     this.state = {
       columns: [
         {
-          title: 'User ID',
-          dataIndex: 'userId',
-          key: 'userId',
+          title: 'Team Name',
+          dataIndex: 'name',
+          key: 'name',
         },
         {
-          title: 'Client Name',
-          dataIndex: 'clientName',
-          key: 'clientName',
+          title: 'Team Admin',
+          dataIndex: 'teamAdmin',
+          key: 'teamAdmin',
         },
         {
-          title: 'Status',
-          dataIndex: 'status',
-          key: 'status',
-        },
-        {
-          title: 'Location',
-          dataIndex: 'location',
-          key: 'location',
+          title: 'Rating',
+          dataIndex: 'rating',
+          key: 'rating',
         },
         {
           title: 'Actions',
@@ -44,29 +40,16 @@ export default class extends Component {
           render: (row) => <ActionButtons row={row}/>
         }
       ],
-      dataSource: [
-        {
-          key: '1',
-          userId: 32,
-          clientName: 'Yalamber',
-          status: 'Active',
-          location: '10 Downing Street'
-        }, {
-          key: '2',
-          userId: 35,
-          clientName: 'Amrit',
-          status: 'Active',
-          location: '10 Downing Street'
-        },
-        {
-          key: '3',
-          userId: 35,
-          clientName: 'Pat',
-          status: 'Active',
-          location: '10 Downing Street'
-        }
-        ]
+      dataSource: []
     }
+  }
+
+  componentDidMount() {
+    getTestingProviderTeams().then(res => {
+      this.setState({
+        dataSource: res.data,
+      })
+    })
   }
 
   render() {
@@ -78,14 +61,13 @@ export default class extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Users List</ComponentTitle>
-
+                <ComponentTitle>Testing Providers Teams</ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
-                    console.log(this.props.history.push('create'))
+                    this.props.history.push('create')
                   }}>
-                    <Icon type="plus"/>
-                    Add new user
+                    <Icon type="usergroup-add"/>
+                    Create Team
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
@@ -95,7 +77,6 @@ export default class extends Component {
                 dataSource={this.state.dataSource}
               />
             </Box>
-
           </Col>
         </Row>
       </LayoutWrapper>
