@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Input} from 'antd';
+import {Input, message} from 'antd';
 import Form from '../../../../components/uielements/form';
 import Button from '../../../../components/uielements/button';
 import {Icon} from 'antd';
@@ -7,6 +7,7 @@ import {
   ActionWrapper,
 } from '../../crud.style';
 import {clientValidation} from "../../../../Validations/clientValidation";
+import {addClient} from "../../../../actions/clientActions";
 
 const FormItem = Form.Item;
 
@@ -20,7 +21,12 @@ class ClientForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        alert(JSON.stringify(values));
+        addClient(values).then(res => {
+          if (res.status) {
+            message.success(res.message);
+            this.props.form.resetFields();
+          }
+        });
       }
     });
 
