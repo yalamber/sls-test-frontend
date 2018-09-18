@@ -110,7 +110,7 @@ class CompanyDetails extends Component {
                     </ActionBtn>
                   </ComponentTitle>
                   <ButtonHolders>
-                    <ActionBtn type="primary">
+                    <ActionBtn type="primary" onClick={()=>{alert("This will show form for create Company Team")}}>
                       <Icon type="usergroup-add"/>
                       Add Team
                     </ActionBtn>

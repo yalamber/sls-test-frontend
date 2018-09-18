@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Table} from 'antd';
 import {Row, Col, Icon} from 'antd';
 import LayoutWrapper from '../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../settings/basicStyle';
@@ -11,6 +10,7 @@ import {
   TitleWrapper,
   ButtonHolders,
   ComponentTitle,
+  TableClickable as Table
 } from '../crud.style';
 import {getTestingProviderTeams} from "../../../actions/testingProviderActions";
 
@@ -19,6 +19,11 @@ export default class extends Component {
     super(props);
     this.state = {
       columns: [
+        {
+          title: 'Team Id',
+          dataIndex: 'id',
+          key: 'id',
+        },
         {
           title: 'Team Name',
           dataIndex: 'name',
@@ -64,7 +69,7 @@ export default class extends Component {
                 <ComponentTitle>Testing Providers Teams</ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
-                    this.props.history.push('create')
+                    alert("this will show form to create Testing Provider Team")
                   }}>
                     <Icon type="usergroup-add"/>
                     Create Team
@@ -72,9 +77,14 @@ export default class extends Component {
                 </ButtonHolders>
               </TitleWrapper>
               <Table
+                size="middle"
+                bordered
                 pagination={true}
                 columns={this.state.columns}
                 dataSource={this.state.dataSource}
+                onRowClick={(row) => {
+                  this.props.history.push('teams/' + row.id)
+                }}
               />
             </Box>
           </Col>

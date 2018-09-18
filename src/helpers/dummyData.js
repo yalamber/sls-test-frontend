@@ -59,15 +59,38 @@ export const teams = [
 
 export const testingProviderTeams = [
   {
-    key: 1,
+    id: 1,
     name: 'Team Nepal',
     teamAdmin: 'Yalamber',
     rating: 5
   },
   {
-    key: 2,
+    id: 2,
     name: 'Utah Team',
     teamAdmin: 'Pat Halman',
     rating: 5
   },
+];
+
+export const testingProviderTeamMembers = [
+  {id: 1, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
+  {id: 2, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
+  {id: 3, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
+  {id: 4, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
+  {id: 5, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
+  {id: 6, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
+  {id: 7, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
+  {id: 8, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
+  {id: 9, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
+  {id: 10, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
+  {id: 11, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
+  {id: 12, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
+  {id: 13, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
+  {id: 14, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
+  {id: 15, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
+  {id: 16, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
+  {id: 17, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
+  {id: 18, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
+  {id: 19, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
+  {id: 20, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
 ];
