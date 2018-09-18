@@ -9,7 +9,7 @@ import {
 } from '../../crud.style';
 
 import Box from '../../../../components/utility/box';
-import UserForm from "../users/partials/UserForm";
+import TeamForm from "./partials/TeamForm";
 
 class Create extends Component {
   render() {
@@ -22,10 +22,10 @@ class Create extends Component {
             <Box>
               <TitleWrapper>
                 <ComponentTitle>
-                  Create User
+                  Create Team
                 </ComponentTitle>
               </TitleWrapper>
-              <UserForm/>
+              <TeamForm/>
             </Box>
           </Col>
         </Row>
