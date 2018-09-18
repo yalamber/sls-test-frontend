@@ -6,12 +6,16 @@ const options = [
     children: [
       {
         key: 'clients/list',
-        label: 'List',
+        label: 'List All',
       },
       {
-        key: 'clients/create',
-        label: 'Create',
-      }
+        key: 'clients/teams/create',
+        label: 'Create Team',
+      },
+      {
+        key: 'clients/users/create',
+        label: 'Create User',
+      },
     ]
   },
   {
