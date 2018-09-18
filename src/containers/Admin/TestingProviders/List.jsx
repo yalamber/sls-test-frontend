@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon} from 'antd';
+import {Row, Col, Icon, Rate} from 'antd';
 import LayoutWrapper from '../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../settings/basicStyle';
 import Box from '../../../components/utility/box';
@@ -38,6 +38,7 @@ export default class extends Component {
           title: 'Rating',
           dataIndex: 'rating',
           key: 'rating',
+          render: (value) => <Rate defaultValue={value} disabled/>
         },
         {
           title: 'Actions',
