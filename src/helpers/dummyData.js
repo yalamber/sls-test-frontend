@@ -62,13 +62,13 @@ export const testingProviderTeams = [
     id: 1,
     name: 'Team Nepal',
     teamAdmin: 'Yalamber',
-    rating: 5
+    rating: 3
   },
   {
     id: 2,
     name: 'Utah Team',
     teamAdmin: 'Pat Halman',
-    rating: 5
+    rating: 4
   },
 ];
 
