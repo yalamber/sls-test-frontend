@@ -8,5 +8,10 @@ export default [
   {
     path: "testing-providers/teams/create",
     component: asyncComponent(() => import("../../Admin/TestingProviders/Create"))
-  }
+  },
+
+  {
+    path: "testing-providers/teams/:id",
+    component: asyncComponent(() => import("../../Admin/TestingProviders/TeamMembers/List"))
+  },
 ]
