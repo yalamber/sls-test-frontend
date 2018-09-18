@@ -110,7 +110,7 @@ class CompanyDetails extends Component {
                     </ActionBtn>
                   </ComponentTitle>
                   <ButtonHolders>
-                    <ActionBtn type="primary" onClick={()=>{alert("This will show form for create Company Team")}}>
+                    <ActionBtn type="primary" onClick={()=>{this.props.history.push('../teams/create/'+this.props.match.params.id)}}>
                       <Icon type="usergroup-add"/>
                       Add Team
                     </ActionBtn>
