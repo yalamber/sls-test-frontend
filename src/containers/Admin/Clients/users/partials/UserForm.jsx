@@ -7,7 +7,7 @@ import {
   ActionWrapper,
 } from '../../../crud.style';
 import Card from "../../../../../components/uielements/styles/card.style";
-import {addClientUser, getTeams} from "../../../../../actions/clientActions";
+import {addClientUser, getClients, getTeams} from "../../../../../actions/clientActions";
 import {userStatus} from "../../../../../constants/userStatus";
 
 const FormItem = Form.Item;
@@ -20,16 +20,19 @@ class UserForm extends Component {
     super();
     this.state = {
       status: userStatus,
-      teams: []
+      teams: [],
+      clients: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.generatePassword = this.generatePassword.bind(this);
   }
 
   componentDidMount() {
-    console.log(this.props);
     getTeams(12).then(res => {
       this.setState({teams: res.data})
+    });
+    getClients().then(res => {
+      this.setState({clients: res.data})
     })
   }
 
@@ -76,12 +79,24 @@ class UserForm extends Component {
     };
     const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
     const teamOptions = this.state.teams.map(team => <Option key={team.id}>{team.name}</Option>);
+    const clientsOptions = this.state.clients.map(company => <Option key={company.id}>{company.name}</Option>);
     const {getFieldDecorator} = this.props.form;
     return (
       <div>
         <Form onSubmit={this.handleSubmit} id="clientForm">
           <Row gutter={16}>
             <Col span={12}>
+              <Row>
+                <Col span={24}>
+                  <FormItem label="Company Name" style={margin}>
+                    {getFieldDecorator('company', {rules: userValidation.status})(
+                      <Select placeholder="Company">
+                        {clientsOptions}
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
               <Row>
                 <Col span={24}>
                   <FormItem label="Status" style={margin}>
@@ -173,14 +188,14 @@ class UserForm extends Component {
                     <Row>
                       <Col span={12}>
                         <FormItem style={margin} label="Instant Messaging:">
-                          {getFieldDecorator('im2', {rules: userValidation.client})(
+                          {getFieldDecorator('im2', {})(
                             <Input placeholder="Instant Messaging"/>
                           )}
                         </FormItem>
                       </Col>
                       <Col span={12}>
                         <FormItem style={margin} label="Service">
-                          {getFieldDecorator('ims2', {rules: userValidation.client})(
+                          {getFieldDecorator('ims2', {})(
                             <Select placeholder="Instant Messaging Service">
                               <Option value={0}>Facebook</Option>
                               <Option value={1}>Twiter</Option>
@@ -206,7 +221,7 @@ class UserForm extends Component {
                   )}
                 </FormItem>
                 <FormItem label="Resume URL" style={margin}>
-                  {getFieldDecorator('resume', {rules: userValidation.client})(
+                  {getFieldDecorator('resume', {})(
                     <Input
                       placeholder="https:://amrittamang.com.np/amttmg.pdf"
                     />

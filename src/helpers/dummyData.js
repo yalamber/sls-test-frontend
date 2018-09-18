@@ -10,6 +10,12 @@ export const clients = [
     name: 'EB Pearls Pvt. Ltd.',
     location: 'Kupandol Kathmandu, Nepal'
   }
+  , {
+    key: '3',
+    id: 36,
+    name: 'Acme SOftware Company',
+    location: 'Kupandol Kathmandu, Nepal'
+  }
 ];
 
 export const teams = [

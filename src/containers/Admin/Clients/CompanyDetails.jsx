@@ -114,10 +114,6 @@ class CompanyDetails extends Component {
                       <Icon type="usergroup-add"/>
                       Add Team
                     </ActionBtn>
-                    <ActionBtn type="primary"onClick={()=>{this.props.history.push('/dashboard/clients/details/23/users/create')}}>
-                      <Icon type="user-add"/>
-                      Add User
-                    </ActionBtn>
                   </ButtonHolders>
                 </TitleWrapper>
               <Col md={8} sm={24} xs={24}>
