@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {Form, Select, Row, Col, Input, message} from 'antd';
 import {withRouter} from 'react-router-dom'
 import Button from '../../../../../components/uielements/button';
-import {userValidation} from '../../../../../Validations/usersValidation';
+import {teamValidation} from '../../../../../Validations/teamValidation';
 import {
   ActionWrapper,
 } from '../../../crud.style';
-import {addClientUser, getClients} from "../../../../../actions/clientActions";
+import {getClients} from "../../../../../actions/clientActions";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -30,12 +30,8 @@ class TeamForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        addClientUser(values).then(res => {
-          if (res.status) {
-            message.success(res.message);
-            this.props.form.resetFields();
-          }
-        })
+        console.log(values);
+        message.success("Success");
       }
     });
   }
@@ -55,7 +51,10 @@ class TeamForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Company Name" style={margin}>
-                    {getFieldDecorator('company', {rules: userValidation.status, initialValue: this.props.match.params.id})(
+                    {getFieldDecorator('company', {
+                      rules: teamValidation.companyName,
+                      initialValue: this.props.match.params.id
+                    })(
                       <Select placeholder="Company">
                         {clientsOptions}
                       </Select>
@@ -66,7 +65,7 @@ class TeamForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Team Name" style={margin}>
-                    {getFieldDecorator('team', {rules: userValidation.status})(
+                    {getFieldDecorator('team', {rules: teamValidation.teamName})(
                       <Input placeholder="Team Name"/>
                     )}
                   </FormItem>
