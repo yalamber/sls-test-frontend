@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
 import {Form, Select, Row, Col, Input, Radio} from 'antd';
-import Button from '../../../../components/uielements/button';
-import {userValidation} from '../../../../Validations/usersValidation';
+import Button from '../../../../../components/uielements/button';
+import {userValidation} from '../../../../../Validations/usersValidation';
 import {
   ActionWrapper,
-} from '../../crud.style';
-import ContactList from "../../../../components/contacts/contactList";
-import Card from "../../../../components/uielements/styles/card.style";
-
+} from '../../../crud.style';
+import Card from "../../../../../components/uielements/styles/card.style";
+import {getTestingProviderTeams} from "../../../../../actions/testingProviderActions";
+import {userStatus} from "../../../../../constants/userStatus";
 const FormItem = Form.Item;
 const Option = Select.Option;
-const Search = Input.Search;
 const TextArea = Input.TextArea;
 const RadioGroup = Radio.Group;
 
@@ -18,30 +17,8 @@ class UserForm extends Component {
   constructor() {
     super();
     this.state = {
-      status: [
-        {
-          id: 1,
-          name: "Active"
-        },
-        {
-          id: 2,
-          name: "Inactive"
-        }
-      ],
-      contactList: [
-        {
-          "id": 22143,
-          "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/dvdwinden/128.jpg",
-          "name": "Benjamin Jacobi",
-        }, {
-          "id": 17385,
-          "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/antonyzotov/128.jpg",
-          "name": "Clementina Hahn",
-        }, {
-          "id": 85838,
-          "avatar": "https://s3.amazonaws.com/uifaces/faces/twitter/bungiwan/128.jpg",
-          "name": "Clinton Goyette",
-        }]
+      status: userStatus,
+      teams: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.generatePassword = this.generatePassword.bind(this);
@@ -79,11 +56,18 @@ class UserForm extends Component {
     }
   }
 
+  componentDidMount() {
+    getTestingProviderTeams().then(res => {
+      this.setState({teams: res.data})
+    });
+  }
   render() {
     const margin = {
       margin: '5px 5px 0px 0'
     };
     const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
+    const teamOptions = this.state.teams.map(team => <Option key={team.id}>{team.name}</Option>);
+
     const {getFieldDecorator} = this.props.form;
     return (
       <div>
@@ -91,7 +75,7 @@ class UserForm extends Component {
           <Row gutter={16}>
             <Col span={12}>
               <Row>
-                <Col span={12}>
+                <Col span={24}>
                   <FormItem label="Status" style={margin}>
                     {getFieldDecorator('status', {rules: userValidation.status})(
                       <Select placeholder="Status">
@@ -114,25 +98,18 @@ class UserForm extends Component {
                   />
                 )}
               </FormItem>
-              <RadioGroup style={margin} onChange={this.generatePassword}>
-                <Radio value={0}>Custom Password</Radio>
-                <Radio value={1}>Generate Password</Radio>
-              </RadioGroup>
+              <FormItem style={margin}>
+                {getFieldDecorator('password_type', {initialValue:0})(
+                  <RadioGroup style={margin} onChange={this.generatePassword}>
+                    <Radio value={0}>Custom Password</Radio>
+                    <Radio value={1}>Generate Password</Radio>
+                  </RadioGroup>
+                )}
+              </FormItem>
               <Row>
-                <Col span={12}>
-                  <FormItem label="User Type" style={margin}>
-                    {getFieldDecorator('type', {rules: userValidation.client})(
-                      <Select placeholder="User Type">
-                        <Option value={0}>User Type 1</Option>
-                        <Option value={1}>User Type 2</Option>
-                        <Option value={2}>User Type 3</Option>
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-                <Col span={12}>
+                <Col span={24}>
                   <FormItem label="Citizenship" style={margin}>
-                    {getFieldDecorator('citizenship', {rules: userValidation.client})(
+                    {getFieldDecorator('citizenship', {})(
                       <Select placeholder="Citizenship">
                         <Option value={0}>Citizenship</Option>
                         <Option value={1}>Passport</Option>
@@ -145,19 +122,12 @@ class UserForm extends Component {
             <Col span={12}>
               <Card title="Teams">
                 <FormItem style={margin}>
-                  {getFieldDecorator('username', {rules: []})(
-                    <Search placeholder="Search User"/>
+                  {getFieldDecorator('teams', {rules: userValidation.status})(
+                    <Select mode="multiple" placeholder="Please choose teams">
+                      {teamOptions}
+                    </Select>
                   )}
                 </FormItem>
-                <ContactList
-                  contacts={this.state.contactList}
-                  changeContact={() => {
-                    console.log("change")
-                  }}
-                  deleteContact={() => {
-                    console.log("delete")
-                  }}
-                />
               </Card>
             </Col>
           </Row>
@@ -211,14 +181,14 @@ class UserForm extends Component {
                     <Row>
                       <Col span={12}>
                         <FormItem style={margin} label="Instant Messaging:">
-                          {getFieldDecorator('im2', {rules: userValidation.client})(
+                          {getFieldDecorator('im2', {})(
                             <Input placeholder="Instant Messaging"/>
                           )}
                         </FormItem>
                       </Col>
                       <Col span={12}>
                         <FormItem style={margin} label="Service">
-                          {getFieldDecorator('ims2', {rules: userValidation.client})(
+                          {getFieldDecorator('ims2', {})(
                             <Select placeholder="Instant Messaging Service">
                               <Option value={0}>Facebook</Option>
                               <Option value={1}>Twiter</Option>
@@ -244,7 +214,7 @@ class UserForm extends Component {
                   )}
                 </FormItem>
                 <FormItem label="Resume URL" style={margin}>
-                  {getFieldDecorator('resume', {rules: userValidation.client})(
+                  {getFieldDecorator('resume', {})(
                     <Input
                       placeholder="https:://amrittamang.com.np/amttmg.pdf"
                     />

@@ -9,6 +9,10 @@ const options = [
         label: 'List All',
       },
       {
+        key: 'clients/create',
+        label: 'Create Company',
+      },
+      {
         key: 'clients/teams/create',
         label: 'Create Team',
       },
@@ -25,7 +29,15 @@ const options = [
     children: [
       {
         key: 'testing-providers/teams',
-        label: 'Teams',
+        label: 'List All',
+      },
+      {
+        key: 'testing-providers/teams/create',
+        label: 'Create Team',
+      },
+      {
+        key: 'testing-providers/users/create',
+        label: 'Create User',
       }
     ]
   }
