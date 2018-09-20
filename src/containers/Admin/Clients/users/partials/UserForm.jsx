@@ -121,10 +121,14 @@ class UserForm extends Component {
                   />
                 )}
               </FormItem>
-              <RadioGroup style={margin} onChange={this.generatePassword}>
-                <Radio value={0}>Custom Password</Radio>
-                <Radio value={1}>Generate Password</Radio>
-              </RadioGroup>
+              <FormItem style={margin}>
+                {getFieldDecorator('password_type', {initialValue: 0})(
+                  <RadioGroup style={margin} onChange={this.generatePassword}>
+                    <Radio value={0}>Custom Password</Radio>
+                    <Radio value={1}>Generate Password</Radio>
+                  </RadioGroup>
+                )}
+              </FormItem>
             </Col>
             <Col span={12}>
               <Card title="Teams" style={{minHeight: '300px'}}>

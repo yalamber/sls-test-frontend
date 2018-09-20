@@ -3,7 +3,7 @@ import {Row, Col, Icon} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import Box from '../../../../components/utility/box';
-import ActionButtons from "../partials/ActionButtons";
+import ActionButtons from "./partials/ActionButtons";
 import PageHeader from "../../../../components/utility/pageHeader";
 
 import {
@@ -79,7 +79,7 @@ export default class extends Component {
                 </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
-                    alert("this will show form to create Testing Provider Team members")
+                    this.props.history.push('../../users/create')
                   }}>
                     <Icon type="user-add"/>
                     Create Team Member

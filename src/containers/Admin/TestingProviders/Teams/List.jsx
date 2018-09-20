@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Row, Col, Icon, Rate} from 'antd';
-import LayoutWrapper from '../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../settings/basicStyle';
-import Box from '../../../components/utility/box';
+import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
+import basicStyle from '../../../../settings/basicStyle';
+import Box from '../../../../components/utility/box';
 import ActionButtons from "./partials/ActionButtons";
 
 import {
@@ -11,8 +11,8 @@ import {
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from '../crud.style';
-import {getTestingProviderTeams} from "../../../actions/testingProviderActions";
+} from '../../crud.style';
+import {getTestingProviderTeams} from "../../../../actions/testingProviderActions";
 
 export default class extends Component {
   constructor(props) {
@@ -70,7 +70,7 @@ export default class extends Component {
                 <ComponentTitle>Testing Providers Teams</ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
-                    alert("this will show form to create Testing Provider Team")
+                    this.props.history.push('teams/create')
                   }}>
                     <Icon type="usergroup-add"/>
                     Create Team
@@ -84,7 +84,7 @@ export default class extends Component {
                 columns={this.state.columns}
                 dataSource={this.state.dataSource}
                 onRowClick={(row) => {
-                  this.props.history.push('teams/' + row.id)
+                  this.props.history.push('teams/' + row.id + '/team-members')
                 }}
               />
             </Box>
