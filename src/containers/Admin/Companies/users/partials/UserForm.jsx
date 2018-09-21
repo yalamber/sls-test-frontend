@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Select, Row, Col, Input, Radio, message} from 'antd';
+import {Form, Select, Row, Col, Input, Radio, message, Icon} from 'antd';
 import {withRouter} from 'react-router-dom'
 import Button from '../../../../../components/uielements/button';
 import {userValidation} from '../../../../../Validations/usersValidation';
@@ -14,6 +14,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const TextArea = Input.TextArea;
 const RadioGroup = Radio.Group;
+const InputGroup = Input.Group;
 
 class UserForm extends Component {
   constructor() {
@@ -131,12 +132,19 @@ class UserForm extends Component {
               </FormItem>
             </Col>
             <Col span={12}>
-              <Card title="Teams" style={{minHeight: '300px'}}>
+              <Card title="Teams">
                 <FormItem style={margin}>
                   {getFieldDecorator('teams', {rules: userValidation.status})(
-                    <Select mode="multiple" placeholder="Please choose teams">
-                      {teamOptions}
-                    </Select>
+                    <InputGroup size="large">
+                      <Col span={2}>
+                        <Icon type="search" style={{ fontSize: '24px', color: '#08c', margin: '5px' }}/>
+                      </Col>
+                      <Col span={22}>
+                        <Select mode="multiple" placeholder="Please choose teams" style={{width: '100%'}}>
+                          {teamOptions}
+                        </Select>
+                      </Col>
+                    </InputGroup>
                   )}
                 </FormItem>
               </Card>

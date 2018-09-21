@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Select, Row, Col, Input, Radio} from 'antd';
+import {Form, Select, Row, Col, Input, Radio, Icon} from 'antd';
 import Button from '../../../../../components/uielements/button';
 import {userValidation} from '../../../../../Validations/usersValidation';
 import {
@@ -8,10 +8,12 @@ import {
 import Card from "../../../../../components/uielements/styles/card.style";
 import {getTestingProviderTeams} from "../../../../../actions/testingProviderActions";
 import {userStatus} from "../../../../../constants/userStatus";
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const TextArea = Input.TextArea;
 const RadioGroup = Radio.Group;
+const InputGroup = Input.Group;
 
 class UserForm extends Component {
   constructor() {
@@ -61,6 +63,7 @@ class UserForm extends Component {
       this.setState({teams: res.data})
     });
   }
+
   render() {
     const margin = {
       margin: '5px 5px 0px 0'
@@ -99,7 +102,7 @@ class UserForm extends Component {
                 )}
               </FormItem>
               <FormItem style={margin}>
-                {getFieldDecorator('password_type', {initialValue:0})(
+                {getFieldDecorator('password_type', {initialValue: 0})(
                   <RadioGroup style={margin} onChange={this.generatePassword}>
                     <Radio value={0}>Custom Password</Radio>
                     <Radio value={1}>Generate Password</Radio>
@@ -123,9 +126,16 @@ class UserForm extends Component {
               <Card title="Teams">
                 <FormItem style={margin}>
                   {getFieldDecorator('teams', {rules: userValidation.status})(
-                    <Select mode="multiple" placeholder="Please choose teams">
-                      {teamOptions}
-                    </Select>
+                    <InputGroup size="large">
+                      <Col span={2}>
+                        <Icon type="search" style={{fontSize: '24px', color: '#08c', margin: '5px'}}/>
+                      </Col>
+                      <Col span={22}>
+                        <Select mode="multiple" placeholder="Please choose teams" style={{width: '100%'}}>
+                          {teamOptions}
+                        </Select>
+                      </Col>
+                    </InputGroup>
                   )}
                 </FormItem>
               </Card>
