@@ -6,7 +6,7 @@ import {teamValidation} from '../../../../../Validations/teamValidation';
 import {
   ActionWrapper,
 } from '../../../crud.style';
-import {getClients} from "../../../../../actions/clientActions";
+import {getCompanies} from "../../../../../actions/companyActions";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -21,7 +21,7 @@ class TeamForm extends Component {
   }
 
   componentDidMount() {
-    getClients().then(res => {
+    getCompanies().then(res => {
       this.setState({clients: res.data})
     })
   }
@@ -47,7 +47,7 @@ class TeamForm extends Component {
       <div>
         <Form onSubmit={this.handleSubmit} id="clientForm">
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <Row>
                 <Col span={24}>
                   <FormItem label="Company Name" style={margin}>
@@ -72,7 +72,6 @@ class TeamForm extends Component {
                 </Col>
               </Row>
             </Col>
-
           </Row>
           <ActionWrapper style={margin}>
             <Button type="primary" style={margin} icon="left" onClick={() => this.props.history.goBack()}>

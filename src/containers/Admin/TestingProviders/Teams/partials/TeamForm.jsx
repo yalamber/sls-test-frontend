@@ -42,7 +42,7 @@ class TeamForm extends Component {
       <div>
         <Form onSubmit={this.handleSubmit} id="clientForm">
           <Row gutter={16}>
-            <Col span={12}>
+            <Col span={24}>
               <Row>
                 <Col span={24}>
                   <FormItem label="Team Manager" style={margin}>

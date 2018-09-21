@@ -13,7 +13,7 @@ import {
 
 import Box from '../../../components/utility/box';
 import ActionButtons from "./partials/ActionButtons";
-import {getTeams} from "../../../actions/clientActions";
+import {getTeams} from "../../../actions/companyActions";
 
 class CompanyDetails extends Component {
   constructor() {
@@ -38,19 +38,24 @@ class CompanyDetails extends Component {
           title: "Users List",
           children: [
             {
-              title: 'Id',
-              dataIndex: 'id',
-              key: 'id',
+              title: 'Role',
+              dataIndex: 'role',
+              key: 'role',
             },
             {
-              title: 'Type',
-              dataIndex: 'type',
-              key: 'eyp',
+              title: 'Name',
+              dataIndex: 'name',
+              key: 'name',
             },
             {
-              title: 'Contact Info',
-              dataIndex: 'contactInfo',
-              key: 'contactInfo',
+              title: 'Address',
+              dataIndex: 'address',
+              key: 'address',
+            },
+            {
+              title: 'Email',
+              dataIndex: 'email',
+              key: 'email',
             },
             {
               title: 'Location',
@@ -72,10 +77,14 @@ class CompanyDetails extends Component {
   componentDidMount() {
     getTeams(this.props.match.params.id).then(res => {
       this.setState({teams: res.data});
-    })
+      if(this.state.teams.length){
+        this.handleTeamSelect(this.state.teams[0])
+      }
+    });
   }
 
   handleTeamSelect(record) {
+    console.log(record);
     this.setState({
       userColumns: [
         {

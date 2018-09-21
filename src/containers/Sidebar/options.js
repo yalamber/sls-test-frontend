@@ -1,23 +1,23 @@
 const options = [
   {
-    key: "clients",
+    key: "companies",
     label: "Software Company",
     leftIcon: "ion-android-contacts",
     children: [
       {
-        key: 'clients/list',
+        key: 'company/list',
         label: 'List All',
       },
       {
-        key: 'clients/create',
+        key: 'company/create',
         label: 'Create Company',
       },
       {
-        key: 'clients/teams/create',
+        key: 'company/teams/create',
         label: 'Create Team',
       },
       {
-        key: 'clients/users/create',
+        key: 'company/users/create',
         label: 'Create User',
       },
     ]
@@ -28,15 +28,15 @@ const options = [
     leftIcon: "ion-person",
     children: [
       {
-        key: 'testing-providers/teams',
+        key: 'providers/teams',
         label: 'List All',
       },
       {
-        key: 'testing-providers/teams/create',
+        key: 'providers/teams/create',
         label: 'Create Team',
       },
       {
-        key: 'testing-providers/users/create',
+        key: 'providers/users/create',
         label: 'Create User',
       }
     ]

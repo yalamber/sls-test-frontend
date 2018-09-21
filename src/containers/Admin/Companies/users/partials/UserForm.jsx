@@ -7,7 +7,7 @@ import {
   ActionWrapper,
 } from '../../../crud.style';
 import Card from "../../../../../components/uielements/styles/card.style";
-import {addClientUser, getClients, getTeams} from "../../../../../actions/clientActions";
+import {addCompanyUser, getCompanies, getTeams} from "../../../../../actions/companyActions";
 import {userStatus} from "../../../../../constants/userStatus";
 
 const FormItem = Form.Item;
@@ -31,7 +31,7 @@ class UserForm extends Component {
     getTeams(12).then(res => {
       this.setState({teams: res.data})
     });
-    getClients().then(res => {
+    getCompanies().then(res => {
       this.setState({clients: res.data})
     })
   }
@@ -40,7 +40,7 @@ class UserForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        addClientUser(values).then(res => {
+        addCompanyUser(values).then(res => {
           if (res.status) {
             message.success(res.message);
             this.props.form.resetFields();

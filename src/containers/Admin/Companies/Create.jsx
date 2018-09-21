@@ -9,7 +9,7 @@ import {
 } from '../crud.style';
 
 import Box from '../../../components/utility/box';
-import ClientForm from "./partials/ClientForm";
+import ClientForm from "./partials/CompanyForm";
 
 export default class extends Component {
   render() {
@@ -21,16 +21,16 @@ export default class extends Component {
           <Col md={12} sm={12} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Create new client</ComponentTitle>
+                <ComponentTitle>Create Company</ComponentTitle>
               </TitleWrapper>
               <ClientForm/>
             </Box>
           </Col>
           <Col md={12} sm={12} xs={24} style={colStyle}>
-            <Box title="Information">
+            <Box title="Instruction">
               <ContentHolder>
-                <p><b>Client Name : </b> Client name must me alphabet with 5 to 25 characters. </p>
-                <p><b>Client Location : </b> Client Location is location of client.</p>
+                <p><b>Company Name : </b> Company name must me alphabet with 5 to 25 characters. </p>
+                <p><b>Company Location : </b> Company Location is location of client.</p>
               </ContentHolder>
             </Box>
           </Col>

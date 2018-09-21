@@ -1,6 +1,6 @@
 import {required} from "./rules";
 
-export const clientValidation = {
+export const companyValidation = {
   name: [required],
   location: [required]
 };

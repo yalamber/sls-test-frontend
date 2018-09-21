@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {Route} from "react-router-dom";
 import testingProviderRoutes from './Routes/TestingProvidersRoutes';
-import clientRoutes from './Routes/ClientRoutes';
+import companyRoutes from './Routes/CompanyRoutes';
 
 const routes = [
-  ...clientRoutes,
+  ...companyRoutes,
   ...testingProviderRoutes
 ];
 

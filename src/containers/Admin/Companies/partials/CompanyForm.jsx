@@ -7,12 +7,12 @@ import {Icon} from 'antd';
 import {
   ActionWrapper,
 } from '../../crud.style';
-import {clientValidation} from "../../../../Validations/clientValidation";
-import {addClient} from "../../../../actions/clientActions";
+import {companyValidation} from "../../../../Validations/companyValidation";
+import {addCompany} from "../../../../actions/companyActions";
 
 const FormItem = Form.Item;
 
-class ClientForm extends Component {
+class CompanyForm extends Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,7 +22,7 @@ class ClientForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        addClient(values).then(res => {
+        addCompany(values).then(res => {
           if (res.status) {
             message.success(res.message);
             this.props.form.resetFields();
@@ -40,14 +40,14 @@ class ClientForm extends Component {
     const {getFieldDecorator} = this.props.form;
     return (
       <div>
-        <Form onSubmit={this.handleSubmit} id="clientForm">
-          <FormItem hasFeedback label="Client Name" style={{marginBottom: '0px'}}>
-            {getFieldDecorator('name', {rules: clientValidation.name})(
-              <Input placeholder="Enter Client Name"/>)}
+        <Form onSubmit={this.handleSubmit} id="companyForm">
+          <FormItem hasFeedback label="Company Name" style={{marginBottom: '0px'}}>
+            {getFieldDecorator('name', {rules: companyValidation.name})(
+              <Input placeholder="Enter Company Name"/>)}
           </FormItem>
-          <FormItem hasFeedback label="Client Location" style={{marginBottom: '0px'}}>
-            {getFieldDecorator('location', {rules: clientValidation.location})(
-              <Input placeholder="Enter Client Location"/>)}
+          <FormItem hasFeedback label="Company Location" style={{marginBottom: '0px'}}>
+            {getFieldDecorator('location', {rules: companyValidation.location})(
+              <Input placeholder="Enter Company Location"/>)}
           </FormItem>
           <ActionWrapper style={margin}>
             <Button type="primary" style={margin} icon="left" onClick={() => this.props.history.goBack()}>
@@ -63,5 +63,5 @@ class ClientForm extends Component {
   }
 }
 
-const form = Form.create()(ClientForm);
+const form = Form.create()(CompanyForm);
 export default withRouter(form);

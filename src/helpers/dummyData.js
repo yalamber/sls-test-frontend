@@ -3,17 +3,23 @@ export const clients = [
     key: '1',
     id: 32,
     name: 'Capital Eye Pvt. Ltd.',
+    companyAdmin: 'Amrit Tamang',
+    companyAdminEmail: 'amt.tmg@gmail.com',
     location: 'Jawalakhel Lalitpur, Nepal'
   }, {
     key: '2',
     id: 35,
     name: 'EB Pearls Pvt. Ltd.',
+    companyAdmin: 'Pat',
+    companyAdminEmail: 'pat@gmail.com',
     location: 'Kupandol Kathmandu, Nepal'
   }
   , {
     key: '3',
     id: 36,
     name: 'Acme SOftware Company',
+    companyAdmin: 'Yalamber',
+    companyAdminEmail: 'yalamber@gmail.com',
     location: 'Kupandol Kathmandu, Nepal'
   }
 ];
@@ -21,44 +27,47 @@ export const clients = [
 export const teams = [
   {
     id: 1, name: 'Project Manager', users: [
-      {id: 1, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
-      {id: 2, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
-      {id: 3, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
-      {id: 4, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
-      {id: 5, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
-      {id: 6, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
-      {id: 7, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
-      {id: 8, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
-      {id: 9, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
-      {id: 10, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
-      {id: 11, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
-      {id: 12, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
-      {id: 13, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
-      {id: 14, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
-      {id: 15, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
-      {id: 16, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
-      {id: 17, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
-      {id: 18, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
-      {id: 19, type: 'Manager', contactInfo: '10th street Downtown Demo', location: 'Nepal'},
-      {id: 20, type: 'Manager', contactInfo: '10th street Downtown', location: 'Nepal'},
+      {id: 1, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown Demo', email: 'amt.tmg@gmail.com', location: 'Nepal'},
+      {id: 2, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 3, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown Demo',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 4, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 5, role: 'Manager',name: 'Amrit Tamang',address: '10th street Downtown Demo', email: 'amt.tmg@gmail.com', location: 'Nepal'},
+      {id: 6, role: 'Manager',name: 'Amrit Tamang',address: '10th street Downtown', email: 'amt.tmg@gmail.com', location: 'Nepal'},
+      {id: 7, role: 'Manager',name: 'Amrit Tamang',address: '10th street Downtown Demo', email: 'amt.tmg@gmail.com', location: 'Nepal'},
+      {id: 8, role: 'Manager',name: 'Amrit Tamang',address: '10th street Downtown',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 9, role: 'Manager',name: 'Amrit Tamang',address: '10th street Downtown Demo',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 10, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown', email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 11, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown Demo', email: 'amt.tmg@gmail.com', location: 'Nepal'},
+      {id: 12, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 13, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown Demo', email: 'amt.tmg@gmail.com', location: 'Nepal'},
+      {id: 14, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 15, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown Demo',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 16, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 17, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown Demo',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 18, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 19, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown Demo',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 20, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown', email: 'amt.tmg@gmail.com', location: 'Nepal'},
     ]
   },
   {
     id: 2, name: 'Business Analyst', users: [
-      {id: 1, type: 'Business Analyst', contactInfo: 'Pokhara', location: 'Nepal'},
-      {id: 2, type: 'Business Analyst', contactInfo: 'Kathmandu', location: 'Nepal'},
+      {id: 18, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 19, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown Demo',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 20, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown', email: 'amt.tmg@gmail.com', location: 'Nepal'},
     ]
   },
   {
     id: 3, name: 'Quality Assurance', users: [
-      {id: 1, type: 'Tester', contactInfo: '10th street Downtown', location: 'Nepal'},
-      {id: 2, type: 'Tester', contactInfo: '10th street Downtown', location: 'Nepal'},
+      {id: 18, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 19, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown Demo',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 20, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown', email: 'amt.tmg@gmail.com', location: 'Nepal'},
     ]
   },
   {
     id: 4, name: 'Operation and Management', users: [
-      {id: 1, type: 'Tester', contactInfo: '10th street Downtown', location: 'Nepal'},
-      {id: 2, type: 'Tester', contactInfo: '10th street Downtown', location: 'Nepal'},
+      {id: 18, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 19, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown Demo',  email: 'amt.tmg@gmail.com',location: 'Nepal'},
+      {id: 20, role: 'Manager',name: 'Amrit Tamang', address: '10th street Downtown', email: 'amt.tmg@gmail.com', location: 'Nepal'},
     ]
   },
 ];

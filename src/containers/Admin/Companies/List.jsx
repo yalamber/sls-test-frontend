@@ -12,7 +12,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../crud.style';
-import {getClients} from "../../../actions/clientActions";
+import {getCompanies} from "../../../actions/companyActions";
 
 export default class extends Component {
   constructor(props) {
@@ -23,11 +23,23 @@ export default class extends Component {
           title: 'Client ID',
           dataIndex: 'id',
           key: 'id',
-        }, {
+        },
+        {
           title: 'Name',
           dataIndex: 'name',
           key: 'name',
-        }, {
+        },
+        {
+          title: 'Company Admin',
+          dataIndex: 'companyAdmin',
+          key: 'company_admin',
+        },
+        {
+          title: 'Company Admin Email',
+          dataIndex: 'companyAdminEmail',
+          key: 'company_admin_email',
+        },
+        {
           title: 'Location',
           dataIndex: 'location',
           key: 'location',
@@ -43,7 +55,7 @@ export default class extends Component {
   }
 
   componentDidMount() {
-    getClients().then(res => {
+    getCompanies().then(res => {
       this.setState({dataSource: res.data})
     })
   }
@@ -57,14 +69,14 @@ export default class extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Clients List</ComponentTitle>
+                <ComponentTitle>Companies List</ComponentTitle>
 
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
                     console.log(this.props.history.push('create'))
                   }}>
                     <Icon type="plus"/>
-                    Add new client
+                    Add Company
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
