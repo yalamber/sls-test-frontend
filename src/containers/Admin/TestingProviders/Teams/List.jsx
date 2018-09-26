@@ -20,11 +20,6 @@ export default class extends Component {
     this.state = {
       columns: [
         {
-          title: 'Team Id',
-          dataIndex: 'id',
-          key: 'id',
-        },
-        {
           title: 'Team Name',
           dataIndex: 'name',
           key: 'name',

@@ -24,11 +24,6 @@ export default class extends Component {
           title: "Team Member List",
           children: [
             {
-              title: 'Id',
-              dataIndex: 'id',
-              key: 'id',
-            },
-            {
               title: 'Type',
               dataIndex: 'type',
               key: 'eyp',
