@@ -12,7 +12,8 @@ import {
 } from '../crud.style';
 
 import Box from '../../../components/utility/box';
-import ActionButtons from "./partials/ActionButtons";
+import UsersActionButtons from "./users/partials/ActionButtons";
+import TeamActionButtons from "./teams/partials/ActionButtons";
 import {getTeams} from "../../../actions/companyActions";
 
 class CompanyDetails extends Component {
@@ -29,7 +30,7 @@ class CompanyDetails extends Component {
         {
           title: 'Actions',
           key: 'actions',
-          render: (row) => <ActionButtons row={row}/>
+          render: (row) => <TeamActionButtons row={row}/>
         }
       ],
       teams: [],
@@ -65,7 +66,7 @@ class CompanyDetails extends Component {
             {
               title: 'Actions',
               key: 'actions',
-              render: (row) => <ActionButtons row={row}/>
+              render: (row) => <UsersActionButtons row={row}/>
             }
           ]
         }
