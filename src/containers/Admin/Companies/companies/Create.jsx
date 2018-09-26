@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import {Row, Col} from 'antd';
-import LayoutWrapper from '../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../settings/basicStyle';
-import ContentHolder from '../../../components/utility/contentHolder';
+import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
+import basicStyle from '../../../../settings/basicStyle';
+import ContentHolder from '../../../../components/utility/contentHolder';
 import {
   TitleWrapper,
   ComponentTitle,
-} from '../crud.style';
+} from '../../crud.style';
 
-import Box from '../../../components/utility/box';
+import Box from '../../../../components/utility/box';
 import ClientForm from "./partials/CompanyForm";
 
 export default class extends Component {

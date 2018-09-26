@@ -7,15 +7,15 @@ export default [
   },
   {
     path: "company/list",
-    component: asyncComponent(() => import("../../Admin/Companies/List"))
+    component: asyncComponent(() => import("../../Admin/Companies/companies/List"))
   },
   {
     path: "company/details/:id",
-    component: asyncComponent(() => import("../../Admin/Companies/CompanyDetails"))
+    component: asyncComponent(() => import("../../Admin/Companies/companies/CompanyDetails"))
   },
   {
     path: "company/create",
-    component: asyncComponent(() => import("../../Admin/Companies/Create"))
+    component: asyncComponent(() => import("../../Admin/Companies/companies/Create"))
   },
   {
     path: "company/teams/create/:id?",

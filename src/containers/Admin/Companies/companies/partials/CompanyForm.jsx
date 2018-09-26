@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {Input, message} from 'antd';
-import Form from '../../../../components/uielements/form';
-import Button from '../../../../components/uielements/button';
+import Form from '../../../../../components/uielements/form';
+import Button from '../../../../../components/uielements/button';
 import {Icon} from 'antd';
 import {
   ActionWrapper,
-} from '../../crud.style';
-import {companyValidation} from "../../../../Validations/companyValidation";
-import {addCompany} from "../../../../actions/companyActions";
+} from '../../../crud.style';
+import {companyValidation} from "../../../../../Validations/companyValidation";
+import {addCompany} from "../../../../../actions/companyActions";
 
 const FormItem = Form.Item;
 

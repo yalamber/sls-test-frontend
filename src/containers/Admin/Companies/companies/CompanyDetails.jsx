@@ -1,20 +1,20 @@
 import React, {Component} from 'react';
 import {Row, Col, Icon} from 'antd';
-import LayoutWrapper from '../../../components/utility/layoutWrapper.js';
-import PageHeader from "../../../components/utility/pageHeader";
+import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
+import PageHeader from "../../../../components/utility/pageHeader";
 import {withRouter} from 'react-router-dom'
 
-import basicStyle from '../../../settings/basicStyle';
+import basicStyle from '../../../../settings/basicStyle';
 import {
   TitleWrapper,
   ComponentTitle,
   TableClickable as Table, ButtonHolders, ActionBtn
-} from '../crud.style';
+} from '../../crud.style';
 
-import Box from '../../../components/utility/box';
-import UsersActionButtons from "./users/partials/ActionButtons";
-import TeamActionButtons from "./teams/partials/ActionButtons";
-import {getTeams} from "../../../actions/companyActions";
+import Box from '../../../../components/utility/box';
+import UsersActionButtons from "./../users/partials/ActionButtons";
+import TeamActionButtons from "./../teams/partials/ActionButtons";
+import {getTeams} from "../../../../actions/companyActions";
 
 class CompanyDetails extends Component {
   constructor() {
