@@ -22,7 +22,7 @@ class TeamForm extends Component {
 
   componentDidMount() {
     getCompanies().then(res => {
-      this.setState({clients: res.data})
+      this.setState({companies: res.data})
     })
   }
 
@@ -41,7 +41,7 @@ class TeamForm extends Component {
     const margin = {
       margin: '5px 5px 0px 0'
     };
-    const clientsOptions = this.state.clients.map(company => <Option key={company.id}>{company.name}</Option>);
+    const clientsOptions = this.state.companies.map(company => <Option key={company.id}>{company.name}</Option>);
     const {getFieldDecorator} = this.props.form;
     return (
       <div>

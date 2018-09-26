@@ -2,10 +2,12 @@ import React, {Component} from "react";
 import {Route} from "react-router-dom";
 import testingProviderRoutes from './Routes/TestingProvidersRoutes';
 import companyRoutes from './Routes/CompanyRoutes';
+import dashboardRoutes from './Routes/DashboardRoutes';
 
 const routes = [
   ...companyRoutes,
-  ...testingProviderRoutes
+  ...testingProviderRoutes,
+  ...dashboardRoutes
 ];
 
 class AppRouter extends Component {

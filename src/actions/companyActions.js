@@ -1,5 +1,5 @@
 import Response from "../helpers/Response";
-import {clients, teams} from "../helpers/dummyData";
+import {companies, teams} from "../helpers/dummyData";
 
 let response = new Response();
 
@@ -15,7 +15,7 @@ export const addCompanyUser = (user) => {
 
 export const getCompanies = () => {
   //API Call here
-  return Promise.resolve(response.getDataSuccess(clients))
+  return Promise.resolve(response.getDataSuccess(companies))
 };
 
 export const getTeams = (cimpanyId) => {

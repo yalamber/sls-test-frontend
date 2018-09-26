@@ -1,21 +1,14 @@
 import React from "react";
-import Popconfirms from '../../../../../components/feedback/popconfirm';
+import Popconfirms from '../../../../components/feedback/popconfirm';
 
 import {
   ActionWrapper,
-} from '../../../crud.style';
+} from '../../crud.style';
 import {Tooltip} from "antd";
 
 export default function ActionButtons(props) {
   return (
     <ActionWrapper>
-      <Tooltip placement="topLeft" title="Go to Dashboard">
-        <a onClick={(e) => {
-          e.preventDefault();
-        }}>
-          <i className="ion-android-apps"/>
-        </a>
-      </Tooltip>
       <Tooltip placement="topLeft" title="Edit Record">
         <a onClick={() => alert(JSON.stringify(props.row))}>
           <i className="ion-android-create"/>

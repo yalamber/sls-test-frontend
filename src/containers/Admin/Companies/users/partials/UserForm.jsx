@@ -22,7 +22,7 @@ class UserForm extends Component {
     this.state = {
       status: userStatus,
       teams: [],
-      clients: [],
+      companies: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.generatePassword = this.generatePassword.bind(this);
@@ -33,7 +33,7 @@ class UserForm extends Component {
       this.setState({teams: res.data})
     });
     getCompanies().then(res => {
-      this.setState({clients: res.data})
+      this.setState({companies: res.data})
     })
   }
 
@@ -80,7 +80,7 @@ class UserForm extends Component {
     };
     const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
     const teamOptions = this.state.teams.map(team => <Option key={team.id}>{team.name}</Option>);
-    const clientsOptions = this.state.clients.map(company => <Option key={company.id}>{company.name}</Option>);
+    const companiesOptions = this.state.companies.map(company => <Option key={company.id}>{company.name}</Option>);
     const {getFieldDecorator} = this.props.form;
     return (
       <div>
@@ -92,7 +92,7 @@ class UserForm extends Component {
                   <FormItem label="Company Name" style={margin}>
                     {getFieldDecorator('company', {rules: userValidation.status})(
                       <Select placeholder="Company">
-                        {clientsOptions}
+                        {companiesOptions}
                       </Select>
                     )}
                   </FormItem>
