@@ -2,7 +2,7 @@ const options = [
   {
     key: "companies",
     label: "Software Company",
-    leftIcon: "ion-android-contacts",
+    leftIcon: "ion-briefcase",
     children: [
       {
         key: 'company/list',
@@ -25,7 +25,7 @@ const options = [
   {
     key: "Testing-Providers",
     label: "Testing Providers",
-    leftIcon: "ion-person",
+    leftIcon: "ion-android-contacts",
     children: [
       {
         key: 'providers/teams',
@@ -38,6 +38,40 @@ const options = [
       {
         key: 'providers/users/create',
         label: 'Create User',
+      }
+    ]
+  },
+  {
+    key: "dashboard",
+    label: "Dashboards",
+    leftIcon: "ion-grid",
+    children: [
+      {
+        key: 'dashboards/list',
+        label: 'List All',
+      },
+      {
+        key: 'dashboards/create',
+        label: 'Add New',
+      }
+    ]
+  },
+  {
+    key: "test",
+    label: "Test Manager",
+    leftIcon: "ion-settings",
+    children: [
+      {
+        key: 'test-manager/run',
+        label: 'Test Run',
+      },
+      {
+        key: 'test-manager/suit',
+        label: 'Test Suite',
+      },
+      {
+        key: 'test-manager/cases',
+        label: 'Test Cases',
       }
     ]
   }

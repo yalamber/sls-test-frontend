@@ -14,6 +14,11 @@ export default function ActionButtons(props) {
           <i className="ion-android-create"/>
         </a>
       </Tooltip>
+      <Tooltip placement="topLeft" title="Go to Dashboard">
+        <a onClick={() => alert(JSON.stringify(props.row))}>
+          <i className="ion-android-apps"/>
+        </a>
+      </Tooltip>
       <Tooltip placement="topLeft" title="Delete Record">
       <Popconfirms
         title="Are you sure to delete this article？"
