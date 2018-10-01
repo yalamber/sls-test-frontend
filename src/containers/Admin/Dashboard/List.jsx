@@ -51,9 +51,10 @@ export default class extends Component {
       ],
       dataSource: [],
       companies: [],
+      selectedCompany: {},
       isCompanySelected: false,
     };
-    this.getDashboardByClient = this.getDashboardByClient.bind(this);
+    this.handleCompanyChange = this.handleCompanyChange.bind(this);
   }
 
   componentDidMount() {
@@ -62,10 +63,10 @@ export default class extends Component {
     });
   }
 
-  getDashboardByClient(clientId) {
+  handleCompanyChange(companyId) {
     // eslint-disable-next-line
-    getDashboards(parseInt(clientId)).then(res => {
-      this.setState({dataSource: res.data, isCompanySelected: true})
+    getDashboards(parseInt(companyId)).then(res => {
+      this.setState({dataSource: res.data, isCompanySelected: true, selectedCompany: companyId})
     });
   }
 
@@ -85,25 +86,26 @@ export default class extends Component {
               <TitleWrapper>
                 <ComponentTitle>Dashboard List</ComponentTitle>
                 <ButtonHolders>
-                  <Tooltip placement="topRight" title={!this.state.isCompanySelected ? 'Please select company.': ''} >
-                  <ActionBtn type="primary" disabled={!this.state.isCompanySelected} onClick={() => {
-                  }}>
-                    <Icon type="plus"/>
-                    Add New
-                  </ActionBtn>
+                  <Tooltip placement="topRight" title={!this.state.isCompanySelected ? 'Please select company.' : ''}>
+                    <ActionBtn type="primary" disabled={!this.state.isCompanySelected} onClick={() => {
+                      this.props.history.push('create/' + this.state.selectedCompany)
+                    }}>
+                      <Icon type="plus"/>
+                      Add New
+                    </ActionBtn>
                   </Tooltip>
                 </ButtonHolders>
               </TitleWrapper>
               <Row>
                 <Col md={6} sm={24} xs={24}>
                   <Select placeholder="Please Choose Company Name" style={{...margin, width: '100%'}}
-                          onChange={this.getDashboardByClient}>
+                          onChange={this.handleCompanyChange}>
                     {companiesOptions}
                   </Select>
                 </Col>
               </Row>
               <Table
-                locale={{ emptyText: 'Selected company has not any dashboard list.' }}
+                locale={{emptyText: 'Selected company has not any dashboard list.'}}
                 size="middle"
                 bordered
                 pagination={true}
