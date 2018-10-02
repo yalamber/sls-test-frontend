@@ -19,7 +19,6 @@ class TeamForm extends Component {
         {id: 1, name: 'Active'},
         {id: 2, name: 'Inactive'},
       ],
-      clients: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }

@@ -330,6 +330,9 @@ export const dashboards = [
   },
 ];
 
-export const suits =[
-  {title: 'Protocol Smoke Test', lastUpdated: '09/26/2018', lastUpdatedBy: 'Pat Halman'},
+export const suits = [
+  {id: 1, title: 'Protocol Smoke Test', lastUpdated: '09/26/2018', lastUpdatedBy: 'Pat Halman'},
+];
+export const cases = [
+  {id: 1, title: 'Protocol Smoke Test', lastUpdated: '09/26/2018', suite: '09/26/2018', lastUpdatedBy: 'Pat Halman'},
 ];
