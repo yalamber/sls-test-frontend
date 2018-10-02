@@ -66,7 +66,7 @@ const options = [
         label: 'Test Run',
       },
       {
-        key: 'test-manager/suit',
+        key: 'test-manager/suite',
         label: 'Test Suite',
       },
       {

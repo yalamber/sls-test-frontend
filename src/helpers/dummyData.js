@@ -329,3 +329,7 @@ export const dashboards = [
     status: 'Green',
   },
 ];
+
+export const suits =[
+  {title: 'Protocol Smoke Test', lastUpdated: '09/26/2018', lastUpdatedBy: 'Pat Halman'},
+];
