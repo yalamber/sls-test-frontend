@@ -104,7 +104,7 @@ export default class extends Component {
                   <Tooltip placement="topRight"
                            title={!this.isCompanyAndTeamSelected() ? 'Please select company and team.' : ''}>
                     <ActionBtn type="primary" disabled={!this.isCompanyAndTeamSelected()} onClick={() => {
-                      this.props.history.push('create/' + this.state.selectedCompany)
+                      this.props.history.push('create/' + this.state.selectedCompany + '/' + this.state.selectedTeam)
                     }}>
                       <Icon type="plus"/>
                       Add New
