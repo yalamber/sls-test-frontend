@@ -70,7 +70,7 @@ const options = [
         label: 'Test Suite',
       },
       {
-        key: 'test-manager/cases',
+        key: 'test-manager/cases/list',
         label: 'Test Cases',
       }
     ]
