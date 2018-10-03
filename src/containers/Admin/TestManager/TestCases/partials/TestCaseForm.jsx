@@ -83,11 +83,12 @@ class TeamForm extends Component {
     for (let i = 0; i < this.state.stepsCount; i++) {
       tmp.push(i);
     }
+    const plural = this.state.stepsCount>1 ? 's' : '';
     const steps = tmp.map(function(i) {
       return (
         <Row key={i}>
           <Col md={24} sm={24} xs={24}>
-            <FormItem label={"Steps #" + (i + 1)} style={margin}>
+            <FormItem label={"Step"+ plural +" #" + (i + 1)} style={margin}>
               {getFieldDecorator('step[' + i + ']', {})(
                 <TextArea placeholder="Steps" rows={5}/>
               )}
