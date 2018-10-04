@@ -69,7 +69,7 @@ class UserForm extends Component {
       margin: '5px 5px 0px 0'
     };
     const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
-    const teamOptions = this.state.teams.map(team => <Option key={team.id}>{team.name}</Option>);
+    const teamOptions = this.state.teams.map(team => <Option key={team.clientTeamId}>{team.name}</Option>);
 
     const {getFieldDecorator} = this.props.form;
     return (

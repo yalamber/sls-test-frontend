@@ -75,7 +75,7 @@ export default class extends Component {
       margin: '5px 5px 10px 0'
     };
     const {rowStyle, colStyle, gutter} = basicStyle;
-    const companiesOptions = this.state.companies.map(company => <Option key={company.id}>{company.name}</Option>);
+    const companiesOptions = this.state.companies.map(company => <Option key={company.clientId}>{company.name}</Option>);
 
     return (
 
