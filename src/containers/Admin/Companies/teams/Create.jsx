@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col} from 'antd';
+import {Row, Col, message} from 'antd';
 import {withRouter} from 'react-router-dom'
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
@@ -12,8 +12,21 @@ import {
 
 import Box from '../../../../components/utility/box';
 import TeamForm from "./partials/TeamForm";
+import {addTeam} from "../../../../actions/companyActions";
 
 class Create extends Component {
+
+  constructor() {
+    super();
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(formData) {
+    addTeam(formData).then(res=>{
+      message.success('Successfully Saved.')
+    })
+  }
+
   render() {
     const {rowStyle, colStyle, gutter} = basicStyle;
     return (
@@ -27,7 +40,7 @@ class Create extends Component {
                   Create Team
                 </ComponentTitle>
               </TitleWrapper>
-              <TeamForm/>
+              <TeamForm submit={this.handleSubmit}/>
             </Box>
           </Col>
           <Col md={12} sm={12} xs={24} style={colStyle}>

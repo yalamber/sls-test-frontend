@@ -1,6 +1,6 @@
 import Response from "../helpers/Response";
 import {post, get, put, deleteRecord} from "../helpers/http";
-import { teams} from "../helpers/dummyData";
+import {teams} from "../helpers/dummyData";
 
 let response = new Response();
 
@@ -9,10 +9,11 @@ export const addCompany = (company) => {
 };
 
 export const editCompany = (id, company) => {
-  return put('client/'+id, company)
+  return put('client/' + id, company)
 };
+
 export const deleteCompany = (id) => {
-  return deleteRecord('client/'+id)
+  return deleteRecord('client/' + id)
 };
 
 export const addCompanyUser = (user) => {
@@ -27,7 +28,11 @@ export const getCompany = (id) => {
   return get('client/' + id);
 };
 
+//Teams
+export const addTeam = (team) => {
+  return post('team', team);
+};
+
 export const getTeams = (cimpanyId) => {
-//API Call
   return Promise.resolve(response.getDataSuccess(teams))
 };
