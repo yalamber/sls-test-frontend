@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Select, Row, Col, Input, message} from 'antd';
+import {Form, Select, Row, Col, Input} from 'antd';
 import {withRouter} from 'react-router-dom'
 import Button from '../../../../../components/uielements/button';
 import {teamValidation} from '../../../../../Validations/teamValidation';
@@ -30,8 +30,7 @@ class TeamForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log(values);
-        message.success("Success");
+        this.props.submit(values);
       }
     });
   }
@@ -41,7 +40,7 @@ class TeamForm extends Component {
     const margin = {
       margin: '5px 5px 0px 0'
     };
-    const clientsOptions = this.state.companies.map(company => <Option key={company.id}>{company.name}</Option>);
+    const clientsOptions = this.state.companies.map(company => <Option key={company.clientId}>{company.name}</Option>);
     const {getFieldDecorator} = this.props.form;
     return (
       <div>

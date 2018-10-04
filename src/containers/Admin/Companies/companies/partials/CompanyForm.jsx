@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
-import {Input, message} from 'antd';
+import {Input} from 'antd';
 import Form from '../../../../../components/uielements/form';
 import Button from '../../../../../components/uielements/button';
 import {Icon} from 'antd';
@@ -8,7 +8,6 @@ import {
   ActionWrapper,
 } from '../../../crud.style';
 import {companyValidation} from "../../../../../Validations/companyValidation";
-import {addCompany} from "../../../../../actions/companyActions";
 
 const FormItem = Form.Item;
 
@@ -22,12 +21,9 @@ class CompanyForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        addCompany(values).then(res => {
-          if (res.status) {
-            message.success(res.message);
-            this.props.form.resetFields();
-          }
-        });
+        if (this.props.submit(values)) {
+          this.props.form.resetFields();
+        }
       }
     });
 
@@ -63,5 +59,18 @@ class CompanyForm extends Component {
   }
 }
 
-const form = Form.create()(CompanyForm);
+const mapPropsToFields = (props) => {
+  if (!props.hasOwnProperty('company')) {
+    return;
+  }
+  return {
+    name: Form.createFormField({
+      value: props.company.name
+    }),
+    location: Form.createFormField({
+      value: props.company.location
+    }),
+  };
+};
+const form = Form.create({mapPropsToFields})(CompanyForm);
 export default withRouter(form);
