@@ -1,21 +1,30 @@
 import Response from "../helpers/Response";
-import {companies, teams} from "../helpers/dummyData";
+import {post, get, put, deleteRecord} from "../helpers/http";
+import { teams} from "../helpers/dummyData";
 
 let response = new Response();
 
 export const addCompany = (company) => {
-  //API Call here
-  return Promise.resolve(response.saveSuccess())
+  return post('client', company)
+};
+
+export const editCompany = (id, company) => {
+  return put('client/'+id, company)
+};
+export const deleteCompany = (id) => {
+  return deleteRecord('client/'+id)
 };
 
 export const addCompanyUser = (user) => {
-  //API call
-  return Promise.resolve(response.saveSuccess());
+
 };
 
 export const getCompanies = () => {
-  //API Call here
-  return Promise.resolve(response.getDataSuccess(companies))
+  return get('client');
+};
+
+export const getCompany = (id) => {
+  return get('client/' + id);
 };
 
 export const getTeams = (cimpanyId) => {

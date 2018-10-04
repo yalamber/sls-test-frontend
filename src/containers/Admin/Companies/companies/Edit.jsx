@@ -10,24 +10,32 @@ import {
 
 import Box from '../../../../components/utility/box';
 import ClientForm from "./partials/CompanyForm";
+import {editCompany, getCompany} from "../../../../actions/companyActions";
 import {message} from "antd/lib/index";
-import {addCompany} from "../../../../actions/companyActions";
 
 export default class extends Component {
-
   constructor() {
     super();
+    this.state = {
+      company: {}
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(formData) {
-    addCompany(formData).then(res => {
+    editCompany(this.props.match.params.id, formData).then(res => {
       if (res.status) {
         message.success("Successfully Saved");
         this.props.history.goBack();
       }
     });
     return true;
+  }
+
+  componentDidMount() {
+    getCompany(this.props.match.params.id).then(res => {
+      this.setState({company: res.data})
+    })
   }
 
   render() {
@@ -39,9 +47,9 @@ export default class extends Component {
           <Col md={12} sm={12} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Create Company</ComponentTitle>
+                <ComponentTitle>Edit Company</ComponentTitle>
               </TitleWrapper>
-              <ClientForm submit={this.handleSubmit}/>
+              <ClientForm company={this.state.company} submit={this.handleSubmit}/>
             </Box>
           </Col>
           <Col md={12} sm={12} xs={24} style={colStyle}>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon} from 'antd';
+import {Row, Col, Icon, message} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import Box from '../../../../components/utility/box';
@@ -12,7 +12,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {getCompanies} from "../../../../actions/companyActions";
+import {deleteCompany, getCompanies} from "../../../../actions/companyActions";
 
 export default class extends Component {
   constructor(props) {
@@ -42,16 +42,29 @@ export default class extends Component {
         {
           title: 'Actions',
           key: 'actions',
-          render: (row) => <ActionButtons row={row}/>
+          render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
         }
       ],
       dataSource: []
-    }
+    };
+    this.fetchData = this.fetchData.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData() {
     getCompanies().then(res => {
       this.setState({dataSource: res.data})
+    })
+  }
+
+  handleDelete(row) {
+    deleteCompany(row.clientId).then(res => {
+      message.success('Successfully Deleted.');
+      this.fetchData();
     })
   }
 
@@ -80,7 +93,7 @@ export default class extends Component {
                 columns={this.state.columns}
                 dataSource={this.state.dataSource}
                 onRowClick={(row) => {
-                  this.props.history.push('details/' + row.id)
+                  //this.props.history.push('details/' + row.id)
                 }}
               />
             </Box>
