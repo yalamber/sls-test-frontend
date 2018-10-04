@@ -30,7 +30,9 @@ class TeamForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.props.submit(values);
+        if(this.props.submit(values)){
+          this.props.form.resetFields();
+        }
       }
     });
   }
@@ -50,7 +52,7 @@ class TeamForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Company Name" style={margin}>
-                    {getFieldDecorator('company', {
+                    {getFieldDecorator('clientId', {
                       rules: teamValidation.companyName,
                       initialValue: this.props.match.params.id
                     })(
@@ -64,7 +66,7 @@ class TeamForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Team Name" style={margin}>
-                    {getFieldDecorator('team', {rules: teamValidation.teamName})(
+                    {getFieldDecorator('name', {rules: teamValidation.teamName})(
                       <Input placeholder="Team Name"/>
                     )}
                   </FormItem>

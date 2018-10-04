@@ -24,7 +24,8 @@ class Create extends Component {
   handleSubmit(formData) {
     addTeam(formData).then(res=>{
       message.success('Successfully Saved.')
-    })
+    });
+    return true;
   }
 
   render() {

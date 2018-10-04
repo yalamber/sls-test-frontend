@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon} from 'antd';
+import {Row, Col, Icon, message} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import PageHeader from "../../../../components/utility/pageHeader";
 import {withRouter} from 'react-router-dom'
@@ -14,7 +14,7 @@ import {
 import Box from '../../../../components/utility/box';
 import UsersActionButtons from "./../users/partials/ActionButtons";
 import TeamActionButtons from "./../teams/partials/ActionButtons";
-import {getTeams} from "../../../../actions/companyActions";
+import {deleteTeam, getTeams} from "../../../../actions/companyActions";
 
 class CompanyDetails extends Component {
   constructor() {
@@ -25,12 +25,12 @@ class CompanyDetails extends Component {
           title: 'Teams',
           dataIndex: 'name',
           key: 'name',
-          render: text => <p><Icon type="team"/>  {text}</p>,
+          render: text => <p><Icon type="team"/> {text}</p>,
         },
         {
           title: 'Actions',
           key: 'actions',
-          render: (row) => <TeamActionButtons row={row}/>
+          render: (row) => <TeamActionButtons row={row} delete={this.handleDelete}/>
         }
       ],
       teams: [],
@@ -72,13 +72,19 @@ class CompanyDetails extends Component {
         }
       ],
       selectedTeam: {}
-    }
+    };
+    this.handleDelete = this.handleDelete.bind(this);
+    this.fetchData = this.fetchData.bind(this);
   }
 
   componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData() {
     getTeams(this.props.match.params.id).then(res => {
       this.setState({teams: res.data});
-      if(this.state.teams.length){
+      if (this.state.teams.length) {
         this.handleTeamSelect(this.state.teams[0])
       }
     });
@@ -98,8 +104,15 @@ class CompanyDetails extends Component {
       selectedTeam: record,
     });
     this.state.teams.map((row) => {
-      return row.isSelected = row.id === record.id;
+      return row.isSelected = row.clientTeamId === record.clientTeamId;
     })
+  }
+
+  handleDelete(row) {
+    deleteTeam(row.clientTeamId).then(res => {
+      message.success("Successfully Deleted");
+      this.fetchData();
+    });
   }
 
   render() {
@@ -113,19 +126,21 @@ class CompanyDetails extends Component {
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
-                <TitleWrapper style={margin}>
-                  <ComponentTitle>
-                    <ActionBtn type="secondary" onClick={()=>this.props.history.goBack()}>
-                      <Icon type="left"/>Go Back
-                    </ActionBtn>
-                  </ComponentTitle>
-                  <ButtonHolders>
-                    <ActionBtn type="primary" onClick={()=>{this.props.history.push('../teams/create/'+this.props.match.params.id)}}>
-                      <Icon type="usergroup-add"/>
-                      Add Team
-                    </ActionBtn>
-                  </ButtonHolders>
-                </TitleWrapper>
+              <TitleWrapper style={margin}>
+                <ComponentTitle>
+                  <ActionBtn type="secondary" onClick={() => this.props.history.goBack()}>
+                    <Icon type="left"/>Go Back
+                  </ActionBtn>
+                </ComponentTitle>
+                <ButtonHolders>
+                  <ActionBtn type="primary" onClick={() => {
+                    this.props.history.push('../teams/create/' + this.props.match.params.id)
+                  }}>
+                    <Icon type="usergroup-add"/>
+                    Add Team
+                  </ActionBtn>
+                </ButtonHolders>
+              </TitleWrapper>
               <Col md={8} sm={24} xs={24}>
                 <Table
                   size="middle"
