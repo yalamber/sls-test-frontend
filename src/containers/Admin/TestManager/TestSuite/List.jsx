@@ -25,12 +25,12 @@ export default class extends Component {
       columns: [
         {
           title: 'Title',
-          dataIndex: 'title',
+          dataIndex: 'name',
           key: 'title',
         },
         {
           title: 'Last Updated',
-          dataIndex: 'lastUpdated',
+          dataIndex: 'updatedAt',
           key: 'lastUpdated',
         },
         {

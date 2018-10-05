@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Row, Col, Input, message, Select} from 'antd';
+import {Form, Row, Col, Input, Select} from 'antd';
 import {withRouter} from 'react-router-dom'
 import Button from '../../../../../components/uielements/button';
 import {teamValidation} from '../../../../../Validations/teamValidation';
@@ -16,8 +16,8 @@ class TeamForm extends Component {
     super();
     this.state = {
       status: [
-        {id: 1, name: 'Active'},
-        {id: 2, name: 'Inactive'},
+        {key: 'active', value: 'Active'},
+        {key: 'inactive', value: 'Inactive'},
       ],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,14 +31,16 @@ class TeamForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        message.success("Success");
+        if (this.props.submit(values)) {
+          this.props.form.resetFields();
+        }
       }
     });
   }
 
 
   render() {
-    const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
+    const statusOptions = this.state.status.map(status => <Option key={status.key}>{status.value}</Option>);
     const margin = {
       margin: '5px 5px 0px 0'
     };
@@ -51,7 +53,7 @@ class TeamForm extends Component {
               <Row>
                 <Col span={12}>
                   <FormItem label="Team Suite Name" style={margin}>
-                    {getFieldDecorator('team_suite_name', {rules: teamValidation.teamManager})(
+                    {getFieldDecorator('name', {rules: teamValidation.teamManager})(
                       <Input placeholder="Team Suite Name"/>
                     )}
                   </FormItem>
@@ -78,7 +80,7 @@ class TeamForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Environment Access and Details" style={margin}>
-                    {getFieldDecorator('env_access', {rules: teamValidation.teamName})(
+                    {getFieldDecorator('access_details', {rules: teamValidation.teamName})(
                       <TextArea placeholder="Environment Access and Details" rows={10}/>
                     )}
                   </FormItem>
