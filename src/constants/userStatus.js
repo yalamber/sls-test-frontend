@@ -1,22 +1,22 @@
 export const userStatus = [
   {
-    id: 1,
+    id: 'active',
     name: "Active"
   },
   {
-    id: 2,
+    id: 'inactive',
     name: "Inactive"
   },
   {
-    id: 3,
+    id: 'suspended',
     name: "Suspended"
   },
   {
-    id: 4,
+    id: 'blocked',
     name: "Blocked"
   },
   {
-    id: 5,
+    id: 'under-review',
     name: "Under Review"
   },
 ];
