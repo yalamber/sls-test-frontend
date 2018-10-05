@@ -9,9 +9,6 @@ export const editCompany = (id, company) => {
 export const deleteCompany = (id) => {
   return deleteRecord('client/' + id)
 };
-export const addCompanyUser = (user) => {
-
-};
 export const getCompanies = () => {
   return get('client');
 };
@@ -31,4 +28,10 @@ export const getTeams = (companyId) => {
 };
 export const getClientTeam = (clientTeamId) => {
   return get('team/client/' + clientTeamId);
+};
+
+
+//Users
+export const addCompanyUser = (user) => {
+  return post('user', user);
 };

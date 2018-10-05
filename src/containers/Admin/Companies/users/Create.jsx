@@ -10,8 +10,24 @@ import {
 
 import Box from '../../../../components/utility/box';
 import UserForm from "../users/partials/UserForm";
+import {message} from "antd/lib/index";
+import {addCompanyUser} from "../../../../actions/companyActions";
 
 class Create extends Component {
+  constructor() {
+    super();
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(formData, resetForm) {
+    addCompanyUser({userType: 'client', ...formData}).then(res => {
+      if (res.status) {
+        message.success("Successfully Saved");
+        resetForm();
+      }
+    })
+  }
+
   render() {
     const {rowStyle, colStyle, gutter} = basicStyle;
     return (
@@ -25,7 +41,7 @@ class Create extends Component {
                   Create User
                 </ComponentTitle>
               </TitleWrapper>
-              <UserForm/>
+              <UserForm submit={this.handleSubmit}/>
             </Box>
           </Col>
         </Row>
