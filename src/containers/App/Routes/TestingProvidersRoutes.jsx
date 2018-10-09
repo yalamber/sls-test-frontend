@@ -6,12 +6,16 @@ export default [
     component: asyncComponent(() => import("../../Admin/TestingProviders/Teams/List"))
   },
   {
-    path: "providers/users/create",
-    component: asyncComponent(() => import("../../Admin/TestingProviders/TeamMembers/Create"))
-  },
-  {
     path: "providers/teams/create",
     component: asyncComponent(() => import("../../Admin/TestingProviders/Teams/Create"))
+  },
+  {
+    path: "providers/teams/edit/:id",
+    component: asyncComponent(() => import("../../Admin/TestingProviders/Teams/Edit"))
+  },
+  {
+    path: "providers/users/create",
+    component: asyncComponent(() => import("../../Admin/TestingProviders/TeamMembers/Create"))
   },
   {
     path: "providers/teams/:id/team-members",
