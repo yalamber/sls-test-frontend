@@ -73,7 +73,7 @@ class TeamForm extends Component {
     const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
     const companyOptions = this.state.companies.map(company => <Option key={company.clientId}>{company.name}</Option>);
     const teamOptions = this.state.teams.map(team => <Option key={team.clientTeamId}>{team.name}</Option>);
-    const suiteOptions = this.state.suites.map(suite => <Option key={suite.id}>{suite.title}</Option>);
+    const suiteOptions = this.state.suites.map(suite => <Option key={suite.testSuiteId}>{suite.name}</Option>);
     const margin = {
       margin: '5px 5px 0px 0'
     };
