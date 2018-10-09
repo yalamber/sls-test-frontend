@@ -9,7 +9,6 @@ import {
 import {getCompanyUsers} from "../../../../../actions/companyActions";
 
 const FormItem = Form.Item;
-const Search = Input.Search;
 const Option = Select.Option;
 
 class TeamForm extends Component {
@@ -60,7 +59,11 @@ class TeamForm extends Component {
                 <Col span={24}>
                   <FormItem label="Team Manager" style={margin}>
                     {getFieldDecorator('teamManagerId', {rules: teamValidation.teamManager})(
-                      <Select placeholder="Select Team Manager">
+                      <Select
+                        showSearch
+                        placeholder="Select Team Manager"
+                        optionFilterProp="children"
+                      >
                         {userOptions}
                       </Select>
                     )}
@@ -92,6 +95,7 @@ class TeamForm extends Component {
     );
   }
 }
+
 const mapPropsToFields = (props) => {
   if (!props.hasOwnProperty('team')) {
     return;

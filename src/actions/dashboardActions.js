@@ -1,12 +1,22 @@
-import Response from "../helpers/Response";
-import {dashboards} from "../helpers/dummyData";
+import {post, get, put, deleteRecord} from "../helpers/http";
 
-let response = new Response();
+export const getDashboards = (companyId = null) => {
+  return get('dashboard');
+};
 
-export const getDashboards = (companyId) => {
-  //API Call here
-  let data = dashboards.filter(function(dashboard) {
-    return dashboard.companyId === companyId;
-  });
-  return Promise.resolve(response.getDataSuccess(data))
+export const getDashboard = (id) => {
+  return get('dashboard/' + id);
+};
+
+export const addDashboard = (formData) => {
+  delete formData.company;
+  return post('dashboard', {...formData, teamType: 'client'});
+};
+
+export const updateDashboard = (id, formData) => {
+  return put('dashboard/' + id, formData);
+};
+
+export const deleteDashboard = (id) => {
+  return deleteRecord('dashboard/' + id);
 };

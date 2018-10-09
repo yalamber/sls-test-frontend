@@ -12,15 +12,26 @@ import {
 
 import Box from '../../../components/utility/box';
 import DashboardForm from "./partials/DashboardForm";
-import {addDashboard} from "../../../actions/dashboardActions";
+import {getDashboard, updateDashboard} from "../../../actions/dashboardActions";
 
 class Create extends Component {
 
+  constructor() {
+    super();
+    this.state = {dashboard: {}}
+  }
+
   handleSubmit(formData, resetForm) {
-    addDashboard(formData).then(res => {
+    updateDashboard(this.props.match.params.id, formData).then(res => {
       message.success("Successfully saved.");
       resetForm();
     })
+  }
+
+  componentDidMount() {
+    getDashboard(this.props.match.params.id).then(res => {
+      this.setState({dashboard: res.data});
+    });
   }
 
   render() {
@@ -33,10 +44,10 @@ class Create extends Component {
             <Box>
               <TitleWrapper>
                 <ComponentTitle>
-                  Create Dashboard
+                  Edit Dashboard
                 </ComponentTitle>
               </TitleWrapper>
-              <DashboardForm submit={this.handleSubmit.bind(this)}/>
+              <DashboardForm submit={this.handleSubmit.bind(this)} dashboard={this.state.dashboard}/>
             </Box>
           </Col>
           <Col md={12} sm={12} xs={24} style={colStyle}>
