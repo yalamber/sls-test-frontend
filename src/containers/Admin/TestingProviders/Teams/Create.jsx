@@ -11,8 +11,22 @@ import {
 
 import Box from '../../../../components/utility/box';
 import UserForm from "./partials/TeamForm";
+import {addProviderTeam} from "../../../../actions/testingProviderActions";
 
 export default class extends Component {
+
+
+  constructor() {
+    super();
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(formData, resetForm) {
+    addProviderTeam(formData).then(res => {
+      resetForm();
+    })
+  }
+
   render() {
     const {rowStyle, colStyle, gutter} = basicStyle;
     return (
@@ -24,7 +38,7 @@ export default class extends Component {
               <TitleWrapper>
                 <ComponentTitle>Create new Team</ComponentTitle>
               </TitleWrapper>
-              <UserForm/>
+              <UserForm submit={this.handleSubmit}/>
             </Box>
           </Col>
           <Col md={12} sm={12} xs={24} style={colStyle}>

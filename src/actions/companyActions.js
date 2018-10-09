@@ -35,3 +35,7 @@ export const getClientTeam = (clientTeamId) => {
 export const addCompanyUser = (user) => {
   return post('user', user);
 };
+
+export const getCompanyUsers = () => {
+  return get('user');
+};

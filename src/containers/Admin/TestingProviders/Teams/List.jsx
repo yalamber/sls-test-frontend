@@ -12,7 +12,8 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {getTestingProviderTeams} from "../../../../actions/testingProviderActions";
+import {getTestingProviderTeams, deleteProviderTeam} from "../../../../actions/testingProviderActions";
+import {message} from "antd/lib/index";
 
 export default class extends Component {
   constructor(props) {
@@ -38,18 +39,31 @@ export default class extends Component {
         {
           title: 'Actions',
           key: 'actions',
-          render: (row) => <ActionButtons row={row}/>
+          render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
         }
       ],
       dataSource: []
-    }
+    };
+    this.handleDelete = this.handleDelete.bind(this);
+    this.fetchData = this.fetchData.bind(this);
   }
 
   componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData() {
     getTestingProviderTeams().then(res => {
       this.setState({
         dataSource: res.data,
       })
+    })
+  }
+
+  handleDelete(row) {
+    deleteProviderTeam(row.providerTeamId).then(res => {
+      message.success('Successfully Deleted.');
+      this.fetchData();
     })
   }
 
@@ -78,9 +92,9 @@ export default class extends Component {
                 pagination={true}
                 columns={this.state.columns}
                 dataSource={this.state.dataSource}
-                onRowClick={(row) => {
+                /*onRowClick={(row) => {
                   this.props.history.push('teams/' + row.id + '/team-members')
-                }}
+                }}*/
               />
             </Box>
           </Col>
