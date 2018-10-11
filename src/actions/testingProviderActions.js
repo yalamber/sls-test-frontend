@@ -1,4 +1,4 @@
-import {testingProviderTeamMembers, testingProviderTeams} from "../helpers/dummyData";
+import {testingProviderTeamMembers} from "../helpers/dummyData";
 import {post, get, put, deleteRecord} from "../helpers/http";
 
 import Response from "../helpers/Response";

@@ -23,17 +23,16 @@ class UserForm extends Component {
       status: userStatus,
       teams: [],
       companies: [],
-      passwordType: false
+      passwordType: false,
+      selected: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.generatePassword = this.generatePassword.bind(this);
     this.resetForm = this.resetForm.bind(this);
+    this.handleCompanyChange = this.handleCompanyChange.bind(this);
   }
 
   componentDidMount() {
-    getTeams(12).then(res => {
-      this.setState({teams: res.data})
-    });
     getCompanies().then(res => {
       this.setState({companies: res.data})
     })
@@ -45,6 +44,13 @@ class UserForm extends Component {
       if (!err) {
         this.props.submit(values, this.resetForm);
       }
+    });
+  }
+
+  handleCompanyChange(companyId) {
+    getTeams(companyId).then(res => {
+      this.setState({teams: res.data});
+      this.setState({ selected: [] });
     });
   }
 
@@ -94,7 +100,7 @@ class UserForm extends Component {
                 <Col span={24}>
                   <FormItem label="Company Name" style={margin}>
                     {/* {getFieldDecorator('company', {rules: userValidation.status})(*/}
-                    <Select placeholder="Company">
+                    <Select placeholder="Company" onChange={this.handleCompanyChange}>
                       {companiesOptions}
                     </Select>
                     {/*  )}*/}
@@ -137,18 +143,24 @@ class UserForm extends Component {
             <Col span={12}>
               <Card title="Teams">
                 <FormItem style={margin}>
-                  {/* {getFieldDecorator('teams', {})(*/}
-                  <InputGroup size="large">
-                    <Col span={2}>
-                      <Icon type="search" style={{fontSize: '24px', color: '#08c', margin: '5px'}}/>
-                    </Col>
-                    <Col span={22}>
-                      <Select mode="multiple" placeholder="Please choose teams" style={{width: '100%'}}>
-                        {teamOptions}
-                      </Select>
-                    </Col>
-                  </InputGroup>
-                  {/*  )}*/}
+                  {getFieldDecorator('teams', {})(
+                    <InputGroup size="large">
+                      <Col span={2}>
+                        <Icon type="search" style={{fontSize: '24px', color: '#08c', margin: '5px'}}/>
+                      </Col>
+                      <Col span={22}>
+                        <Select mode="multiple"
+                                value={this.state.selected}
+                                placeholder="Please choose teams"
+                                style={{width: '100%'}}
+                                onChange={(value => {
+                                  this.setState({selected: value});
+                                })}>
+                          {teamOptions}
+                        </Select>
+                      </Col>
+                    </InputGroup>
+                  )}
                 </FormItem>
               </Card>
             </Col>

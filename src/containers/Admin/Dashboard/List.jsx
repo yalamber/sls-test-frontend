@@ -12,8 +12,9 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../crud.style';
-import {getDashboards} from "../../../actions/dashboardActions";
+import {deleteDashboard, getDashboards} from "../../../actions/dashboardActions";
 import {getCompanies} from "../../../actions/companyActions";
+import {message} from "antd/lib/index";
 
 const Option = Select.Option;
 
@@ -25,7 +26,7 @@ export default class extends Component {
       columns: [
         {
           title: 'Board Name',
-          dataIndex: 'boardName',
+          dataIndex: 'name',
           key: 'name',
         },
         {
@@ -46,7 +47,7 @@ export default class extends Component {
         {
           title: 'Actions',
           key: 'actions',
-          render: (row) => <ActionButtons row={row}/>
+          render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
         }
       ],
       dataSource: [],
@@ -55,18 +56,33 @@ export default class extends Component {
       isCompanySelected: false,
     };
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
     getCompanies().then(res => {
       this.setState({companies: res.data})
     });
+    this.fetchData();
   }
 
   handleCompanyChange(companyId) {
-    // eslint-disable-next-line
-    getDashboards(parseInt(companyId)).then(res => {
+    getDashboards(companyId).then(res => {
       this.setState({dataSource: res.data, isCompanySelected: true, selectedCompany: companyId})
+    });
+  }
+
+  handleDelete(row) {
+    deleteDashboard(row.dashboardId).then(res => {
+      message.success('Successfully Deleted.');
+      this.fetchData();
+    })
+  }
+
+  fetchData() {
+    getDashboards().then(res => {
+      this.setState({dataSource: res.data})
     });
   }
 
@@ -75,7 +91,8 @@ export default class extends Component {
       margin: '5px 5px 10px 0'
     };
     const {rowStyle, colStyle, gutter} = basicStyle;
-    const companiesOptions = this.state.companies.map(company => <Option key={company.clientId}>{company.name}</Option>);
+    const companiesOptions = this.state.companies.map(company => <Option
+      key={company.clientId}>{company.name}</Option>);
 
     return (
 

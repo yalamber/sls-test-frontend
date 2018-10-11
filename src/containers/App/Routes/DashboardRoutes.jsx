@@ -9,4 +9,8 @@ export default [
     path: "dashboards/create/:id?",
     component: asyncComponent(() => import("../../Admin/Dashboard/Create"))
   },
+  {
+    path: "dashboards/edit/:id?",
+    component: asyncComponent(() => import("../../Admin/Dashboard/Edit"))
+  },
 ]

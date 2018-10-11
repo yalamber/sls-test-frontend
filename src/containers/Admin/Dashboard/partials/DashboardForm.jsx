@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Select, Row, Col, Input, message} from 'antd';
+import {Form, Select, Row, Col, Input} from 'antd';
 import {withRouter} from 'react-router-dom'
 import Button from '../../../../components/uielements/button';
 import {teamValidation} from '../../../../Validations/teamValidation';
@@ -11,7 +11,7 @@ import {getCompanies, getTeams} from "../../../../actions/companyActions";
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-class TeamForm extends Component {
+class DashboardForm extends Component {
   constructor() {
     super();
     this.state = {
@@ -20,13 +20,14 @@ class TeamForm extends Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
+    this.resetForm = this.resetForm.bind(this);
   }
 
   componentDidMount() {
     getCompanies().then(res => {
       this.setState({companies: res.data});
     });
-    if(this.props.match.params.id){
+    if (this.props.match.params.id) {
       this.handleCompanyChange(this.props.match.params.id);
     }
   }
@@ -41,12 +42,15 @@ class TeamForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log(values);
-        message.success("Success");
+        this.props.submit(values, this.resetForm)
       }
     });
   }
 
+  resetForm() {
+    this.props.form.resetFields();
+    this.props.history.goBack();
+  }
 
   render() {
     const margin = {
@@ -78,8 +82,8 @@ class TeamForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Team Name" style={margin}>
-                    {getFieldDecorator('team', {
-                      rules: teamValidation.companyName
+                    {getFieldDecorator('teamId', {
+                      rules: teamValidation.companyName,
                     })(
                       <Select placeholder="Please select team">
                         {teamsOptions}
@@ -91,7 +95,7 @@ class TeamForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Board Name" style={margin}>
-                    {getFieldDecorator('board', {rules: teamValidation.teamName})(
+                    {getFieldDecorator('name', {rules: teamValidation.teamName})(
                       <Input placeholder="Enter Board name"/>
                     )}
                   </FormItem>
@@ -112,6 +116,22 @@ class TeamForm extends Component {
     );
   }
 }
+const mapPropsToFields = (props) => {
+  if (!props.hasOwnProperty('dashboard')) {
+    return;
+  }
 
-const form = Form.create()(TeamForm);
+  return {
+    company: Form.createFormField({
+      value: [2]
+    }),
+    teamId: Form.createFormField({
+      value: props.dashboard.clientTeamId
+    }),
+    name: Form.createFormField({
+      value: props.dashboard.name
+    }),
+  };
+};
+const form = Form.create({mapPropsToFields})(DashboardForm);
 export default withRouter(form);
