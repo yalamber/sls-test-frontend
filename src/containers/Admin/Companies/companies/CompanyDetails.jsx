@@ -14,7 +14,7 @@ import {
 import Box from '../../../../components/utility/box';
 import UsersActionButtons from "./../users/partials/ActionButtons";
 import TeamActionButtons from "./../teams/partials/ActionButtons";
-import {deleteTeam, getTeams} from "../../../../actions/companyActions";
+import {deleteTeam, getCompanyUsersByTeamId, getTeams} from "../../../../actions/companyActions";
 
 class CompanyDetails extends Component {
   constructor() {
@@ -71,7 +71,8 @@ class CompanyDetails extends Component {
           ]
         }
       ],
-      selectedTeam: {}
+      selectedTeam: {},
+      users: []
     };
     this.handleDelete = this.handleDelete.bind(this);
     this.fetchData = this.fetchData.bind(this);
@@ -105,6 +106,9 @@ class CompanyDetails extends Component {
     });
     this.state.teams.map((row) => {
       return row.isSelected = row.clientTeamId === record.clientTeamId;
+    });
+    getCompanyUsersByTeamId(record.clientTeamId).then(res => {
+      this.setState({users: res.data});
     })
   }
 
@@ -162,7 +166,7 @@ class CompanyDetails extends Component {
                   size="middle"
                   style={margin}
                   columns={this.state.userColumns}
-                  dataSource={this.state.selectedTeam.users}
+                  dataSource={this.state.users}
                   pagination={{pageSize: 5}}
                   bordered
                 />

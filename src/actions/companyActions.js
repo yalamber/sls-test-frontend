@@ -39,3 +39,7 @@ export const addCompanyUser = (user) => {
 export const getCompanyUsers = () => {
   return get('user');
 };
+
+export const getCompanyUsersByTeamId = (teamId) => {
+  return get('user');
+};
