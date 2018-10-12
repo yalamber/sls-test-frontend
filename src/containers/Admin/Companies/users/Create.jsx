@@ -20,7 +20,7 @@ class Create extends Component {
   }
 
   handleSubmit(formData, resetForm) {
-    addCompanyUser({userType: 'client', ...formData}).then(res => {
+    addCompanyUser({isProviderUser: false, isClientUser: true, ...formData}).then(res => {
       if (res.status) {
         message.success("Successfully Saved");
         resetForm();

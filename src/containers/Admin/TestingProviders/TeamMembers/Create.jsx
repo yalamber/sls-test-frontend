@@ -9,8 +9,22 @@ import {
 
 import Box from '../../../../components/utility/box';
 import UserForm from "./partials/UserForm";
+import {addCompanyUser} from "../../../../actions/companyActions";
 
 export default class extends Component {
+
+
+  constructor() {
+    super();
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(formData, resetForm) {
+    addCompanyUser({isProviderUser: true, isClientUser: false, ...formData}).then(res => {
+      resetForm();
+    })
+  }
+
   render() {
     const {rowStyle, colStyle, gutter} = basicStyle;
     return (
@@ -22,7 +36,7 @@ export default class extends Component {
               <TitleWrapper>
                 <ComponentTitle>Create new User</ComponentTitle>
               </TitleWrapper>
-              <UserForm/>
+              <UserForm submit={this.handleSubmit}/>
             </Box>
           </Col>
         </Row>
