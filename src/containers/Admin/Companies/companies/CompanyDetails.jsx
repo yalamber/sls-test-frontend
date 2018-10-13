@@ -14,7 +14,7 @@ import {
 import Box from '../../../../components/utility/box';
 import UsersActionButtons from "./../users/partials/ActionButtons";
 import TeamActionButtons from "./../teams/partials/ActionButtons";
-import {deleteTeam, getCompanyUsersByTeamId, getTeams} from "../../../../actions/companyActions";
+import {deleteCompanyUser, deleteTeam, getCompanyUsersByTeamId, getTeams} from "../../../../actions/companyActions";
 
 class CompanyDetails extends Component {
   constructor() {
@@ -40,12 +40,12 @@ class CompanyDetails extends Component {
           children: [
             {
               title: 'Role',
-              dataIndex: 'role',
+              dataIndex: 'ClientTeamMember.role',
               key: 'role',
             },
             {
               title: 'Name',
-              dataIndex: 'name',
+              dataIndex: 'username',
               key: 'name',
             },
             {
@@ -66,7 +66,7 @@ class CompanyDetails extends Component {
             {
               title: 'Actions',
               key: 'actions',
-              render: (row) => <UsersActionButtons row={row}/>
+              render: (row) => <UsersActionButtons row={row} delete={this.handleDeleteUser}/>
             }
           ]
         }
@@ -75,6 +75,7 @@ class CompanyDetails extends Component {
       users: []
     };
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleDeleteUser = this.handleDeleteUser.bind(this);
     this.fetchData = this.fetchData.bind(this);
   }
 
@@ -117,6 +118,13 @@ class CompanyDetails extends Component {
       message.success("Successfully Deleted");
       this.fetchData();
     });
+  }
+
+  handleDeleteUser(row) {
+    deleteCompanyUser(row.userId).then(res => {
+      message.success("Successfully Deleted");
+      this.fetchData();
+    })
   }
 
   render() {

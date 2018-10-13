@@ -9,7 +9,7 @@ import {
 
 import Box from '../../../../components/utility/box';
 import UserForm from "./partials/UserForm";
-import {addCompanyUser} from "../../../../actions/companyActions";
+import {addProviderUser} from "../../../../actions/testingProviderActions";
 
 export default class extends Component {
 
@@ -20,7 +20,7 @@ export default class extends Component {
   }
 
   handleSubmit(formData, resetForm) {
-    addCompanyUser({isProviderUser: true, isClientUser: false, ...formData}).then(res => {
+    addProviderUser({isProviderUser: true, isClientUser: false, ...formData}).then(res => {
       resetForm();
     })
   }

@@ -39,7 +39,10 @@ export const addCompanyUser = (user) => {
 export const getCompanyUsers = () => {
   return get('user');
 };
+export const deleteCompanyUser = (id) => {
+  return deleteRecord('user/' + id);
+};
 
 export const getCompanyUsersByTeamId = (teamId) => {
-  return get('user');
+  return get('team/client/' + teamId + '/member');
 };

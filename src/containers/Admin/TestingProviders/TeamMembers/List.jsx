@@ -13,7 +13,11 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {getTestingProviderTeamMembers} from "../../../../actions/testingProviderActions";
+import {
+  deleteProviderUser,
+  getTestingProviderTeamMembers
+} from "../../../../actions/testingProviderActions";
+import {message} from "antd/lib/index";
 
 export default class extends Component {
   constructor() {
@@ -30,7 +34,7 @@ export default class extends Component {
             },
             {
               title: 'Contact Info',
-              dataIndex: 'contactInfo',
+              dataIndex: 'username',
               key: 'contactInfo',
             },
             {
@@ -41,17 +45,30 @@ export default class extends Component {
             {
               title: 'Actions',
               key: 'actions',
-              render: (row) => <ActionButtons row={row}/>
+              render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
             }
           ]
         }
       ],
       dataSource: []
     }
+    this.handleDelete = this.handleDelete.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+  }
+
+  handleDelete(row) {
+    deleteProviderUser(row.userId).then(res => {
+      message.success('Successfully Deleted.');
+      this.fetchData();
+    })
   }
 
   componentDidMount() {
-    getTestingProviderTeamMembers().then(res => {
+    this.fetchData();
+  }
+
+  fetchData() {
+    getTestingProviderTeamMembers(this.props.match.params.id).then(res => {
       this.setState({
         dataSource: res.data,
       })
@@ -68,7 +85,7 @@ export default class extends Component {
             <Box>
               <TitleWrapper>
                 <ComponentTitle>
-                  <ActionBtn type="secondary" onClick={()=>this.props.history.goBack()}>
+                  <ActionBtn type="secondary" onClick={() => this.props.history.goBack()}>
                     <Icon type="left"/>Go Back
                   </ActionBtn>
                 </ComponentTitle>
