@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, message} from 'antd';
+import {Row, Col, Icon, message, Spin} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import PageHeader from "../../../../components/utility/pageHeader";
 import {withRouter} from 'react-router-dom'
@@ -14,7 +14,7 @@ import {
 import Box from '../../../../components/utility/box';
 import UsersActionButtons from "./../users/partials/ActionButtons";
 import TeamActionButtons from "./../teams/partials/ActionButtons";
-import {deleteTeam, getCompanyUsersByTeamId, getTeams} from "../../../../actions/companyActions";
+import {deleteCompanyUser, deleteTeam, getCompanyUsersByTeamId, getTeams} from "../../../../actions/companyActions";
 
 class CompanyDetails extends Component {
   constructor() {
@@ -40,12 +40,12 @@ class CompanyDetails extends Component {
           children: [
             {
               title: 'Role',
-              dataIndex: 'role',
+              dataIndex: 'ClientTeamMember.role',
               key: 'role',
             },
             {
               title: 'Name',
-              dataIndex: 'name',
+              dataIndex: 'username',
               key: 'name',
             },
             {
@@ -66,15 +66,17 @@ class CompanyDetails extends Component {
             {
               title: 'Actions',
               key: 'actions',
-              render: (row) => <UsersActionButtons row={row}/>
+              render: (row) => <UsersActionButtons row={row} delete={this.handleDeleteUser}/>
             }
           ]
         }
       ],
       selectedTeam: {},
-      users: []
+      users: [],
+      loading: false
     };
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleDeleteUser = this.handleDeleteUser.bind(this);
     this.fetchData = this.fetchData.bind(this);
   }
 
@@ -92,7 +94,7 @@ class CompanyDetails extends Component {
   }
 
   handleTeamSelect(record) {
-    console.log(record);
+    this.setState({loading:true});
     this.setState({
       userColumns: [
         {
@@ -108,7 +110,7 @@ class CompanyDetails extends Component {
       return row.isSelected = row.clientTeamId === record.clientTeamId;
     });
     getCompanyUsersByTeamId(record.clientTeamId).then(res => {
-      this.setState({users: res.data});
+      this.setState({users: res.data, loading: false});
     })
   }
 
@@ -119,6 +121,13 @@ class CompanyDetails extends Component {
     });
   }
 
+  handleDeleteUser(row) {
+    deleteCompanyUser(row.userId).then(res => {
+      message.success("Successfully Deleted");
+      this.fetchData();
+    })
+  }
+
   render() {
     const {rowStyle, colStyle, gutter} = basicStyle;
     const margin = {
@@ -126,7 +135,7 @@ class CompanyDetails extends Component {
     };
     return (
       <LayoutWrapper>
-        <PageHeader>ACME Software Company</PageHeader>
+        <PageHeader>ACME Software Company </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -162,14 +171,16 @@ class CompanyDetails extends Component {
                 />
               </Col>
               <Col md={16} sm={24} xs={24}>
-                <Table
-                  size="middle"
-                  style={margin}
-                  columns={this.state.userColumns}
-                  dataSource={this.state.users}
-                  pagination={{pageSize: 5}}
-                  bordered
-                />
+                <Spin spinning={this.state.loading}>
+                  <Table
+                    size="middle"
+                    style={margin}
+                    columns={this.state.userColumns}
+                    dataSource={this.state.users}
+                    pagination={{pageSize: 5}}
+                    bordered
+                  />
+                </Spin>
               </Col>
             </Box>
           </Col>

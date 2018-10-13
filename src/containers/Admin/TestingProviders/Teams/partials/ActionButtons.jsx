@@ -11,7 +11,7 @@ const ActionButtons = function ActionButtons(props) {
   return (
     <ActionWrapper>
       <Tooltip placement="topLeft" title="Edit Record">
-        <a onClick={() => props.history.push('teams/edit/'+props.row.providerTeamId)}>
+        <a onClick={() => props.history.push('teams/edit/' + props.row.providerTeamId)}>
           <i className="ion-android-create"/>
         </a>
       </Tooltip>
@@ -29,7 +29,7 @@ const ActionButtons = function ActionButtons(props) {
         </Popconfirms>
       </Tooltip>
       <Tooltip placement="topLeft" title="Show Record">
-        <a>
+        <a onClick={() => props.history.push('teams/' + props.row.providerTeamId + '/team-members')}>
           <i className="ion-information-circled"/>
         </a>
       </Tooltip>

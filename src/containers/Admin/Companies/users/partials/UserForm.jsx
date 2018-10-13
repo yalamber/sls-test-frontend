@@ -123,7 +123,7 @@ class UserForm extends Component {
                 )}
               </FormItem>
               <FormItem label="Password" style={margin}>
-                {getFieldDecorator('password', {rules: userValidation.client})(
+                {getFieldDecorator('password', {})(
                   <Input
                     placeholder="Enter Password"
                   />
@@ -236,7 +236,7 @@ class UserForm extends Component {
                   )}
                 </FormItem>
                 <FormItem label="Resume URL" style={margin}>
-                  {getFieldDecorator('contactInformation.resumeUrl', {})(
+                  {getFieldDecorator('resumeUrl', {})(
                     <Input
                       placeholder="https:://amrittamang.com.np/amttmg.pdf"
                     />

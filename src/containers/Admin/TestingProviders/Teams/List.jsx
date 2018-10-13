@@ -27,7 +27,7 @@ export default class extends Component {
         },
         {
           title: 'Team Admin',
-          dataIndex: 'teamAdmin',
+          dataIndex: 'manager.username',
           key: 'teamAdmin',
         },
         {

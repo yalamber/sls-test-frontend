@@ -26,7 +26,7 @@ export default class extends Component {
         },
         {
           title: 'Company Admin',
-          dataIndex: 'companyAdmin',
+          dataIndex: 'admin',
           key: 'company_admin',
         },
         {
