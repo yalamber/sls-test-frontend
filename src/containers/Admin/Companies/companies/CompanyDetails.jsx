@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, message} from 'antd';
+import {Row, Col, Icon, message, Spin} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import PageHeader from "../../../../components/utility/pageHeader";
 import {withRouter} from 'react-router-dom'
@@ -72,7 +72,8 @@ class CompanyDetails extends Component {
         }
       ],
       selectedTeam: {},
-      users: []
+      users: [],
+      loading: false
     };
     this.handleDelete = this.handleDelete.bind(this);
     this.handleDeleteUser = this.handleDeleteUser.bind(this);
@@ -93,7 +94,7 @@ class CompanyDetails extends Component {
   }
 
   handleTeamSelect(record) {
-    console.log(record);
+    this.setState({loading:true});
     this.setState({
       userColumns: [
         {
@@ -109,7 +110,7 @@ class CompanyDetails extends Component {
       return row.isSelected = row.clientTeamId === record.clientTeamId;
     });
     getCompanyUsersByTeamId(record.clientTeamId).then(res => {
-      this.setState({users: res.data});
+      this.setState({users: res.data, loading: false});
     })
   }
 
@@ -134,7 +135,7 @@ class CompanyDetails extends Component {
     };
     return (
       <LayoutWrapper>
-        <PageHeader>ACME Software Company</PageHeader>
+        <PageHeader>ACME Software Company </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -170,14 +171,16 @@ class CompanyDetails extends Component {
                 />
               </Col>
               <Col md={16} sm={24} xs={24}>
-                <Table
-                  size="middle"
-                  style={margin}
-                  columns={this.state.userColumns}
-                  dataSource={this.state.users}
-                  pagination={{pageSize: 5}}
-                  bordered
-                />
+                <Spin spinning={this.state.loading}>
+                  <Table
+                    size="middle"
+                    style={margin}
+                    columns={this.state.userColumns}
+                    dataSource={this.state.users}
+                    pagination={{pageSize: 5}}
+                    bordered
+                  />
+                </Spin>
               </Col>
             </Box>
           </Col>

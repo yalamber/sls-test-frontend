@@ -229,11 +229,11 @@ class UserForm extends Component {
                   )}
                 </FormItem>
                 <FormItem label="Resume URL" style={margin}>
-                  {/* {getFieldDecorator('contactInformation.resumeUrl', {})(*/}
-                  <Input
-                    placeholder="https:://amrittamang.com.np/amttmg.pdf"
-                  />
-                  {/*   )}*/}
+                  {getFieldDecorator('resumeUrl', {})(
+                    <Input
+                      placeholder="https:://amrittamang.com.np/amttmg.pdf"
+                    />
+                  )}
                 </FormItem>
               </Card>
             </Col>
