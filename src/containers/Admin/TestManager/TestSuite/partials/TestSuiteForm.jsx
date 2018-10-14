@@ -21,23 +21,21 @@ class TeamForm extends Component {
       ],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-
+    this.resetForm = this.resetForm.bind(this);
   }
 
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        if (this.props.submit(values)) {
-          this.props.form.resetFields();
-        }
+        this.props.submit(values, this.resetForm)
       }
     });
   }
 
+  resetForm() {
+    this.props.form.resetFields();
+  }
 
   render() {
     const statusOptions = this.state.status.map(status => <Option key={status.key}>{status.value}</Option>);
@@ -61,7 +59,7 @@ class TeamForm extends Component {
                 <Col span={12}>
                   <FormItem label="Status" style={margin}>
                     {getFieldDecorator('status', {rules: teamValidation.teamManager})(
-                      <Select>
+                      <Select showSearch>
                         {statusOptions}
                       </Select>
                     )}
@@ -98,7 +96,10 @@ class TeamForm extends Component {
             </Col>
           </Row>
           <ActionWrapper style={margin}>
-            <Button type="primary" style={margin} icon="left" onClick={() => this.props.history.goBack()}>
+            <Button type="primary" style={margin} icon="left"
+                    onClick={() => {
+                      this.props.history.push('../../list/' + this.props.match.params.companyId + '/' + this.props.match.params.teamId)
+                    }}>
               Cancel
             </Button>
             <Button id="btnSubmit" type="primary" style={margin} htmlType="submit" className="" icon="save">

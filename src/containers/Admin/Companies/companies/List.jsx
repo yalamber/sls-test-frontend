@@ -92,8 +92,8 @@ export default class extends Component {
                 pagination={true}
                 columns={this.state.columns}
                 dataSource={this.state.dataSource}
-                onRowClick={(row) => {
-                  //this.props.history.push('details/' + row.id)
+                onRowDoubleClick={(row) => {
+                  this.props.history.push('details/' + row.clientId)
                 }}
               />
             </Box>

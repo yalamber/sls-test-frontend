@@ -72,7 +72,7 @@ class DashboardForm extends Component {
                       initialValue: this.props.match.params.id,
                       onChange: this.handleCompanyChange
                     })(
-                      <Select placeholder="Please select company">
+                      <Select showSearch placeholder="Please select company">
                         {clientsOptions}
                       </Select>
                     )}
@@ -85,7 +85,7 @@ class DashboardForm extends Component {
                     {getFieldDecorator('teamId', {
                       rules: teamValidation.companyName,
                     })(
-                      <Select placeholder="Please select team">
+                      <Select showSearch placeholder="Please select team">
                         {teamsOptions}
                       </Select>
                     )}

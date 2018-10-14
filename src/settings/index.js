@@ -3,9 +3,9 @@ export default {
 };
 
 const siteConfig = {
-  siteName: 'ISOMORPHIC',
+  siteName: 'swQA.cloud',
   siteIcon: 'ion-flash',
-  footerText: 'Isomorphic ©2017 Created by RedQ, Inc',
+  footerText: 'swqa.cloud & outcome.cloud ©2018 by incBiz.co',
 };
 const themeConfig = {
   topbar: 'themedefault',

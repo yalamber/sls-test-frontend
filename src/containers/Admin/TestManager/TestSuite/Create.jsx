@@ -12,20 +12,30 @@ import {
 import Box from '../../../../components/utility/box';
 import TestSuiteForm from "./partials/TestSuiteForm";
 import {addSuite} from "../../../../actions/testManagerActions";
+import {getClientTeam, getCompany} from "../../../../actions/companyActions";
 
 export default class extends Component {
 
   constructor() {
     super();
-    this.state = {
-
-    };
+    this.state = {company: null, team: null};
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleSubmit(formData) {
+  componentDidMount() {
+    getCompany(this.props.match.params.companyId).then(res => {
+      this.setState({company: res.data});
+    });
+    getClientTeam(this.props.match.params.teamId).then(res => {
+      this.setState({team: res.data});
+    });
+  }
+
+  handleSubmit(formData, resetForm) {
     addSuite({clientTeamId: this.props.match.params.teamId, ...formData}).then(res => {
       message.success("Successfully Saved");
+      this.props.history.push('../../list/' + this.props.match.params.companyId + '/' + this.props.match.params.teamId);
+      resetForm();
     });
     return true
   }
@@ -35,7 +45,7 @@ export default class extends Component {
     return (
 
       <LayoutWrapper>
-        <PageHeader>ACME Software Company | Driver and Protocol Team</PageHeader>
+        <PageHeader>{this.state.company ? this.state.company.name : ''} | {this.state.team ? this.state.team.name : ''}</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>

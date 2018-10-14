@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Alert} from 'antd';
+import {Row, Col, Spin} from 'antd';
 import {withRouter} from 'react-router-dom'
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
@@ -12,6 +12,7 @@ import Box from '../../../../components/utility/box';
 import UserForm from "../users/partials/UserForm";
 import {message} from "antd/lib/index";
 import {addCompanyUser} from "../../../../actions/companyActions";
+import Errors from "../../../Errors";
 
 class Create extends Component {
   constructor() {
@@ -19,32 +20,32 @@ class Create extends Component {
     this.state = {
       errors: {
         details: []
-      }
+      },
+      loading: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(formData, resetForm) {
+    this.setState({loading: true});
     addCompanyUser({isProviderUser: false, isClientUser: true, ...formData}).then(res => {
       if (res.status) {
         message.success("Successfully Saved");
         resetForm();
+        this.setState({errors: {details: []}});
       }
     }).catch(error => {
       if (error.response.status === 403) {
         this.setState({errors: error.response.data});
+        window.scrollTo(0, 0)
       }
+    }).finally(() => {
+      this.setState({loading: false});
     })
   }
 
   render() {
     const {rowStyle, colStyle, gutter} = basicStyle;
-    const margin = {
-      margin: '0px 0px 15px 0px'
-    };
-    const errors = this.state.errors.details.map(error => {
-      return <li>{error.message}</li>
-    });
     return (
 
       <LayoutWrapper>
@@ -58,19 +59,12 @@ class Create extends Component {
               </TitleWrapper>
               <Row gutter={24}>
                 <Col span={24}>
-                  {this.state.errors.details.length ? <Alert
-                    style={margin}
-                    message="Validation Errors:"
-                    description={
-                      <ul style={{paddingLeft: '16px'}}>
-                        {errors}
-                      </ul>
-                    }
-                    type="error"
-                  /> : ''}
+                  {this.state.errors.details.length ? <Errors errors={this.state.errors}/> : ''}
                 </Col>
               </Row>
-              <UserForm submit={this.handleSubmit}/>
+              <Spin spinning={this.state.loading}>
+                <UserForm submit={this.handleSubmit}/>
+              </Spin>
             </Box>
           </Col>
         </Row>

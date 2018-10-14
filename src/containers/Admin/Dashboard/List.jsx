@@ -115,7 +115,7 @@ export default class extends Component {
               </TitleWrapper>
               <Row>
                 <Col md={6} sm={24} xs={24}>
-                  <Select placeholder="Please Choose Company Name" style={{...margin, width: '100%'}}
+                  <Select showSearch placeholder="Please Choose Company Name" style={{...margin, width: '100%'}}
                           onChange={this.handleCompanyChange}>
                     {companiesOptions}
                   </Select>

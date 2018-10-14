@@ -16,7 +16,7 @@ export default function ActionButtons(props) {
       </Tooltip>
       <Tooltip placement="topLeft" title="Delete Record">
         <Popconfirms
-          title="Are you sure to delete this article？"
+          title="Are you sure to delete this test case ?"
           okText="Yes"
           cancelText="No"
           placement="topRight"
@@ -26,11 +26,6 @@ export default function ActionButtons(props) {
             <i className="ion-android-delete"/>
           </a>
         </Popconfirms>
-      </Tooltip>
-      <Tooltip placement="topLeft" title="Show Details">
-        <a onClick={() => alert(JSON.stringify(props.row))}>
-          <i className="ion-information-circled"/>
-        </a>
       </Tooltip>
     </ActionWrapper>
   );

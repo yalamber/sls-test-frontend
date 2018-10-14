@@ -109,7 +109,7 @@ class TeamForm extends Component {
                       rules: teamValidation.teamManager,
                       onChange: this.handleCompanyChange
                     })(
-                      <Select placeholder="Choose Company Name">
+                      <Select showSearch placeholder="Choose Company Name">
                         {companyOptions}
                       </Select>
                     )}
@@ -118,7 +118,7 @@ class TeamForm extends Component {
                 <Col md={6} sm={24} xs={24}>
                   <FormItem label="Team Name" style={margin}>
                     {getFieldDecorator('team', {rules: teamValidation.teamManager, onChange: this.handleTeamChange})(
-                      <Select placeholder="Choose Team Name">
+                      <Select showSearch placeholder="Choose Team Name">
                         {teamOptions}
                       </Select>
                     )}
@@ -130,7 +130,7 @@ class TeamForm extends Component {
                       rules: teamValidation.teamManager,
                       onChange: this.handleSuiteChange
                     })(
-                      <Select placeholder="Choose Suite Name">
+                      <Select showSearch placeholder="Choose Suite Name">
                         {suiteOptions}
                       </Select>
                     )}
@@ -139,7 +139,7 @@ class TeamForm extends Component {
                 <Col md={6} sm={24} xs={24}>
                   <FormItem label="Status" style={margin}>
                     {getFieldDecorator('status', {rules: teamValidation.teamManager})(
-                      <Select placeholder="Choose Status">
+                      <Select  showSearch placeholder="Choose Status">
                         {statusOptions}
                       </Select>
                     )}

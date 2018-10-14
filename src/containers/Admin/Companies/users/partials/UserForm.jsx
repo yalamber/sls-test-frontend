@@ -99,7 +99,7 @@ class UserForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Company Name" style={margin}>
-                    <Select placeholder="Company" onChange={this.handleCompanyChange}>
+                    <Select  showSearch placeholder="Company" onChange={this.handleCompanyChange}>
                       {companiesOptions}
                     </Select>
                   </FormItem>
@@ -109,7 +109,7 @@ class UserForm extends Component {
                 <Col span={24}>
                   <FormItem label="Status" style={margin}>
                     {getFieldDecorator('status', {rules: userValidation.status})(
-                      <Select placeholder="Status">
+                      <Select showSearch placeholder="Status">
                         {statusOptions}
                       </Select>
                     )}
@@ -145,7 +145,7 @@ class UserForm extends Component {
                     </Col>
                     <Col span={22}>
                       {getFieldDecorator('clientTeams', {})(
-                        <Select mode="multiple"
+                        <Select showSearch mode="multiple"
                                 placeholder="Please choose teams"
                                 style={{width: '100%'}}>
                           {teamOptions}
@@ -195,7 +195,7 @@ class UserForm extends Component {
                       </Col>
                       <Col span={12}>
                         <FormItem style={margin} label="Service">
-                          <Select placeholder="Instant Messaging Service">
+                          <Select showSearch placeholder="Instant Messaging Service">
                             <Option value={0}>Facebook</Option>
                             <Option value={1}>Twiter</Option>
                           </Select>
@@ -212,7 +212,7 @@ class UserForm extends Component {
                       </Col>
                       <Col span={12}>
                         <FormItem style={margin} label="Service">
-                          <Select placeholder="Instant Messaging Service">
+                          <Select showSearch placeholder="Instant Messaging Service">
                             <Option value={0}>Facebook</Option>
                             <Option value={1}>Twiter</Option>
                           </Select>
