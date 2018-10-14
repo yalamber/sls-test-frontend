@@ -16,7 +16,7 @@ const ActionButtons = (props) => {
       </Tooltip>
       <Tooltip placement="topLeft" title="Delete Record">
         <Popconfirms
-          title="Are you sure to delete this article？"
+          title="Are you sure to delete this team ?"
           okText="Yes"
           cancelText="No"
           placement="topRight"

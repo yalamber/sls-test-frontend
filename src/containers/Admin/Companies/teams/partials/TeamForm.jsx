@@ -56,7 +56,7 @@ class TeamForm extends Component {
                       rules: teamValidation.companyName,
                       initialValue: this.props.match.params.id
                     })(
-                      <Select placeholder="Company">
+                      <Select showSearch placeholder="Company">
                         {clientsOptions}
                       </Select>
                     )}

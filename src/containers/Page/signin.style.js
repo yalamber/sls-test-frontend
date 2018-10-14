@@ -59,7 +59,6 @@ const SignInStyleWrapper = styled.div`
         font-size: 24px;
         font-weight: 300;
         line-height: 1;
-        text-transform: uppercase;
         color: ${palette("secondary", 2)};
       }
     }

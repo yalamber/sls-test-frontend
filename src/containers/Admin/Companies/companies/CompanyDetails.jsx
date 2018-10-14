@@ -14,7 +14,13 @@ import {
 import Box from '../../../../components/utility/box';
 import UsersActionButtons from "./../users/partials/ActionButtons";
 import TeamActionButtons from "./../teams/partials/ActionButtons";
-import {deleteCompanyUser, deleteTeam, getCompanyUsersByTeamId, getTeams} from "../../../../actions/companyActions";
+import {
+  deleteCompanyUser,
+  deleteTeam,
+  getCompany,
+  getCompanyUsersByTeamId,
+  getTeams
+} from "../../../../actions/companyActions";
 
 class CompanyDetails extends Component {
   constructor() {
@@ -34,6 +40,7 @@ class CompanyDetails extends Component {
         }
       ],
       teams: [],
+      company: null,
       userColumns: [
         {
           title: "Users List",
@@ -91,6 +98,9 @@ class CompanyDetails extends Component {
         this.handleTeamSelect(this.state.teams[0])
       }
     });
+    getCompany(this.props.match.params.id).then(res=>{
+      this.setState({company: res.data});
+    })
   }
 
   handleTeamSelect(record) {
@@ -135,7 +145,7 @@ class CompanyDetails extends Component {
     };
     return (
       <LayoutWrapper>
-        <PageHeader>ACME Software Company </PageHeader>
+        <PageHeader>{this.state.company ? this.state.company.name : ''}</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>

@@ -33,5 +33,7 @@ export function send(url, data = [], method) {
     url: url,
     method: method,
     data: data
+  }).catch(error => {
+    throw  error;
   });
 }

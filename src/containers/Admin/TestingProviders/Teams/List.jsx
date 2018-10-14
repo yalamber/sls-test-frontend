@@ -92,9 +92,9 @@ export default class extends Component {
                 pagination={true}
                 columns={this.state.columns}
                 dataSource={this.state.dataSource}
-                /*onRowClick={(row) => {
-                  this.props.history.push('teams/' + row.id + '/team-members')
-                }}*/
+                onRowDoubleClick={(row) => {
+                  this.props.history.push('teams/' + row.providerTeamId + '/team-members')
+                }}
               />
             </Box>
           </Col>

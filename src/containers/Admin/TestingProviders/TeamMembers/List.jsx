@@ -14,7 +14,7 @@ import {
   TableClickable as Table
 } from '../../crud.style';
 import {
-  deleteProviderUser,
+  deleteProviderUser, getTestingProviderTeam,
   getTestingProviderTeamMembers
 } from "../../../../actions/testingProviderActions";
 import {message} from "antd/lib/index";
@@ -50,8 +50,9 @@ export default class extends Component {
           ]
         }
       ],
+      team: null,
       dataSource: []
-    }
+    };
     this.handleDelete = this.handleDelete.bind(this);
     this.fetchData = this.fetchData.bind(this);
   }
@@ -72,6 +73,9 @@ export default class extends Component {
       this.setState({
         dataSource: res.data,
       })
+    });
+    getTestingProviderTeam(this.props.match.params.id).then(res => {
+      this.setState({team: res.data});
     })
   }
 
@@ -79,7 +83,7 @@ export default class extends Component {
     const {rowStyle, colStyle, gutter} = basicStyle;
     return (
       <LayoutWrapper>
-        <PageHeader>Team Nepal</PageHeader>
+        <PageHeader>{this.state.team ? this.state.team.name : ''}</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>

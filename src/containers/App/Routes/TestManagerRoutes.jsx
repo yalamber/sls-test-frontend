@@ -2,7 +2,7 @@ import asyncComponent from "../../../helpers/AsyncFunc";
 
 export default [
   {
-    path: "test-manager/suite/list",
+    path: "test-manager/suite/list/:companyId?/:teamId?",
     component: asyncComponent(() => import("../../Admin/TestManager/TestSuite/List"))
   },
   {
