@@ -35,7 +35,7 @@ class Create extends Component {
         this.setState({errors: {details: []}});
       }
     }).catch(error => {
-      if (error.response.status === 403) {
+      if (error.response.status === 422) {
         this.setState({errors: error.response.data});
         window.scrollTo(0, 0)
       }

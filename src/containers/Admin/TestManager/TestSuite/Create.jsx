@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, message} from 'antd';
+import {Row, Col, message, Spin} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import PageHeader from "../../../../components/utility/pageHeader";
@@ -13,12 +13,20 @@ import Box from '../../../../components/utility/box';
 import TestSuiteForm from "./partials/TestSuiteForm";
 import {addSuite} from "../../../../actions/testManagerActions";
 import {getClientTeam, getCompany} from "../../../../actions/companyActions";
+import Errors from "../../../Errors";
 
 export default class extends Component {
 
   constructor() {
     super();
-    this.state = {company: null, team: null};
+    this.state = {
+      company: null,
+      team: null,
+      errors: {
+        details: []
+      },
+      loading: false
+    };
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
@@ -32,10 +40,18 @@ export default class extends Component {
   }
 
   handleSubmit(formData, resetForm) {
+    this.setState({loading: true});
     addSuite({clientTeamId: this.props.match.params.teamId, ...formData}).then(res => {
       message.success("Successfully Saved");
       this.props.history.push('../../list/' + this.props.match.params.companyId + '/' + this.props.match.params.teamId);
       resetForm();
+    }).catch(error => {
+      if (error.response.status === 422) {
+        this.setState({errors: error.response.data});
+        window.scrollTo(0, 0)
+      }
+    }).finally(() => {
+      this.setState({loading: false});
     });
     return true
   }
@@ -52,7 +68,14 @@ export default class extends Component {
               <TitleWrapper>
                 <ComponentTitle>Create Test Suite</ComponentTitle>
               </TitleWrapper>
-              <TestSuiteForm submit={this.handleSubmit}/>
+              <Row gutter={24}>
+                <Col span={24}>
+                  {this.state.errors.details.length ? <Errors errors={this.state.errors}/> : ''}
+                </Col>
+              </Row>
+              <Spin spinning={this.state.loading}>
+                <TestSuiteForm submit={this.handleSubmit}/>
+              </Spin>
             </Box>
           </Col>
         </Row>

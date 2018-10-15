@@ -5,8 +5,13 @@ import {cases} from "../helpers/dummyData";
 
 let response = new Response();
 
-export const getSuites = (companyId, teamId) => {
-  return get('test/suite', {clientTeamId: teamId});
+export const getSuites = (clientId = null, clientTeamId = null) => {
+  if (clientId) {
+    return get('test/suite', {clientId});
+  } else if (clientTeamId) {
+    return get('test/suite', {clientTeamId});
+  }
+  return Promise.resolve({});
 };
 export const addSuite = (formData) => {
   return post('test/suite', formData);

@@ -62,7 +62,7 @@ const options = [
     leftIcon: "ion-settings",
     children: [
       {
-        key: 'test-manager/run',
+        key: 'test-manager/runs/list',
         label: 'Test Run',
       },
       {

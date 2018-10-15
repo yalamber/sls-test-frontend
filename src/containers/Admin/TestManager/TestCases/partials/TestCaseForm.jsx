@@ -39,7 +39,6 @@ class TeamForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log(values);
         message.success("Success");
       }
     });
@@ -48,21 +47,43 @@ class TeamForm extends Component {
   componentDidMount() {
     getCompanies().then(res => {
       this.setState({companies: res.data});
+      this.handleCompanyChange(this.props.match.params.companyId);
+      this.handleTeamChange(this.props.match.params.teamId)
     })
   }
 
   handleCompanyChange(companyId) {
+    this.setState({selectedTeam: null});
+    this.props.form.setFieldsValue({
+      team: null
+    });
+    this.props.form.setFieldsValue({
+      suite: null
+    });
     this.setState({selectedCompany: companyId});
     getTeams(companyId).then(res => {
       this.setState({teams: res.data});
-    })
+    });
+    this.updateSuite(companyId, undefined);
   }
 
   handleTeamChange(teamId) {
     this.setState({selectedTeam: teamId});
-    getSuites(this.state.selectedCompany, this.state.selectedTeam).then(res => {
-      this.setState({suites: res.data});
-    })
+    this.props.form.setFieldsValue({
+      suite: null
+    });
+    this.props.form.setFieldsValue({
+      team: this.state.selectedTeam
+    });
+    this.updateSuite(undefined, teamId);
+  }
+
+  updateSuite(companyId = this.state.selectedCompany, teamId = this.state.selectedTeam) {
+    if (companyId > 0 && teamId > 0) {
+      getSuites(companyId, teamId).then(res => {
+        this.setState({suites: res.data});
+      })
+    }
   }
 
   handleSuiteChange(suiteId) {
@@ -83,12 +104,12 @@ class TeamForm extends Component {
     for (let i = 0; i < this.state.stepsCount; i++) {
       tmp.push(i);
     }
-    const plural = this.state.stepsCount>1 ? 's' : '';
+    const plural = this.state.stepsCount > 1 ? 's' : '';
     const steps = tmp.map(function(i) {
       return (
         <Row key={i}>
           <Col md={24} sm={24} xs={24}>
-            <FormItem label={"Step"+ plural +" #" + (i + 1)} style={margin}>
+            <FormItem label={"Step" + plural + " #" + (i + 1)} style={margin}>
               {getFieldDecorator('step[' + i + ']', {})(
                 <TextArea placeholder="Steps" rows={5}/>
               )}
@@ -107,7 +128,8 @@ class TeamForm extends Component {
                   <FormItem label="Compant Name" style={margin}>
                     {getFieldDecorator('company', {
                       rules: teamValidation.teamManager,
-                      onChange: this.handleCompanyChange
+                      onChange: this.handleCompanyChange,
+                      initialValue: this.state.selectedCompany
                     })(
                       <Select showSearch placeholder="Choose Company Name">
                         {companyOptions}
@@ -117,7 +139,11 @@ class TeamForm extends Component {
                 </Col>
                 <Col md={6} sm={24} xs={24}>
                   <FormItem label="Team Name" style={margin}>
-                    {getFieldDecorator('team', {rules: teamValidation.teamManager, onChange: this.handleTeamChange})(
+                    {getFieldDecorator('team', {
+                      rules: teamValidation.teamManager,
+                      onChange: this.handleTeamChange,
+                      initialValue: this.state.selectedTeam
+                    })(
                       <Select showSearch placeholder="Choose Team Name">
                         {teamOptions}
                       </Select>
@@ -126,7 +152,7 @@ class TeamForm extends Component {
                 </Col>
                 <Col md={6} sm={24} xs={24}>
                   <FormItem label="Test Suite Name" style={margin}>
-                    {getFieldDecorator('test_suite_name', {
+                    {getFieldDecorator('suite', {
                       rules: teamValidation.teamManager,
                       onChange: this.handleSuiteChange
                     })(
@@ -139,7 +165,7 @@ class TeamForm extends Component {
                 <Col md={6} sm={24} xs={24}>
                   <FormItem label="Status" style={margin}>
                     {getFieldDecorator('status', {rules: teamValidation.teamManager})(
-                      <Select  showSearch placeholder="Choose Status">
+                      <Select showSearch placeholder="Choose Status">
                         {statusOptions}
                       </Select>
                     )}

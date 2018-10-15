@@ -31,12 +31,12 @@ export default class extends Component {
         },
         {
           title: 'Team Name',
-          dataIndex: 'teamName',
+          dataIndex: 'clientTeam.name',
           key: 'team_name',
         },
         {
           title: 'Team Admin',
-          dataIndex: 'teamAdmin',
+          dataIndex: 'clientTeam.client.admin.username',
           key: 'team_admin',
         },
         {
