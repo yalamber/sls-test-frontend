@@ -78,7 +78,7 @@ class TeamForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Environment Access and Details" style={margin}>
-                    {getFieldDecorator('access_details', {rules: teamValidation.teamName})(
+                    {getFieldDecorator('accessDetails', {rules: teamValidation.teamName})(
                       <TextArea placeholder="Environment Access and Details" rows={10}/>
                     )}
                   </FormItem>
