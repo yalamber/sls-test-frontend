@@ -64,7 +64,7 @@ class TeamForm extends Component {
     getTeams(companyId).then(res => {
       this.setState({teams: res.data});
     });
-    this.updateSuite(companyId, undefined);
+    this.updateSuite(companyId, null);
   }
 
   handleTeamChange(teamId) {
@@ -75,15 +75,13 @@ class TeamForm extends Component {
     this.props.form.setFieldsValue({
       team: this.state.selectedTeam
     });
-    this.updateSuite(undefined, teamId);
+    this.updateSuite(null, teamId);
   }
 
-  updateSuite(companyId = this.state.selectedCompany, teamId = this.state.selectedTeam) {
-    if (companyId > 0 && teamId > 0) {
-      getSuites(companyId, teamId).then(res => {
-        this.setState({suites: res.data});
-      })
-    }
+  updateSuite(companyId, teamId) {
+    getSuites(companyId, teamId).then(res => {
+      this.setState({suites: res.data});
+    })
   }
 
   handleSuiteChange(suiteId) {
