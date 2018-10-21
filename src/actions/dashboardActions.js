@@ -1,7 +1,7 @@
 import {post, get, put, deleteRecord} from "../helpers/http";
 
 export const getDashboards = (companyId = null) => {
-  return get('dashboard');
+  return get('dashboard', {companyId});
 };
 
 export const getDashboard = (id) => {

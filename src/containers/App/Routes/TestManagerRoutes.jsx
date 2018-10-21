@@ -1,6 +1,7 @@
 import asyncComponent from "../../../helpers/AsyncFunc";
 
 export default [
+  //Suite
   {
     path: "test-manager/suite/list/:companyId?/:teamId?",
     component: asyncComponent(() => import("../../Admin/TestManager/TestSuite/List"))
@@ -10,6 +11,7 @@ export default [
     component: asyncComponent(() => import("../../Admin/TestManager/TestSuite/Create"))
   },
 
+  //Cases
   {
     path: "test-manager/cases/list",
     component: asyncComponent(() => import("../../Admin/TestManager/TestCases/List"))
@@ -17,5 +19,11 @@ export default [
   {
     path: "test-manager/cases/create/:companyId?/:teamId?",
     component: asyncComponent(() => import("../../Admin/TestManager/TestCases/Create"))
+  },
+
+  //Runs
+  {
+    path: "test-manager/runs/list",
+    component: asyncComponent(() => import("../../Admin/TestManager/TestRun/List"))
   },
 ]

@@ -79,23 +79,21 @@ export default class extends Component {
       this.setState({teams: res.data});
     });
     this.setState({selectedCompany: companyId});
-    this.updateRecords();
+    this.updateRecords(companyId, null);
   }
 
   handleTeamChange(teamId) {
     this.setState({selectedTeam: teamId});
-    this.updateRecords(teamId);
+    this.updateRecords(null, teamId);
   }
 
-  updateRecords(teamId = this.state.selectedTeam) {
-    if (teamId > 0 && this.state.selectedCompany > 0) {
-      this.setState({loading: true});
-      getSuites(this.state.selectedCompany, teamId).then(res => {
-        this.setState({dataSource: res.data})
-      }).finally(() => {
-        this.setState({loading: false});
-      })
-    }
+  updateRecords(companyId, teamId) {
+    this.setState({loading: true});
+    getSuites(companyId, teamId).then(res => {
+      this.setState({dataSource: res.data})
+    }).finally(() => {
+      this.setState({loading: false});
+    })
   }
 
   isCompanyAndTeamSelected() {

@@ -46,29 +46,19 @@ class CompanyDetails extends Component {
           title: "Users List",
           children: [
             {
-              title: 'Role',
-              dataIndex: 'ClientTeamMember.role',
-              key: 'role',
-            },
-            {
               title: 'Name',
               dataIndex: 'username',
               key: 'name',
             },
             {
               title: 'Address',
-              dataIndex: 'address',
+              dataIndex: 'contactInformation.postalAddress',
               key: 'address',
             },
             {
               title: 'Email',
-              dataIndex: 'email',
+              dataIndex: 'contactInformation.emailAddress',
               key: 'email',
-            },
-            {
-              title: 'Location',
-              dataIndex: 'location',
-              key: 'location',
             },
             {
               title: 'Actions',
