@@ -3,7 +3,7 @@ export default {
 };
 
 const siteConfig = {
-  siteName: 'swQA.cloud',
+  siteName: 'swqa.cloud',
   siteIcon: 'ion-flash',
   footerText: 'swqa.cloud & outcome.cloud ©2018 by incBiz.co',
 };
