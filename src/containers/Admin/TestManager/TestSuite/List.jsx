@@ -152,6 +152,7 @@ export default class extends Component {
                   pagination={true}
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
+                  rowKey="testSuiteId"
                 />
               </Spin>
             </Box>

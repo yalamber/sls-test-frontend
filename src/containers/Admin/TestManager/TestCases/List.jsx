@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Select, Tooltip} from 'antd';
+import {Row, Col, Icon, Select, Tooltip, message} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import Box from '../../../../components/utility/box';
@@ -13,7 +13,9 @@ import {
   TableClickable as Table
 } from '../../crud.style';
 import {getCompanies, getTeams} from "../../../../actions/companyActions";
-import {getCases} from "../../../../actions/testManagerActions";
+import {deleteTestCase, getCases} from "../../../../actions/testManagerActions";
+import Moment from "react-moment";
+import {dateTime} from "../../../../constants/dateFormat";
 
 const Option = Select.Option;
 
@@ -30,8 +32,8 @@ export default class extends Component {
         },
         {
           title: 'Last Updated',
-          dataIndex: 'lastUpdated',
-          key: 'lastUpdated',
+          render: (row) => <Moment format={dateTime}>{row.updatedAt}</Moment>,
+          key: 'updatedAt',
         },
         {
           title: 'Suite',
@@ -46,7 +48,7 @@ export default class extends Component {
         {
           title: 'Actions',
           key: 'actions',
-          render: (row) => <ActionButtons row={row}/>
+          render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
         }
       ],
       dataSource: [],
@@ -58,6 +60,7 @@ export default class extends Component {
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.isCompanyAndTeamSelected = this.isCompanyAndTeamSelected.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
@@ -89,12 +92,20 @@ export default class extends Component {
     return !!this.state.selectedCompany && !!this.state.selectedTeam;
   }
 
+  handleDelete(row) {
+    deleteTestCase(row.testCaseId).then(res => {
+      message.success('Successfully Deleted.');
+      this.updateRecords();
+    })
+  }
+
   render() {
     const margin = {
       margin: '5px 5px 10px 0'
     };
     const {rowStyle, colStyle, gutter} = basicStyle;
-    const companiesOptions = this.state.companies.map(company => <Option key={company.clientId}>{company.name}</Option>);
+    const companiesOptions = this.state.companies.map(company => <Option
+      key={company.clientId}>{company.name}</Option>);
     const teamsOptions = this.state.teams.map(team => <Option key={team.clientTeamId}>{team.name}</Option>);
 
     return (
@@ -125,7 +136,8 @@ export default class extends Component {
                   </Select>
                 </Col>
                 <Col md={6} sm={24} xs={24}>
-                  <Select  showSearch placeholder="Please Choose Team" style={{width: '100%', margin: '5px 5px 10px 20px'}}
+                  <Select showSearch placeholder="Please Choose Team"
+                          style={{width: '100%', margin: '5px 5px 10px 20px'}}
                           onChange={this.handleTeamChange}>
                     {teamsOptions}
                   </Select>
@@ -138,6 +150,7 @@ export default class extends Component {
                 pagination={true}
                 columns={this.state.columns}
                 dataSource={this.state.dataSource}
+                rowKey="testCaseId"
               />
             </Box>
           </Col>

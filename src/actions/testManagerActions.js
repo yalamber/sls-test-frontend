@@ -1,9 +1,4 @@
-import Response from "../helpers/Response";
-import {post, get} from "../helpers/http";
-
-import {cases} from "../helpers/dummyData";
-
-let response = new Response();
+import {post, get, deleteRecord} from "../helpers/http";
 
 export const getSuites = (clientId = null, clientTeamId = null) => {
   if (clientId) {
@@ -17,6 +12,18 @@ export const addSuite = (formData) => {
   return post('test/suite', formData);
 };
 
+//cases
 export const getCases = (companyId, teamId) => {
-  return Promise.resolve(response.getDataSuccess(cases))
+  return get('test/suite/1/case')
+};
+
+export const addTestCase = (formData) => {
+  delete formData.company;
+  delete formData.team;
+  delete formData.title;
+  return post('test/suite/case', formData)
+};
+
+export const deleteTestCase = (id) => {
+  return deleteRecord('test/suite/case/' + id)
 };
