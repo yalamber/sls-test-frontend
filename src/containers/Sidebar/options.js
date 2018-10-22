@@ -1,77 +1,77 @@
 const options = [
   {
     key: "companies",
-    label: "Software Company",
+    label: "sidebar.softwareCompany",
     leftIcon: "ion-briefcase",
     children: [
       {
         key: 'company/list',
-        label: 'List All',
+        label: 'sidebar.listAll',
       },
       {
         key: 'company/create',
-        label: 'Create Company',
+        label: 'sidebar.createCompany',
       },
       {
         key: 'company/teams/create',
-        label: 'Create Team',
+        label: 'sidebar.createTeam',
       },
       {
         key: 'company/users/create',
-        label: 'Create User',
+        label: 'sidebar.createUser',
       },
     ]
   },
   {
     key: "Testing-Providers",
-    label: "Testing Providers",
+    label: "sidebar.testingProviders",
     leftIcon: "ion-android-contacts",
     children: [
       {
         key: 'providers/teams',
-        label: 'List All',
+        label: 'sidebar.listAll',
       },
       {
         key: 'providers/teams/create',
-        label: 'Create Team',
+        label: 'sidebar.createTeam',
       },
       {
         key: 'providers/users/create',
-        label: 'Create User',
+        label: 'sidebar.createUser',
       }
     ]
   },
   {
     key: "dashboard",
-    label: "Dashboards",
+    label: "sidebar.Dashboards",
     leftIcon: "ion-grid",
     children: [
       {
         key: 'dashboards/list',
-        label: 'List All',
+        label: 'sidebar.listAll',
       },
       {
         key: 'dashboards/create',
-        label: 'Add New',
+        label: 'sidebar.addNew',
       }
     ]
   },
   {
     key: "test",
-    label: "Test Manager",
+    label: "sidebar.testManager",
     leftIcon: "ion-settings",
     children: [
       {
         key: 'test-manager/runs/list',
-        label: 'Test Run',
+        label: 'sidebar.testRun',
       },
       {
         key: 'test-manager/suite/list',
-        label: 'Test Suite',
+        label: 'sidebar.testSuite',
       },
       {
         key: 'test-manager/cases/list',
-        label: 'Test Cases',
+        label: 'sidebar.testCases',
       }
     ]
   }

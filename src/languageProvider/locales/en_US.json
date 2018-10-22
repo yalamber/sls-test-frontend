@@ -1,4 +1,18 @@
 {
+  "sidebar.softwareCompany": "Software Company",
+  "sidebar.listAll": "List All",
+  "sidebar.createCompany": "Create Company",
+  "sidebar.createTeam": "Create Team",
+  "sidebar.createUser": "Create User",
+  "sidebar.testingProviders": "Testing Providers",
+  "sidebar.Dashboards": "Dashboards",
+  "sidebar.addNew": "Add New",
+  "sidebar.testManager": "Test Manager",
+  "sidebar.testRun": "Test Run",
+  "sidebar.testSuite": "Test Suite",
+  "sidebar.testCases": "Test Cases",
+  
+
   "sidebar.email": "Email",
   "sidebar.clients": "Clients",
   "sidebar.ecommerce": "Ecommerce",
