@@ -10,7 +10,7 @@ export default function ActionButtons(props) {
   return (
     <ActionWrapper>
       <Tooltip placement="topLeft" title="Edit Record">
-        <a onClick={() => alert(JSON.stringify(props.row))}>
+        <a onClick={() => alert("Edit Form")}>
           <i className="ion-android-create"/>
         </a>
       </Tooltip>
@@ -20,7 +20,7 @@ export default function ActionButtons(props) {
           okText="Yes"
           cancelText="No"
           placement="topRight"
-          onConfirm={() => alert(JSON.stringify(props.row))}
+          onConfirm={() => props.delete(props.row)}
         >
           <a className="deleteBtn">
             <i className="ion-android-delete"/>

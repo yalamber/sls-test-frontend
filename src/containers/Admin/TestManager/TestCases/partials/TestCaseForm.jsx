@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import {Form, Row, Col, Input, message, Select, Divider} from 'antd';
 import {withRouter} from 'react-router-dom'
 import Button from '../../../../../components/uielements/button';
-import {teamValidation} from '../../../../../Validations/teamValidation';
 import {
   ActionWrapper,
 } from '../../../crud.style';
 import {getCompanies, getTeams} from "../../../../../actions/companyActions";
 import {getSuites} from "../../../../../actions/testManagerActions";
+import {testCaseValidation} from "../../../../../Validations/testCaseValidation";
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -18,8 +18,8 @@ class TeamForm extends Component {
     super();
     this.state = {
       status: [
-        {id: 1, name: 'Active'},
-        {id: 2, name: 'Inactive'},
+        {key: "active", value: 'Active'},
+        {key: "inactive", value: 'Inactive'},
       ],
       selectedCompany: null,
       selectedTeam: null,
@@ -33,15 +33,22 @@ class TeamForm extends Component {
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.handleSuiteChange = this.handleSuiteChange.bind(this);
+    this.resetForm = this.resetForm.bind(this);
   }
 
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        message.success("Success");
+        this.props.submit(values, this.resetForm);
       }
     });
+  }
+
+  resetForm() {
+    message.success("Success");
+    this.props.history.goBack();
+    this.props.form.resetFields();
   }
 
   componentDidMount() {
@@ -89,7 +96,7 @@ class TeamForm extends Component {
   }
 
   render() {
-    const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
+    const statusOptions = this.state.status.map(status => <Option key={status.key}>{status.value}</Option>);
     const companyOptions = this.state.companies.map(company => <Option key={company.clientId}>{company.name}</Option>);
     const teamOptions = this.state.teams.map(team => <Option key={team.clientTeamId}>{team.name}</Option>);
     const suiteOptions = this.state.suites.map(suite => <Option key={suite.testSuiteId}>{suite.name}</Option>);
@@ -108,7 +115,7 @@ class TeamForm extends Component {
         <Row key={i}>
           <Col md={24} sm={24} xs={24}>
             <FormItem label={"Step" + plural + " #" + (i + 1)} style={margin}>
-              {getFieldDecorator('step[' + i + ']', {})(
+              {getFieldDecorator('testCaseSteps[' + i + ']', {})(
                 <TextArea placeholder="Steps" rows={5}/>
               )}
             </FormItem>
@@ -125,7 +132,7 @@ class TeamForm extends Component {
                 <Col md={6} sm={24} xs={24}>
                   <FormItem label="Compant Name" style={margin}>
                     {getFieldDecorator('company', {
-                      rules: teamValidation.teamManager,
+                      rules: testCaseValidation.company,
                       onChange: this.handleCompanyChange,
                       initialValue: this.state.selectedCompany
                     })(
@@ -138,7 +145,7 @@ class TeamForm extends Component {
                 <Col md={6} sm={24} xs={24}>
                   <FormItem label="Team Name" style={margin}>
                     {getFieldDecorator('team', {
-                      rules: teamValidation.teamManager,
+                      rules: testCaseValidation.team,
                       onChange: this.handleTeamChange,
                       initialValue: this.state.selectedTeam
                     })(
@@ -150,8 +157,8 @@ class TeamForm extends Component {
                 </Col>
                 <Col md={6} sm={24} xs={24}>
                   <FormItem label="Test Suite Name" style={margin}>
-                    {getFieldDecorator('suite', {
-                      rules: teamValidation.teamManager,
+                    {getFieldDecorator('testSuiteId', {
+                      rules: testCaseValidation.suite,
                       onChange: this.handleSuiteChange
                     })(
                       <Select showSearch placeholder="Choose Suite Name">
@@ -162,7 +169,7 @@ class TeamForm extends Component {
                 </Col>
                 <Col md={6} sm={24} xs={24}>
                   <FormItem label="Status" style={margin}>
-                    {getFieldDecorator('status', {rules: teamValidation.teamManager})(
+                    {getFieldDecorator('status', {rules: testCaseValidation.status})(
                       <Select showSearch placeholder="Choose Status">
                         {statusOptions}
                       </Select>
@@ -172,8 +179,17 @@ class TeamForm extends Component {
               </Row>
               <Row>
                 <Col md={24} sm={24} xs={24}>
+                  <FormItem label="Title" style={margin}>
+                    {getFieldDecorator('title', {rules: testCaseValidation.title})(
+                      <TextArea placeholder="Title"/>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={24} sm={24} xs={24}>
                   <FormItem label="Description" style={margin}>
-                    {getFieldDecorator('description', {rules: teamValidation.teamName})(
+                    {getFieldDecorator('description', {rules: testCaseValidation.description})(
                       <TextArea placeholder="Description"/>
                     )}
                   </FormItem>
@@ -182,14 +198,14 @@ class TeamForm extends Component {
               <Row>
                 <Col md={12} sm={24} xs={24}>
                   <FormItem label="Developer Comment" style={margin}>
-                    {getFieldDecorator('dev_comment', {})(
+                    {getFieldDecorator('developerComments', {})(
                       <TextArea placeholder="Developer Comments" rows={5}/>
                     )}
                   </FormItem>
                 </Col>
                 <Col md={12} sm={24} xs={24}>
                   <FormItem label="Analyst Comment" style={margin}>
-                    {getFieldDecorator('analyst_comment', {})(
+                    {getFieldDecorator('analystComments', {})(
                       <TextArea placeholder="Analyst Comments" rows={5}/>
                     )}
                   </FormItem>
