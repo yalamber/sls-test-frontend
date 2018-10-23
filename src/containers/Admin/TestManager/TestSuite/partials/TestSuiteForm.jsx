@@ -6,6 +6,7 @@ import {teamValidation} from '../../../../../Validations/teamValidation';
 import {
   ActionWrapper,
 } from '../../../crud.style';
+import {testSuiteValidation} from "../../../../../Validations/testSuiteValidation";
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -51,14 +52,14 @@ class TeamForm extends Component {
               <Row>
                 <Col span={12}>
                   <FormItem label="Team Suite Name" style={margin}>
-                    {getFieldDecorator('name', {rules: teamValidation.teamManager})(
+                    {getFieldDecorator('name', {rules: testSuiteValidation.name})(
                       <Input placeholder="Team Suite Name"/>
                     )}
                   </FormItem>
                 </Col>
                 <Col span={12}>
                   <FormItem label="Status" style={margin}>
-                    {getFieldDecorator('status', {rules: teamValidation.teamManager})(
+                    {getFieldDecorator('status', {rules: testSuiteValidation.status})(
                       <Select showSearch>
                         {statusOptions}
                       </Select>
@@ -69,7 +70,7 @@ class TeamForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Description" style={margin}>
-                    {getFieldDecorator('description', {rules: teamValidation.teamName})(
+                    {getFieldDecorator('description', {rules: testSuiteValidation.description})(
                       <TextArea placeholder="Description"/>
                     )}
                   </FormItem>
@@ -78,7 +79,7 @@ class TeamForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Environment Access and Details" style={margin}>
-                    {getFieldDecorator('accessDetails', {rules: teamValidation.teamName})(
+                    {getFieldDecorator('accessDetails', {rules: testSuiteValidation.envAccessDetails})(
                       <TextArea placeholder="Environment Access and Details" rows={10}/>
                     )}
                   </FormItem>
@@ -87,7 +88,7 @@ class TeamForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Comments" style={margin}>
-                    {getFieldDecorator('comments', {})(
+                    {getFieldDecorator('comments', {rule: testSuiteValidation.comments})(
                       <TextArea placeholder="Comments"/>
                     )}
                   </FormItem>
