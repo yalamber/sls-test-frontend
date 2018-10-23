@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {Form, Select, Row, Col, Input} from 'antd';
 import {withRouter} from 'react-router-dom'
 import Button from '../../../../components/uielements/button';
-import {teamValidation} from '../../../../Validations/teamValidation';
 import {
   ActionWrapper,
 } from '../../crud.style';
 import {getCompanies, getTeams} from "../../../../actions/companyActions";
+import {dashboardValidation} from "../../../../Validations/dashboardValidation";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -68,7 +68,7 @@ class DashboardForm extends Component {
                 <Col span={24}>
                   <FormItem label="Company Name" style={margin}>
                     {getFieldDecorator('company', {
-                      rules: teamValidation.companyName,
+                      rules: dashboardValidation.company,
                       initialValue: this.props.match.params.id,
                       onChange: this.handleCompanyChange
                     })(
@@ -83,7 +83,7 @@ class DashboardForm extends Component {
                 <Col span={24}>
                   <FormItem label="Team Name" style={margin}>
                     {getFieldDecorator('teamId', {
-                      rules: teamValidation.companyName,
+                      rules: dashboardValidation.team,
                     })(
                       <Select showSearch placeholder="Please select team">
                         {teamsOptions}
@@ -95,7 +95,7 @@ class DashboardForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Board Name" style={margin}>
-                    {getFieldDecorator('name', {rules: teamValidation.teamName})(
+                    {getFieldDecorator('name', {rules: dashboardValidation.boardName})(
                       <Input placeholder="Enter Board name"/>
                     )}
                   </FormItem>
@@ -116,6 +116,7 @@ class DashboardForm extends Component {
     );
   }
 }
+
 const mapPropsToFields = (props) => {
   if (!props.hasOwnProperty('dashboard')) {
     return;
