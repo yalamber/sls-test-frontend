@@ -24,7 +24,14 @@ export function get(url, data = {}) {
     url: url + '?' + qs.stringify(data),
     method: 'GET',
   }).catch(error => {
-    throw error;
+    if (error.response === undefined) {
+      alert("Network Error");
+    } else {
+      if (error.response.status !== 422) {
+        alert("Something went wrong please try again.");
+      }
+    }
+    throw  error;
   });
 }
 
