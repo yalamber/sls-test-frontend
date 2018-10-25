@@ -26,4 +26,10 @@ export default [
     path: "test-manager/runs/list",
     component: asyncComponent(() => import("../../Admin/TestManager/TestRun/List"))
   },
+
+  //QueueManage
+  {
+    path: "test-manager/queues",
+    component: asyncComponent(() => import("../../Admin/TestManager/ManageQueues/List"))
+  },
 ]

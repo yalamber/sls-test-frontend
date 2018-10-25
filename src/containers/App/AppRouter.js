@@ -4,12 +4,14 @@ import testingProviderRoutes from './Routes/TestingProvidersRoutes';
 import companyRoutes from './Routes/CompanyRoutes';
 import dashboardRoutes from './Routes/DashboardRoutes';
 import testManagerRoutes from './Routes/TestManagerRoutes';
+import testQueueRoutes from './Routes/TestQueuesRoutes';
 
 const routes = [
   ...companyRoutes,
   ...testingProviderRoutes,
   ...dashboardRoutes,
-  ...testManagerRoutes
+  ...testManagerRoutes,
+  ...testQueueRoutes
 ];
 
 class AppRouter extends Component {

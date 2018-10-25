@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Form, Row, Col, Input, Select} from 'antd';
 import {withRouter} from 'react-router-dom'
 import Button from '../../../../../components/uielements/button';
-import {teamValidation} from '../../../../../Validations/teamValidation';
 import {
   ActionWrapper,
 } from '../../../crud.style';
