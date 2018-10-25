@@ -89,7 +89,7 @@ const options = [
         label: 'sidebar.testQueues.availableTests',
       },
       {
-        key: 'test-queues/active-tests',
+        key: 'test-queues/assigned-tests',
         label: 'sidebar.testQueues.activeTests',
       },
       {

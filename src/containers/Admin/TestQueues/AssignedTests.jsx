@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
-import {Row, Col, Select, Spin, Button, Checkbox} from 'antd';
-import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../../settings/basicStyle';
-import Box from '../../../../components/utility/box';
+import {Row, Col, Select, Spin, Checkbox, Radio} from 'antd';
+import LayoutWrapper from '../../../components/utility/layoutWrapper.js';
+import basicStyle from '../../../settings/basicStyle';
+import Box from '../../../components/utility/box';
 
 import {
   TitleWrapper,
   ComponentTitle,
   TableClickable as Table
-} from '../../crud.style';
-import {getCompanies, getTeams} from "../../../../actions/companyActions";
-import {getSuites} from "../../../../actions/testManagerActions";
+} from '../crud.style';
+import {getCompanies, getTeams} from "../../../actions/companyActions";
+import {getSuites} from "../../../actions/testManagerActions";
 
 const Option = Select.Option;
+const RadioGroup = Radio.Group;
 
 
 export default class extends Component {
@@ -123,11 +124,14 @@ export default class extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Company Test Queues </ComponentTitle>
+                <ComponentTitle>Assigned Tests </ComponentTitle>
               </TitleWrapper>
               <Row style={margin}>
-                <Col md={2} sm={24} xs={24}>
-                  <Button type="primary">Edit</Button>
+                <Col md={5} sm={24} xs={24}>
+                  <RadioGroup>
+                    <Radio value={1}>Individual</Radio>
+                    <Radio value={2}>Team</Radio>
+                  </RadioGroup>
                 </Col>
                 <Col md={6} sm={24} xs={24}>
                   <Select showSearch placeholder="Please Choose Company Name" style={{width: '90%'}}

@@ -6,15 +6,7 @@ export default [
     component: asyncComponent(() => import("../../Admin/TestQueues/AvailableTests"))
   },
   {
-    path: "test-queues/active-tests",
-    component: asyncComponent(() => import("../../Admin/TestManager/TestSuite/Create"))
-  },
-  {
-    path: "test-queues/completed-tests",
-    component: asyncComponent(() => import("../../Admin/TestManager/TestSuite/Create"))
-  },
-  {
-    path: "test-queues/reports",
-    component: asyncComponent(() => import("../../Admin/TestManager/TestSuite/Create"))
+    path: "test-queues/assigned-tests",
+    component: asyncComponent(() => import("../../Admin/TestQueues/AssignedTests.jsx"))
   },
 ]
