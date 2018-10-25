@@ -15,7 +15,7 @@
 
   "sidebar.testQueues": "Test Queues",
   "sidebar.testQueues.availableTests": "Available Tests",
-  "sidebar.testQueues.activeTests": "Active Tests",
+  "sidebar.testQueues.activeTests": "Assigned Tests",
   "sidebar.testQueues.completeTests": "Complete Tests",
   "sidebar.testQueues.reports": "Reports",
 
