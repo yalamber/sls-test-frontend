@@ -62,6 +62,10 @@ const options = [
     leftIcon: "ion-settings",
     children: [
       {
+        key: 'test-manager/queues',
+        label: 'sidebar.testManager.manageQueues',
+      },
+      {
         key: 'test-manager/runs/list',
         label: 'sidebar.testRun',
       },
@@ -72,6 +76,29 @@ const options = [
       {
         key: 'test-manager/cases/list',
         label: 'sidebar.testCases',
+      }
+    ]
+  },
+  {
+    key: "testQueues",
+    label: "sidebar.testQueues",
+    leftIcon: "ion-ios-browsers-outline",
+    children: [
+      {
+        key: 'test-queues/available-tests',
+        label: 'sidebar.testQueues.availableTests',
+      },
+      {
+        key: 'test-queues/active-tests',
+        label: 'sidebar.testQueues.activeTests',
+      },
+      {
+        key: 'test-queues/complete-tests',
+        label: 'sidebar.testQueues.completeTests',
+      },
+      {
+        key: 'test-queues/reports',
+        label: 'sidebar.testQueues.reports',
       }
     ]
   }
