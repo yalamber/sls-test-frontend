@@ -1,5 +1,5 @@
 import {post, get, deleteRecord} from "../helpers/http";
-
+//Suite
 export const getSuites = (clientId = null, clientTeamId = null) => {
   if (clientId) {
     return get('test/suite', {clientId});
@@ -10,6 +10,9 @@ export const getSuites = (clientId = null, clientTeamId = null) => {
 };
 export const addSuite = (formData) => {
   return post('test/suite', formData);
+};
+export const deleteSuite = (row) => {
+  return deleteRecord('test/suite/' + row.testSuiteId);
 };
 
 //cases

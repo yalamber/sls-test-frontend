@@ -7,8 +7,12 @@ import {
 import {Tooltip} from "antd";
 
 export default function ActionButtons(props) {
+  const rotate = {display: 'inline-block', transform: 'rotate(-45deg)'};
   return (
     <ActionWrapper>
+      <a>
+        <i className="ion-jet" style={rotate}/>
+      </a>
       <Tooltip placement="topLeft" title="Edit Record">
         <a onClick={() => alert("Edit Form")}>
           <i className="ion-android-create"/>

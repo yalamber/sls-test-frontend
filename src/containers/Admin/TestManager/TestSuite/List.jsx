@@ -15,7 +15,7 @@ import {
   TableClickable as Table
 } from '../../crud.style';
 import {getCompanies, getTeams} from "../../../../actions/companyActions";
-import {getSuites} from "../../../../actions/testManagerActions";
+import {deleteSuite, getSuites} from "../../../../actions/testManagerActions";
 import {dateTime} from "../../../../constants/dateFormat";
 
 const Option = Select.Option;
@@ -49,7 +49,7 @@ export default class extends Component {
         {
           title: 'Actions',
           key: 'actions',
-          render: (row) => <ActionButtons row={row}/>
+          render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
         }
       ],
       dataSource: [],
@@ -62,6 +62,7 @@ export default class extends Component {
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.isCompanyAndTeamSelected = this.isCompanyAndTeamSelected.bind(this);
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   componentDidMount() {
@@ -98,6 +99,15 @@ export default class extends Component {
 
   isCompanyAndTeamSelected() {
     return !!this.state.selectedCompany && !!this.state.selectedTeam;
+  }
+
+  handleDelete(id) {
+    deleteSuite(id).then(res => {
+      this.updateRecords(this.state.selectedCompany, this.state.selectedTeam);
+    }).catch(error => {
+      this.updateRecords(this.state.selectedCompany, this.state.selectedTeam);
+      console.log(error);
+    })
   }
 
   render() {
