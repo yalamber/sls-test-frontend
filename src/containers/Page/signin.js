@@ -62,18 +62,6 @@ class SignIn extends Component {
                 </Button>
               </div>
 
-              <p className="isoHelperText">
-                <IntlMessages id="page.signInPreview" />
-              </p>
-
-              <div className="isoInputWrapper isoOtherLogin">
-                <Button onClick={this.handleLogin} type="primary btnFacebook">
-                  <IntlMessages id="page.signInFacebook" />
-                </Button>
-                <Button onClick={this.handleLogin} type="primary btnGooglePlus">
-                  <IntlMessages id="page.signInGooglePlus" />
-                </Button>
-              </div>
               <div className="isoCenterComponent isoHelperWrapper">
                 <Link to="" className="isoForgotPass">
                   <IntlMessages id="page.signInForgotPass" />
