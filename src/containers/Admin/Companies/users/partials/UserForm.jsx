@@ -55,6 +55,7 @@ class UserForm extends Component {
   }
 
   resetForm() {
+    //this.props.history.goBack();
     this.props.form.resetFields();
   }
 
@@ -99,7 +100,7 @@ class UserForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Company Name" style={margin}>
-                    <Select  showSearch placeholder="Company" onChange={this.handleCompanyChange}>
+                    <Select showSearch placeholder="Company" onChange={this.handleCompanyChange}>
                       {companiesOptions}
                     </Select>
                   </FormItem>
@@ -186,36 +187,20 @@ class UserForm extends Component {
                       )}
                     </FormItem>
                     <Row>
-                      <Col span={12}>
-                        <FormItem style={margin} label="Instant Messaging:">
+                      <Col span={24}>
+                        <FormItem style={margin} label="Facebook:">
                           {getFieldDecorator('contactInformation.facebookHandle', {rules: userValidation.client})(
-                            <Input placeholder="Instant Messaging"/>
+                            <Input placeholder="Facebook Account"/>
                           )}
-                        </FormItem>
-                      </Col>
-                      <Col span={12}>
-                        <FormItem style={margin} label="Service">
-                          <Select showSearch placeholder="Instant Messaging Service">
-                            <Option value={0}>Facebook</Option>
-                            <Option value={1}>Twiter</Option>
-                          </Select>
                         </FormItem>
                       </Col>
                     </Row>
                     <Row>
-                      <Col span={12}>
-                        <FormItem style={margin} label="Instant Messaging:">
+                      <Col span={24}>
+                        <FormItem style={margin} label="Twitter:">
                           {getFieldDecorator('contactInformation.twitterHandle', {})(
-                            <Input placeholder="Instant Messaging"/>
+                            <Input placeholder="Twitter Account"/>
                           )}
-                        </FormItem>
-                      </Col>
-                      <Col span={12}>
-                        <FormItem style={margin} label="Service">
-                          <Select showSearch placeholder="Instant Messaging Service">
-                            <Option value={0}>Facebook</Option>
-                            <Option value={1}>Twiter</Option>
-                          </Select>
                         </FormItem>
                       </Col>
                     </Row>
@@ -231,14 +216,14 @@ class UserForm extends Component {
                 <FormItem label="LinkedIn URL" style={margin}>
                   {getFieldDecorator('contactInformation.linkedInUrl', {rules: userValidation.client})(
                     <Input
-                      placeholder="https:://linkedin.com/amttmg"
+                      placeholder="Linkedin URL"
                     />
                   )}
                 </FormItem>
                 <FormItem label="Resume URL" style={margin}>
                   {getFieldDecorator('resumeUrl', {})(
                     <Input
-                      placeholder="https:://amrittamang.com.np/amttmg.pdf"
+                      placeholder="Resume URL"
                     />
                   )}
                 </FormItem>

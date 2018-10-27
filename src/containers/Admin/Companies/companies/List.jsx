@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, message} from 'antd';
+import {Row, Col, Icon, message, Spin} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import Box from '../../../../components/utility/box';
@@ -45,7 +45,8 @@ export default class extends Component {
           render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
         }
       ],
-      dataSource: []
+      dataSource: [],
+      loading: false,
     };
     this.fetchData = this.fetchData.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -56,8 +57,9 @@ export default class extends Component {
   }
 
   fetchData() {
+    this.setState({loading: true});
     getCompanies().then(res => {
-      this.setState({dataSource: res.data})
+      this.setState({dataSource: res.data, loading: false})
     })
   }
 
@@ -88,14 +90,16 @@ export default class extends Component {
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Table
-                pagination={true}
-                columns={this.state.columns}
-                dataSource={this.state.dataSource}
-                onRowDoubleClick={(row) => {
-                  this.props.history.push('details/' + row.clientId)
-                }}
-              />
+              <Spin spinning={this.state.loading}>
+                <Table
+                  pagination={true}
+                  columns={this.state.columns}
+                  dataSource={this.state.dataSource}
+                  onRowDoubleClick={(row) => {
+                    this.props.history.push('details/' + row.clientId)
+                  }}
+                />
+              </Spin>
             </Box>
 
           </Col>

@@ -112,7 +112,7 @@ export default class extends Component {
 
   render() {
     const margin = {
-      margin: '5px 5px 10px 0'
+      margin: '5px 5px 10px 0px'
     };
     const {rowStyle, colStyle, gutter} = basicStyle;
     const companiesOptions = this.state.companies.map(company => <Option
@@ -140,16 +140,21 @@ export default class extends Component {
                 </ButtonHolders>
               </TitleWrapper>
               <Row>
-                <Col md={6} sm={24} xs={24}>
-                  <Select showSearch placeholder="Please Choose Company Name" style={{...margin, width: '100%'}}
-                          onChange={this.handleCompanyChange} value={this.state.selectedCompany}>
+                <Col md={6} sm={24} xs={24} style={margin}>
+                  <Select showSearch
+                          placeholder="Please Choose Company Name"
+                          style={{width: '100%'}}
+                          onChange={this.handleCompanyChange}
+                          value={this.state.selectedCompany}>
                     {companiesOptions}
                   </Select>
                 </Col>
-                <Col md={6} sm={24} xs={24}>
-                  <Select showSearch placeholder="Please Choose Team"
-                          style={{width: '100%', margin: '5px 5px 10px 20px'}}
-                          onChange={this.handleTeamChange} value={this.state.selectedTeam}>
+                <Col md={6} sm={24} xs={24} style={margin}>
+                  <Select showSearch
+                          placeholder="Please Choose Team"
+                          style={{width: '100%'}}
+                          onChange={this.handleTeamChange}
+                          value={this.state.selectedTeam}>
                     {teamsOptions}
                   </Select>
                 </Col>

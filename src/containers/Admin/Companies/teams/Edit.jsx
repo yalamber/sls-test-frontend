@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, message} from 'antd';
+import {Row, Col, message, Spin} from 'antd';
 import {withRouter} from 'react-router-dom'
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
@@ -12,28 +12,33 @@ import {
 
 import Box from '../../../../components/utility/box';
 import TeamForm from "./partials/TeamForm";
-import {addTeam, getClientTeam} from "../../../../actions/companyActions";
+import {updateTeam, getClientTeam} from "../../../../actions/companyActions";
 
 class Create extends Component {
 
   constructor() {
     super();
     this.state = {
-      team: {}
+      team: {},
+      loading: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(formData) {
-    addTeam(formData).then(res => {
+  handleSubmit(formData, resetForm) {
+    this.setState({loading: true});
+    updateTeam(formData, this.props.match.params.id).then(res => {
+      resetForm();
+      this.setState({loading: true});
       message.success('Successfully Saved.')
     });
     return true;
   }
 
   componentDidMount() {
+    this.setState({loading: true});
     getClientTeam(this.props.match.params.id).then(res => {
-      this.setState({team: res.data})
+      this.setState({team: res.data, loading: false})
     })
   }
 
@@ -47,10 +52,12 @@ class Create extends Component {
             <Box>
               <TitleWrapper>
                 <ComponentTitle>
-                  Create Team
+                  Edit Team
                 </ComponentTitle>
               </TitleWrapper>
-              <TeamForm submit={this.handleSubmit}/>
+              <Spin spinning={this.state.loading}>
+                <TeamForm team={this.state.team} submit={this.handleSubmit}/>
+              </Spin>
             </Box>
           </Col>
           <Col md={12} sm={12} xs={24} style={colStyle}>

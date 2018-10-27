@@ -20,6 +20,9 @@ export const getCompany = (id) => {
 export const addTeam = (team) => {
   return post('team/client', team);
 };
+export const updateTeam = (team, id) => {
+  return put('team/client/' + id, team);
+};
 export const deleteTeam = (teamId) => {
   return deleteRecord('team/client/' + teamId);
 };

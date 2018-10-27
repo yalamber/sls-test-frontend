@@ -42,7 +42,7 @@ export default class extends Component {
           title: 'Status',
           dataIndex: 'status',
           key: 'status' +
-          '',
+            '',
         }
       ],
       dataSource: [],
@@ -83,11 +83,11 @@ export default class extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Test Cases </ComponentTitle>
+                <ComponentTitle>Test Run </ComponentTitle>
                 <ButtonHolders>
                   <Tooltip placement="topRight">
                     <ActionBtn type="primary" onClick={() => {
-
+                      alert("Form on development")
                     }}>
                       <Icon type="plus"/>
                       Add New

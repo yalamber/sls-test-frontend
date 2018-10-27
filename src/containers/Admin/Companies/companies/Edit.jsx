@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col} from 'antd';
+import {Row, Col, Spin} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import ContentHolder from '../../../../components/utility/contentHolder';
@@ -17,14 +17,18 @@ export default class extends Component {
   constructor() {
     super();
     this.state = {
-      company: {}
+      company: {},
+      loading: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(formData) {
+  handleSubmit(formData, resetForm) {
+    this.setState({loading: true});
     editCompany(this.props.match.params.id, formData).then(res => {
       if (res.status) {
+        resetForm();
+        this.setState({loading: false});
         message.success("Successfully Saved");
         this.props.history.goBack();
       }
@@ -33,8 +37,9 @@ export default class extends Component {
   }
 
   componentDidMount() {
+    this.setState({loading: true});
     getCompany(this.props.match.params.id).then(res => {
-      this.setState({company: res.data})
+      this.setState({company: res.data, loading:false})
     })
   }
 
@@ -49,7 +54,9 @@ export default class extends Component {
               <TitleWrapper>
                 <ComponentTitle>Edit Company</ComponentTitle>
               </TitleWrapper>
+              <Spin spinning={this.state.loading}>
               <ClientForm company={this.state.company} submit={this.handleSubmit}/>
+              </Spin>
             </Box>
           </Col>
           <Col md={12} sm={12} xs={24} style={colStyle}>

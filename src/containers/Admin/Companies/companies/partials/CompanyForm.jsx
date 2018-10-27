@@ -15,18 +15,21 @@ class CompanyForm extends Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.resetForm = this.resetForm.bind(this);
   }
 
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        if (this.props.submit(values)) {
-          this.props.form.resetFields();
-        }
+        this.props.submit(values, this.resetForm)
       }
     });
 
+  }
+
+  resetForm() {
+    this.props.form.resetFields();
   }
 
   render() {
