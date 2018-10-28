@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import Input from '../../components/uielements/input';
-import Checkbox from '../../components/uielements/checkbox';
-import Button from '../../components/uielements/button';
+//import Input from '../../components/uielements/input';
+//import Checkbox from '../../components/uielements/checkbox';
+//import Button from '../../components/uielements/button';
 import authAction from '../../redux/auth/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
+import LoginForm from './partials/loginForm';
 
 const { login } = authAction;
 
 class SignIn extends Component {
   state = {
-    redirectToReferrer: false
+    redirectToReferrer: false,
+    userCred :[],
+    error: null
   };
   componentWillReceiveProps(nextProps) {
     if (
@@ -22,9 +25,10 @@ class SignIn extends Component {
       this.setState({ redirectToReferrer: true });
     }
   }
-  handleLogin = () => {
+  handleLogin = (values) => {
+    //console.log(values)
     const { login } = this.props;
-    login();
+    login(values);
     this.props.history.push('/dashboard');
   };
   render() {
@@ -43,33 +47,9 @@ class SignIn extends Component {
                 <IntlMessages id="page.signInTitle" />
               </Link>
             </div>
-
+           
             <div className="isoSignInForm">
-              <div className="isoInputWrapper">
-                <Input size="large" placeholder="Username" />
-              </div>
-
-              <div className="isoInputWrapper">
-                <Input size="large" type="password" placeholder="Password" />
-              </div>
-
-              <div className="isoInputWrapper isoLeftRightComponent">
-                <Checkbox>
-                  <IntlMessages id="page.signInRememberMe" />
-                </Checkbox>
-                <Button type="primary" onClick={this.handleLogin}>
-                  <IntlMessages id="page.signInButton" />
-                </Button>
-              </div>
-
-              <div className="isoCenterComponent isoHelperWrapper">
-                <Link to="" className="isoForgotPass">
-                  <IntlMessages id="page.signInForgotPass" />
-                </Link>
-                <Link to="">
-                  <IntlMessages id="page.signInCreateAccount" />
-                </Link>
-              </div>
+              <LoginForm submit={this.handleLogin}/>
             </div>
           </div>
         </div>
