@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Select, Tooltip, Spin} from 'antd';
+import {Row, Col, Icon, Select, Tooltip, Spin, Form} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import Box from '../../../../components/utility/box';
@@ -19,6 +19,7 @@ import {deleteSuite, getSuites} from "../../../../actions/testManagerActions";
 import {dateTime} from "../../../../constants/dateFormat";
 
 const Option = Select.Option;
+const FormItem = Form.Item;
 
 
 export default class extends Component {
@@ -141,22 +142,26 @@ export default class extends Component {
               </TitleWrapper>
               <Row>
                 <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch
-                          placeholder="Please Choose Company Name"
-                          style={{width: '100%'}}
-                          onChange={this.handleCompanyChange}
-                          value={this.state.selectedCompany}>
-                    {companiesOptions}
-                  </Select>
+                  <FormItem label="Company Name *">
+                    <Select showSearch
+                            placeholder="Please Choose Company Name"
+                            style={{width: '100%'}}
+                            onChange={this.handleCompanyChange}
+                            value={this.state.selectedCompany}>
+                      {companiesOptions}
+                    </Select>
+                  </FormItem>
                 </Col>
                 <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch
-                          placeholder="Please Choose Team"
-                          style={{width: '100%'}}
-                          onChange={this.handleTeamChange}
-                          value={this.state.selectedTeam}>
-                    {teamsOptions}
-                  </Select>
+                  <FormItem label="Team Name:">
+                    <Select showSearch
+                            placeholder="Please Choose Team"
+                            style={{width: '100%'}}
+                            onChange={this.handleTeamChange}
+                            value={this.state.selectedTeam}>
+                      {teamsOptions}
+                    </Select>
+                  </FormItem>
                 </Col>
               </Row>
               <Spin spinning={this.state.loading}>

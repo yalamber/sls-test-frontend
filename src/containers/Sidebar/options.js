@@ -6,19 +6,15 @@ const options = [
     children: [
       {
         key: 'company/list',
-        label: 'sidebar.listAll',
+        label: 'sidebar.company.companies',
       },
       {
-        key: 'company/create',
-        label: 'sidebar.createCompany',
-      },
-      {
-        key: 'company/teams/create',
-        label: 'sidebar.createTeam',
+        key: 'company/teams',
+        label: 'sidebar.company.teams',
       },
       {
         key: 'company/users/create',
-        label: 'sidebar.createUser',
+        label: 'sidebar.company.users',
       },
     ]
   },
