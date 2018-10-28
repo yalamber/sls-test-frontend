@@ -5,34 +5,48 @@ import actions from './actions';
 import {signIn} from "../../actions/userAction";
 import notification from '../../components/notification';
 
-
-
 export function* loginRequest() {
-  yield takeEvery('LOGIN_REQUEST', function*({ payload }) {
-    const { history, userInfo } = payload;
-    const result = yield call(signIn, userInfo);
-    if (result.data && result.data.token) {
-      yield put({
-        type: actions.LOGIN_SUCCESS,
-        payload: result.data,
-        token: result.data.token,
-        history
-      });
-    } else {
-      notification('error', 'login failed');
-      yield put({ type: actions.LOGIN_ERROR });
-    }
-
-  });
+  try{
+    yield takeEvery('LOGIN_REQUEST', function*({ payload }) {
+      const { history, userInfo } = payload;
+      try{
+        const result = yield call(signIn, userInfo);
+        if (result && result.data && result.data.token) {
+          yield put({
+            type: actions.LOGIN_SUCCESS,
+            payload: result.data,
+            token: result.data.token,
+            history
+          });
+        } else {
+          notification('error', 'login failed');
+          yield put({ type: actions.LOGIN_ERROR });
+        }
+      } catch(e) {
+        notification('error', 'login failed');
+        yield put({ type: actions.LOGIN_ERROR });
+      }
+    });  
+  } catch(e) {
+    console.log(e);
+    notification('error', 'Server error');
+  }
 }
 
 export function* loginSuccess() {
-  yield takeEvery(actions.LOGIN_SUCCESS, function*({ payload, history }) {
-    yield setToken(payload.token);
-    if (history) {
-      history.push('/dashboard');
-    }
-  });
+  try{
+    yield takeEvery(actions.LOGIN_SUCCESS, function*({payload, history}) {
+      if(payload) {  
+        yield setToken(payload.token);
+        if (history) {
+          history.push('/dashboard');
+        }
+      }
+    }); 
+  } catch(e) { 
+    console.log(e);
+    notification('error', 'Server error');
+  }
 }
 
 export function* loginError() {
