@@ -18,6 +18,7 @@ class TeamForm extends Component {
       companies: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.resetForm = this.resetForm.bind(this);
   }
 
   componentDidMount() {
@@ -30,11 +31,13 @@ class TeamForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        if(this.props.submit(values)){
-          this.props.form.resetFields();
-        }
+        this.props.submit(values, this.resetForm);
       }
     });
+  }
+
+  resetForm() {
+    this.props.history.goBack();
   }
 
 
@@ -87,6 +90,15 @@ class TeamForm extends Component {
     );
   }
 }
-
-const form = Form.create()(TeamForm);
+const mapPropsToFields = (props) => {
+  if (!props.hasOwnProperty('team')) {
+    return;
+  }
+  return {
+    name: Form.createFormField({
+      value: props.team.name
+    })
+  };
+};
+const form = Form.create({mapPropsToFields})(TeamForm);
 export default withRouter(form);

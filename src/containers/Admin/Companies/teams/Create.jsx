@@ -21,8 +21,9 @@ class Create extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(formData) {
-    addTeam(formData).then(res=>{
+  handleSubmit(formData, resetForm) {
+    addTeam(formData).then(res => {
+      resetForm();
       message.success('Successfully Saved.')
     });
     return true;

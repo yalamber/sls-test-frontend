@@ -93,7 +93,7 @@ export default class extends Component {
 
   render() {
     const margin = {
-      marginBottom: '10px'
+      margin: '5px 5px 10px 0px'
     };
     const {rowStyle, colStyle, gutter} = basicStyle;
     const companiesOptions = this.state.companies.map(company => <Option
@@ -110,30 +110,37 @@ export default class extends Component {
               <TitleWrapper>
                 <ComponentTitle>Available for Assignment </ComponentTitle>
               </TitleWrapper>
-              <Row style={margin}>
-                <Col md={3} sm={24} xs={24}>
-                  <Button type="primary">Assign To Me</Button>
+              <Row>
+                <Col md={3} sm={24} xs={24} style={margin}>
+                  <Button block type="primary">Assign To Me</Button>
                 </Col>
-                <Col md={1} sm={24} xs={24}>
+                <Col md={1} sm={24} xs={24} style={margin}>
                   <Button shape="circle" icon="check"/>
                 </Col>
-                <Col md={6} sm={24} xs={24}>
-                  <Select showSearch placeholder="Please Choose Company Name" style={{width: '90%'}}
-                          onChange={this.handleCompanyChange} value={this.state.selectedCompany}>
+                <Col md={6} sm={24} xs={24} style={margin}>
+                  <Select showSearch 
+                          placeholder="Please Choose Company Name" 
+                          style={{width: '100%'}}
+                          onChange={this.handleCompanyChange} 
+                          value={this.state.selectedCompany}>
                     {companiesOptions}
                   </Select>
                 </Col>
-                <Col md={6} sm={24} xs={24}>
-                  <Select showSearch placeholder="Please Choose Team"
-                          style={{width: '90%'}}
-                          onChange={this.handleTeamChange} value={this.state.selectedTeam}>
+                <Col md={6} sm={24} xs={24} style={margin}>
+                  <Select showSearch 
+                          placeholder="Please Choose Team"
+                          style={{width: '100%'}}
+                          onChange={this.handleTeamChange}
+                          value={this.state.selectedTeam}>
                     {teamsOptions}
                   </Select>
                 </Col>
-                <Col md={6} sm={24} xs={24}>
-                  <Select showSearch placeholder="Please Choose Suite"
-                          style={{width: '90%'}}
-                          onChange={this.handleSuiteChange} value={this.state.selectedSuite}>
+                <Col md={6} sm={24} xs={24} style={margin}>
+                  <Select showSearch 
+                          placeholder="Please Choose Suite"
+                          style={{width: '100%'}}
+                          onChange={this.handleSuiteChange} 
+                          value={this.state.selectedSuite}>
                     {suiteOptions}
                   </Select>
                 </Col>
