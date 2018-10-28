@@ -22,6 +22,10 @@ export default [
     component: asyncComponent(() => import("../../Admin/Companies/companies/Edit"))
   },
   {
+    path: "company/teams",
+    component: asyncComponent(() => import("../../Admin/Companies/teams/List"))
+  },
+  {
     path: "company/teams/create/:id?",
     component: asyncComponent(() => import("../../Admin/Companies/teams/Create"))
   },

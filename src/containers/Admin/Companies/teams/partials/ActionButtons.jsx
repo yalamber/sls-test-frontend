@@ -10,7 +10,7 @@ const ActionButtons = (props) => {
   return (
     <ActionWrapper>
       <Tooltip placement="topLeft" title="Edit Record">
-        <a onClick={() => props.history.push('../teams/edit/' + props.row.clientTeamId)}>
+        <a onClick={() => props.history.push('teams/edit/' + props.row.clientTeamId)}>
           <i className="ion-android-create"/>
         </a>
       </Tooltip>

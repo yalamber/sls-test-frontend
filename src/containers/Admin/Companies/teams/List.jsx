@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, message, Spin} from 'antd';
+import {Row, Col, Icon, message, Spin, Select} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import Box from '../../../../components/utility/box';
 import ActionButtons from "./partials/ActionButtons";
-
 import {
   ActionBtn,
   TitleWrapper,
@@ -12,32 +11,34 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {deleteCompany, getCompanies} from "../../../../actions/companyActions";
+import {deleteTeam, getCompanies, getTeams} from "../../../../actions/companyActions";
 
+const Option = Select.Option;
 export default class extends Component {
   constructor(props) {
     super(props);
     this.state = {
       columns: [
         {
+          title: 'Company',
+          dataIndex: 'client.name',
+          key: 'clientId',
+        },
+        {
           title: 'Name',
           dataIndex: 'name',
           key: 'name',
         },
         {
-          title: 'Company Admin',
-          dataIndex: 'admin.username',
-          key: 'company_admin',
+          title: 'Team Admin',
+          dataIndex: 'client.admin.username',
+          key: 'team_admin',
         },
+
         {
-          title: 'Company Admin Email',
-          dataIndex: 'admin.contactInformation.emailAddress',
-          key: 'company_admin_email',
-        },
-        {
-          title: 'Location',
-          dataIndex: 'location',
-          key: 'location',
+          title: 'Rating',
+          dataIndex: 'rating',
+          key: 'rating',
         },
         {
           title: 'Actions',
@@ -46,32 +47,48 @@ export default class extends Component {
         }
       ],
       dataSource: [],
+      companies: [],
+      selectedCompany: null,
       loading: false,
     };
     this.fetchData = this.fetchData.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleCompanyChange = this.handleCompanyChange.bind(this);
+  }
+
+  handleCompanyChange(companyId) {
+    this.setState({selectedCompany: companyId});
+    this.fetchData(companyId);
   }
 
   componentDidMount() {
+    getCompanies().then(res => {
+      this.setState({companies: res.data})
+    });
     this.fetchData();
   }
 
-  fetchData() {
+  fetchData(companyId = null) {
     this.setState({loading: true});
-    getCompanies().then(res => {
+    getTeams(companyId).then(res => {
       this.setState({dataSource: res.data, loading: false})
     })
   }
 
   handleDelete(row) {
-    deleteCompany(row.clientId).then(res => {
+    deleteTeam(row.clientTeamId).then(res => {
       message.success('Successfully Deleted.');
-      this.fetchData();
+      this.fetchData(this.state.selectedCompany);
     })
   }
 
   render() {
+    const margin = {
+      margin: '5px 5px 10px 0'
+    };
     const {rowStyle, colStyle, gutter} = basicStyle;
+    const companiesOptions = this.state.companies.map(company => <Option
+      key={company.clientId}>{company.name}</Option>);
     return (
 
       <LayoutWrapper>
@@ -83,21 +100,27 @@ export default class extends Component {
 
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
-                    console.log(this.props.history.push('create'))
+                    console.log(this.props.history.push('teams/create'))
                   }}>
                     <Icon type="plus"/>
-                    Add Company
+                    Add Team
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
+              <Row>
+                <Col md={6} sm={24} xs={24}>
+                  <Select showSearch placeholder="Please Choose Company Name" style={{...margin, width: '100%'}}
+                          onChange={this.handleCompanyChange}>
+                    {companiesOptions}
+                  </Select>
+                </Col>
+              </Row>
               <Spin spinning={this.state.loading}>
                 <Table
                   pagination={true}
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
-                  onRowDoubleClick={(row) => {
-                    this.props.history.push('details/' + row.clientId)
-                  }}
+                  rowKey="clientTeamId"
                 />
               </Spin>
             </Box>

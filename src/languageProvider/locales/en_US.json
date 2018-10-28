@@ -1,6 +1,12 @@
 {
   "sidebar.softwareCompany": "Software Company",
   "sidebar.listAll": "List All",
+
+  "sidebar.company.companies": "Company",
+  "sidebar.company.teams": "Team",
+  "sidebar.company.users": "User",
+
+
   "sidebar.createCompany": "Create Company",
   "sidebar.createTeam": "Create Team",
   "sidebar.createUser": "Create User",
@@ -12,13 +18,11 @@
   "sidebar.testRun": "Test Run",
   "sidebar.testSuite": "Test Suite",
   "sidebar.testCases": "Test Cases",
-
   "sidebar.testQueues": "Test Queues",
   "sidebar.testQueues.availableTests": "Available Tests",
   "sidebar.testQueues.activeTests": "Assigned Tests",
   "sidebar.testQueues.completeTests": "Complete Tests",
   "sidebar.testQueues.reports": "Reports",
-
   "sidebar.email": "Email",
   "sidebar.clients": "Clients",
   "sidebar.ecommerce": "Ecommerce",
