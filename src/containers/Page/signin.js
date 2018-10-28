@@ -27,9 +27,10 @@ class SignIn extends Component {
   }
   handleLogin = (values) => {
     //console.log(values)
-    const { login } = this.props;
-    login(values);
-    this.props.history.push('/dashboard');
+    const { login, history } = this.props;
+    console.log(history);
+    login({ history, userInfo : values});
+    //this.props.history.push('/dashboard');
   };
   render() {
     const from = { pathname: '/dashboard' };

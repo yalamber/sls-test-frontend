@@ -1,5 +1,9 @@
 import { Map } from 'immutable';
 
+export function setToken(token) {
+  localStorage.setItem('id_token', token);
+}
+
 export function clearToken() {
   localStorage.removeItem('id_token');
 }
