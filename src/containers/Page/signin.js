@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-//import Input from '../../components/uielements/input';
-//import Checkbox from '../../components/uielements/checkbox';
-//import Button from '../../components/uielements/button';
 import authAction from '../../redux/auth/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
@@ -13,9 +9,7 @@ const { login } = authAction;
 
 class SignIn extends Component {
   state = {
-    redirectToReferrer: false,
-    userCred :[],
-    error: null
+    redirectToReferrer: false
   };
   componentWillReceiveProps(nextProps) {
     if (
@@ -28,7 +22,6 @@ class SignIn extends Component {
   handleLogin = (values) => {
     //console.log(values)
     const { login, history } = this.props;
-    console.log(history);
     login({ history, userInfo : values});
     //this.props.history.push('/dashboard');
   };
