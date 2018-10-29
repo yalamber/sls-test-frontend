@@ -5,6 +5,7 @@ import authAction from '../../redux/auth/actions';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 import LoginForm from './partials/loginForm';
+import {getToken} from '../../helpers/utility';
 
 const { login } = authAction;
 
@@ -12,6 +13,12 @@ class SignIn extends Component {
   state = {
     redirectToReferrer: false
   };
+  componentDidMount(){
+    const token = getToken().get('idToken');
+    if (token) {
+       this.props.history.push('/dashboard');
+    }
+  }
   componentWillReceiveProps(nextProps) {
     if (
       this.props.isLoggedIn !== nextProps.isLoggedIn &&
@@ -21,7 +28,6 @@ class SignIn extends Component {
     }
   }
   handleLogin = (values) => {
-    //console.log(values)
     const { login, history } = this.props;
     login({ history, userInfo : values});
     //this.props.history.push('/dashboard');
