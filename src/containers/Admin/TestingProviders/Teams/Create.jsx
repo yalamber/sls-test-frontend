@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col} from 'antd';
+import {Row, Col, Spin} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import ContentHolder from '../../../../components/utility/contentHolder';
@@ -18,12 +18,18 @@ export default class extends Component {
 
   constructor() {
     super();
+    this.state = {
+      loading: false
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(formData, resetForm) {
+    this.setState({loading: true});
     addProviderTeam(formData).then(res => {
       resetForm();
+    }).finally(() => {
+      this.setState({loading: false});
     })
   }
 
@@ -38,7 +44,9 @@ export default class extends Component {
               <TitleWrapper>
                 <ComponentTitle>Create new Team</ComponentTitle>
               </TitleWrapper>
-              <UserForm submit={this.handleSubmit}/>
+              <Spin spinning={this.state.loading}>
+                <UserForm submit={this.handleSubmit}/>
+              </Spin>
             </Box>
           </Col>
           <Col md={12} sm={12} xs={24} style={colStyle}>

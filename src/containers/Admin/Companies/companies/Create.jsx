@@ -11,7 +11,7 @@ import {
 import Box from '../../../../components/utility/box';
 import ClientForm from "./partials/CompanyForm";
 import {message} from "antd/lib/index";
-import {addCompany} from "../../../../actions/companyActions";
+import {addCompany, addTeam} from "../../../../actions/companyActions";
 
 export default class extends Component {
 
@@ -25,10 +25,12 @@ export default class extends Component {
     this.setState({loading: true});
     addCompany(formData).then(res => {
       if (res.status) {
-        resetForm();
-        this.setState({loading: false});
-        message.success("Successfully Saved");
-        this.props.history.goBack();
+        addTeam({clientId: res.data.clientId, name: "Company Admin"}).then(res => {
+          this.setState({loading: false});
+          resetForm();
+          message.success("Successfully Saved");
+          this.props.history.goBack();
+        });
       }
     });
     return true;

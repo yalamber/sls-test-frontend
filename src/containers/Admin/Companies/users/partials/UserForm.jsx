@@ -100,9 +100,11 @@ class UserForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Company Name" style={margin}>
-                    <Select showSearch placeholder="Company" onChange={this.handleCompanyChange}>
-                      {companiesOptions}
-                    </Select>
+                    {getFieldDecorator('company', {rules: userValidation.company})(
+                      <Select showSearch placeholder="Company" onChange={this.handleCompanyChange}>
+                        {companiesOptions}
+                      </Select>
+                    )}
                   </FormItem>
                 </Col>
               </Row>
@@ -139,14 +141,15 @@ class UserForm extends Component {
             </Col>
             <Col span={12}>
               <Card title="Teams">
-                <FormItem style={margin}>
+                <FormItem style={margin} label="Select Teams">
                   <InputGroup size="large">
                     <Col span={2}>
                       <Icon type="search" style={{fontSize: '24px', color: '#08c', margin: '5px'}}/>
                     </Col>
                     <Col span={22}>
-                      {getFieldDecorator('clientTeams', {})(
+                      {getFieldDecorator('clientTeams', {rules: userValidation.team})(
                         <Select showSearch mode="multiple"
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 placeholder="Please choose teams"
                                 style={{width: '100%'}}>
                           {teamOptions}

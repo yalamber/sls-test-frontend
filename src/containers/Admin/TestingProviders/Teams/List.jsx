@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Rate} from 'antd';
+import {Row, Col, Icon, Rate, Spin} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import Box from '../../../../components/utility/box';
@@ -42,7 +42,8 @@ export default class extends Component {
           render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
         }
       ],
-      dataSource: []
+      dataSource: [],
+      loading: false
     };
     this.handleDelete = this.handleDelete.bind(this);
     this.fetchData = this.fetchData.bind(this);
@@ -53,18 +54,24 @@ export default class extends Component {
   }
 
   fetchData() {
+    this.setState({loading: true});
     getTestingProviderTeams().then(res => {
       this.setState({
         dataSource: res.data,
       })
-    })
+    }).finally(() => {
+      this.setState({loading: false});
+    });
   }
 
   handleDelete(row) {
+    this.setState({loading: true});
     deleteProviderTeam(row.providerTeamId).then(res => {
       message.success('Successfully Deleted.');
       this.fetchData();
-    })
+    }).finally(() => {
+      this.setState({loading: false});
+    });
   }
 
   render() {
@@ -86,16 +93,19 @@ export default class extends Component {
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Table
-                size="middle"
-                bordered
-                pagination={true}
-                columns={this.state.columns}
-                dataSource={this.state.dataSource}
-                onRowDoubleClick={(row) => {
-                  this.props.history.push('teams/' + row.providerTeamId + '/team-members')
-                }}
-              />
+              <Spin spinning={this.state.loading}>
+                <Table
+                  size="middle"
+                  bordered
+                  pagination={true}
+                  columns={this.state.columns}
+                  dataSource={this.state.dataSource}
+                  rowKey="providerTeamId"
+                  onRowDoubleClick={(row) => {
+                    this.props.history.push('teams/' + row.providerTeamId + '/team-members')
+                  }}
+                />
+              </Spin>
             </Box>
           </Col>
         </Row>

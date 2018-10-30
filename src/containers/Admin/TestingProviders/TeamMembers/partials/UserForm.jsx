@@ -116,7 +116,7 @@ class UserForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Citizenship" style={margin}>
-                    <Select  showSearch placeholder="Citizenship">
+                    <Select showSearch placeholder="Citizenship">
                       <Option value={0}>Citizenship</Option>
                       <Option value={1}>Passport</Option>
                     </Select>
@@ -133,8 +133,13 @@ class UserForm extends Component {
                       <Icon type="search" style={{fontSize: '24px', color: '#08c', margin: '5px'}}/>
                     </Col>
                     <Col span={22}>
-                      {getFieldDecorator('providerTeams', {rules: userValidation.status})(
-                        <Select  showSearch mode="multiple" placeholder="Please choose teams" style={{width: '100%'}}>
+                      {getFieldDecorator('providerTeams', {rules: userValidation.team})(
+                        <Select
+                          filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                          showSearch
+                          mode="multiple"
+                          placeholder="Please choose teams"
+                          style={{width: '100%'}}>
                           {teamOptions}
                         </Select>
                       )}
