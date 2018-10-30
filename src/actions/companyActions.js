@@ -50,3 +50,11 @@ export const deleteCompanyUser = (id) => {
 export const getCompanyUsersByTeamId = (teamId) => {
   return get('team/client/' + teamId + '/member');
 };
+
+export const getUsers = (companyId, teamId) => {
+  if (teamId) {
+    return get('team/client/' + teamId + '/member');
+  } else {
+    return get('user');
+  }
+};

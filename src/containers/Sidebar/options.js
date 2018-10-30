@@ -13,7 +13,7 @@ const options = [
         label: 'sidebar.company.teams',
       },
       {
-        key: 'company/users/create',
+        key: 'company/users',
         label: 'sidebar.company.users',
       },
     ]
@@ -25,15 +25,11 @@ const options = [
     children: [
       {
         key: 'providers/teams',
-        label: 'sidebar.listAll',
+        label: 'sidebar.provider.teams',
       },
       {
-        key: 'providers/teams/create',
-        label: 'sidebar.createTeam',
-      },
-      {
-        key: 'providers/users/create',
-        label: 'sidebar.createUser',
+        key: 'providers/teams/team-members',
+        label: 'sidebar.provider.users',
       }
     ]
   },

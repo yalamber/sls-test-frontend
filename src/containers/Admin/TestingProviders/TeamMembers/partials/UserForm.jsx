@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Select, Row, Col, Input, Radio, Icon} from 'antd';
+import {Form, Select, Row, Col, Input, Radio, Icon, message} from 'antd';
 import Button from '../../../../../components/uielements/button';
 import {userValidation} from '../../../../../Validations/usersValidation';
 import {
@@ -8,6 +8,7 @@ import {
 import Card from "../../../../../components/uielements/styles/card.style";
 import {getTestingProviderTeams} from "../../../../../actions/testingProviderActions";
 import {userStatus} from "../../../../../constants/userStatus";
+import {withRouter} from "react-router-dom";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -38,7 +39,9 @@ class UserForm extends Component {
   }
 
   resetForm() {
+    message.success("Successfully Saved");
     this.props.form.resetFields();
+    this.props.history.goBack();
   }
 
   generage() {
@@ -178,8 +181,8 @@ class UserForm extends Component {
                       )}
                     </FormItem>
                     <Row>
-                      <Col span={12}>
-                        <FormItem style={margin} label="Instant Messaging:">
+                      <Col span={24}>
+                        <FormItem style={margin} label="Facebool:">
 
                           {getFieldDecorator('contactInformation.facebookHandle', {rules: userValidation.client})(
                             <Input placeholder="Instant Messaging"/>
@@ -187,33 +190,13 @@ class UserForm extends Component {
 
                         </FormItem>
                       </Col>
-                      <Col span={12}>
-                        <FormItem style={margin} label="Service">
-
-                          <Select showSearch placeholder="Instant Messaging Service">
-                            <Option value={0}>Facebook</Option>
-                            <Option value={1}>Twiter</Option>
-                          </Select>
-
-                        </FormItem>
-                      </Col>
                     </Row>
                     <Row>
-                      <Col span={12}>
-                        <FormItem style={margin} label="Instant Messaging:">
+                      <Col span={24}>
+                        <FormItem style={margin} label="Twitter:">
                           {getFieldDecorator('contactInformation.twitterHandle', {})(
                             <Input placeholder="Instant Messaging"/>
                           )}
-                        </FormItem>
-                      </Col>
-                      <Col span={12}>
-                        <FormItem style={margin} label="Service">
-
-                          <Select showSearch placeholder="Instant Messaging Service">
-                            <Option value={0}>Facebook</Option>
-                            <Option value={1}>Twiter</Option>
-                          </Select>
-
                         </FormItem>
                       </Col>
                     </Row>
@@ -229,14 +212,14 @@ class UserForm extends Component {
                 <FormItem label="LinkedIn URL" style={margin}>
                   {getFieldDecorator('contactInformation.linkedInUrl', {rules: userValidation.client})(
                     <Input
-                      placeholder="https:://linkedin.com/amttmg"
+                      placeholder="Linkedin Profile URL"
                     />
                   )}
                 </FormItem>
                 <FormItem label="Resume URL" style={margin}>
                   {getFieldDecorator('resumeUrl', {})(
                     <Input
-                      placeholder="https:://amrittamang.com.np/amttmg.pdf"
+                      placeholder="Resume URL"
                     />
                   )}
                 </FormItem>
@@ -254,4 +237,6 @@ class UserForm extends Component {
   }
 }
 
-export default Form.create()(UserForm)
+const form = Form.create()(UserForm);
+export default withRouter(form);
+
