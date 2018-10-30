@@ -77,16 +77,14 @@ export default class extends Component {
   }
 
   fetchData(teamId = null) {
-    if (teamId) {
-      this.setState({loading: true});
-      getTestingProviderTeamMembers(teamId).then(res => {
-        this.setState({
-          dataSource: res.data,
-        })
-      }).finally(() => {
-        this.setState({loading: false});
-      });
-    }
+    this.setState({loading: true});
+    getTestingProviderTeamMembers(teamId).then(res => {
+      this.setState({
+        dataSource: res.data,
+      })
+    }).finally(() => {
+      this.setState({loading: false});
+    });
   }
 
   render() {

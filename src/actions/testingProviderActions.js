@@ -21,7 +21,11 @@ export const updateProviderTeam = (id, teamData) => {
 
 //Members
 export const getTestingProviderTeamMembers = (teamId) => {
-  return get('team/provider/' + teamId + '/member')
+  if (teamId) {
+    return get('team/provider/' + teamId + '/member')
+  } else {
+    return get('user?isProviderUser=1');
+  }
 };
 
 export const addProviderUser = (user) => {
