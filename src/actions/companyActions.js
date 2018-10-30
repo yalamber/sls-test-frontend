@@ -36,6 +36,7 @@ export const getClientTeam = (clientTeamId) => {
 
 //Users
 export const addCompanyUser = (user) => {
+  delete user.company;
   return post('user', user);
 };
 

@@ -57,7 +57,7 @@ class TeamForm extends Component {
                   <FormItem label="Company Name" style={margin}>
                     {getFieldDecorator('clientId', {
                       rules: teamValidation.companyName,
-                      initialValue: this.props.match.params.id
+                      //initialValue: this.props.match.params.id
                     })(
                       <Select showSearch placeholder="Company">
                         {clientsOptions}
@@ -90,11 +90,15 @@ class TeamForm extends Component {
     );
   }
 }
+
 const mapPropsToFields = (props) => {
   if (!props.hasOwnProperty('team')) {
     return;
   }
   return {
+    clientId: Form.createFormField({
+      value: props.team.clientId ? props.team.clientId.toString() : ''
+    }),
     name: Form.createFormField({
       value: props.team.name
     })

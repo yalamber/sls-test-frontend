@@ -118,16 +118,15 @@ class DashboardForm extends Component {
 }
 
 const mapPropsToFields = (props) => {
-  if (!props.hasOwnProperty('dashboard')) {
+  if (!props.hasOwnProperty('dashboard') || !props.dashboard.hasOwnProperty('clientTeam')) {
     return;
   }
-
   return {
     company: Form.createFormField({
-      value: [2]
+      value: props.dashboard.clientTeam.clientId.toString()
     }),
     teamId: Form.createFormField({
-      value: props.dashboard.clientTeamId
+      value: props.dashboard.clientTeamId.toString()
     }),
     name: Form.createFormField({
       value: props.dashboard.name

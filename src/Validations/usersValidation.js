@@ -4,6 +4,8 @@ export const userValidation = {
   status: [required],
   username: [required],
   email: [email, required],
-  client: [required]
+  client: [required],
+  company: [required],
+  team: [required]
 };
 

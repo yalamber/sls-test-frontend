@@ -32,12 +32,12 @@ class TeamForm extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         this.props.submit(values, this.resetForm);
-        message.success("Successfully Saved");
       }
     });
   }
 
   resetForm() {
+    message.success("Successfully Saved");
     this.props.form.resetFields();
     this.props.history.goBack();
   }
@@ -58,7 +58,7 @@ class TeamForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Team Manager" style={margin}>
-                    {getFieldDecorator('teamManagerId', {rules: teamValidation.teamManager})(
+                    {getFieldDecorator('teamManagerUserId', {rules: teamValidation.teamManager})(
                       <Select
                         showSearch
                         placeholder="Select Team Manager"
@@ -101,8 +101,8 @@ const mapPropsToFields = (props) => {
     return;
   }
   return {
-    teamManagerId: Form.createFormField({
-      value: props.team.teamManagerId
+    teamManagerUserId: Form.createFormField({
+      value: props.team.teamManagerUserId ? props.team.teamManagerUserId.toString() : ''
     }),
     name: Form.createFormField({
       value: props.team.name
