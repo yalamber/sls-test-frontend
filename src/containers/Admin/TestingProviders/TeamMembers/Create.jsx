@@ -16,12 +16,18 @@ export default class extends Component {
 
   constructor() {
     super();
+    this.state = {
+      loading: false
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(formData, resetForm) {
+    this.setState({loading: true});
     addProviderUser({isProviderUser: true, isClientUser: false, ...formData}).then(res => {
       resetForm();
+    }).finally(()=>{
+      this.setState({loading: false});
     })
   }
 

@@ -6,6 +6,10 @@
   "sidebar.company.teams": "Team",
   "sidebar.company.users": "User",
 
+  "sidebar.provider.teams": "Teams",
+  "sidebar.provider.users": "Users",
+
+
 
   "sidebar.createCompany": "Create Company",
   "sidebar.createTeam": "Create Team",

@@ -37,4 +37,8 @@ export default [
     path: "company/users/create",
     component: asyncComponent(() => import("../../Admin/Companies/users/Create"))
   },
+  {
+    path: "company/users",
+    component: asyncComponent(() => import("../../Admin/Companies/users/List"))
+  },
 ]

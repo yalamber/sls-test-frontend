@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon} from 'antd';
+import {Row, Col, Icon, Select, Spin} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import Box from '../../../../components/utility/box';
 import ActionButtons from "./partials/ActionButtons";
-import PageHeader from "../../../../components/utility/pageHeader";
 
 import {
   ActionBtn,
@@ -14,10 +13,12 @@ import {
   TableClickable as Table
 } from '../../crud.style';
 import {
-  deleteProviderUser, getTestingProviderTeam,
-  getTestingProviderTeamMembers
+  deleteProviderUser,
+  getTestingProviderTeamMembers, getTestingProviderTeams
 } from "../../../../actions/testingProviderActions";
 import {message} from "antd/lib/index";
+
+const Option = Select.Option;
 
 export default class extends Component {
   constructor() {
@@ -28,18 +29,13 @@ export default class extends Component {
           title: "Team Member List",
           children: [
             {
-              title: 'Type',
-              dataIndex: 'type',
-              key: 'eyp',
-            },
-            {
               title: 'Contact Info',
               dataIndex: 'username',
               key: 'contactInfo',
             },
             {
               title: 'Location',
-              dataIndex: 'location',
+              dataIndex: 'contactInformation.postalAddress',
               key: 'location',
             },
             {
@@ -50,65 +46,94 @@ export default class extends Component {
           ]
         }
       ],
-      team: null,
-      dataSource: []
+      teams: [],
+      selectedTeam: null,
+      dataSource: [],
+      loading: false
     };
     this.handleDelete = this.handleDelete.bind(this);
     this.fetchData = this.fetchData.bind(this);
+    this.handleTeamChange = this.handleTeamChange.bind(this);
+  }
+
+  handleTeamChange(teamId) {
+    this.setState({selectedTeam: teamId});
+    this.fetchData(teamId);
   }
 
   handleDelete(row) {
     deleteProviderUser(row.userId).then(res => {
       message.success('Successfully Deleted.');
-      this.fetchData();
+      this.fetchData(this.state.selectedTeam);
     })
   }
 
   componentDidMount() {
-    this.fetchData();
+    getTestingProviderTeams().then(res => {
+      this.setState({teams: res.data});
+    });
+    this.setState({selectedTeam: this.props.match.params.id});
+    this.fetchData(this.props.match.params.id);
   }
 
-  fetchData() {
-    getTestingProviderTeamMembers(this.props.match.params.id).then(res => {
-      this.setState({
-        dataSource: res.data,
-      })
-    });
-    getTestingProviderTeam(this.props.match.params.id).then(res => {
-      this.setState({team: res.data});
-    })
+  fetchData(teamId = null) {
+    if (teamId) {
+      this.setState({loading: true});
+      getTestingProviderTeamMembers(teamId).then(res => {
+        this.setState({
+          dataSource: res.data,
+        })
+      }).finally(() => {
+        this.setState({loading: false});
+      });
+    }
   }
 
   render() {
     const {rowStyle, colStyle, gutter} = basicStyle;
+    const margin = {
+      margin: '5px 5px 10px 0'
+    };
+    const teamOptions = this.state.teams.map(team => <Option
+      key={team.providerTeamId}>{team.name}</Option>);
     return (
       <LayoutWrapper>
-        <PageHeader>{this.state.team ? this.state.team.name : ''}</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
                 <ComponentTitle>
-                  <ActionBtn type="secondary" onClick={() => this.props.history.goBack()}>
-                    <Icon type="left"/>Go Back
-                  </ActionBtn>
+                  Testing Provider Users
                 </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
-                    this.props.history.push('../../users/create')
+                    this.props.history.push('/dashboard/providers/users/create')
                   }}>
                     <Icon type="user-add"/>
                     Create Team Member
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Table
-                bordered
-                size="middle"
-                pagination={{pageSize: 5}}
-                columns={this.state.columns}
-                dataSource={this.state.dataSource}
-              />
+              <Row>
+                <Col md={6} sm={24} xs={24}>
+                  <Select showSearch
+                          value={this.state.selectedTeam}
+                          placeholder="Please Choose Company Name"
+                          style={{...margin, width: '100%'}}
+                          onChange={this.handleTeamChange}>
+                    {teamOptions}
+                  </Select>
+                </Col>
+              </Row>
+              <Spin spinning={this.state.loading}>
+                <Table
+                  bordered
+                  size="middle"
+                  pagination={{pageSize: 5}}
+                  columns={this.state.columns}
+                  dataSource={this.state.dataSource}
+                />
+              </Spin>
             </Box>
           </Col>
         </Row>

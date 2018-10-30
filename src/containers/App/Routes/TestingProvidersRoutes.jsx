@@ -18,7 +18,7 @@ export default [
     component: asyncComponent(() => import("../../Admin/TestingProviders/TeamMembers/Create"))
   },
   {
-    path: "providers/teams/:id/team-members",
+    path: "providers/teams/team-members/:id?",
     component: asyncComponent(() => import("../../Admin/TestingProviders/TeamMembers/List"))
   },
 ]
