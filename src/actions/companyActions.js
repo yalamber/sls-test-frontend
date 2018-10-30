@@ -55,6 +55,6 @@ export const getUsers = (companyId, teamId) => {
   if (teamId) {
     return get('team/client/' + teamId + '/member');
   } else {
-    return get('user');
+    return get('user?clientId=' + companyId);
   }
 };
