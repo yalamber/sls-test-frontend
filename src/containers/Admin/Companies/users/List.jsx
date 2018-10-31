@@ -118,7 +118,7 @@ export default class extends Component {
                 <ComponentTitle>Users List </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
-                    this.props.history.push('/dashboard/company/users/create')
+                    this.props.history.push('/dashboard/company/user/create')
                   }}>
                     <Icon type="plus"/>
                     Add new User
