@@ -7,7 +7,8 @@ export default class extends Component {
     return (
       <LayoutContentWrapper style={{ height: '100vh' }}>
         <LayoutContent>
-          <h1>ISOMORPHIC DASHBOARD HOME</h1>
+          <h1>SWQA</h1>
+          <p>Welcome to Dashboard</p>
         </LayoutContent>
       </LayoutContentWrapper>
     );
