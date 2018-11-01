@@ -26,12 +26,12 @@ export default class extends Component {
         },
         {
           title: 'Company Admin',
-          dataIndex: 'admin.username',
+          dataIndex: 'owner.username',
           key: 'company_admin',
         },
         {
           title: 'Company Admin Email',
-          dataIndex: 'admin.contactInformation.emailAddress',
+          dataIndex: 'owner.contactInformation.emailAddress',
           key: 'company_admin_email',
         },
         {
@@ -60,7 +60,7 @@ export default class extends Component {
     this.setState({loading: true});
     getCompanies().then(res => {
       this.setState({dataSource: res.data, loading: false})
-    })
+    });
   }
 
   handleDelete(row) {
@@ -93,11 +93,14 @@ export default class extends Component {
               <Spin spinning={this.state.loading}>
                 <Table
                   pagination={true}
+                  rowKey="clientId"
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
-                  onRowDoubleClick={(row) => {
-                    this.props.history.push('details/' + row.clientId)
-                  }}
+                  onRow={(row) => ({
+                    onDoubleClick: () => {
+                      this.props.history.push('details/' + row.clientId)
+                    },
+                  })}
                 />
               </Spin>
             </Box>
