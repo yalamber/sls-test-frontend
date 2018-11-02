@@ -50,9 +50,9 @@ export default class extends Component {
       companies: [],
       teams: [],
       suites: [],
-      selectedCompany: null,
-      selectedTeam: null,
-      selectedSuite: null,
+      selectedCompany: undefined,
+      selectedTeam: undefined,
+      selectedSuite: undefined,
       loading: false
     };
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
