@@ -11,9 +11,7 @@ const ActionButtons = (props) => {
   return (
     <ActionWrapper>
       <Tooltip placement="topLeft" title="Go to Dashboard">
-        <a onClick={(e) => {
-          e.preventDefault();
-        }}>
+        <a onClick={() => props.history.push('/dashboard/dashboards/list/?clientId='+props.row.clientId)}>
           <i className="ion-android-apps"/>
         </a>
       </Tooltip>

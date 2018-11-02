@@ -29,9 +29,9 @@ export default class extends Component {
           title: "Team Member List",
           children: [
             {
-              title: 'Contact Info',
+              title: 'Username',
               dataIndex: 'username',
-              key: 'contactInfo',
+              key: 'username',
             },
             {
               title: 'Location',
@@ -128,6 +128,7 @@ export default class extends Component {
                   bordered
                   size="middle"
                   pagination={{pageSize: 5}}
+                  rowKey="userId"
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
                 />

@@ -101,9 +101,11 @@ export default class extends Component {
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
                   rowKey="providerTeamId"
-                  onRowDoubleClick={(row) => {
-                    this.props.history.push('teams/team-members/' + row.providerTeamId)
-                  }}
+                  onRow={(row) => ({
+                    onDoubleClick: () => {
+                      this.props.history.push('teams/team-members/' + row.providerTeamId)
+                    },
+                  })}
                 />
               </Spin>
             </Box>
