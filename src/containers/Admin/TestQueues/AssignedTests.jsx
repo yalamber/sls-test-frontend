@@ -134,28 +134,28 @@ export default class extends Component {
                   </RadioGroup>
                 </Col>
                 <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch 
-                          placeholder="Please Choose Company Name" 
+                  <Select showSearch
+                          placeholder="Company Name"
                           style={{width: '100%'}}
-                          onChange={this.handleCompanyChange} 
+                          onChange={this.handleCompanyChange}
                           value={this.state.selectedCompany}>
                     {companiesOptions}
                   </Select>
                 </Col>
                 <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch 
-                          placeholder="Please Choose Team"
+                  <Select showSearch
+                          placeholder="Team Name"
                           style={{width: '100%'}}
-                          onChange={this.handleTeamChange} 
+                          onChange={this.handleTeamChange}
                           value={this.state.selectedTeam}>
                     {teamsOptions}
                   </Select>
                 </Col>
                 <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch 
-                          placeholder="Please Choose Suite"
+                  <Select showSearch
+                          placeholder="Testing Suite"
                           style={{width: '100%'}}
-                          onChange={this.handleSuiteChange} 
+                          onChange={this.handleSuiteChange}
                           value={this.state.selectedSuite}>
                     {suiteOptions}
                   </Select>
