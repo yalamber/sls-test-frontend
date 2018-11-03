@@ -41,6 +41,11 @@ export const addCompanyUser = (user) => {
   return post('user', user);
 };
 
+export const updateCompanyUser = (id, user) => {
+  delete user.company;
+  return put('user/' + id, user);
+};
+
 export const getCompanyUsers = () => {
   return get('user');
 };
@@ -58,4 +63,8 @@ export const getUsers = (companyId, teamId) => {
   } else {
     return get('user?clientId=' + companyId);
   }
+};
+
+export const getUser = (id) => {
+  return get('user/' + id);
 };

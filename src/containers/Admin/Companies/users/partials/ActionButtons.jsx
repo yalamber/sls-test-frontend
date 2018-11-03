@@ -5,28 +5,31 @@ import {
   ActionWrapper,
 } from '../../../crud.style';
 import {Tooltip} from "antd";
+import {withRouter} from "react-router-dom";
 
-export default function ActionButtons(props) {
+const ActionButtons = function ActionButtons(props) {
   return (
     <ActionWrapper>
       <Tooltip placement="topLeft" title="Edit Record">
-        <a onClick={() => console.log(props.row)}>
+        <a onClick={() => props.history.push('/dashboard/company/user/edit/' + props.row.userId)}>
           <i className="ion-android-create"/>
         </a>
       </Tooltip>
       <Tooltip placement="topLeft" title="Delete Record">
-      <Popconfirms
-        title="Are you sure to delete this user ?"
-        okText="Yes"
-        cancelText="No"
-        placement="topRight"
-        onConfirm={() => props.delete(props.row)}
-      >
-        <a className="deleteBtn">
-          <i className="ion-android-delete"/>
-        </a>
-      </Popconfirms>
+        <Popconfirms
+          title="Are you sure to delete this user ?"
+          okText="Yes"
+          cancelText="No"
+          placement="topRight"
+          onConfirm={() => props.delete(props.row)}
+        >
+          <a className="deleteBtn">
+            <i className="ion-android-delete"/>
+          </a>
+        </Popconfirms>
       </Tooltip>
     </ActionWrapper>
   );
 }
+
+export default withRouter(ActionButtons);

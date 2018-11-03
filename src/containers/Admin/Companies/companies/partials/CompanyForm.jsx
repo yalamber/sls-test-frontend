@@ -51,6 +51,7 @@ class CompanyForm extends Component {
   }
 
   resetForm() {
+    this.setState({passwordType: false});
     this.props.form.resetFields();
   }
 

@@ -5,12 +5,13 @@ import {
   ActionWrapper,
 } from '../../../crud.style';
 import {Tooltip} from "antd";
+import {withRouter} from "react-router-dom";
 
-export default function ActionButtons(props) {
+const ActionButtons = function(props) {
   return (
     <ActionWrapper>
       <Tooltip placement="topLeft" title="Edit Record">
-        <a onClick={() => console.log(props.row)}>
+        <a onClick={() => props.history.push('/dashboard/providers/users/edit/' + props.row.userId)}>
           <i className="ion-android-create"/>
         </a>
       </Tooltip>
@@ -30,3 +31,5 @@ export default function ActionButtons(props) {
     </ActionWrapper>
   );
 }
+
+export default withRouter(ActionButtons);
