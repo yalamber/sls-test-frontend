@@ -56,8 +56,8 @@ export default class extends Component {
       dataSource: [],
       companies: [],
       teams: [],
-      selectedCompany: null,
-      selectedTeam: null,
+      selectedCompany: undefined,
+      selectedTeam: undefined,
       loading: false
     };
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
@@ -76,7 +76,7 @@ export default class extends Component {
   }
 
   handleCompanyChange(companyId) {
-    this.setState({selectedTeam: null});
+    this.setState({selectedTeam: undefined});
     getTeams(companyId).then(res => {
       this.setState({teams: res.data});
     });
