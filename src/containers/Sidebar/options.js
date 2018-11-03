@@ -24,6 +24,10 @@ const options = [
     leftIcon: "ion-android-contacts",
     children: [
       {
+        key: 'agencies_list',
+        label: 'Agency',
+      },
+      {
         key: 'providers/teams',
         label: 'sidebar.provider.teams',
       },
