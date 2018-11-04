@@ -9,6 +9,7 @@ import {
 import Card from "../../../../../components/uielements/styles/card.style";
 import {getCompanies, getTeams} from "../../../../../actions/companyActions";
 import {userStatus} from "../../../../../constants/userStatus";
+import Errors from "../../../../Errors";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -231,6 +232,11 @@ class UserForm extends Component {
                   )}
                 </FormItem>
               </Card>
+            </Col>
+          </Row>
+          <Row style={margin}>
+            <Col span={24}>
+              {this.props.errors.details.length ? <Errors errors={this.props.errors}/> : ''}
             </Col>
           </Row>
           <ActionWrapper style={margin}>

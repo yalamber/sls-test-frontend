@@ -12,7 +12,6 @@ import Box from '../../../../components/utility/box';
 import UserForm from "../users/partials/UserForm";
 import {message} from "antd/lib/index";
 import {addCompanyUser} from "../../../../actions/companyActions";
-import Errors from "../../../Errors";
 
 class Create extends Component {
   constructor() {
@@ -37,7 +36,6 @@ class Create extends Component {
     }).catch(error => {
       if (error.response.status === 422) {
         this.setState({errors: error.response.data});
-        window.scrollTo(0, 0)
       }
     }).finally(() => {
       this.setState({loading: false});
@@ -57,13 +55,8 @@ class Create extends Component {
                   Create User
                 </ComponentTitle>
               </TitleWrapper>
-              <Row gutter={24}>
-                <Col span={24}>
-                  {this.state.errors.details.length ? <Errors errors={this.state.errors}/> : ''}
-                </Col>
-              </Row>
               <Spin spinning={this.state.loading}>
-                <UserForm submit={this.handleSubmit}/>
+                <UserForm submit={this.handleSubmit} errors={this.state.errors}/>
               </Spin>
             </Box>
           </Col>
