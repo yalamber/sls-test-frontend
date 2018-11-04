@@ -66,9 +66,9 @@ export default class extends Component {
       companies: [],
       teams: [],
       suites: [],
-      selectedCompany: null,
-      selectedTeam: null,
-      selectedSuite: null,
+      selectedCompany: undefined,
+      selectedTeam: undefined,
+      selectedSuite: undefined,
       loading: false
     };
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
@@ -84,7 +84,7 @@ export default class extends Component {
   }
 
   handleCompanyChange(companyId) {
-    this.setState({selectedTeam: null});
+    this.setState({selectedTeam: undefined});
     getTeams(companyId).then(res => {
       this.setState({teams: res.data});
     });
