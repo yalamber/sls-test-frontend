@@ -1,113 +1,243 @@
-import React, {Component} from 'react';
-import {Form, Row, Col, Input, message, Select} from 'antd';
-import {withRouter} from 'react-router-dom'
+import React, { Component } from 'react';
+import { Form, Select, Row, Col, Input, Radio, Icon } from 'antd';
+import { withRouter } from 'react-router-dom'
 import Button from '../../../../components/uielements/button';
-import {teamValidation} from '../../../../Validations/teamValidation';
+import { userValidation } from '../../../../Validations/usersValidation';
+import { agencyValidation } from '../../../../Validations/agencyValidation.js';
 import {
   ActionWrapper,
-} from '../../../crud.style';
-import {getCompanyUsers} from "../../../../actions/companyActions";
+} from '../../crud.style';
+import Card from "../../../../components/uielements/styles/card.style";
+import { getCompanies, getTeams } from "../../../../actions/companyActions";
+import { userStatus } from "../../../../constants/userStatus";
+import {
+  TitleWrapper,
+  ComponentTitle,
+} from '../../crud.style'
+import AgencyFormWrapper from './agency.style.js'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const TextArea = Input.TextArea;
+const RadioGroup = Radio.Group;
+const InputGroup = Input.Group;
 
-class TeamForm extends Component {
+class AgencyForm extends Component {
   constructor() {
     super();
     this.state = {
-      users: [],
+      status: userStatus,
+      teams: [],
+      companies: [],
+      passwordType: false,
+      selected: []
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.resetForm = this.resetForm.bind(this);
   }
 
   componentDidMount() {
-    // getCompanyUsers().then(res => {
-    //   this.setState({users: res.data})
-    // })
   }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        this.props.submit(values, this.resetForm);
-      }
-    });
-  }
-
-  resetForm() {
-    message.success("Successfully Saved");
-    this.props.form.resetFields();
-    this.props.history.goBack();
-  }
-
 
   render() {
     const margin = {
       margin: '5px 5px 0px 0'
     };
-    const userOptions = this.state.users.map(user => <Option key={user.userId}>{user.username}</Option>);
+    const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
+    const teamOptions = this.state.teams.map(team => <Option key={team.clientTeamId}>{team.name}</Option>);
+    const companiesOptions = this.state.companies.map(company => <Option
+      key={company.clientId}>{company.name}</Option>);
+    const { getFieldDecorator } = this.props.form;
+    const formItemLayout = {
+      labelCol: {
+        lg: { span: 9 },
+        md: { span: 5 },
+        sm: { span: 24 },
+      },
+      wrapperCol: {
+        lg: { span: 15 },
+        md: { span: 19 },
+        sm: { span: 24 },
+      },
+    };
+    const formItemLayout1 = {
+      labelCol: {
+        lg: { span: 3 },
+        md: { span: 5 },
+        sm: { span: 24 },
+      },
+      wrapperCol: {
+        lg: { span: 21 },
+        md: { span: 19 },
+        sm: { span: 24 },
+      },
+    };
 
-    const {getFieldDecorator} = this.props.form;
+    //Responsive span
+    const formResSpan = {
+      xl: { span: 12 },
+      lg: { span: 12 },
+      md: { span: 24 },
+      sm: { span: 24 },
+    };
+
+    //Margin bottom 
+    const marginBottom = {
+      marginBottom: 14
+    }
+
+    const selectAfter = (
+      <Select defaultValue="Services" style={{ width: 120 }}>
+        <Option value=".com">Service One</Option>
+        <Option value=".jp">Service Two</Option>
+        <Option value=".cn">Service Three</Option>
+        <Option value=".org">Service Four</Option>
+      </Select>
+    );
+
     return (
-      <div>
-        <Form onSubmit={this.handleSubmit} id="clientForm">
+      <AgencyFormWrapper>
+        <Form onSubmit={() => { }} id="clientForm">
+          <Row gutter={16} style={marginBottom}>
+            <Col {...formResSpan}>
+              <FormItem style={margin} label="Agency Name:">
+                {getFieldDecorator('contactInformation.agencyName', { rules: agencyValidation.agencyName })(
+                  <Input placeholder="Enter Agency Name" />
+                )}
+              </FormItem>
+            </Col>
+            <Col {...formResSpan}>
+              <FormItem style={margin} label="Agency Address:">
+                {getFieldDecorator('contactInformation.agencyAddress', { rules: agencyValidation.agencyAddress })(
+                  <TextArea placeholder="Enter Agency Address" rows={5} />
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+
+          <TitleWrapper>
+            <ComponentTitle style={{ marginTop: 30}}>
+              Agency Account Owner
+            </ComponentTitle>
+          </TitleWrapper>
+
           <Row gutter={16}>
             <Col span={24}>
-              <Row>
-                <Col span={24}>
-                  <FormItem label="Team Manager" style={margin}>
-                    {getFieldDecorator('teamManagerUserId', {rules: teamValidation.teamManager})(
-                      <Select
-                        showSearch
-                        placeholder="Select Team Manager"
-                        optionFilterProp="children"
-                      >
-                        {userOptions}
-                      </Select>
+              {/*<Card title="Contact Information" style={{ marginTop: '20px' }}>
+                
+              </Card>*/}
+              <Row gutter={16}>
+                <Col {...formResSpan}>
+                  <FormItem style={margin} label="User Name:">
+                    {getFieldDecorator('contactInformation.usernameAddress', { rules: agencyValidation.username })(
+                      <Input placeholder="Enter User Name" />
+                    )}
+                  </FormItem>
+                  <FormItem style={margin} label="Postal Address:">
+                    {getFieldDecorator('contactInformation.postalAddress', { rules: agencyValidation.postalAddress })(
+                      <TextArea placeholder="Enter Postal Address" rows={5} />
+                    )}
+                  </FormItem>
+                  <FormItem style={margin} label="Email Address:">
+                    {getFieldDecorator('contactInformation.emailAddress', { rules: agencyValidation.email })(
+                      <Input placeholder="Enter Email Address" />
+                    )}
+                  </FormItem>
+                </Col>
+                <Col {...formResSpan}>
+                  <FormItem label="Password" style={margin}>
+                    {getFieldDecorator('password', { rules: agencyValidation.password })(
+                      <Input
+                        placeholder="Enter Password"
+                      />
+                    )}
+                  </FormItem>
+                  <FormItem style={margin}>
+                    <RadioGroup onChange={this.generatePassword}>
+                      <Radio value={false}>Custom Password</Radio>
+                      <Radio value={true}>Generate Password</Radio>
+                    </RadioGroup>
+                  </FormItem>
+
+                  <FormItem style={marginBottom} {...formItemLayout} label="Mobile Phone:">
+                    {getFieldDecorator('contactInformation.mobilePhone', { rules: agencyValidation.mobile })(
+                      <Input placeholder="Enter Mobile Phone" />
+                    )}
+                  </FormItem>
+                  <FormItem style={marginBottom} {...formItemLayout} label="SMS/Text:">
+                    {getFieldDecorator('contactInformation.sms', { rules: agencyValidation.sms })(
+                      <Input placeholder="Enter SMS Phone" />
+                    )}
+                  </FormItem>
+                  <FormItem
+                    style={marginBottom}
+                    label="Instant Messaging:"
+                    {...formItemLayout}>
+                    {getFieldDecorator('contactInformation.instantMessaging1', { rules: agencyValidation.instantMessaging })(
+                      <Input
+                        addonAfter={selectAfter}
+                        defaultValue="mysite"
+                      />
+                    )}
+                  </FormItem>
+                  <FormItem
+                    style={marginBottom}
+                    label="Instant Messaging:"
+                    {...formItemLayout}>
+                    {getFieldDecorator('contactInformation.instantMessaging2', { rules: agencyValidation.instantMessaging })(
+                      <Input
+                        addonAfter={selectAfter}
+                        defaultValue="mysite"
+                      />
                     )}
                   </FormItem>
                 </Col>
               </Row>
+
               <Row>
                 <Col span={24}>
-                  <FormItem label="Team Name" style={margin}>
-                    {getFieldDecorator('name', {rules: teamValidation.teamName})(
-                      <Input placeholder="Team Name"/>
+                  <FormItem
+                    style={marginBottom}
+                    label="LinkedIn URL:"
+                    {...formItemLayout1}>
+                    {getFieldDecorator('contactInformation.likedinUrl', { rules: agencyValidation.linkedin })(
+                      <Input
+                        placeholder="Link"
+                      />
+                    )}
+                  </FormItem>
+                  <FormItem
+                    style={[marginBottom]}
+                    className={'agencyFormWrapper'}
+                    label="Resume URL:"
+                    {...formItemLayout1}>
+                    {getFieldDecorator('contactInformation.resumeUrl', { rules: agencyValidation.resume })(
+                      <Input
+                        placeholder="Link"
+                      />
                     )}
                   </FormItem>
                 </Col>
               </Row>
             </Col>
-
           </Row>
-          <ActionWrapper style={margin}>
-            <Button type="primary" style={margin} icon="left" onClick={() => this.props.history.goBack()}>
-              Cancel
-            </Button>
-            <Button id="btnSubmit" type="primary" style={margin} htmlType="submit" className="" icon="save">
-              Submit
-            </Button>
-          </ActionWrapper>
+
+          <Row type={"flex"} align={'middle'} justify={"center"}>
+            <Col>
+              <Button type="danger" style={margin} onClick={() => this.props.history.goBack()}>
+                Cancel
+              </Button>
+            </Col>
+            <Col>
+              {/*htmlType="submit"*/}
+              <Button id="btnSubmit" type="primary" style={margin} onClick={() => alert('clicked')} >
+                Submit
+              </Button>
+            </Col>
+          </Row>
         </Form>
-      </div>
+      </AgencyFormWrapper >
     );
   }
 }
 
-const mapPropsToFields = (props) => {
-  if (!props.hasOwnProperty('team')) {
-    return;
-  }
-  return {
-    teamManagerUserId: Form.createFormField({
-      value: props.team.teamManagerUserId ? props.team.teamManagerUserId.toString() : ''
-    }),
-    name: Form.createFormField({
-      value: props.team.name
-    }),
-  };
-};
-const form = Form.create({mapPropsToFields})(TeamForm);
+const form = Form.create()(AgencyForm);
 export default withRouter(form);

@@ -24,7 +24,7 @@ const options = [
     leftIcon: "ion-android-contacts",
     children: [
       {
-        key: 'agencies_list',
+        key: 'agency/list',
         label: 'Agency',
       },
       {

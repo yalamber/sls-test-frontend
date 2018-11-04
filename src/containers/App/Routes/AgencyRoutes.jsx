@@ -2,7 +2,11 @@ import asyncComponent from "../../../helpers/AsyncFunc";
 
 export default [
     {
-        path: "agencies_list",
-        component: asyncComponent(() => import("../../Admin/Agency/List.jsx"))
+        path: "agency/list",
+        component: asyncComponent(() => import("../../Admin/Agency/List"))
+    },
+    {
+        path: "agency/create",
+        component: asyncComponent(() => import("../../Admin/Agency/Create"))
     }
 ]

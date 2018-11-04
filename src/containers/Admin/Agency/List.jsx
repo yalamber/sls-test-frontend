@@ -99,7 +99,7 @@ export default class extends Component {
                                 <ComponentTitle></ComponentTitle>
                                 <ButtonHolders>
                                     <ActionBtn type="primary" onClick={() => {
-                                        this.props.history.push('teams/create')
+                                        this.props.history.push('/dashboard/agency/create')
                                     }}>
                                         + Create Agency
                                     </ActionBtn>
