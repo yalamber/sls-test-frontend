@@ -9,6 +9,7 @@ import {
 import Card from "../../../../../components/uielements/styles/card.style";
 import {getCompanies, getTeams} from "../../../../../actions/companyActions";
 import {userStatus} from "../../../../../constants/userStatus";
+import {generatePassword} from "../../../../../helpers/utility";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -59,22 +60,12 @@ class UserForm extends Component {
     this.props.form.resetFields();
   }
 
-  generage() {
-    let length = 8,
-      charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-      retVal = "";
-    for (let i = 0, n = charset.length; i < length; ++i) {
-      retVal += charset.charAt(Math.floor(Math.random() * n));
-    }
-    return retVal;
-  }
-
   generatePassword(e) {
     this.setState({passwordType: !this.state.passwordType});
     let password = '';
     if (e.target.value) {
       this.props.form.setFieldsValue({
-        password: this.generage()
+        password: generatePassword()
       });
     } else {
       this.props.form.setFieldsValue({
