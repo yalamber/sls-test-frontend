@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Icon, Rate, Spin} from 'antd';
+import {Row, Col, Icon, Rate, Spin, Select} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import Box from '../../../../components/utility/box';
@@ -15,11 +15,17 @@ import {
 import {getTestingProviderTeams, deleteProviderTeam} from "../../../../actions/testingProviderActions";
 import {message} from "antd/lib/index";
 
+const Option = Select.Option;
 export default class extends Component {
   constructor(props) {
     super(props);
     this.state = {
       columns: [
+        {
+          title: 'Agency',
+          dataIndex: 'agency',
+          key: 'agency',
+        },
         {
           title: 'Team Name',
           dataIndex: 'name',
@@ -41,6 +47,23 @@ export default class extends Component {
           key: 'actions',
           render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
         }
+      ],
+      agencies: [
+          {
+            clientId: 1,
+            name: 'Agency 1'
+          },
+          {
+            clientId: 2,
+            name: 'Agency 2'
+          },
+          {
+            clientId: 3,
+            name: 'Agency 3'
+          },{
+            clientId: 4,
+            name: 'Agency 4'
+          }
       ],
       dataSource: [],
       loading: false
@@ -75,9 +98,14 @@ export default class extends Component {
   }
 
   render() {
+    const margin = {
+      margin: '5px 5px 10px 0'
+    };
+    const agenciesOptions = this.state.agencies.map(agency => <Option
+        key={agency.clientId}>{agency.name}</Option>);
+    //console.log(this.state.dataSource);
     const {rowStyle, colStyle, gutter} = basicStyle;
     return (
-
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -93,6 +121,13 @@ export default class extends Component {
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
+              <Row>
+                <Col md={6} sm={24} xs={24}>
+                    <Select showSearch placeholder="Please Choose Agency Name" style={{...margin, width: '100%'}}>
+                        {agenciesOptions}
+                    </Select>
+                </Col>
+              </Row>
               <Spin spinning={this.state.loading}>
                 <Table
                   size="middle"
