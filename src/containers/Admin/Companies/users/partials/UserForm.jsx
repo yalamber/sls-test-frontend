@@ -23,6 +23,34 @@ class UserForm extends Component {
     this.state = {
       status: userStatus,
       teams: [],
+      userRoles: [{
+        key: 'developer',
+        name: 'Developer'
+      },
+      {
+        key: 'analyst',
+        name: 'Analyst'
+      },
+      {
+        key: 'quality-assurance',
+        name: 'Quality Assurance'
+      },
+      {
+        key: 'manager',
+        name: 'Manager'
+      },
+      {
+        key: 'executive',
+        name: 'Executive'
+      },
+      {
+        key: 'team-administrator',
+        name: 'Team Administrator'
+      },
+      {
+        key: 'other',
+        name: 'Other'
+      }],
       companies: [],
       passwordType: false,
       selected: []
@@ -80,6 +108,7 @@ class UserForm extends Component {
     };
     const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
     const teamOptions = this.state.teams.map(team => <Option key={team.clientTeamId}>{team.name}</Option>);
+    const userRolesOptions = this.state.userRoles.map(role => <Option key={role.key}>{role.name}</Option>);
     const companiesOptions = this.state.companies.map(company => <Option
       key={company.clientId}>{company.name}</Option>);
     const {getFieldDecorator} = this.props.form;
@@ -144,6 +173,25 @@ class UserForm extends Component {
                                 placeholder="Please choose teams"
                                 style={{width: '100%'}}>
                           {teamOptions}
+                        </Select>
+                      )}
+                    </Col>
+                  </InputGroup>
+                </FormItem>
+              </Card>
+              <Card title="Roles" style={{marginTop: '20px'}}>
+                <FormItem style={margin} label="Select Roles">
+                  <InputGroup size="large">
+                    <Col span={2}>
+                      <Icon type="search" style={{fontSize: '24px', color: '#08c', margin: '5px'}}/>
+                    </Col>
+                    <Col span={22}>
+                      {getFieldDecorator('userRoles')(
+                        <Select showSearch mode="multiple"
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                placeholder="Please choose roles"
+                                style={{width: '100%'}}>
+                          {userRolesOptions}
                         </Select>
                       )}
                     </Col>
