@@ -165,7 +165,9 @@ export default class extends Component {
                 <Table
                   locale={{emptyText: 'Please Select Company name'}}
                   size="middle"
-                  bordered
+                  onRow={()=>({
+                    onDoubleClick: ()=> this.props.history.push("/dashboard/test-queues/assigned-test")
+                  })}
                   pagination={true}
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
