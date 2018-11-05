@@ -103,7 +103,7 @@ export default class extends Component {
     };
     const agenciesOptions = this.state.agencies.map(agency => <Option
         key={agency.clientId}>{agency.name}</Option>);
-    //console.log(this.state.dataSource);
+    console.log(this.state.dataSource);
     const {rowStyle, colStyle, gutter} = basicStyle;
     return (
       <LayoutWrapper>
