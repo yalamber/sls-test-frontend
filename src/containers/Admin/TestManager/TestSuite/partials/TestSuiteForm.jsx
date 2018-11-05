@@ -68,6 +68,15 @@ class TeamForm extends Component {
               </Row>
               <Row>
                 <Col span={24}>
+                  <FormItem label="Title" style={margin}>
+                    {getFieldDecorator('title', {rules: testSuiteValidation.title})(
+                      <Input placeholder="Title"/>
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
                   <FormItem label="Description" style={margin}>
                     {getFieldDecorator('description', {rules: testSuiteValidation.description})(
                       <TextArea maxLength={1000} placeholder="Description"/>
