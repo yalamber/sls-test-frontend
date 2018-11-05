@@ -52,7 +52,7 @@ class TeamForm extends Component {
                 <Col span={12}>
                   <FormItem label="Team Suite Name" style={margin}>
                     {getFieldDecorator('name', {rules: testSuiteValidation.name})(
-                      <Input placeholder="Team Suite Name"/>
+                      <Input maxLength={250} placeholder="Team Suite Name"/>
                     )}
                   </FormItem>
                 </Col>
@@ -70,7 +70,7 @@ class TeamForm extends Component {
                 <Col span={24}>
                   <FormItem label="Description" style={margin}>
                     {getFieldDecorator('description', {rules: testSuiteValidation.description})(
-                      <TextArea placeholder="Description"/>
+                      <TextArea maxLength={1000} placeholder="Description"/>
                     )}
                   </FormItem>
                 </Col>
@@ -79,7 +79,7 @@ class TeamForm extends Component {
                 <Col span={24}>
                   <FormItem label="Environment Access and Details" style={margin}>
                     {getFieldDecorator('accessDetails', {rules: testSuiteValidation.envAccessDetails})(
-                      <TextArea placeholder="Environment Access and Details" rows={10}/>
+                      <TextArea maxLength={4000} placeholder="Environment Access and Details" rows={10}/>
                     )}
                   </FormItem>
                 </Col>
@@ -88,7 +88,7 @@ class TeamForm extends Component {
                 <Col span={24}>
                   <FormItem label="Comments" style={margin}>
                     {getFieldDecorator('comments', {rule: testSuiteValidation.comments})(
-                      <TextArea placeholder="Comments"/>
+                      <TextArea maxLength={1000} placeholder="Comments"/>
                     )}
                   </FormItem>
                 </Col>
