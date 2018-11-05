@@ -186,7 +186,7 @@ class UserForm extends Component {
                       <Icon type="search" style={{fontSize: '24px', color: '#08c', margin: '5px'}}/>
                     </Col>
                     <Col span={22}>
-                      {getFieldDecorator('userRoles', {rules: userValidation.userRoles})(
+                      {getFieldDecorator('userRoles')(
                         <Select showSearch mode="multiple"
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 placeholder="Please choose roles"
