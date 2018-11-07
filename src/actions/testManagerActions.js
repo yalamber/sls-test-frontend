@@ -16,17 +16,17 @@ export const deleteSuite = (row) => {
 };
 
 //cases
-export const getCases = (companyId, teamId) => {
-  return get('test/suite/1/case')
+export const getCases = (companyId, teamId, suiteId) => {
+  return get('test/case?suiteId='+suiteId);
 };
 
 export const addTestCase = (formData) => {
   delete formData.company;
   delete formData.team;
   delete formData.title;
-  return post('test/suite/case', formData)
+  return post('test/case', formData)
 };
 
 export const deleteTestCase = (id) => {
-  return deleteRecord('test/suite/case/' + id)
+  return deleteRecord('test/case/' + id)
 };
