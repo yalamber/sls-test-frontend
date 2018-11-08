@@ -64,7 +64,7 @@ class Create extends Component {
             <Box title="Instruction">
               <ContentHolder>
                 <p><b>Company Name : </b> You can select company from list. </p>
-                <p><b>Team Name : </b> Team name must me alphabet with 5 to 25 characters.</p>
+                <p><b>Team Name : </b> Team name must be alphabet with 5 to 25 characters.</p>
               </ContentHolder>
             </Box>
           </Col>

@@ -20,10 +20,10 @@ export default function ActionButtons(props) {
         okText="Yes"
         cancelText="No"
         placement="topRight"
-        onConfirm={() => props.delete(props.row)}
+        onConfirm={() => alert('user info here')}
       >
-        <a className="deleteBtn">
-          <i className="ion-android-delete"/>
+        <a className="infoBtn">
+          <i className="ion-information-circled"/>
         </a>
       </Popconfirms>
       </Tooltip>

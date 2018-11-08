@@ -121,7 +121,6 @@ export default class extends Component {
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
                   onRowDoubleClick={(row) => {
-                    console.log(row);
                     this.props.history.push('/dashboard/company/users/' + row.clientId + '/' + row.clientTeamId)
                   }}
                   rowKey="clientTeamId"

@@ -53,7 +53,7 @@ export default class extends Component {
             <Box title="Instruction">
               <ContentHolder>
                 <p><b>Team Manager : </b> You can search team manager from the list. </p>
-                <p><b>Team Name : </b> Team name must me alphabet with 5 to 25 characters.</p>
+                <p><b>Team Name : </b> Team name must be alphabet with 5 to 25 characters.</p>
               </ContentHolder>
             </Box>
           </Col>

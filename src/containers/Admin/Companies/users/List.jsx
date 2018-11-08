@@ -30,17 +30,20 @@ export default class extends Component {
         {
           title: "Name",
           dataIndex: "username",
-          key: "name"
+          key: "name",
+          sorter: (a, b) => a.name >= b.name
         },
         {
-          title: "Address",
+          title: "Rating",
           dataIndex: "contactInformation.postalAddress",
-          key: "address"
+          key: "rating",
+          sorter: (a, b) => a.rating >= b.rating
         },
         {
-          title: "Email",
+          title: "Status",
           dataIndex: "contactInformation.emailAddress",
-          key: "email"
+          key: "status",
+          sorter: (a, b) => a.status >= b.status
         },
         {
           title: "Actions",
