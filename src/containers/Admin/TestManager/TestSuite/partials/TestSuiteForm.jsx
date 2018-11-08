@@ -50,9 +50,9 @@ class TeamForm extends Component {
             <Col span={24}>
               <Row>
                 <Col span={12}>
-                  <FormItem label="Team Suite Name" style={margin}>
+                  <FormItem label="Suite Title" style={margin}>
                     {getFieldDecorator('name', {rules: testSuiteValidation.name})(
-                      <Input maxLength={250} placeholder="Team Suite Name"/>
+                      <Input maxLength={250} placeholder="Suite Title"/>
                     )}
                   </FormItem>
                 </Col>
@@ -62,15 +62,6 @@ class TeamForm extends Component {
                       <Select showSearch>
                         {statusOptions}
                       </Select>
-                    )}
-                  </FormItem>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={24}>
-                  <FormItem label="Title" style={margin}>
-                    {getFieldDecorator('title', {rules: testSuiteValidation.title})(
-                      <Input placeholder="Title"/>
                     )}
                   </FormItem>
                 </Col>

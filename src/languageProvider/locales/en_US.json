@@ -1,4 +1,12 @@
 {
+  "sidebar.systemAdmin": "System Admin",
+  "sidebar.company": "Company",
+  "sidebar.company.myCompanies": "My Companies",
+  "sidebar.company.testingManager": "Testing Manager",
+
+  "sidebar.agency": "Agency",
+  "sidebar.agency.myAgencies": "My Agencies",
+
   "sidebar.softwareCompany": "Software Company",
   "sidebar.listAll": "List All",
 
