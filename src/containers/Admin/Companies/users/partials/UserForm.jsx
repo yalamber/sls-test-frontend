@@ -115,7 +115,7 @@ class UserForm extends Component {
       md: { span: 24 },
       sm: { span: 24 },
     };
-    
+
     return (
       <div>
         <Form onSubmit={this.handleSubmit} id="clientForm">
