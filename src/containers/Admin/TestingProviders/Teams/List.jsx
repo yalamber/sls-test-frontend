@@ -111,7 +111,7 @@ export default class extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Testing Providers Teams</ComponentTitle>
+                <ComponentTitle>Agency [Name] - Teams List</ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
                     this.props.history.push('teams/create')
@@ -138,7 +138,8 @@ export default class extends Component {
                   rowKey="providerTeamId"
                   onRow={(row) => ({
                     onDoubleClick: () => {
-                      this.props.history.push('teams/team-members/' + row.providerTeamId)
+                      // this.props.history.push('teams/team-members/' + row.providerTeamId)
+                      alert("show info")
                     },
                   })}
                 />

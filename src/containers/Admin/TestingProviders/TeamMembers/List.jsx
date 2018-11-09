@@ -32,11 +32,19 @@ export default class extends Component {
               title: 'Username',
               dataIndex: 'username',
               key: 'username',
+              sorter: true
             },
             {
-              title: 'Location',
+              title: 'Rating',
               dataIndex: 'contactInformation.postalAddress',
               key: 'location',
+              sorter: true
+            },
+            {
+              title: 'Status',
+              dataIndex: 'contactInformation.postalAddress',
+              key: 'status',
+              sorter: true
             },
             {
               title: 'Actions',
@@ -70,7 +78,7 @@ export default class extends Component {
 
   componentDidMount() {
     getTestingProviderTeams().then(res => {
-      this.setState({teams: res.data});
+      this.setState({teams: []});
     });
     this.setState({selectedTeam: this.props.match.params.id});
     this.fetchData(this.props.match.params.id);
@@ -101,7 +109,7 @@ export default class extends Component {
             <Box>
               <TitleWrapper>
                 <ComponentTitle>
-                  Testing Provider Users
+                  {`<Agency Name> - <Team name?>`}
                 </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
@@ -112,7 +120,7 @@ export default class extends Component {
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Row>
+              {/*<Row>
                 <Col md={6} sm={24} xs={24}>
                   <Select showSearch
                           value={this.state.selectedTeam}
@@ -122,7 +130,7 @@ export default class extends Component {
                     {teamOptions}
                   </Select>
                 </Col>
-              </Row>
+              </Row>*/}
               <Spin spinning={this.state.loading}>
                 <Table
                   bordered
@@ -131,6 +139,9 @@ export default class extends Component {
                   rowKey="userId"
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
+                  onRow={() => ({
+                    onDoubleClick: () => alert("on double click, show information")
+                  })}
                 />
               </Spin>
             </Box>

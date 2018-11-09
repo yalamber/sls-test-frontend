@@ -8,5 +8,9 @@ export default [
     {
         path: "agency/create",
         component: asyncComponent(() => import("../../Admin/Agency/Create"))
-    }
+    },
+    {
+      path: "agency/users/:agencyId",
+      component: asyncComponent(() => import("../../Admin/Agency/users/List"))
+    },
 ]

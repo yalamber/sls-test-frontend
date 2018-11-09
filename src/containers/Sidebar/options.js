@@ -26,11 +26,11 @@ const options = [
     leftIcon: "ion-android-contacts",
     children: [
       {
-        key: "company/list",
+        key: "agency/list",
         label: "sidebar.agency.myAgencies"
       },
       {
-        key: "company/teams",
+        key: "providers/teams",
         label: "sidebar.company.testingManager"
       }
     ]
