@@ -40,6 +40,7 @@ const ComponentTitle = styled.h3`
   font-weight: 500;
   color: ${palette('text', 0)};
   margin: 5px 0;
+  text-transform: capitalize;  
 `;
 
 const ActionBtn = styled(Buttons)`

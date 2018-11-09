@@ -3,7 +3,16 @@ const options = [
     key: "systemAdmin",
     label: "sidebar.systemAdmin",
     leftIcon: "ion-settings",
-    children: []
+    children: [
+      {
+        key: "system-admin-company/list",
+        label: "sidebar.company"
+      },
+      {
+        key: "system-admin/agency/list",
+        label: "sidebar.agency"
+      }
+    ]
   },
   {
     key: "company",

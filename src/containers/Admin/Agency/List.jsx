@@ -18,8 +18,11 @@ import {
   deleteProviderTeam
 } from "../../../actions/testingProviderActions";
 import { message } from "antd/lib/index";
+import actions from '../../../redux/agency/actions';
+import { connect } from 'react-redux';
+const { _updateForm } = actions;
 
-export default class extends Component {
+class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,13 +48,28 @@ export default class extends Component {
         {
           title: "Actions",
           key: "actions",
-          render: row => <ActionButtons row={row} delete={this.handleDelete} />
+          render: row => <ActionButtons row={row} onPress={this.openPage.bind(this)} delete={this.handleDelete} />
         }
       ],
       data: [],
       loading: false
     };
     this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  openPage = ( path, key, row ) => {
+    const { history } = this.props;
+    this.updateForm(key, row);
+    history.push(path);
+  }
+
+  updateForm = (key, value) => {
+    const { _updateForm } = this.props;
+        
+    _updateForm(
+        Object.assign(this.props[actions.FORM_DATA_AGENCY_KEY], { [key]: value })
+    );
+
   }
 
   componentDidMount() {
@@ -136,3 +154,12 @@ export default class extends Component {
     );
   }
 }
+
+export default connect(
+  ({ Agency}) => {
+    const { form_data_agency_key } = Agency;
+
+    return({form_data_agency_key});
+  },
+  { _updateForm }
+)(List);

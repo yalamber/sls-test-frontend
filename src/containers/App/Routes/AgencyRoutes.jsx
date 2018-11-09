@@ -2,6 +2,10 @@ import asyncComponent from "../../../helpers/AsyncFunc";
 
 export default [
   {
+    path: "system-admin/agency/list",
+    component: asyncComponent(() => import("../../Admin/Agency/List"))
+  },
+  {
     path: "agency/list",
     component: asyncComponent(() => import("../../Admin/Agency/List"))
   },
