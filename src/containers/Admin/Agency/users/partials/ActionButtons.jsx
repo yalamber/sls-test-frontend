@@ -12,8 +12,8 @@ export default function ActionButtons(props) {
           <i className="ion-android-create" />
         </a>
       </Tooltip>
-      <Tooltip placement="topLeft" title="Show Details">
-        <a onClick={() => alert("show information")}>
+      <Tooltip placement="topLeft" title="Delete Record">
+        <a className="infoBtn">
           <i className="ion-information-circled" />
         </a>
       </Tooltip>
