@@ -42,4 +42,10 @@ export default [
     path: "company/users/:companyId?/:teamId?",
     component: asyncComponent(() => import("../../Admin/Companies/users/List"))
   },
+
+  /* test manager */
+  {
+    path: "company/test-manager",
+    component: asyncComponent(() => import("../../Admin/Companies/TestManager/List"))
+  },
 ]

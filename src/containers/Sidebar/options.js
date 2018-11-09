@@ -15,7 +15,7 @@ const options = [
         label: "sidebar.company.myCompanies"
       },
       {
-        key: "company/teams",
+        key: "company/test-manager",
         label: "sidebar.company.testingManager"
       }
     ]
@@ -30,7 +30,7 @@ const options = [
         label: "sidebar.agency.myAgencies"
       },
       {
-        key: "providers/teams",
+        key: "agency/test-manager",
         label: "sidebar.company.testingManager"
       }
     ]
