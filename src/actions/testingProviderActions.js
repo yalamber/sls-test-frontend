@@ -1,30 +1,30 @@
 import {post, get, put, deleteRecord} from "../helpers/http";
 
 export const getTestingProviderTeams = () => {
-  return get("team/provider");
+  return get("agency-team");
 };
 export const getTestingProviderTeam = (id) => {
-  return get("team/provider/" + id);
+  return get("agency-team/" + id);
 };
 export const deleteProviderTeam = (id) => {
-  return deleteRecord("team/provider/" + id);
+  return deleteRecord("agency-team/" + id);
 };
 
 export const addProviderTeam = (teamData) => {
-  return post('team/provider', teamData);
+  return post('agency-team', teamData);
 };
 
 export const updateProviderTeam = (id, teamData) => {
-  return put('team/provider/' + id, teamData);
+  return put('agency-team/' + id, teamData);
 };
 
 
 //Members
 export const getTestingProviderTeamMembers = (teamId) => {
   if (teamId) {
-    return get('team/provider/' + teamId + '/member')
+    return get('agency-team/' + teamId + '/member')
   } else {
-    return get('user?isProviderUser=1');
+    return get('user');
   }
 };
 

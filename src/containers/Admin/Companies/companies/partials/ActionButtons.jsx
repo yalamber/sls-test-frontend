@@ -10,30 +10,20 @@ import {Tooltip} from "antd";
 const ActionButtons = (props) => {
   return (
     <ActionWrapper>
-      <Tooltip placement="topLeft" title="Go to Dashboard">
-        <a onClick={(e) => {
-          e.preventDefault();
-        }}>
-          <i className="ion-android-apps"/>
+      <Tooltip placement="topLeft" title="Show Users List">
+        <a onClick={() => props.history.push(`users/${props.row.clientId}/1`)}>
+          <i className="ion-ios-person"/>
+        </a>
+      </Tooltip>
+      <Tooltip placement="topLeft" title="Show Teams List">
+        <a onClick={() => props.history.push('details/' + props.row.clientId)}>
+          <i className="ion-ios-people"/>
         </a>
       </Tooltip>
       <Tooltip placement="topLeft" title="Edit Record">
         <a onClick={() => props.history.push('edit/'+props.row.clientId)}>
           <i className="ion-android-create"/>
         </a>
-      </Tooltip>
-      <Tooltip placement="topLeft" title="Delete Record">
-        <Popconfirms
-          title="Are you sure to delete this company ?"
-          okText="Yes"
-          cancelText="No"
-          placement="topRight"
-          onConfirm={() => props.delete(props.row) }
-        >
-          <a className="deleteBtn">
-            <i className="ion-android-delete"/>
-          </a>
-        </Popconfirms>
       </Tooltip>
       <Tooltip placement="topLeft" title="Show Details">
         <a onClick={() => props.history.push('details/' + props.row.clientId)}>

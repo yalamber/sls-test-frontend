@@ -9,11 +9,18 @@ import {withRouter} from "react-router-dom";
 const ActionButtons = (props) => {
   return (
     <ActionWrapper>
-      <Tooltip placement="topLeft" title="Edit Record">
-        <a onClick={() => props.history.push('/dashboard/company/teams/edit/' + props.row.clientTeamId)}>
-          <i className="ion-android-create"/>
+      <Tooltip placement="topLeft" title="Show Users List">
+        <a onClick={() => {
+          props.history.push(`/dashboard/company/users/${props.row.clientId}/${props.row.clientTeamId}`)
+        }}>
+          <i className="ion-ios-person"/>
         </a>
       </Tooltip>
+        <Tooltip placement="topLeft" title="Edit Record">
+          <a onClick={() => props.history.push('/dashboard/company/teams/edit/' + props.row.clientTeamId)}>
+            <i className="ion-android-create"/>
+          </a>
+        </Tooltip>
       <Tooltip placement="topLeft" title="Delete Record">
         <Popconfirms
           title="Are you sure to delete this team ?"
@@ -22,8 +29,8 @@ const ActionButtons = (props) => {
           placement="topRight"
           onConfirm={() => props.delete(props.row)}
         >
-          <a className="deleteBtn">
-            <i className="ion-android-delete"/>
+          <a className="infoBtn">
+            <i className="ion-information-circled"/>
           </a>
         </Popconfirms>
       </Tooltip>

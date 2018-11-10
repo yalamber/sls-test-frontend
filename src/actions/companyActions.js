@@ -18,25 +18,26 @@ export const getCompany = (id) => {
 
 //Teams
 export const addTeam = (team) => {
-  return post('team/client', team);
+  return post('client-team', team);
 };
 export const updateTeam = (team, id) => {
-  return put('team/client/' + id, team);
+  return put('client-team/' + id, team);
 };
 export const deleteTeam = (teamId) => {
-  return deleteRecord('team/client/' + teamId);
+  return deleteRecord('client-team/' + teamId);
 };
 export const getTeams = (companyId) => {
-  return get('team/client', {clientId: companyId});
+  return get('client-team', {clientId: companyId});
 };
 export const getClientTeam = (clientTeamId) => {
-  return get('team/client/' + clientTeamId);
+  return get('client-team/' + clientTeamId);
 };
 
 
 //Users
 export const addCompanyUser = (user) => {
   delete user.company;
+  console.log(user);
   return post('user', user);
 };
 
@@ -48,12 +49,12 @@ export const deleteCompanyUser = (id) => {
 };
 
 export const getCompanyUsersByTeamId = (teamId) => {
-  return get('team/client/' + teamId + '/member');
+  return get('client-team/' + teamId + '/member');
 };
 
 export const getUsers = (companyId, teamId) => {
   if (teamId) {
-    return get('team/client/' + teamId + '/member');
+    return get('client-team/' + teamId + '/member');
   } else {
     return get('user?clientId=' + companyId);
   }

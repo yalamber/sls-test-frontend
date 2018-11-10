@@ -68,7 +68,7 @@ export default class extends Component {
   }
 
   handleCompanyChange(companyId) {
-    this.setState({selectedTeam: null});
+    this.setState({selectedTeam: undefined});
     getTeams(companyId).then(res => {
       this.setState({teams: res.data});
     });
@@ -118,17 +118,17 @@ export default class extends Component {
                   <Button shape="circle" icon="check"/>
                 </Col>
                 <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch 
-                          placeholder="Please Choose Company Name" 
+                  <Select showSearch
+                          placeholder="Company Name"
                           style={{width: '100%'}}
-                          onChange={this.handleCompanyChange} 
+                          onChange={this.handleCompanyChange}
                           value={this.state.selectedCompany}>
                     {companiesOptions}
                   </Select>
                 </Col>
                 <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch 
-                          placeholder="Please Choose Team"
+                  <Select showSearch
+                          placeholder="Team Name"
                           style={{width: '100%'}}
                           onChange={this.handleTeamChange}
                           value={this.state.selectedTeam}>
@@ -136,10 +136,10 @@ export default class extends Component {
                   </Select>
                 </Col>
                 <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch 
-                          placeholder="Please Choose Suite"
+                  <Select showSearch
+                          placeholder="Testing Suite"
                           style={{width: '100%'}}
-                          onChange={this.handleSuiteChange} 
+                          onChange={this.handleSuiteChange}
                           value={this.state.selectedSuite}>
                     {suiteOptions}
                   </Select>

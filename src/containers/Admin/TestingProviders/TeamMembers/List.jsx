@@ -4,6 +4,8 @@ import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import Box from '../../../../components/utility/box';
 import ActionButtons from "./partials/ActionButtons";
+import actions from '../../../../redux/agency/actions';
+import { connect } from 'react-redux';
 
 import {
   ActionBtn,
@@ -14,13 +16,15 @@ import {
 } from '../../crud.style';
 import {
   deleteProviderUser,
-  getTestingProviderTeamMembers, getTestingProviderTeams
+  getTestingProviderTeamMembers, 
+  getTestingProviderTeams,
+  getTestingProviderTeam
 } from "../../../../actions/testingProviderActions";
 import {message} from "antd/lib/index";
 
 const Option = Select.Option;
 
-export default class extends Component {
+class List extends Component {
   constructor() {
     super();
     this.state = {
@@ -29,14 +33,22 @@ export default class extends Component {
           title: "Team Member List",
           children: [
             {
-              title: 'Contact Info',
+              title: 'Username',
               dataIndex: 'username',
-              key: 'contactInfo',
+              key: 'username',
+              sorter: true
             },
             {
-              title: 'Location',
+              title: 'Rating',
               dataIndex: 'contactInformation.postalAddress',
               key: 'location',
+              sorter: true
+            },
+            {
+              title: 'Status',
+              dataIndex: 'contactInformation.postalAddress',
+              key: 'status',
+              sorter: true
             },
             {
               title: 'Actions',
@@ -70,7 +82,7 @@ export default class extends Component {
 
   componentDidMount() {
     getTestingProviderTeams().then(res => {
-      this.setState({teams: res.data});
+      this.setState({teams: []});
     });
     this.setState({selectedTeam: this.props.match.params.id});
     this.fetchData(this.props.match.params.id);
@@ -79,6 +91,7 @@ export default class extends Component {
   fetchData(teamId = null) {
     this.setState({loading: true});
     getTestingProviderTeamMembers(teamId).then(res => {
+      console.log("res.data", this.props);
       this.setState({
         dataSource: res.data,
       })
@@ -88,6 +101,9 @@ export default class extends Component {
   }
 
   render() {
+    const { form_data_agency_key } = this.props;
+    const { form_data_selected_team_of_agency } = form_data_agency_key;
+
     const {rowStyle, colStyle, gutter} = basicStyle;
     const margin = {
       margin: '5px 5px 10px 0'
@@ -101,7 +117,7 @@ export default class extends Component {
             <Box>
               <TitleWrapper>
                 <ComponentTitle>
-                  Testing Provider Users
+                  {`${form_data_selected_team_of_agency.agency ? form_data_selected_team_of_agency.agency.name+'-' : form_data_selected_team_of_agency.name } ${form_data_selected_team_of_agency.agency ? form_data_selected_team_of_agency.name : '' }`}
                 </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
@@ -112,7 +128,7 @@ export default class extends Component {
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Row>
+              {/*<Row>
                 <Col md={6} sm={24} xs={24}>
                   <Select showSearch
                           value={this.state.selectedTeam}
@@ -122,14 +138,18 @@ export default class extends Component {
                     {teamOptions}
                   </Select>
                 </Col>
-              </Row>
+              </Row>*/}
               <Spin spinning={this.state.loading}>
                 <Table
                   bordered
                   size="middle"
                   pagination={{pageSize: 5}}
+                  rowKey="userId"
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
+                  onRow={() => ({
+                    onDoubleClick: () => alert("on double click, show information")
+                  })}
                 />
               </Spin>
             </Box>
@@ -139,3 +159,12 @@ export default class extends Component {
     );
   }
 }
+
+export default connect(
+  ({ Agency}) => {
+    const { form_data_agency_key } = Agency;
+
+    return({form_data_agency_key});
+  },
+  { }
+)(List);

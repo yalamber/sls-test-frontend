@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import {Map} from 'immutable';
 
 export function setToken(token) {
   localStorage.setItem('id_token', token);
@@ -8,10 +8,20 @@ export function clearToken() {
   localStorage.removeItem('id_token');
 }
 
+export function generatePassword() {
+  let length = 8,
+    charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+    retVal = "";
+  for (let i = 0, n = charset.length; i < length; ++i) {
+    retVal += charset.charAt(Math.floor(Math.random() * n));
+  }
+  return retVal;
+}
+
 export function getToken() {
   try {
     const idToken = localStorage.getItem('id_token');
-    return new Map({ idToken });
+    return new Map({idToken});
   } catch (err) {
     clearToken();
     return new Map();
