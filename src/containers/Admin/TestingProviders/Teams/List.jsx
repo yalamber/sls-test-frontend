@@ -4,6 +4,8 @@ import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import Box from '../../../../components/utility/box';
 import ActionButtons from "./partials/ActionButtons";
+import actions from '../../../../redux/agency/actions';
+import { connect } from 'react-redux';
 
 import {
   ActionBtn,
@@ -16,7 +18,9 @@ import {getTestingProviderTeams, deleteProviderTeam} from "../../../../actions/t
 import {message} from "antd/lib/index";
 
 const Option = Select.Option;
-export default class extends Component {
+const { _updateForm } = actions;
+
+class TeamsList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -97,10 +101,21 @@ export default class extends Component {
     });
   }
 
+  updateForm = (key, value) => {
+    const { _updateForm } = this.props;
+        
+    _updateForm(
+        Object.assign(this.props[actions.FORM_DATA_AGENCY_KEY], { [key]: value })
+    );
+
+  }
+
   render() {
     const margin = {
       margin: '5px 5px 10px 0'
     };
+    const { form_data_agency_key } = this.props;
+    const { form_data_selected_agency } = form_data_agency_key;
     const agenciesOptions = this.state.agencies.map(agency => <Option
         key={agency.clientId}>{agency.name}</Option>);
     console.log(this.state.dataSource);
@@ -111,7 +126,7 @@ export default class extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Agency [Name] - Teams List</ComponentTitle>
+                <ComponentTitle className="captialize-data">{form_data_selected_agency.name ? form_data_selected_agency.name : ''} - Teams List</ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
                     this.props.history.push('teams/create')
@@ -138,8 +153,8 @@ export default class extends Component {
                   rowKey="providerTeamId"
                   onRow={(row) => ({
                     onDoubleClick: () => {
-                      // this.props.history.push('teams/team-members/' + row.providerTeamId)
-                      alert("show info")
+                       this.updateForm(actions.FORM_DATA_SELECTED_TEAM_OF_AGENCY, row);
+                       this.props.history.push('teams/team-members')
                     },
                   })}
                 />
@@ -151,3 +166,12 @@ export default class extends Component {
     );
   }
 }
+
+export default connect(
+  ({ Agency}) => {
+    const { form_data_agency_key } = Agency;
+
+    return({form_data_agency_key});
+  },
+  { _updateForm }
+)(TeamsList);

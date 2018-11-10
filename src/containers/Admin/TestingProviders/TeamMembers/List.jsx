@@ -4,6 +4,8 @@ import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
 import Box from '../../../../components/utility/box';
 import ActionButtons from "./partials/ActionButtons";
+import actions from '../../../../redux/agency/actions';
+import { connect } from 'react-redux';
 
 import {
   ActionBtn,
@@ -14,13 +16,15 @@ import {
 } from '../../crud.style';
 import {
   deleteProviderUser,
-  getTestingProviderTeamMembers, getTestingProviderTeams
+  getTestingProviderTeamMembers, 
+  getTestingProviderTeams,
+  getTestingProviderTeam
 } from "../../../../actions/testingProviderActions";
 import {message} from "antd/lib/index";
 
 const Option = Select.Option;
 
-export default class extends Component {
+class List extends Component {
   constructor() {
     super();
     this.state = {
@@ -87,6 +91,7 @@ export default class extends Component {
   fetchData(teamId = null) {
     this.setState({loading: true});
     getTestingProviderTeamMembers(teamId).then(res => {
+      console.log("res.data", this.props);
       this.setState({
         dataSource: res.data,
       })
@@ -96,6 +101,9 @@ export default class extends Component {
   }
 
   render() {
+    const { form_data_agency_key } = this.props;
+    const { form_data_selected_team_of_agency } = form_data_agency_key;
+
     const {rowStyle, colStyle, gutter} = basicStyle;
     const margin = {
       margin: '5px 5px 10px 0'
@@ -109,7 +117,7 @@ export default class extends Component {
             <Box>
               <TitleWrapper>
                 <ComponentTitle>
-                  {`<Agency Name> - <Team name?>`}
+                  {`${form_data_selected_team_of_agency.agency ? form_data_selected_team_of_agency.agency.name+'-' : form_data_selected_team_of_agency.name } ${form_data_selected_team_of_agency.agency ? form_data_selected_team_of_agency.name : '' }`}
                 </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
@@ -151,3 +159,12 @@ export default class extends Component {
     );
   }
 }
+
+export default connect(
+  ({ Agency}) => {
+    const { form_data_agency_key } = Agency;
+
+    return({form_data_agency_key});
+  },
+  { }
+)(List);
