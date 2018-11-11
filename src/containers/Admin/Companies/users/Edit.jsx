@@ -1,4 +1,3 @@
-import {
 import React, { Component } from "react";
 import { Row, Col, Spin } from "antd";
 import { withRouter } from "react-router-dom";
