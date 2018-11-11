@@ -206,8 +206,7 @@ class CompanyDetails extends Component {
                   onRow={record => {
                     return {
                       onDoubleClick: (e) => {
-                        console.log("osow", record);
-                        this.props.history.push('/dashboard/company/users/' + record.clientId + '/' + record.clientTeamId)
+                        this.props.history.push(`/dashboard/company/users/${record.clientId}/team/${record.clientTeamId}`)
                       },
                       onClick: () => this.handleTeamSelect(record)
                     };

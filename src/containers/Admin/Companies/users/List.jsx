@@ -49,7 +49,11 @@ export default class extends Component {
           title: "Actions",
           key: "actions",
           render: row => (
-            <UsersActionButtons selectedTeam={this.state.selectedTeam} row={row} delete={this.handleDelete} />
+            <UsersActionButtons
+              selectedTeam={this.state.selectedTeam}
+              row={row}
+              delete={this.handleDelete}
+            />
           )
         }
       ],
@@ -71,7 +75,7 @@ export default class extends Component {
       .then(res => {
         this.setState({ companies: res.data });
         this.handleCompanyChange(this.props.match.params.companyId);
-        this.handleTeamChange(this.props.match.params.teamId);
+        // this.handleTeamChange(this.props.match.params.teamId);
       })
       .catch(() => {
         this.setState({ loading: false });
@@ -83,9 +87,11 @@ export default class extends Component {
       { selectedTeam: undefined, selectedCompany: companyId },
       () => {
         getTeams(companyId).then(res => {
-          const teamDefault = res.data.length
-            ? res.data[0].clientTeamId + ""
-            : undefined;
+          const { teamId } = this.props.match.params;
+          const teamDefault = teamId
+            ? teamId + ""
+            : res.data[0].clientTeamId + "";
+
           this.updateRecords(companyId, teamDefault, (err, users) => {
             if (err) {
               return this.setState({
@@ -208,6 +214,19 @@ export default class extends Component {
                   bordered
                   pagination={true}
                   columns={this.state.columns}
+                  onRow={row => ({
+                    onDoubleClick: () => {
+                      this.props.history.push({
+                        pathname: `/dashboard/company/user/${
+                          this.props.match.params.companyId
+                        }/edit/${row.userId}`,
+                        state: {
+                          row,
+                          selectedTeam: row.ClientTeamMember.teamId + ""
+                        }
+                      });
+                    }
+                  })}
                   dataSource={
                     this.state.dataSource && this.state.dataSource.length
                       ? this.state.dataSource
