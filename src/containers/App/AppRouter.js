@@ -6,6 +6,7 @@ import dashboardRoutes from './Routes/DashboardRoutes';
 import testManagerRoutes from './Routes/TestManagerRoutes';
 import testQueueRoutes from './Routes/TestQueuesRoutes';
 import agencyRoutes from './Routes/AgencyRoutes';
+import editRolesRoutes from './Routes/EditRolesRoutes';
 
 const routes = [
   ...companyRoutes,
@@ -13,7 +14,8 @@ const routes = [
   ...dashboardRoutes,
   ...testManagerRoutes,
   ...testQueueRoutes,
-  ...agencyRoutes
+  ...agencyRoutes,
+  ...editRolesRoutes
 ];
 
 class AppRouter extends Component {
