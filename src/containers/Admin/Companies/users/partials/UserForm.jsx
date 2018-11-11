@@ -39,6 +39,12 @@ class UserForm extends Component {
     })
   }
 
+  componentWillReceiveProps(props) {
+    if (props.user) {
+      this.handleCompanyChange(props.user.clientTeams[0].clientId)
+    }
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -56,7 +62,7 @@ class UserForm extends Component {
   }
 
   resetForm() {
-    //this.props.history.goBack();
+    this.setState({passwordType: false});
     this.props.form.resetFields();
   }
 
@@ -298,5 +304,52 @@ class UserForm extends Component {
   }
 }
 
-const form = Form.create()(UserForm);
+const mapPropsToFields = (props) => {
+  if (!props.hasOwnProperty('user') || !props.user) {
+    return;
+  }
+  let teams = props.user.clientTeams.map(function(team) {
+    return team.clientTeamId.toString();
+  });
+  let clientId = props.user.clientTeams[0].clientId.toString();
+  return {
+    company: Form.createFormField({
+      value: clientId
+    }),
+    clientTeams: Form.createFormField({
+      value: teams
+    }),
+    status: Form.createFormField({
+      value: props.user.status
+    }),
+    username: Form.createFormField({
+      value: props.user.username
+    }),
+    'contactInformation.emailAddress': Form.createFormField({
+      value: props.user.contactInformation.emailAddress
+    }),
+    'contactInformation.postalAddress': Form.createFormField({
+      value: props.user.contactInformation.postalAddress
+    }),
+    'contactInformation.mobilePhone': Form.createFormField({
+      value: props.user.contactInformation.mobilePhone
+    }),
+    'contactInformation.smsPhone': Form.createFormField({
+      value: props.user.contactInformation.smsPhone
+    }),
+    'contactInformation.facebookHandle': Form.createFormField({
+      value: props.user.contactInformation.facebookHandle
+    }),
+    'contactInformation.twitterHandle': Form.createFormField({
+      value: props.user.contactInformation.twitterHandle
+    }),
+    'contactInformation.linkedInUrl': Form.createFormField({
+      value: props.user.contactInformation.linkedInUrl
+    }),
+    resumeUrl: Form.createFormField({
+      value: props.user.contactInformation.resumeUrl
+    }),
+  };
+};
+const form = Form.create({mapPropsToFields})(UserForm);
 export default withRouter(form);
