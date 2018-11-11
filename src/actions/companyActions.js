@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {post, get, put, deleteRecord} from "../helpers/http";
 
 export const addCompany = (company) => {
@@ -37,8 +38,21 @@ export const getClientTeam = (clientTeamId) => {
 //Users
 export const addCompanyUser = (user) => {
   delete user.company;
-  console.log(user);
+  // console.log(user);
+  user = _.omit(user, 'isClientUser');
+  user = _.omit(user, 'isProviderUser');
+  // console.log('user2', user);
   return post('user', user);
+};
+
+export const saveEditCompanyUser = (params, user) => {
+  delete user.company;
+  const { companyId, userId } = params;
+  user = _.omit(user, 'isClientUser');
+  user = _.omit(user, 'isProviderUser');
+  user = _.omit(user, 'clientTeams');
+
+  return put(`user/${userId}`, user);
 };
 
 export const getCompanyUsers = () => {
@@ -56,6 +70,6 @@ export const getUsers = (companyId, teamId) => {
   if (teamId) {
     return get('client-team/' + teamId + '/member');
   } else {
-    return get('user?clientId=' + companyId);
+    // return get('user?clientId=' + companyId);
   }
 };
