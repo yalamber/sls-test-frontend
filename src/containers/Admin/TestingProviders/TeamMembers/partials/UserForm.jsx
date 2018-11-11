@@ -40,6 +40,7 @@ class UserForm extends Component {
 
   resetForm() {
     message.success("Successfully Saved");
+    this.setState({passwordType: false});
     this.props.form.resetFields();
     this.props.history.goBack();
   }
@@ -60,10 +61,12 @@ class UserForm extends Component {
       this.props.form.setFieldsValue({
         password: this.generage()
       });
+      this.setState({passwordType:true});
     } else {
       this.props.form.setFieldsValue({
         password
       });
+      this.setState({passwordType:false});
     }
   }
 
@@ -227,6 +230,9 @@ class UserForm extends Component {
             </Col>
           </Row>
           <ActionWrapper style={margin}>
+            <Button type="primary" style={margin} icon="left" onClick={() => this.props.history.goBack()}>
+              Cancel
+            </Button>
             <Button id="btnSubmit" type="primary" style={margin} htmlType="submit" className="" icon="save">
               Submit
             </Button>
@@ -237,6 +243,50 @@ class UserForm extends Component {
   }
 }
 
-const form = Form.create()(UserForm);
+const mapPropsToFields = (props) => {
+  if (!props.hasOwnProperty('user') || !props.user) {
+    return;
+  }
+  let teams = props.user.providerTeams.map(function(team) {
+    return team.providerTeamId.toString();
+  });
+
+  return {
+    providerTeams: Form.createFormField({
+      value: teams
+    }),
+    status: Form.createFormField({
+      value: props.user.status
+    }),
+    username: Form.createFormField({
+      value: props.user.username
+    }),
+    'contactInformation.emailAddress': Form.createFormField({
+      value: props.user.contactInformation.emailAddress
+    }),
+    'contactInformation.postalAddress': Form.createFormField({
+      value: props.user.contactInformation.postalAddress
+    }),
+    'contactInformation.mobilePhone': Form.createFormField({
+      value: props.user.contactInformation.mobilePhone
+    }),
+    'contactInformation.smsPhone': Form.createFormField({
+      value: props.user.contactInformation.smsPhone
+    }),
+    'contactInformation.facebookHandle': Form.createFormField({
+      value: props.user.contactInformation.facebookHandle
+    }),
+    'contactInformation.twitterHandle': Form.createFormField({
+      value: props.user.contactInformation.twitterHandle
+    }),
+    'contactInformation.linkedInUrl': Form.createFormField({
+      value: props.user.contactInformation.linkedInUrl
+    }),
+    resumeUrl: Form.createFormField({
+      value: props.user.contactInformation.resumeUrl
+    }),
+  };
+};
+const form = Form.create({mapPropsToFields})(UserForm);
 export default withRouter(form);
 

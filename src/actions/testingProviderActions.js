@@ -31,7 +31,9 @@ export const getTestingProviderTeamMembers = (teamId) => {
 export const addProviderUser = (user) => {
   return post('user', user);
 };
-
+export const getProviderUser = (id) => {
+  return get('user/' + id);
+};
 export const deleteProviderUser = (id) => {
   return deleteRecord('user/' + id);
 };
