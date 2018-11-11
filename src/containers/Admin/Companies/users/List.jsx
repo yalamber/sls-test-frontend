@@ -52,7 +52,7 @@ export default class extends Component {
             <UsersActionButtons
               selectedTeam={this.state.selectedTeam}
               row={row}
-              delete={this.handleDelete}
+              info={this.handleInfo}
             />
           )
         }
@@ -66,7 +66,7 @@ export default class extends Component {
     };
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
+    this.handleInfo = this.handleInfo.bind(this);
   }
 
   componentDidMount() {
@@ -138,14 +138,15 @@ export default class extends Component {
       });
   }
 
-  handleDelete(row) {
-    deleteCompanyUser(row.userId)
-      .then(res => {
-        this.updateRecords(this.state.selectedCompany, this.state.selectedTeam);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  handleInfo(row) {
+    alert("show info")
+    // deleteCompanyUser(row.userId)
+    //   .then(res => {
+    //     this.updateRecords(this.state.selectedCompany, this.state.selectedTeam);
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
   }
 
   render() {

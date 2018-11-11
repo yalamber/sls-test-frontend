@@ -27,18 +27,10 @@ function ActionButtons(props) {
           <i className="ion-android-create" />
         </a>
       </Tooltip>
-      <Tooltip placement="topLeft" title="Delete Record">
-        <Popconfirms
-          title="Are you sure to delete this user ?"
-          okText="Yes"
-          cancelText="No"
-          placement="topRight"
-          onConfirm={() => alert("user info here")}
-        >
-          <a className="infoBtn">
-            <i className="ion-information-circled" />
-          </a>
-        </Popconfirms>
+      <Tooltip placement="topLeft" title="Show user info">
+        <a className="infoBtn" onClick={() => alert("user info here")}>
+          <i className="ion-information-circled" />
+        </a>
       </Tooltip>
     </ActionWrapper>
   );

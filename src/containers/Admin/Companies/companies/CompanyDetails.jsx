@@ -66,7 +66,7 @@ class CompanyDetails extends Component {
           title: "Actions",
           key: "actions",
           render: row => (
-            <TeamActionButtons row={row} delete={this.handleDelete} />
+            <TeamActionButtons row={row} info={this.handleInfo} />
           )
         }
       ],
@@ -103,7 +103,7 @@ class CompanyDetails extends Component {
       users: [],
       loading: false
     };
-    this.handleDelete = this.handleDelete.bind(this);
+    this.handleInfo = this.handleInfo.bind(this);
     this.handleDeleteUser = this.handleDeleteUser.bind(this);
     this.fetchData = this.fetchData.bind(this);
   }
@@ -145,11 +145,12 @@ class CompanyDetails extends Component {
     });
   }
 
-  handleDelete(row) {
-    deleteTeam(row.clientTeamId).then(res => {
-      message.success("Successfully Deleted");
-      this.fetchData();
-    });
+  handleInfo(row) {
+    alert("Show Info")
+    // deleteTeam(row.clientTeamId).then(res => {
+    //   message.success("Successfully Deleted");
+    //   this.fetchData();
+    // });
   }
 
   handleDeleteUser(row) {
