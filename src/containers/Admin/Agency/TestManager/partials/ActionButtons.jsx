@@ -9,12 +9,12 @@ const ActionButtons = props => {
   return (
     <ActionWrapper>
       <Tooltip placement="topLeft" title="Show Available Test Queue">
-        <a onClick={() => props.history.push(`users/${props.row.clientId}/1`)}>
+        <a onClick={() => props.history.push(`/dashboard/agency/test-manager/available-tests`)}>
           <i className="ion-ios-cloud" />
         </a>
       </Tooltip>
       <Tooltip placement="topLeft" title="Show Assigned Test">
-        <a onClick={() => props.history.push("details/" + props.row.clientId)}>
+        <a onClick={() => props.history.push(`/dashboard/agency/test-manager/assigned-tests`)}>
           <i className="ion-ios-paper" />
         </a>
       </Tooltip>

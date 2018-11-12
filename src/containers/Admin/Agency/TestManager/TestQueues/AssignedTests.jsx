@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
-import {Row, Col, Select, Spin, Button, Checkbox} from 'antd';
-import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../../settings/basicStyle';
-import Box from '../../../../components/utility/box';
+import {Row, Col, Select, Spin, Checkbox, Radio} from 'antd';
+import LayoutWrapper from '../../../../../components/utility/layoutWrapper.js';
+import basicStyle from '../../../../../settings/basicStyle';
+import Box from '../../../../../components/utility/box';
 
 import {
   TitleWrapper,
   ComponentTitle,
   TableClickable as Table
-} from '../../crud.style';
-import {getCompanies, getTeams} from "../../../../actions/companyActions";
-import {getSuites} from "../../../../actions/testManagerActions";
+} from '../../../crud.style';
+import {getCompanies, getTeams} from "../../../../../actions/companyActions";
+import {getSuites} from "../../../../../actions/testManagerActions";
 
 const Option = Select.Option;
+const RadioGroup = Radio.Group;
 
 
 export default class extends Component {
@@ -20,12 +21,6 @@ export default class extends Component {
     super();
     this.state = {
       columns: [
-        {
-          title: '',
-          render: () => <Checkbox/>,
-          key: 'check',
-          width: '1%'
-        },
         {
           title: 'Number',
           dataIndex: 'number',
@@ -35,16 +30,19 @@ export default class extends Component {
           title: 'Test Case Title',
           dataIndex: 'title',
           key: 'title',
+          sorter: true
+        },
+        {
+          title: 'Test Run',
+          dataIndex: 'runTitle',
+          key: 'runTitle',
+          sorter: true
         },
         {
           title: 'Status',
           dataIndex: 'status',
           key: 'status',
-        },
-        {
-          title: 'Run Title',
-          dataIndex: 'runTitle',
-          key: 'runTitle',
+          sorter: true
         },
       ],
       dataSource: [
@@ -65,9 +63,9 @@ export default class extends Component {
       companies: [],
       teams: [],
       suites: [],
-      selectedCompany: null,
-      selectedTeam: null,
-      selectedSuite: null,
+      selectedCompany: undefined,
+      selectedTeam: undefined,
+      selectedSuite: undefined,
       loading: false
     };
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
@@ -83,7 +81,7 @@ export default class extends Component {
   }
 
   handleCompanyChange(companyId) {
-    this.setState({selectedTeam: null});
+    this.setState({selectedTeam: undefined});
     getTeams(companyId).then(res => {
       this.setState({teams: res.data});
     });
@@ -123,38 +121,15 @@ export default class extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Company Test Queues </ComponentTitle>
+                <ComponentTitle>{`<Agency Name> - <Team Name>`}</ComponentTitle>
               </TitleWrapper>
-              <Row style={margin}>
-                <Col md={2} sm={24} xs={24} style={margin}>
-                  <Button block type="primary">Edit</Button>
-                </Col>
-                <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch placeholder="Please Choose Company Name" style={{width: '100%'}}
-                          onChange={this.handleCompanyChange} value={this.state.selectedCompany}>
-                    {companiesOptions}
-                  </Select>
-                </Col>
-                <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch placeholder="Please Choose Team"
-                          style={{width: '100%'}}
-                          onChange={this.handleTeamChange} value={this.state.selectedTeam}>
-                    {teamsOptions}
-                  </Select>
-                </Col>
-                <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch placeholder="Please Choose Suite"
-                          style={{width: '100%'}}
-                          onChange={this.handleSuiteChange} value={this.state.selectedSuite}>
-                    {suiteOptions}
-                  </Select>
-                </Col>
-              </Row>
               <Spin spinning={this.state.loading}>
                 <Table
                   locale={{emptyText: 'Please Select Company name'}}
                   size="middle"
-                  bordered
+                  onRow={()=>({
+                    onDoubleClick: ()=> alert("now running the test!")
+                  })}
                   pagination={true}
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}

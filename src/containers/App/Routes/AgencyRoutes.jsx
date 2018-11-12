@@ -10,19 +10,39 @@ export default [
     component: asyncComponent(() => import("../../Admin/Agency/List"))
   },
   {
-    path: "agency/teams",
-    component: asyncComponent(() => import("../../Admin/Agency/Teams/List"))
-  },
-  {
-    path: "agency/test-manager",
-    component: asyncComponent(() => import("../../Admin/Agency/TestManager/List"))
-  },
-  {
-    path: "agency/test-manager/create",
+    path: "agency/create",
     component: asyncComponent(() => import("../../Admin/Agency/Create"))
   },
   {
+    path: "agency/teams/:agencyId?",
+    component: asyncComponent(() => import("../../Admin/Agency/Teams/List"))
+  },
+  {
+    path: "agency/users/:agencyId/team",
+    component: asyncComponent(() => import("../../Admin/Agency/users/List"))
+  },
+  {
+    path: "agency/test-manager",
+    component: asyncComponent(() =>
+      import("../../Admin/Agency/TestManager/List")
+    )
+  },
+  {
     path: "agency/test-manager/test-case",
-    component: asyncComponent(() => import("../../Admin/Agency/TestManager/TestCaseScreen"))
+    component: asyncComponent(() =>
+      import("../../Admin/Agency/TestManager/TestCaseScreen")
+    )
+  },
+  {
+    path: "agency/test-manager/available-tests",
+    component: asyncComponent(() =>
+      import("../../Admin/Agency/TestManager/TestQueues/AvailableTests")
+    )
+  },
+  {
+    path: "agency/test-manager/assigned-tests",
+    component: asyncComponent(() =>
+      import("../../Admin/Agency/TestManager/TestQueues/AssignedTests")
+    )
   }
 ];

@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {Row, Col, Icon, message, Spin} from 'antd';
-import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../../settings/basicStyle';
-import Box from '../../../../components/utility/box';
+import React, { Component } from "react";
+import { Row, Col, Icon, message, Spin } from "antd";
+import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
+import basicStyle from "../../../../settings/basicStyle";
+import Box from "../../../../components/utility/box";
 import ActionButtons from "./partials/ActionButtons";
 
 import {
@@ -11,8 +11,8 @@ import {
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from '../../crud.style';
-import {deleteCompany, getCompanies} from "../../../../actions/companyActions";
+} from "../../crud.style";
+import { getAgency } from "../../../../actions/agencyActions";
 
 export default class extends Component {
   constructor(props) {
@@ -20,37 +20,37 @@ export default class extends Component {
     this.state = {
       columns: [
         {
-          title: 'Name',
-          dataIndex: 'name',
-          key: 'name',
+          title: "Name",
+          dataIndex: "name",
+          key: "name",
           sorter: true
         },
         {
-          title: 'Company Admin',
-          dataIndex: 'owner.username',
-          key: 'company_admin',
+          title: "Company Admin",
+          dataIndex: "owner.username",
+          key: "company_admin",
           sorter: true
         },
         {
-          title: 'Company Admin Email',
-          dataIndex: 'owner.contactInformation.emailAddress',
-          key: 'company_admin_email',
+          title: "Company Admin Email",
+          dataIndex: "owner.contactInformation.emailAddress",
+          key: "company_admin_email",
           sorter: true
         },
         {
-          title: 'Location',
-          dataIndex: 'location',
-          key: 'location',
+          title: "Location",
+          dataIndex: "location",
+          key: "location",
           sorter: true
         },
         {
-          title: 'Actions',
-          key: 'actions',
-          render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
+          title: "Actions",
+          key: "actions",
+          render: row => <ActionButtons row={row} delete={this.handleDelete} />
         }
       ],
       dataSource: [],
-      loading: false,
+      loading: false
     };
     this.fetchData = this.fetchData.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
@@ -61,23 +61,22 @@ export default class extends Component {
   }
 
   fetchData() {
-    this.setState({loading: true});
-    getCompanies().then(res => {
-      this.setState({dataSource: res.data, loading: false})
+    this.setState({ loading: true });
+    getAgency().then(res => {
+      this.setState({ dataSource: res.data, loading: false });
     });
   }
 
   handleDelete(row) {
-    deleteCompany(row.clientId).then(res => {
-      message.success('Successfully Deleted.');
-      this.fetchData();
-    })
+    // deleteCompany(row.clientId).then(res => {
+    //   message.success("Successfully Deleted.");
+    //   this.fetchData();
+    // });
   }
 
   render() {
-    const {rowStyle, colStyle, gutter} = basicStyle;
+    const { rowStyle, colStyle, gutter } = basicStyle;
     return (
-
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -91,16 +90,15 @@ export default class extends Component {
                   rowKey="clientId"
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
-                  onRow={(row) => ({
+                  onRow={row => ({
                     onDoubleClick: () => {
                       // this.props.history.push('details/' + row.clientId)
-                      this.props.history.push(`details/${row.clientId}`)
-                    },
+                      this.props.history.push(`details/${row.clientId}`);
+                    }
                   })}
                 />
               </Spin>
             </Box>
-
           </Col>
         </Row>
       </LayoutWrapper>

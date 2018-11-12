@@ -1,8 +1,9 @@
 import {post, get, put, deleteRecord} from "../helpers/http";
 
-export const getTestingProviderTeams = () => {
-  return get("agency-team");
+export const getTestingProviderTeams = (query) => {
+  return get(`agency-team`, query);
 };
+
 export const getTestingProviderTeam = (id) => {
   return get("agency-team/" + id);
 };
