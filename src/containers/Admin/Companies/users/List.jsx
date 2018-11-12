@@ -35,13 +35,13 @@ export default class extends Component {
         },
         {
           title: "Rating",
-          dataIndex: "contactInformation.postalAddress",
+          dataIndex: "rating",
           key: "rating",
           sorter: (a, b) => a.rating >= b.rating
         },
         {
           title: "Status",
-          dataIndex: "contactInformation.emailAddress",
+          dataIndex: "status",
           key: "status",
           sorter: (a, b) => a.status >= b.status
         },
@@ -49,7 +49,11 @@ export default class extends Component {
           title: "Actions",
           key: "actions",
           render: row => (
-            <UsersActionButtons row={row} delete={this.handleDelete} />
+            <UsersActionButtons
+              selectedTeam={this.state.selectedTeam}
+              row={row}
+              info={this.handleInfo}
+            />
           )
         }
       ],
@@ -62,7 +66,7 @@ export default class extends Component {
     };
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
+    this.handleInfo = this.handleInfo.bind(this);
   }
 
   componentDidMount() {
@@ -71,20 +75,42 @@ export default class extends Component {
       .then(res => {
         this.setState({ companies: res.data });
         this.handleCompanyChange(this.props.match.params.companyId);
-        this.handleTeamChange(this.props.match.params.teamId);
+        // this.handleTeamChange(this.props.match.params.teamId);
       })
-      .finally(() => {
+      .catch(() => {
         this.setState({ loading: false });
       });
   }
 
   handleCompanyChange(companyId) {
-    this.setState({ selectedTeam: undefined });
-    getTeams(companyId).then(res => {
-      this.setState({ teams: res.data });
-    });
-    this.setState({ selectedCompany: companyId });
-    this.updateRecords(companyId, null);
+    this.setState(
+      { selectedTeam: undefined, selectedCompany: companyId },
+      () => {
+        getTeams(companyId).then(res => {
+          const { teamId } = this.props.match.params;
+          const teamDefault = teamId
+            ? teamId + ""
+            : res.data[0].clientTeamId + "";
+
+          this.updateRecords(companyId, teamDefault, (err, users) => {
+            if (err) {
+              return this.setState({
+                teams: res.data,
+                selectedTeam: teamDefault,
+                dataSource: users.data,
+                loading: false
+              });
+            }
+            this.setState({
+              teams: res.data,
+              selectedTeam: teamDefault,
+              dataSource: users.data,
+              loading: false
+            });
+          });
+        });
+      }
+    );
   }
 
   handleTeamChange(teamId) {
@@ -92,8 +118,17 @@ export default class extends Component {
     this.updateRecords(null, teamId);
   }
 
-  updateRecords(companyId, teamId) {
+  updateRecords(companyId, teamId, cb) {
     this.setState({ loading: true });
+    if (cb) {
+      return getUsers(companyId, teamId)
+        .then(res => {
+          return cb(null, res);
+        })
+        .catch(resErr => {
+          return cb(resErr);
+        });
+    }
     getUsers(companyId, teamId)
       .then(res => {
         this.setState({ dataSource: res.data });
@@ -103,14 +138,15 @@ export default class extends Component {
       });
   }
 
-  handleDelete(row) {
-    deleteCompanyUser(row.userId)
-      .then(res => {
-        this.updateRecords(this.state.selectedCompany, this.state.selectedTeam);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  handleInfo(row) {
+    alert("show info")
+    // deleteCompanyUser(row.userId)
+    //   .then(res => {
+    //     this.updateRecords(this.state.selectedCompany, this.state.selectedTeam);
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
   }
 
   render() {
@@ -131,7 +167,7 @@ export default class extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Users List </ComponentTitle>
+                <ComponentTitle>Company - Users List</ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"
@@ -179,8 +215,25 @@ export default class extends Component {
                   bordered
                   pagination={true}
                   columns={this.state.columns}
-                  dataSource={this.state.dataSource}
-                  rowKey="testSuiteId"
+                  onRow={row => ({
+                    onDoubleClick: () => {
+                      this.props.history.push({
+                        pathname: `/dashboard/company/user/${
+                          this.props.match.params.companyId
+                        }/edit/${row.userId}`,
+                        state: {
+                          row,
+                          selectedTeam: row.ClientTeamMember.teamId + ""
+                        }
+                      });
+                    }
+                  })}
+                  dataSource={
+                    this.state.dataSource && this.state.dataSource.length
+                      ? this.state.dataSource
+                      : []
+                  }
+                  rowKey="userId"
                 />
               </Spin>
             </Box>

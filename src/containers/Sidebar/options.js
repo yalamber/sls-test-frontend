@@ -11,6 +11,10 @@ const options = [
       {
         key: "system-admin/agency/list",
         label: "sidebar.agency"
+      },
+      {
+        key: "system-admin/edit-roles/list",
+        label: "sidebar.editRoles"
       }
     ]
   },

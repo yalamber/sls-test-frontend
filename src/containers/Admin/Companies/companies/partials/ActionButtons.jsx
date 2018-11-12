@@ -11,7 +11,7 @@ const ActionButtons = (props) => {
   return (
     <ActionWrapper>
       <Tooltip placement="topLeft" title="Show Users List">
-        <a onClick={() => props.history.push(`users/${props.row.clientId}/1`)}>
+        <a onClick={() => props.history.push(`users/${props.row.clientId}/team`)}>
           <i className="ion-ios-person"/>
         </a>
       </Tooltip>

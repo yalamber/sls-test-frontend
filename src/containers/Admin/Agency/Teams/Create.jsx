@@ -2,14 +2,16 @@ import React, {Component} from 'react';
 import {Row, Col, Spin} from 'antd';
 import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
 import basicStyle from '../../../../settings/basicStyle';
+import ContentHolder from '../../../../components/utility/contentHolder';
+
 import {
   TitleWrapper,
   ComponentTitle,
 } from '../../crud.style';
 
 import Box from '../../../../components/utility/box';
-import UserForm from "./partials/UserForm";
-import {addProviderUser, getProviderUser} from "../../../../actions/testingProviderActions";
+import UserForm from "./partials/TeamForm";
+import {addProviderTeam} from "../../../../actions/testingProviderActions";
 
 export default class extends Component {
 
@@ -22,18 +24,9 @@ export default class extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {
-    this.setState({loading: true});
-    getProviderUser(this.props.match.params.id).then(res => {
-      this.setState({user: res.data});
-    }).finally(() => {
-      this.setState({loading: false});
-    })
-  }
-
   handleSubmit(formData, resetForm) {
     this.setState({loading: true});
-    addProviderUser({isProviderUser: true, isClientUser: false, ...formData}).then(res => {
+    addProviderTeam(formData).then(res => {
       resetForm();
     }).finally(() => {
       this.setState({loading: false});
@@ -46,14 +39,22 @@ export default class extends Component {
 
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
-          <Col md={24} sm={24} xs={24} style={colStyle}>
+          <Col md={12} sm={12} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Edit User</ComponentTitle>
+                <ComponentTitle>Create new Team</ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
-                <UserForm submit={this.handleSubmit} user={this.state.user}/>
+                <UserForm submit={this.handleSubmit}/>
               </Spin>
+            </Box>
+          </Col>
+          <Col md={12} sm={12} xs={24} style={colStyle}>
+            <Box title="Instruction">
+              <ContentHolder>
+                <p><b>Team Manager : </b> You can search team manager from the list. </p>
+                <p><b>Team Name : </b> Team name must be alphabet with 5 to 25 characters.</p>
+              </ContentHolder>
             </Box>
           </Col>
         </Row>

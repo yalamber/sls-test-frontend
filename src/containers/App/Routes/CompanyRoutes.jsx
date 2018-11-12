@@ -94,7 +94,11 @@ export default [
     component: asyncComponent(() => import("../../Admin/Companies/users/Create"))
   },
   {
-    path: "company/users/:companyId?/:teamId?",
+    path: "company/user/:companyId/edit/:userId",
+    component: asyncComponent(() => import("../../Admin/Companies/users/Edit"))
+  },
+  {
+    path: "company/users/:companyId?/team/:teamId?",
     component: asyncComponent(() => import("../../Admin/Companies/users/List"))
   },
 
