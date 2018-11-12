@@ -10,6 +10,10 @@ export default [
     component: asyncComponent(() => import("../../Admin/Agency/List"))
   },
   {
+    path: "agency/teams",
+    component: asyncComponent(() => import("../../Admin/Agency/Teams/List"))
+  },
+  {
     path: "agency/test-manager",
     component: asyncComponent(() => import("../../Admin/Agency/TestManager/List"))
   },

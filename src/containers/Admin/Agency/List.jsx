@@ -65,11 +65,10 @@ class List extends Component {
 
   updateForm = (key, value) => {
     const { _updateForm } = this.props;
-        
+
     _updateForm(
         Object.assign(this.props[actions.FORM_DATA_AGENCY_KEY], { [key]: value })
     );
-
   }
 
   componentDidMount() {
@@ -89,7 +88,6 @@ class List extends Component {
 
   onChange(pagination, filters, sorter) {
     const { data } = this.state;
-    console.log(sorter);
 
     if (sorter && sorter.columnKey && sorter.order) {
       if (sorter.order === "ascend") {
@@ -141,8 +139,7 @@ class List extends Component {
                   rowKey="providerTeamId"
                   onRow={row => ({
                     onDoubleClick: () => {
-                      console.log("row is", row)
-                      this.props.history.push(`/dashboard/agency/users/${row.agencyId}`)
+                      this.props.history.push(`/dashboard/agency/teams`)
                     }
                   })}
                 />

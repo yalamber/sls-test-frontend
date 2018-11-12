@@ -30,7 +30,7 @@ const ActionButtons = function ActionButtons(props) {
       <Col>
         <Tooltip placement="topLeft" title="Teams List">
           <a
-            onClick={onPress.bind(this, `/dashboard/providers/teams`, actions.FORM_DATA_SELECTED_AGENCY, row)}
+            onClick={onPress.bind(this, `/dashboard/agency/teams`, actions.FORM_DATA_SELECTED_AGENCY, row)}
             style={iconStyle}
           >
             <i className="ion-ios-people" />
