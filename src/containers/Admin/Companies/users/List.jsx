@@ -95,9 +95,6 @@ export default class extends Component {
           this.updateRecords(companyId, teamDefault, (err, users) => {
             if (err) {
               return this.setState({
-                teams: res.data,
-                selectedTeam: teamDefault,
-                dataSource: users.data,
                 loading: false
               });
             }

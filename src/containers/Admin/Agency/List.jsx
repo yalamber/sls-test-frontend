@@ -18,8 +18,8 @@ import {
   deleteProviderTeam
 } from "../../../actions/testingProviderActions";
 import { message } from "antd/lib/index";
-import actions from '../../../redux/agency/actions';
-import { connect } from 'react-redux';
+import actions from "../../../redux/agency/actions";
+import { connect } from "react-redux";
 const { _updateForm } = actions;
 
 class List extends Component {
@@ -48,7 +48,13 @@ class List extends Component {
         {
           title: "Actions",
           key: "actions",
-          render: row => <ActionButtons row={row} onPress={this.openPage.bind(this)} delete={this.handleDelete} />
+          render: row => (
+            <ActionButtons
+              row={row}
+              onPress={this.openPage.bind(this)}
+              delete={this.handleDelete}
+            />
+          )
         }
       ],
       data: [],
@@ -57,19 +63,19 @@ class List extends Component {
     this.handleDelete = this.handleDelete.bind(this);
   }
 
-  openPage = ( path, key, row ) => {
+  openPage = (path, key, row) => {
     const { history } = this.props;
     this.updateForm(key, row);
     history.push(path);
-  }
+  };
 
   updateForm = (key, value) => {
     const { _updateForm } = this.props;
 
     _updateForm(
-        Object.assign(this.props[actions.FORM_DATA_AGENCY_KEY], { [key]: value })
+      Object.assign(this.props[actions.FORM_DATA_AGENCY_KEY], { [key]: value })
     );
-  }
+  };
 
   componentDidMount() {
     this.setState({ loading: true });
@@ -139,7 +145,12 @@ class List extends Component {
                   rowKey="providerTeamId"
                   onRow={row => ({
                     onDoubleClick: () => {
-                      this.props.history.push(`/dashboard/agency/teams`)
+                      this.props.history.push({
+                        pathname: `/dashboard/agency/teams/${row.agencyId}`,
+                        state: {
+                          ...row
+                        }
+                      });
                     }
                   })}
                 />
@@ -153,10 +164,10 @@ class List extends Component {
 }
 
 export default connect(
-  ({ Agency}) => {
+  ({ Agency }) => {
     const { form_data_agency_key } = Agency;
 
-    return({form_data_agency_key});
+    return { form_data_agency_key };
   },
   { _updateForm }
 )(List);

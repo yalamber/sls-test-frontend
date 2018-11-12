@@ -20,7 +20,18 @@ const ActionButtons = function ActionButtons(props) {
       <Col>
         <Tooltip placement="topLeft" title="Users List">
           <a
-            onClick={onPress.bind(this, `/dashboard/providers/teams/team-members`, actions.FORM_DATA_SELECTED_TEAM_OF_AGENCY, row)}
+            onClick={() => {
+              console.log('row is rror,', row)
+              props.history.push({
+                pathname: `/dashboard/agency/users/${row.agencyId}/team`,
+                // pathname: `/dashboard/agency/teams/${row.agencyId}`,
+                state: {
+                  ...row
+                }
+              });
+
+                // onPress.bind(this, `/dashboard/agency/teams/team-members`, actions.FORM_DATA_SELECTED_TEAM_OF_AGENCY, row)}
+            }}
             style={iconStyle}
           >
             <i className="ion-ios-person" />
@@ -30,7 +41,15 @@ const ActionButtons = function ActionButtons(props) {
       <Col>
         <Tooltip placement="topLeft" title="Teams List">
           <a
-            onClick={onPress.bind(this, `/dashboard/agency/teams`, actions.FORM_DATA_SELECTED_AGENCY, row)}
+            onClick={() => {
+              props.history.push({
+                pathname: `/dashboard/agency/teams/${row.agencyId}`,
+                state: {
+                  ...row
+                }
+              });
+              // { /*onPress.bind(this, `/dashboard/agency/teams`, actions.FORM_DATA_SELECTED_AGENCY, row) */ }
+            }}
             style={iconStyle}
           >
             <i className="ion-ios-people" />

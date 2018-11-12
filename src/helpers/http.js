@@ -2,6 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 axios.defaults.baseURL = 'https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/';
+// axios.defaults.baseURL = 'http://localhost:8080/';
 
 export function post(url, data = []) {
   return send(url, data, 'POST');

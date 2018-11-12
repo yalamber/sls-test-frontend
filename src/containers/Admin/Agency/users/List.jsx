@@ -13,11 +13,10 @@ import {
   TableClickable as Table
 } from "../../crud.style";
 import {
-  getCompanies,
-  getTeams,
-  getUsers,
-  deleteCompanyUser
-} from "../../../../actions/companyActions";
+  getAgency,
+  getAgencyTeams,
+  getUsers
+} from "../../../../actions/agencyActions";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -35,13 +34,13 @@ export default class extends Component {
         },
         {
           title: "Rating",
-          dataIndex: "contactInformation.postalAddress",
+          dataIndex: "rating",
           key: "rating",
           sorter: (a, b) => a.rating >= b.rating
         },
         {
           title: "Status",
-          dataIndex: "contactInformation.emailAddress",
+          dataIndex: "status",
           key: "status",
           sorter: (a, b) => a.status >= b.status
         },
@@ -49,42 +48,70 @@ export default class extends Component {
           title: "Actions",
           key: "actions",
           render: row => (
-            <UsersActionButtons row={row} delete={this.handleDelete} />
+            <UsersActionButtons
+              selectedTeam={this.state.selectedTeam}
+              row={row}
+              info={this.handleInfo}
+            />
           )
         }
       ],
       dataSource: [],
-      companies: [],
+      agencies: [],
       teams: [],
-      selectedCompany: undefined,
+      selectedAgency: undefined,
       selectedTeam: undefined,
       loading: false
     };
-    this.handleCompanyChange = this.handleCompanyChange.bind(this);
+    this.handleAgencyChange = this.handleAgencyChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
+    this.handleInfo = this.handleInfo.bind(this);
   }
 
   componentDidMount() {
     this.setState({ loading: true });
-    getCompanies()
+    getAgency()
       .then(res => {
-        this.setState({ companies: res.data });
-        this.handleCompanyChange(this.props.match.params.companyId);
-        this.handleTeamChange(this.props.match.params.teamId);
+        this.setState({ agencies: res.data });
+        this.handleAgencyChange(this.props.match.params.agencyId);
+        // this.handleTeamChange(this.props.match.params.teamId);
       })
       .finally(() => {
         this.setState({ loading: false });
       });
   }
 
-  handleCompanyChange(companyId) {
-    this.setState({ selectedTeam: undefined });
-    getTeams(companyId).then(res => {
-      this.setState({ teams: res.data });
-    });
-    this.setState({ selectedCompany: companyId });
-    this.updateRecords(companyId, null);
+  handleAgencyChange(agencyId) {
+    console.log("hoi naman", agencyId)
+    this.setState(
+      { selectedTeam: undefined, selectedAgency: agencyId },
+      () => {
+        getAgencyTeams(agencyId).then(res => {
+          const { teamId } = this.props.match.params;
+          const teamDefault = teamId
+            ? teamId + ""
+            : res.data[0].agencyTeamId + "";
+
+          this.updateRecords(agencyId, teamDefault, (err, users) => {
+            if (err) {
+              console.log("oso?", err)
+              return this.setState({
+                loading: false
+              });
+            }
+
+            console.log("so", res.data);
+            console.log("so2", users.data)
+            this.setState({
+              teams: res.data,
+              selectedTeam: teamDefault,
+              dataSource: users.data,
+              loading: false
+            });
+          });
+        });
+      }
+    );
   }
 
   handleTeamChange(teamId) {
@@ -92,10 +119,22 @@ export default class extends Component {
     this.updateRecords(null, teamId);
   }
 
-  updateRecords(companyId, teamId) {
+  updateRecords(agencyId, teamId, cb) {
     this.setState({ loading: true });
-    getUsers(companyId, teamId)
+    console.log("hoi??", agencyId, teamId)
+    if (cb) {
+      return getUsers(agencyId, teamId)
+        .then(res => {
+          console.log("osow?", res)
+          return cb(null, res);
+        })
+        .catch(resErr => {
+          return cb(resErr);
+        });
+    }
+    getUsers(agencyId, teamId)
       .then(res => {
+        console.log("this we got", res)
         this.setState({ dataSource: res.data });
       })
       .finally(() => {
@@ -103,14 +142,15 @@ export default class extends Component {
       });
   }
 
-  handleDelete(row) {
-    deleteCompanyUser(row.userId)
-      .then(res => {
-        this.updateRecords(this.state.selectedCompany, this.state.selectedTeam);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  handleInfo(row) {
+    alert("show info")
+    // deleteAgencyUser(row.userId)
+    //   .then(res => {
+    //     this.updateRecords(this.state.selectedAgency, this.state.selectedTeam);
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   });
   }
 
   render() {
@@ -118,11 +158,11 @@ export default class extends Component {
       margin: "5px 5px 10px 0px"
     };
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const companiesOptions = this.state.companies.map(company => (
-      <Option key={company.clientId}>{company.name}</Option>
+    const agenciesOptions = this.state.agencies.map(agency => (
+      <Option key={agency.agencyId}>{agency.name}</Option>
     ));
     const teamsOptions = this.state.teams.map(team => (
-      <Option key={team.clientTeamId}>{team.name}</Option>
+      <Option key={team.agencyId}>{team.name}</Option>
     ));
 
     return (
@@ -131,12 +171,12 @@ export default class extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Users List </ComponentTitle>
+                <ComponentTitle>Agency - Users List</ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push("/dashboard/company/user/create");
+                      this.props.history.push("/dashboard/agency/user/create");
                     }}
                   >
                     <Icon type="plus" />
@@ -146,15 +186,15 @@ export default class extends Component {
               </TitleWrapper>
               <Row>
                 <Col md={6} sm={24} xs={24} style={margin}>
-                  <FormItem label="Company Name *">
+                  <FormItem label="Agency Name *">
                     <Select
                       showSearch
-                      placeholder="Please Choose Company Name"
+                      placeholder="Please Choose Agency Name"
                       style={{ width: "100%" }}
-                      onChange={this.handleCompanyChange}
-                      value={this.state.selectedCompany}
+                      onChange={this.handleAgencyChange}
+                      value={this.state.selectedAgency}
                     >
-                      {companiesOptions}
+                      {agenciesOptions}
                     </Select>
                   </FormItem>
                 </Col>
@@ -174,13 +214,22 @@ export default class extends Component {
               </Row>
               <Spin spinning={this.state.loading}>
                 <Table
-                  locale={{ emptyText: "Please Select Company name" }}
+                  locale={{ emptyText: "Please Select Agency name" }}
                   size="middle"
                   bordered
                   pagination={true}
                   columns={this.state.columns}
-                  dataSource={this.state.dataSource}
-                  rowKey="testSuiteId"
+                  onRow={row => ({
+                    onDoubleClick: () => {
+                      alert("show user info");
+                    }
+                  })}
+                  dataSource={
+                    this.state.dataSource && this.state.dataSource.length
+                      ? this.state.dataSource
+                      : []
+                  }
+                  rowKey="userId"
                 />
               </Spin>
             </Box>
