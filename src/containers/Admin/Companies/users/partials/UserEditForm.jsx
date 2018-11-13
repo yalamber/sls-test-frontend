@@ -35,7 +35,7 @@ class UserForm extends Component {
   componentDidMount() {
     const { companyId } = this.props.match.params;
     getCompanies().then(res => {
-      this.setState({ companies: res.data }, () => {
+      this.setState({ companies: res.data.rows }, () => {
         this.handleCompanyChange(companyId);
       });
     });
