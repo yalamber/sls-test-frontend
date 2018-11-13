@@ -13,7 +13,7 @@ import {
   TableClickable as Table
 } from '../crud.style';
 import {deleteDashboard, getDashboards} from "../../../actions/dashboardActions";
-import {getCompanies} from "../../../actions/companyActions";
+import {getCompanies} from "../../../helpers/http-api-client";
 import {message} from "antd/lib/index";
 
 const Option = Select.Option;

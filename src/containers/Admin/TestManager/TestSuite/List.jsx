@@ -14,8 +14,8 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {getCompanies, getTeams} from "../../../../actions/companyActions";
-import {deleteSuite, getSuites} from "../../../../actions/testManagerActions";
+import {getCompanies, getTeams} from "../../../../helpers/http-api-client";
+import {deleteSuite, getSuites} from "../../../../helpers/http-api-client";
 import {dateTime} from "../../../../constants/dateFormat";
 
 const Option = Select.Option;

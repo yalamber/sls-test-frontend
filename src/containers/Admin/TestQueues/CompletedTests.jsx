@@ -10,8 +10,8 @@ import { Row, Col, Radio, Select } from "antd";
 import Box from "../../../components/utility/box";
 import basicStyle from "../../../settings/basicStyle";
 
-import { getCompanies, getTeams } from "../../../actions/companyActions";
-import { getSuites } from "../../../actions/testManagerActions";
+import { getCompanies, getTeams } from "../../../helpers/http-api-client";
+import { getSuites } from "../../../helpers/http-api-client";
 import CommonActionButton from "../../../components/CommonActionButton";
 
 const RadioGroup = Radio.Group;

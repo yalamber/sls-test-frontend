@@ -11,7 +11,7 @@ import {
 import Box from '../../../../components/utility/box';
 import UserForm from "../users/partials/UserForm";
 import {message} from "antd/lib/index";
-import {addCompanyUser} from "../../../../actions/companyActions";
+import {addCompanyUser} from "../../../../helpers/http-api-client";
 
 class Create extends Component {
   constructor() {

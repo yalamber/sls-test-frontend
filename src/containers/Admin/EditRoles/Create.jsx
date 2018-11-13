@@ -10,7 +10,7 @@ import {
 import Box from '../../../components/utility/box';
 import EditRoleForm from "./partials/EditRoleForm";
 import {message} from "antd/lib/index";
-import {addCompany, addCompanyUser, addTeam} from "../../../actions/companyActions";
+import {addCompany, addCompanyUser, addTeam} from "../../../helpers/http-api-client";
 
 export default class extends Component {
 

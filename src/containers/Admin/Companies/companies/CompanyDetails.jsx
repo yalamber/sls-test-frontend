@@ -22,7 +22,7 @@ import {
   getCompany,
   getCompanyUsersByTeamId,
   getTeams
-} from "../../../../actions/companyActions";
+} from "../../../../helpers/http-api-client";
 
 class CompanyDetails extends Component {
   constructor() {

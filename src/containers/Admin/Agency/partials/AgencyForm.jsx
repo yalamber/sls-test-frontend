@@ -8,7 +8,7 @@ import {
   ActionWrapper,
 } from '../../crud.style';
 import Card from "../../../../components/uielements/styles/card.style";
-import { getCompanies, getTeams } from "../../../../actions/companyActions";
+import { getCompanies, getTeams } from "../../../../helpers/http-api-client";
 import { userStatus } from "../../../../constants/userStatus";
 import {
   TitleWrapper,
@@ -79,7 +79,7 @@ class AgencyForm extends Component {
       sm: { span: 24 },
     };
 
-    //Margin bottom 
+    //Margin bottom
     const marginBottom = {
       marginBottom: 14
     }
@@ -122,7 +122,7 @@ class AgencyForm extends Component {
           <Row gutter={16}>
             <Col span={24}>
               {/*<Card title="Contact Information" style={{ marginTop: '20px' }}>
-                
+
               </Card>*/}
               <Row gutter={16}>
                 <Col {...formResSpan}>

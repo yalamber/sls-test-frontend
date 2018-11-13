@@ -7,7 +7,7 @@ import {
   ActionWrapper,
 } from '../../../crud.style';
 import Card from "../../../../../components/uielements/styles/card.style";
-import { getCompanies, getTeams } from "../../../../../actions/companyActions";
+import { getCompanies, getTeams } from "../../../../../helpers/http-api-client";
 import { userStatus } from "../../../../../constants/userStatus";
 import Errors from "../../../../Errors";
 

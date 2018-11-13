@@ -9,7 +9,7 @@ import {
 
 import Box from '../../../../components/utility/box';
 import TestCaseForm from "./partials/TestCaseForm";
-import {addTestCase} from "../../../../actions/testManagerActions";
+import {addTestCase} from "../../../../helpers/http-api-client";
 import Errors from "../../../Errors";
 
 export default class extends Component {

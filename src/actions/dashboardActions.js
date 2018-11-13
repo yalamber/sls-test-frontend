@@ -1,4 +1,5 @@
-import {post, get, put, deleteRecord} from "../helpers/http";
+// import HttpApiClient from "../helpers/http-api-client";
+import { post, get, put, deleteRecord } from "../helpers/http-api-client";
 
 export const getDashboards = (clientId = null) => {
   return get('dashboard', {clientId});

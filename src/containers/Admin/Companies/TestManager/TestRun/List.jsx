@@ -10,7 +10,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {getCompanies} from "../../../../actions/companyActions";
+import {getCompanies} from "../../../../helpers/http-api-client";
 
 const Option = Select.Option;
 export default class extends Component {

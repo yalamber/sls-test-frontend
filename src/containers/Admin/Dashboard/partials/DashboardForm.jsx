@@ -5,7 +5,7 @@ import Button from '../../../../components/uielements/button';
 import {
   ActionWrapper,
 } from '../../crud.style';
-import {getCompanies, getTeams} from "../../../../actions/companyActions";
+import {getCompanies, getTeams} from "../../../../helpers/http-api-client";
 import {dashboardValidation} from "../../../../Validations/dashboardValidation";
 
 const FormItem = Form.Item;

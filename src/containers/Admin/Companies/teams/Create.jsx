@@ -12,7 +12,7 @@ import {
 
 import Box from '../../../../components/utility/box';
 import TeamForm from "./partials/TeamForm";
-import {addTeam} from "../../../../actions/companyActions";
+import {addTeam} from "../../../../helpers/http-api-client";
 
 class Create extends Component {
 

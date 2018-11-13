@@ -6,7 +6,7 @@ import {teamValidation} from '../../../../../Validations/teamValidation';
 import {
   ActionWrapper,
 } from '../../../crud.style';
-import {getCompanyUsers} from "../../../../../actions/companyActions";
+import {getCompanyUsers} from "../../../../../helpers/http-api-client";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
