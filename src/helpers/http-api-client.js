@@ -177,6 +177,77 @@ export const addTestCase = (formData) => {
 export const deleteTestCase = (id) => {
   return _deleteRecord('test/case/' + id)
 };
+
+// Dashboard Actions
+export const getDashboards = (clientId = null) => {
+  return _get('dashboard', {clientId});
+};
+
+export const getDashboard = (id) => {
+  return _get('dashboard/' + id);
+};
+
+export const addDashboard = (formData) => {
+  delete formData.company;
+  return _post('dashboard', {...formData, teamType: 'client'});
+};
+
+export const updateDashboard = (id, formData) => {
+  return _put('dashboard/' + id, formData);
+};
+
+export const deleteDashboard = (id) => {
+  return _deleteRecord('dashboard/' + id);
+};
+
+
+// Testing Provider Actions
+
+export const getTestingProviderTeams = (query) => {
+  return _get(`agency-team`, query);
+};
+
+export const getTestingProviderTeam = (id) => {
+  return _get("agency-team/" + id);
+};
+export const deleteProviderTeam = (id) => {
+  return _deleteRecord("agency-team/" + id);
+};
+
+export const addProviderTeam = (teamData) => {
+  return _post('agency-team', teamData);
+};
+
+export const updateProviderTeam = (id, teamData) => {
+  return _put('agency-team/' + id, teamData);
+};
+
+
+//Members
+export const getTestingProviderTeamMembers = (teamId) => {
+  if (teamId) {
+    return _get('agency-team/' + teamId + '/member')
+  } else {
+    return _get('user');
+  }
+};
+
+export const addProviderUser = (user) => {
+  return _post('user', user);
+};
+export const getProviderUser = (id) => {
+  return _get('user/' + id);
+};
+export const deleteProviderUser = (id) => {
+  return _deleteRecord('user/' + id);
+};
+
+
+// User Actions
+export const signIn = (userCred) => {
+  return _post('auth/signin', userCred);
+};
+
 /*
 *
 * Private Start

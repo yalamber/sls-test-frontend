@@ -12,7 +12,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../crud.style';
-import {deleteDashboard, getDashboards} from "../../../actions/dashboardActions";
+import {deleteDashboard, getDashboards} from "../../../helpers/http-api-client";
 import {getCompanies} from "../../../helpers/http-api-client";
 import {message} from "antd/lib/index";
 

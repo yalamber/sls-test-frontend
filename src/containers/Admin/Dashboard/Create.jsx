@@ -12,7 +12,7 @@ import {
 
 import Box from '../../../components/utility/box';
 import DashboardForm from "./partials/DashboardForm";
-import {addDashboard} from "../../../actions/dashboardActions";
+import {addDashboard} from "../../../helpers/http-api-client";
 
 class Create extends Component {
 

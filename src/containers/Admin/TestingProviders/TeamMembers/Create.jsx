@@ -9,7 +9,7 @@ import {
 
 import Box from '../../../../components/utility/box';
 import UserForm from "./partials/UserForm";
-import {addProviderUser} from "../../../../actions/testingProviderActions";
+import {addProviderUser} from "../../../../helpers/http-api-client";
 
 export default class extends Component {
 

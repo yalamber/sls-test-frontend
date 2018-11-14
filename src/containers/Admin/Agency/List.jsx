@@ -16,7 +16,7 @@ import {
 import {
   getTestingProviderTeams,
   deleteProviderTeam
-} from "../../../actions/testingProviderActions";
+} from "../../../helpers/http-api-client";
 import { message } from "antd/lib/index";
 import actions from "../../../redux/agency/actions";
 import { connect } from "react-redux";
