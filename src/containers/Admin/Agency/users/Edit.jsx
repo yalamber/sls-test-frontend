@@ -24,8 +24,7 @@ class Create extends Component {
   }
 
   comoponentDidMount() {
-    console.log("got mounted");
-    console.log("prop here", this.props);
+    
   }
 
   handleSubmit(formData, resetForm) {

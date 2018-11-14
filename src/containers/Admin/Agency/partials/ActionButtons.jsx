@@ -5,15 +5,13 @@ import { Row, Col } from "antd";
 import { ActionWrapper } from "../../crud.style";
 import { Tooltip, Icon } from "antd";
 import { withRouter } from "react-router-dom";
-import actions from '../../../../redux/agency/actions';
+import actions from "../../../../redux/agency/actions";
 
 const ActionButtons = function ActionButtons(props) {
   const { iconStyle } = styles;
   const { row, onPress } = props;
 
-  const openPate = ( path ) => {
-
-  }
+  const openPate = path => {};
 
   return (
     <Row type={"flex"} justify="center" align={"middle"}>
@@ -29,7 +27,7 @@ const ActionButtons = function ActionButtons(props) {
                 }
               });
 
-                // onPress.bind(this, `/dashboard/agency/teams/team-members`, actions.FORM_DATA_SELECTED_TEAM_OF_AGENCY, row)}
+              // onPress.bind(this, `/dashboard/agency/teams/team-members`, actions.FORM_DATA_SELECTED_TEAM_OF_AGENCY, row)}
             }}
             style={iconStyle}
           >
@@ -58,7 +56,15 @@ const ActionButtons = function ActionButtons(props) {
       <Col>
         <Tooltip placement="topLeft" title="Edit Record">
           <a
-            onClick={onPress.bind(this, `/providers/teams/team-members`, actions.FORM_DATA_SELECTED_AGENCY, row)}
+            onClick={() => {
+              props.history.push({
+                pathname: `/dashboard/agency/edit/${row.agencyId}`,
+                state: {
+                  ...row
+                }
+              });
+              // { /*onPress.bind(this, `/dashboard/agency/teams`, actions.FORM_DATA_SELECTED_AGENCY, row) */ }
+            }}
             style={iconStyle}
           >
             <i className="ion-android-create" />
