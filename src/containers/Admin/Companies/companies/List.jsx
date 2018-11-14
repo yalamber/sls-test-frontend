@@ -21,7 +21,7 @@ export default class extends Component {
       columns: [
         {
           title: "Name",
-          dataIndex: "clientId",
+          dataIndex: "name",
           key: "name"
         },
         {
