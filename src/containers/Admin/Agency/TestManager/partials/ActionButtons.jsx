@@ -19,7 +19,7 @@ const ActionButtons = props => {
         </a>
       </Tooltip>
       <Tooltip placement="topLeft" title="Show Completed Test">
-        <a onClick={() => props.history.push("edit/" + props.row.clientId)}>
+        <a onClick={() => props.history.push("edit/" + props.row.agencyId)}>
           <Icon type="check-circle" style={{ marginTop: 4 }} />
         </a>
       </Tooltip>
