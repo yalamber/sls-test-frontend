@@ -25,7 +25,6 @@ export default class extends Component {
     addCompany(formData.company).then(res => {
       if (res.status) {
         addTeam({clientId: res.data.clientId, name: "Company Admin"}).then(res => {
-          console.log(res.data);
           addCompanyUser({
             isProviderUser: false,
             isClientUser: true,

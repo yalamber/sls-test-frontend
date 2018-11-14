@@ -285,10 +285,10 @@ export const _get = function(url, data = {}) {
 // };
 
 export const _getWithLimitOffset = function(url, option) {
-  const { tablePaginationOptions } = option;
+  const { paginationOptions } = option;
   return _get(url, {
-    limit: tablePaginationOptions.pageSize,
-    offset: tablePaginationOptions.pageSize * (tablePaginationOptions.current-1)
+    limit: paginationOptions.pageSize,
+    offset: paginationOptions.pageSize * (paginationOptions.current-1)
   })
   // return _sendRequest(url, data, "GET");
 };
