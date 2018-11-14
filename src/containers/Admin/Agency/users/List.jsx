@@ -72,7 +72,7 @@ export default class extends Component {
     this.setState({ loading: true });
     getAgency()
       .then(res => {
-        this.setState({ agencies: res.data });
+        this.setState({ agencies: res.data.rows });
         this.handleAgencyChange(this.props.match.params.agencyId);
         // this.handleTeamChange(this.props.match.params.teamId);
       })

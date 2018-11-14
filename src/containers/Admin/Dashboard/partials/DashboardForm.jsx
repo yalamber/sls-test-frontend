@@ -25,7 +25,7 @@ class DashboardForm extends Component {
 
   componentDidMount() {
     getCompanies().then(res => {
-      this.setState({companies: res.data});
+      this.setState({companies: res.data.rows});
     });
     if (this.props.match.params.id) {
       this.handleCompanyChange(this.props.match.params.id);

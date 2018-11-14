@@ -58,9 +58,16 @@ class List extends Component {
         }
       ],
       data: [],
+      tablePaginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 5,
+        total: 1
+      },
       loading: false
     };
     this.handleDelete = this.handleDelete.bind(this);
+    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   openPage = (path, key, row) => {
@@ -79,9 +86,18 @@ class List extends Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-    getAgency()
+    getAgency({
+      tablePaginationOptions: this.state.tablePaginationOptions
+    })
       .then(agencies => {
-        this.setState({ loading: false, data: agencies.data });
+        this.setState({
+          loading: false,
+          data: agencies.data.rows,
+          tablePaginationOptions: {
+            ...this.state.tablePaginationOptions,
+            total: agencies.data.count
+          }
+        });
       })
       .catch(agencies => {
         this.setState({ loading: false, data: [] });
@@ -112,6 +128,37 @@ class List extends Component {
     }
   }
 
+  onTablePaginationChange(page, pageSize) {
+    this.setState(
+      {
+        loading: true,
+        tablePaginationOptions: {
+          ...this.state.tablePaginationOptions,
+          current: page,
+          pageSize
+        }
+      },
+      () => {
+        getAgency({
+          tablePaginationOptions: this.state.tablePaginationOptions
+        })
+          .then(agencies => {
+            this.setState({
+              loading: false,
+              data: agencies.data.rows,
+              tablePaginationOptions: {
+                ...this.state.tablePaginationOptions,
+                total: agencies.data.count
+              }
+            });
+          })
+          .catch(agencies => {
+            this.setState({ loading: false, data: [] });
+          });
+      }
+    );
+  }
+
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { data, columns } = this.state;
@@ -138,7 +185,10 @@ class List extends Component {
                 <Table
                   size="middle"
                   bordered
-                  pagination={true}
+                  pagination={{
+                    ...this.state.tablePaginationOptions,
+                    onChange: this.onTablePaginationChange
+                  }}
                   columns={columns}
                   onChange={this.onChange.bind(this)}
                   dataSource={data}

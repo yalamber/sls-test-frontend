@@ -20,9 +20,16 @@ export const getAgencyTeamMembers = (teamId) => {
   }
 };
 
-export const getAgency = (agencyId) => {
-  if (agencyId) {
-    return get(`agency/${agencyId}`)
+export const getAgency = (objOrAgencyId) => {
+  const option = objOrAgencyId;
+  if (typeof option === 'object') {
+    const { tablePaginationOptions } = option;
+    return get(`agency`, {
+      limit: tablePaginationOptions.pageSize,
+      offset: tablePaginationOptions.pageSize * (tablePaginationOptions.current-1)
+    })
+  } else if (option) {
+    return get(`agency/${option}`)
   }
 
   return get(`agency`)
