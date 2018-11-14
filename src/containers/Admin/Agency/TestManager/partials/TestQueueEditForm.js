@@ -3,8 +3,8 @@ import { Form, Row, Col, Input, message, Select, Divider } from "antd";
 import { withRouter } from "react-router-dom";
 import Button from "../../../../components/uielements/button";
 import { ActionWrapper } from "../../crud.style";
-import { getCompanies, getTeams } from "../../../../actions/companyActions";
-import { getSuites } from "../../../../actions/testManagerActions";
+import { getCompanies, getTeams } from "../../../../helpers/http-api-client";
+import { getSuites } from "../../../../helpers/http-api-client";
 import { testCaseValidation } from "../../../../Validations/testCaseValidation";
 
 const FormItem = Form.Item;

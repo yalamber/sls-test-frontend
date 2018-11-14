@@ -12,7 +12,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from "../../crud.style";
-import { getAgency } from "../../../../actions/agencyActions";
+import { getAgency } from "../../../../helpers/http-api-client";
 
 export default class extends Component {
   constructor(props) {

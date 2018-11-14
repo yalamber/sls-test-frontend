@@ -6,7 +6,7 @@ import {
   ActionWrapper,
 } from '../../../crud.style';
 import Card from "../../../../../components/uielements/styles/card.style";
-import {getTestingProviderTeams} from "../../../../../actions/testingProviderActions";
+import {getTestingProviderTeams} from "../../../../../helpers/http-api-client";
 import {userStatus} from "../../../../../constants/userStatus";
 import {withRouter} from "react-router-dom";
 
@@ -289,4 +289,3 @@ const mapPropsToFields = (props) => {
 };
 const form = Form.create({mapPropsToFields})(UserForm);
 export default withRouter(form);
-

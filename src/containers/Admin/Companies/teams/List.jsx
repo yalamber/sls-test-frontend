@@ -11,7 +11,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {deleteTeam, getCompanies, getTeams} from "../../../../actions/companyActions";
+import {deleteTeam, getCompanies, getTeams} from "../../../../helpers/http-api-client";
 
 const Option = Select.Option;
 export default class extends Component {

@@ -15,9 +15,9 @@ import {
 import {
   getCompanies,
   getTeams,
-  getUsers,
+  getCompanyUsers,
   deleteCompanyUser
-} from "../../../../actions/companyActions";
+} from "../../../../helpers/http-api-client";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -118,7 +118,7 @@ export default class extends Component {
   updateRecords(companyId, teamId, cb) {
     this.setState({ loading: true });
     if (cb) {
-      return getUsers(companyId, teamId)
+      return getCompanyUsers(companyId, teamId)
         .then(res => {
           return cb(null, res);
         })
@@ -126,7 +126,7 @@ export default class extends Component {
           return cb(resErr);
         });
     }
-    getUsers(companyId, teamId)
+    getCompanyUsers(companyId, teamId)
       .then(res => {
         this.setState({ dataSource: res.data });
       })

@@ -9,7 +9,7 @@ import Box from "../../../../components/utility/box";
 import UserEditForm from "../users/partials/UserEditForm";
 import { updateLastUserRowData } from '../../../../util/history-location-helper';
 import { message } from "antd/lib/index";
-import { saveEditCompanyUser } from "../../../../actions/companyActions";
+import { saveEditCompanyUser } from "../../../../helpers/http-api-client";
 
 class Create extends Component {
   constructor() {

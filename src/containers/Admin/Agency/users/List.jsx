@@ -15,8 +15,8 @@ import {
 import {
   getAgency,
   getAgencyTeams,
-  getUsers
-} from "../../../../actions/agencyActions";
+  getAgencyUsers
+} from "../../../../helpers/http-api-client";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -82,7 +82,6 @@ export default class extends Component {
   }
 
   handleAgencyChange(agencyId) {
-    console.log("hoi naman", agencyId)
     this.setState(
       { selectedTeam: undefined, selectedAgency: agencyId },
       () => {
@@ -94,14 +93,11 @@ export default class extends Component {
 
           this.updateRecords(agencyId, teamDefault, (err, users) => {
             if (err) {
-              console.log("oso?", err)
               return this.setState({
                 loading: false
               });
             }
 
-            console.log("so", res.data);
-            console.log("so2", users.data)
             this.setState({
               teams: res.data,
               selectedTeam: teamDefault,
@@ -121,20 +117,17 @@ export default class extends Component {
 
   updateRecords(agencyId, teamId, cb) {
     this.setState({ loading: true });
-    console.log("hoi??", agencyId, teamId)
     if (cb) {
-      return getUsers(agencyId, teamId)
+      return getAgencyUsers(agencyId, teamId)
         .then(res => {
-          console.log("osow?", res)
           return cb(null, res);
         })
         .catch(resErr => {
           return cb(resErr);
         });
     }
-    getUsers(agencyId, teamId)
+    getAgencyUsers(agencyId, teamId)
       .then(res => {
-        console.log("this we got", res)
         this.setState({ dataSource: res.data });
       })
       .finally(() => {

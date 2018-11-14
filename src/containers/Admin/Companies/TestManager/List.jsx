@@ -12,7 +12,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {deleteCompany, getCompanies} from "../../../../actions/companyActions";
+import {deleteCompany, getCompanies} from "../../../../helpers/http-api-client";
 
 export default class extends Component {
   constructor(props) {
