@@ -96,7 +96,7 @@ export default class extends Component {
       },
       () => {
         getCompanies({
-          tablePaginationOptions: this.state.companiesPaginationOptions
+          paginationOptions: this.state.companiesPaginationOptions
         })
           .then(companies => {
             this.setState({

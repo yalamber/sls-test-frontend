@@ -31,7 +31,11 @@ const _middlewares = [];
 
 /** AGENCY **/
 export const createAgency = function(agency) {
-  return _post("client", agency);
+  return _post("agency", agency);
+};
+
+export const updateAgency = function(agencyId, data) {
+  return _put(`agency/${agencyId}`, data);
 };
 
 export const getAgencyTeams = function(query) {
@@ -62,8 +66,6 @@ export const getAgency = function(objOrAgencyId) {
 
 /** Company **/
 export const addCompany = function(company) {
-  company = _.omit(company, 'isClientUser');
-  company = _.omit(company, 'isProviderUser');
   return _post('client', company)
 };
 export const editCompany = function(id, company) {
@@ -285,10 +287,10 @@ export const _get = function(url, data = {}) {
 // };
 
 export const _getWithLimitOffset = function(url, option) {
-  const { tablePaginationOptions } = option;
+  const { paginationOptions } = option;
   return _get(url, {
-    limit: tablePaginationOptions.pageSize,
-    offset: tablePaginationOptions.pageSize * (tablePaginationOptions.current-1)
+    limit: paginationOptions.pageSize,
+    offset: paginationOptions.pageSize * (paginationOptions.current-1)
   })
   // return _sendRequest(url, data, "GET");
 };

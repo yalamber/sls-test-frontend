@@ -1,21 +1,21 @@
 import React, { Component } from "react";
 import { Row, Col, Spin } from "antd";
-import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
-import basicStyle from "../../../../settings/basicStyle";
-import ContentHolder from "../../../../components/utility/contentHolder";
-import { getErrorDataFromApiResponseError } from "../../../../util/response-message";
+import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+import basicStyle from "../../../settings/basicStyle";
+import ContentHolder from "../../../components/utility/contentHolder";
 import { message } from "antd/lib/index";
-import { TitleWrapper, ComponentTitle } from "../../crud.style";
+import { TitleWrapper, ComponentTitle } from "../crud.style";
+import { getErrorDataFromApiResponseError } from "../../../util/response-message";
 
-import Box from "../../../../components/utility/box";
-import ClientEditForm from "./partials/CompanyEditForm";
-import { editCompany, getCompany } from "../../../../helpers/http-api-client";
+import Box from "../../../components/utility/box";
+import AgencyEditForm from "./partials/AgencyEditForm";
+import { updateAgency, getAgency } from "../../../helpers/http-api-client";
 
 export default class extends Component {
   constructor() {
     super();
     this.state = {
-      company: {},
+      agency: {},
       errors: {
         details: []
       },
@@ -26,7 +26,7 @@ export default class extends Component {
 
   handleSubmit(formData, resetForm) {
     this.setState({ loading: true });
-    editCompany(this.props.match.params.id, formData)
+    updateAgency(this.props.match.params.id, formData)
       .then(res => {
         if (res.status) {
           resetForm();
@@ -36,15 +36,18 @@ export default class extends Component {
         }
       })
       .catch(error => {
-        this.setState({ loading: false, errors: getErrorDataFromApiResponseError(error) });
+        this.setState({
+          loading: false,
+          errors: getErrorDataFromApiResponseError(error)
+        });
       });
     return true;
   }
 
   componentDidMount() {
     this.setState({ loading: true });
-    getCompany(this.props.match.params.id).then(res => {
-      this.setState({ company: res.data, loading: false });
+    getAgency(this.props.match.params.id).then(res => {
+      this.setState({ agency: res.data, loading: false });
     });
   }
 
@@ -56,11 +59,11 @@ export default class extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Edit Company</ComponentTitle>
+                <ComponentTitle>Edit Agency</ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
-                <ClientEditForm
-                  company={this.state.company}
+                <AgencyEditForm
+                  agency={this.state.agency}
                   errors={this.state.errors}
                   submit={this.handleSubmit}
                 />

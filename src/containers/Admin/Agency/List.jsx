@@ -58,7 +58,7 @@ class List extends Component {
         }
       ],
       data: [],
-      tablePaginationOptions: {
+      paginationOptions: {
         defaultCurrent: 1,
         current: 1,
         pageSize: 5,
@@ -87,14 +87,14 @@ class List extends Component {
   componentDidMount() {
     this.setState({ loading: true });
     getAgency({
-      tablePaginationOptions: this.state.tablePaginationOptions
+      paginationOptions: this.state.paginationOptions
     })
       .then(agencies => {
         this.setState({
           loading: false,
           data: agencies.data.rows,
-          tablePaginationOptions: {
-            ...this.state.tablePaginationOptions,
+          paginationOptions: {
+            ...this.state.paginationOptions,
             total: agencies.data.count
           }
         });
@@ -132,22 +132,22 @@ class List extends Component {
     this.setState(
       {
         loading: true,
-        tablePaginationOptions: {
-          ...this.state.tablePaginationOptions,
+        paginationOptions: {
+          ...this.state.paginationOptions,
           current: page,
           pageSize
         }
       },
       () => {
         getAgency({
-          tablePaginationOptions: this.state.tablePaginationOptions
+          paginationOptions: this.state.paginationOptions
         })
           .then(agencies => {
             this.setState({
               loading: false,
               data: agencies.data.rows,
-              tablePaginationOptions: {
-                ...this.state.tablePaginationOptions,
+              paginationOptions: {
+                ...this.state.paginationOptions,
                 total: agencies.data.count
               }
             });
@@ -186,7 +186,7 @@ class List extends Component {
                   size="middle"
                   bordered
                   pagination={{
-                    ...this.state.tablePaginationOptions,
+                    ...this.state.paginationOptions,
                     onChange: this.onTablePaginationChange
                   }}
                   columns={columns}

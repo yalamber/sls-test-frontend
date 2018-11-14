@@ -3,6 +3,7 @@ import { Row, Col, Spin } from "antd";
 import { withRouter } from "react-router-dom";
 import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
 import basicStyle from "../../../../settings/basicStyle";
+import { getErrorDataFromApiResponseError } from '../../../../util/response-message';
 import { TitleWrapper, ComponentTitle } from "../../crud.style";
 
 import Box from "../../../../components/utility/box";
@@ -24,8 +25,8 @@ class Create extends Component {
   }
 
   comoponentDidMount() {
-    console.log("got mounted");
-    console.log("prop here", this.props);
+    // console.log("got mounted");
+    // console.log("prop here", this.props);
   }
 
   handleSubmit(formData, resetForm) {
@@ -52,7 +53,7 @@ class Create extends Component {
       })
       .catch(error => {
         if (error.response.status === 422) {
-          this.setState({ errors: error.response.data });
+          this.setState({ errors: getErrorDataFromApiResponseError(error) });
         }
       })
       .finally(() => {

@@ -191,7 +191,7 @@ const mapPropsToFields = (props) => {
     }),
     location: Form.createFormField({
       value: props.company.location
-    }),
+    })
   };
 };
 const form = Form.create({mapPropsToFields})(CompanyForm);
