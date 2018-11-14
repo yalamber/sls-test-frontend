@@ -11,8 +11,8 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {getCompanies, getTeams} from "../../../../actions/companyActions";
-import {deleteTestCase, getCases} from "../../../../actions/testManagerActions";
+import {getCompanies, getTeams} from "../../../../helpers/http-api-client";
+import {deleteTestCase, getCases} from "../../../../helpers/http-api-client";
 import Moment from "react-moment";
 import {dateTime} from "../../../../constants/dateFormat";
 

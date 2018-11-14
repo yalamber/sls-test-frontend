@@ -2,7 +2,7 @@ import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import { setToken, getToken, clearToken } from '../../helpers/utility';
 import actions from './actions';
-import {signIn} from "../../actions/userAction";
+import {signIn} from "../../helpers/http-api-client";
 import notification from '../../components/notification';
 
 export function* loginRequest() {
@@ -26,7 +26,7 @@ export function* loginRequest() {
         notification('error', 'login failed');
         yield put({ type: actions.LOGIN_ERROR });
       }
-    });  
+    });
   } catch(e) {
     console.log(e);
     notification('error', 'Server error');
@@ -36,14 +36,14 @@ export function* loginRequest() {
 export function* loginSuccess() {
   try{
     yield takeEvery(actions.LOGIN_SUCCESS, function*({payload, history}) {
-      if(payload) {  
+      if(payload) {
         yield setToken(payload.token);
         if (history) {
           history.push('/dashboard');
         }
       }
-    }); 
-  } catch(e) { 
+    });
+  } catch(e) {
     console.log(e);
     notification('error', 'Server error');
   }

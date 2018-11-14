@@ -21,7 +21,6 @@ const ActionButtons = function ActionButtons(props) {
         <Tooltip placement="topLeft" title="Users List">
           <a
             onClick={() => {
-              console.log('row is rror,', row)
               props.history.push({
                 pathname: `/dashboard/agency/users/${row.agencyId}/team`,
                 // pathname: `/dashboard/agency/teams/${row.agencyId}`,

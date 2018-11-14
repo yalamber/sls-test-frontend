@@ -11,7 +11,7 @@ import {
 
 import Box from '../../../../components/utility/box';
 import UserForm from "./partials/TeamForm";
-import {getTestingProviderTeam, updateProviderTeam} from "../../../../actions/testingProviderActions";
+import {getTestingProviderTeam, updateProviderTeam} from "../../../../helpers/http-api-client";
 
 export default class extends Component {
 

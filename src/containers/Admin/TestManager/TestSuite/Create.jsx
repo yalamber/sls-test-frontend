@@ -8,8 +8,8 @@ import { TitleWrapper, ComponentTitle } from "../../crud.style";
 
 import Box from "../../../../components/utility/box";
 import TestSuiteForm from "./partials/TestSuiteForm";
-import { addSuite } from "../../../../actions/testManagerActions";
-import { getClientTeam, getCompany } from "../../../../actions/companyActions";
+import { addSuite } from "../../../../helpers/http-api-client";
+import { getClientTeam, getCompany } from "../../../../helpers/http-api-client";
 import Errors from "../../../Errors";
 import { scrollToTop } from '../../../../util/dom-util';
 

@@ -14,7 +14,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {getTestingProviderTeams, deleteProviderTeam} from "../../../../actions/testingProviderActions";
+import {getTestingProviderTeams, deleteProviderTeam} from "../../../../helpers/http-api-client";
 import {message} from "antd/lib/index";
 
 const Option = Select.Option;

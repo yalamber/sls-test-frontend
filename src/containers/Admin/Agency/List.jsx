@@ -3,7 +3,7 @@ import { Row, Col, Icon, Spin } from "antd";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import basicStyle from "../../../settings/basicStyle";
 import Box from "../../../components/utility/box";
-import { getAgency } from "../../../actions/agencyActions";
+import { getAgency } from "../../../helpers/http-api-client";
 import ActionButtons from "./partials/ActionButtons";
 
 import {
@@ -16,7 +16,7 @@ import {
 import {
   getTestingProviderTeams,
   deleteProviderTeam
-} from "../../../actions/testingProviderActions";
+} from "../../../helpers/http-api-client";
 import { message } from "antd/lib/index";
 import actions from "../../../redux/agency/actions";
 import { connect } from "react-redux";

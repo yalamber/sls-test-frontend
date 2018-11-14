@@ -11,11 +11,8 @@ import {
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from "../../crud.style";
-import {
-  deleteCompany,
-  getCompanies
-} from "../../../../actions/companyActions";
+} from '../../crud.style';
+import {deleteCompany, getCompanies} from "../../../../helpers/http-api-client";
 
 export default class extends Component {
   constructor(props) {

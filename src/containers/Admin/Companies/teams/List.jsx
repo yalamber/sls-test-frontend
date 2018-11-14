@@ -11,7 +11,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {deleteTeam, getCompanies, getTeams} from "../../../../actions/companyActions";
+import {deleteTeam, getCompanies, getTeams} from "../../../../helpers/http-api-client";
 
 const Option = Select.Option;
 export default class extends Component {
@@ -48,7 +48,7 @@ export default class extends Component {
       ],
       dataSource: [],
       companies: [],
-      tablePaginationOptions: {
+      companiesPaginationOptions: {
         defaultCurrent: 1,
         current: 1,
         pageSize: 5,
@@ -59,6 +59,7 @@ export default class extends Component {
     };
     this.fetchData = this.fetchData.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
   }
 
@@ -69,9 +70,8 @@ export default class extends Component {
 
   componentDidMount() {
     getCompanies({
-      tablePaginationOptions: this.state.tablePaginationOptions
+      companies: this.state.companiesPaginationOptions
     }).then(res => {
-      console.log('osow', res);
       this.setState({companies: res.data.rows})
     });
     this.fetchData();
@@ -82,6 +82,36 @@ export default class extends Component {
     getTeams(companyId).then(res => {
       this.setState({dataSource: res.data, loading: false})
     })
+  }
+
+  onTablePaginationChange(page, pageSize) {
+    this.setState(
+      {
+        loading: true,
+        companiesPaginationOptions: {
+          ...this.state.companiesPaginationOptions,
+          current: page,
+          pageSize
+        }
+      },
+      () => {
+        getCompanies({
+          tablePaginationOptions: this.state.companiesPaginationOptions
+        })
+          .then(companies => {
+            this.setState({
+              companies: companies.data.rows,
+              companiesPaginationOptions: {
+                ...this.state.companiesPaginationOptions,
+                total: companies.data.count
+              }
+            });
+          })
+          .catch(companies => {
+            this.setState({ companies: [] });
+          });
+      }
+    );
   }
 
   handleDelete(row) {

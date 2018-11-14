@@ -16,10 +16,10 @@ import {
 } from '../../crud.style';
 import {
   deleteProviderUser,
-  getTestingProviderTeamMembers, 
+  getTestingProviderTeamMembers,
   getTestingProviderTeams,
   getTestingProviderTeam
-} from "../../../../actions/testingProviderActions";
+} from "../../../../helpers/http-api-client";
 import {message} from "antd/lib/index";
 
 const Option = Select.Option;

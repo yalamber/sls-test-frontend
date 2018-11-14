@@ -15,9 +15,9 @@ import {
 import {
   getCompanies,
   getTeams,
-  getUsers,
+  getCompanyUsers,
   deleteCompanyUser
-} from "../../../../actions/companyActions";
+} from "../../../../helpers/http-api-client";
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -59,6 +59,12 @@ export default class extends Component {
       ],
       dataSource: [],
       companies: [],
+      companiesPaginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 5,
+        total: 1
+      },
       teams: [],
       selectedCompany: undefined,
       selectedTeam: undefined,
@@ -67,13 +73,22 @@ export default class extends Component {
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.handleInfo = this.handleInfo.bind(this);
+    // this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   componentDidMount() {
     this.setState({ loading: true });
-    getCompanies()
+    getCompanies({
+      tablePaginationOptions: this.state.companiesPaginationOptions
+    })
       .then(res => {
-        this.setState({ companies: res.data.rows });
+        this.setState({
+          companies: res.data.rows,
+          companiesPaginationOptions: {
+            ...this.state.companiesPaginationOptions,
+            total: res.data.count
+          }
+        });
         this.handleCompanyChange(this.props.match.params.companyId);
         // this.handleTeamChange(this.props.match.params.teamId);
       })
@@ -81,6 +96,37 @@ export default class extends Component {
         this.setState({ loading: false });
       });
   }
+
+  /*onTablePaginationChange(page, pageSize) {
+    this.setState(
+      {
+        loading: true,
+        companiesPaginationOptions: {
+          ...this.state.companiesPaginationOptions,
+          current: page,
+          pageSize
+        }
+      },
+      () => {
+        getCompanies({
+          companiesPaginationOptions: this.state.companiesPaginationOptions
+        })
+          .then(companies => {
+            this.setState({
+              loading: false,
+              companies: companies.data.rows,
+              companiesPaginationOptions: {
+                ...this.state.companiesPaginationOptions,
+                total: companies.data.count
+              }
+            });
+          })
+          .catch(companies => {
+            this.setState({ loading: false, dataSource: [] });
+          });
+      }
+    );
+  }*/
 
   handleCompanyChange(companyId) {
     this.setState(
@@ -118,7 +164,7 @@ export default class extends Component {
   updateRecords(companyId, teamId, cb) {
     this.setState({ loading: true });
     if (cb) {
-      return getUsers(companyId, teamId)
+      return getCompanyUsers(companyId, teamId)
         .then(res => {
           return cb(null, res);
         })
@@ -126,7 +172,7 @@ export default class extends Component {
           return cb(resErr);
         });
     }
-    getUsers(companyId, teamId)
+    getCompanyUsers(companyId, teamId)
       .then(res => {
         this.setState({ dataSource: res.data });
       })
@@ -136,7 +182,7 @@ export default class extends Component {
   }
 
   handleInfo(row) {
-    alert("show info")
+    alert("show info");
     // deleteCompanyUser(row.userId)
     //   .then(res => {
     //     this.updateRecords(this.state.selectedCompany, this.state.selectedTeam);

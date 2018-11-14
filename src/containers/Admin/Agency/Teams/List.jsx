@@ -16,7 +16,7 @@ import {
 import {
   getAgencyTeams
   // deleteProviderTeam
-} from "../../../../actions/agencyActions";
+} from "../../../../helpers/http-api-client";
 import { message } from "antd/lib/index";
 
 const Option = Select.Option;
