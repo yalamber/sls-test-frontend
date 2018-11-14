@@ -31,7 +31,7 @@ const _middlewares = [];
 
 /** AGENCY **/
 export const createAgency = function(agency) {
-  return _post("client", agency);
+  return _post("agency", agency);
 };
 
 export const getAgencyTeams = function(query) {
