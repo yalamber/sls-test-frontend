@@ -79,7 +79,7 @@ export default class extends Component {
   componentDidMount() {
     this.setState({ loading: true });
     getCompanies({
-      tablePaginationOptions: this.state.companiesPaginationOptions
+      paginationOptions: this.state.companiesPaginationOptions
     })
       .then(res => {
         this.setState({

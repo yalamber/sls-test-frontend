@@ -46,7 +46,7 @@ export default class extends Component {
         }
       ],
       data: [],
-      tablePaginationOptions: {
+      paginationOptions: {
         defaultCurrent: 1,
         current: 1,
         pageSize: 5,
@@ -66,22 +66,22 @@ export default class extends Component {
   fetchData() {
     this.setState({ loading: true });
     getCompanies({
-      tablePaginationOptions: this.state.tablePaginationOptions
+      paginationOptions: this.state.paginationOptions
     })
       .then(res => {
         this.setState({
           loading: false,
           data: res.data.rows,
-          tablePaginationOptions: {
-            ...this.state.tablePaginationOptions,
+          paginationOptions: {
+            ...this.state.paginationOptions,
             total: res.data.count
           }
         },() => {
           console.log("now new state", {
             loading: false,
             data: res.data.rows,
-            tablePaginationOptions: {
-              ...this.state.tablePaginationOptions,
+            paginationOptions: {
+              ...this.state.paginationOptions,
               total: res.data.count
             }
           })
@@ -97,22 +97,22 @@ export default class extends Component {
     this.setState(
       {
         loading: true,
-        tablePaginationOptions: {
-          ...this.state.tablePaginationOptions,
+        paginationOptions: {
+          ...this.state.paginationOptions,
           current: page,
           pageSize
         }
       },
       () => {
         getCompanies({
-          tablePaginationOptions: this.state.tablePaginationOptions
+          paginationOptions: this.state.paginationOptions
         })
           .then(companies => {
             this.setState({
               loading: false,
               data: companies.data.rows,
-              tablePaginationOptions: {
-                ...this.state.tablePaginationOptions,
+              paginationOptions: {
+                ...this.state.paginationOptions,
                 total: companies.data.count
               }
             });
@@ -156,7 +156,7 @@ export default class extends Component {
               <Spin spinning={this.state.loading}>
                 <Table
                   pagination={{
-                    ...this.state.tablePaginationOptions,
+                    ...this.state.paginationOptions,
                     onChange: this.onTablePaginationChange
                   }}
                   rowKey="clientId"
