@@ -18,8 +18,8 @@ import qs from "qs";
 import _ from 'lodash';
 
 axios.defaults.baseURL =
-  // "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
-axios.defaults.baseURL = 'http://localhost:8080/';
+  "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
+// axios.defaults.baseURL = 'http://localhost:8080/';
 
 const _middlewares = [];
 
@@ -30,8 +30,8 @@ const _middlewares = [];
 */
 
 /** AGENCY **/
-export const createAgency = function(company) {
-  return _post("client", company);
+export const createAgency = function(agency) {
+  return _post("client", agency);
 };
 
 export const getAgencyTeams = function(query) {
@@ -45,8 +45,6 @@ export const getAgencyUsers = function(agencyId, teamId) {
 export const getAgencyTeamMembers = function(teamId) {
   if (teamId) {
     return _get(`agency-team/${teamId}/member`);
-  } else {
-    // return _get('user?clientId=' + companyId);
   }
 };
 
@@ -61,6 +59,8 @@ export const getAgency = function(agencyId) {
 
 /** Company **/
 export const addCompany = function(company) {
+  company = _.omit(company, 'isClientUser');
+  company = _.omit(company, 'isProviderUser');
   return _post('client', company)
 };
 export const editCompany = function(id, company) {
