@@ -1,17 +1,14 @@
-import React, {Component} from 'react';
-import {Row, Col, Spin} from 'antd';
-import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../../settings/basicStyle';
-import ContentHolder from '../../../../components/utility/contentHolder';
-import {
-  TitleWrapper,
-  ComponentTitle,
-} from '../../crud.style';
+import React, { Component } from "react";
+import { Row, Col, Spin } from "antd";
+import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
+import basicStyle from "../../../../settings/basicStyle";
+import ContentHolder from "../../../../components/utility/contentHolder";
+import { message } from "antd/lib/index";
+import { TitleWrapper, ComponentTitle } from "../../crud.style";
 
-import Box from '../../../../components/utility/box';
-import ClientForm from "./partials/CompanyForm";
-import {editCompany, getCompany} from "../../../../helpers/http-api-client";
-import {message} from "antd/lib/index";
+import Box from "../../../../components/utility/box";
+import ClientEditForm from "./partials/CompanyEditForm";
+import { editCompany, getCompany } from "../../../../helpers/http-api-client";
 
 export default class extends Component {
   constructor() {
@@ -24,29 +21,33 @@ export default class extends Component {
   }
 
   handleSubmit(formData, resetForm) {
-    this.setState({loading: true});
-    editCompany(this.props.match.params.id, formData).then(res => {
-      if (res.status) {
-        resetForm();
-        this.setState({loading: false});
-        message.success("Successfully Saved");
-        this.props.history.goBack();
-      }
-    });
+    this.setState({ loading: true });
+    editCompany(this.props.match.params.id, formData)
+      .then(res => {
+        if (res.status) {
+          resetForm();
+          this.setState({ loading: false });
+          message.success("Successfully Saved");
+          this.props.history.goBack();
+        }
+      })
+      .catch(editErr => {
+        this.setState({ loading: false });
+        message.error("Cannot process the request for now.");
+      });
     return true;
   }
 
   componentDidMount() {
-    this.setState({loading: true});
+    this.setState({ loading: true });
     getCompany(this.props.match.params.id).then(res => {
-      this.setState({company: res.data, loading:false})
-    })
+      this.setState({ company: res.data, loading: false });
+    });
   }
 
   render() {
-    const {rowStyle, colStyle, gutter} = basicStyle;
+    const { rowStyle, colStyle, gutter } = basicStyle;
     return (
-
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -55,7 +56,10 @@ export default class extends Component {
                 <ComponentTitle>Edit Company</ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
-              <ClientForm company={this.state.company} submit={this.handleSubmit}/>
+                <ClientEditForm
+                  company={this.state.company}
+                  submit={this.handleSubmit}
+                />
               </Spin>
             </Box>
           </Col>

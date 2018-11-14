@@ -24,19 +24,10 @@ export default class extends Component {
     this.setState({ loading: true });
     addCompany({ ...formData.company, owner: formData.user }).then(res => {
       if (res.status) {
-        /*addTeam({ clientId: res.data.clientId, name: "Company Admin" }).then(
-          res => {
-            addCompanyUser({
-              clientTeams: [res.data.clientTeamId],
-              ...formData.user
-            }).then(res => {*/
-              this.setState({ loading: false });
-              resetForm();
-              message.success("Successfully Saved");
-              this.props.history.goBack();
-            /*});
-          }
-        );*/
+        this.setState({ loading: false });
+        resetForm();
+        message.success("Successfully Saved");
+        this.props.history.goBack();
       }
     });
     return true;
