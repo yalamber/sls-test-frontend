@@ -62,8 +62,6 @@ export const getAgency = function(objOrAgencyId) {
 
 /** Company **/
 export const addCompany = function(company) {
-  company = _.omit(company, 'isClientUser');
-  company = _.omit(company, 'isProviderUser');
   return _post('client', company)
 };
 export const editCompany = function(id, company) {
