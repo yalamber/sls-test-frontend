@@ -50,10 +50,17 @@ export default class extends Component {
         }
       ],
       dataSource: [],
+      paginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 5,
+        total: 1
+      },
       loading: false
     };
     this.fetchData = this.fetchData.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   componentDidMount() {
@@ -62,9 +69,49 @@ export default class extends Component {
 
   fetchData() {
     this.setState({ loading: true });
-    getAgency().then(res => {
-      this.setState({ dataSource: res.data.rows, loading: false });
+    getAgency({
+      paginationOptions: this.state.paginationOptions
+    }).then(res => {
+      this.setState({
+        dataSource: res.data.rows,
+        loading: false,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          total: res.data.count
+        }
+      });
     });
+  }
+
+  onTablePaginationChange(page, pageSize) {
+    this.setState(
+      {
+        loading: true,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          current: page,
+          pageSize
+        }
+      },
+      () => {
+        getAgency({
+          paginationOptions: this.state.paginationOptions
+        })
+          .then(agencies => {
+            this.setState({
+              loading: false,
+              dataSource: agencies.data.rows,
+              paginationOptions: {
+                ...this.state.paginationOptions,
+                total: agencies.data.count
+              }
+            });
+          })
+          .catch(agencies => {
+            this.setState({ loading: false, dataSource: [] });
+          });
+      }
+    );
   }
 
   handleDelete(row) {
@@ -86,7 +133,10 @@ export default class extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table
-                  pagination={true}
+                  pagination={{
+                    ...this.state.paginationOptions,
+                    onChange: this.onTablePaginationChange
+                  }}
                   rowKey="clientId"
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}

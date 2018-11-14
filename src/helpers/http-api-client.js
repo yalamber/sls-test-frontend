@@ -196,7 +196,6 @@ export const deleteDashboard = (id) => {
   return _deleteRecord('dashboard/' + id);
 };
 
-
 // Testing Provider Actions
 
 export const getTestingProviderTeams = (query) => {
@@ -254,37 +253,22 @@ export const signIn = (userCred) => {
 export const _post = function(url, data = []) {
   return _sendRequest(url, data, "POST");
 };
-// export const post = function(url, data = []) {
-//   return _sendRequest(url, data, "POST");
-// };
 
 export const _patch = function(url, data = []) {
   return _sendRequest(url, data, "PATCH");
 };
-// export const patch = function(url, data = []) {
-//   return _sendRequest(url, data, "PATCH");
-// };
 
 export const _put = function(url, data = []) {
   return _sendRequest(url, data, "PUT");
 };
-// export const put = function(url, data = []) {
-//   return _sendRequest(url, data, "PUT");
-// };
 
 export const _deleteRecord = function(url, data = []) {
   return _sendRequest(url, data, "DELETE");
 };
-// export const deleteRecord = function(url, data = []) {
-//   return _sendRequest(url, data, "DELETE");
-// };
 
 export const _get = function(url, data = {}) {
   return _sendRequest(url, data, "GET");
 };
-// export const get = function(url, data = {}) {
-//   return _sendRequest(url, data, "GET");
-// };
 
 export const _getWithLimitOffset = function(url, option) {
   const { paginationOptions } = option;
@@ -292,7 +276,6 @@ export const _getWithLimitOffset = function(url, option) {
     limit: paginationOptions.pageSize,
     offset: paginationOptions.pageSize * (paginationOptions.current-1)
   })
-  // return _sendRequest(url, data, "GET");
 };
 
 /* middlewareOption - param

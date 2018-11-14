@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {Row, Col, Icon, message, Spin} from 'antd';
-import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../../settings/basicStyle';
-import Box from '../../../../components/utility/box';
+import React, { Component } from "react";
+import { Row, Col, Icon, message, Spin } from "antd";
+import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
+import basicStyle from "../../../../settings/basicStyle";
+import Box from "../../../../components/utility/box";
 import ActionButtons from "./partials/ActionButtons";
 
 import {
@@ -11,8 +11,11 @@ import {
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from '../../crud.style';
-import {deleteCompany, getCompanies} from "../../../../helpers/http-api-client";
+} from "../../crud.style";
+import {
+  deleteCompany,
+  getCompanies
+} from "../../../../helpers/http-api-client";
 
 export default class extends Component {
   constructor(props) {
@@ -20,40 +23,47 @@ export default class extends Component {
     this.state = {
       columns: [
         {
-          title: 'Name',
-          dataIndex: 'name',
-          key: 'name',
+          title: "Name",
+          dataIndex: "name",
+          key: "name",
           sorter: true
         },
         {
-          title: 'Company Admin',
-          dataIndex: 'owner.username',
-          key: 'company_admin',
+          title: "Company Admin",
+          dataIndex: "owner.username",
+          key: "company_admin",
           sorter: true
         },
         {
-          title: 'Company Admin Email',
-          dataIndex: 'owner.contactInformation.emailAddress',
-          key: 'company_admin_email',
+          title: "Company Admin Email",
+          dataIndex: "owner.contactInformation.emailAddress",
+          key: "company_admin_email",
           sorter: true
         },
         {
-          title: 'Location',
-          dataIndex: 'location',
-          key: 'location',
+          title: "Location",
+          dataIndex: "location",
+          key: "location",
           sorter: true
         },
         {
-          title: 'Actions',
-          key: 'actions',
-          render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
+          title: "Actions",
+          key: "actions",
+          render: row => <ActionButtons row={row} delete={this.handleDelete} />
         }
       ],
       dataSource: [],
-      loading: false,
+      paginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 5,
+        total: 1
+      },
+      loading: false
     };
     this.fetchData = this.fetchData.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   componentDidMount() {
@@ -61,23 +71,62 @@ export default class extends Component {
   }
 
   fetchData() {
-    this.setState({loading: true});
-    getCompanies().then(res => {
-      this.setState({dataSource: res.data.rows, loading: false})
+    this.setState({ loading: true });
+    getCompanies({
+      paginationOptions: this.state.paginationOptions
+    }).then(res => {
+      this.setState({
+        dataSource: res.data.rows,
+        loading: false,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          total: res.data.count
+        }
+      });
     });
+  }
+
+  onTablePaginationChange(page, pageSize) {
+    this.setState(
+      {
+        loading: true,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          current: page,
+          pageSize
+        }
+      },
+      () => {
+        getCompanies({
+          paginationOptions: this.state.paginationOptions
+        })
+          .then(companies => {
+            this.setState({
+              loading: false,
+              dataSource: companies.data.rows,
+              paginationOptions: {
+                ...this.state.paginationOptions,
+                total: companies.data.count
+              }
+            });
+          })
+          .catch(companies => {
+            this.setState({ loading: false, dataSource: [] });
+          });
+      }
+    );
   }
 
   handleDelete(row) {
     deleteCompany(row.clientId).then(res => {
-      message.success('Successfully Deleted.');
+      message.success("Successfully Deleted.");
       this.fetchData();
-    })
+    });
   }
 
   render() {
-    const {rowStyle, colStyle, gutter} = basicStyle;
+    const { rowStyle, colStyle, gutter } = basicStyle;
     return (
-
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -87,20 +136,22 @@ export default class extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table
-                  pagination={true}
+                  pagination={{
+                    ...this.state.paginationOptions,
+                    onChange: this.onTablePaginationChange
+                  }}
                   rowKey="clientId"
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
-                  onRow={(row) => ({
+                  onRow={row => ({
                     onDoubleClick: () => {
                       // this.props.history.push('details/' + row.clientId)
-                      this.props.history.push(`details/${row.clientId}`)
-                    },
+                      this.props.history.push(`details/${row.clientId}`);
+                    }
                   })}
                 />
               </Spin>
             </Box>
-
           </Col>
         </Row>
       </LayoutWrapper>
