@@ -48,9 +48,12 @@ export const getAgencyTeamMembers = function(teamId) {
   }
 };
 
-export const getAgency = function(agencyId) {
-  if (agencyId) {
-    return _get(`agency/${agencyId}`);
+export const getAgency = function(objOrAgencyId) {
+  const option = objOrAgencyId;
+  if (typeof option === 'object') {
+    return _getWithLimitOffset(`agency`, option)
+  } else if (option) {
+    return _get(`agency/${option}`);
   }
 
   return _get(`agency`);
@@ -72,11 +75,7 @@ export const deleteCompany = function(id) {
 export const getCompanies = (objOrCompanyId) => {
   const option = objOrCompanyId;
   if (typeof option === 'object') {
-    const { tablePaginationOptions } = option;
-    return _get(`client`, {
-      limit: tablePaginationOptions.pageSize,
-      offset: tablePaginationOptions.pageSize * (tablePaginationOptions.current-1)
-    })
+    return _getWithLimitOffset(`client`, option)
   }
 
   return _get(`client`)
@@ -285,7 +284,14 @@ export const _get = function(url, data = {}) {
 //   return _sendRequest(url, data, "GET");
 // };
 
-
+export const _getWithLimitOffset = function(url, option) {
+  const { tablePaginationOptions } = option;
+  return _get(url, {
+    limit: tablePaginationOptions.pageSize,
+    offset: tablePaginationOptions.pageSize * (tablePaginationOptions.current-1)
+  })
+  // return _sendRequest(url, data, "GET");
+};
 
 /* middlewareOption - param
   {
