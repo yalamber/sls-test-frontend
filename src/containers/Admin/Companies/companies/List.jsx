@@ -11,8 +11,11 @@ import {
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from '../../crud.style';
-import {deleteCompany, getCompanies} from "../../../../helpers/http-api-client";
+} from "../../crud.style";
+import {
+  deleteCompany,
+  getCompanies
+} from "../../../../helpers/http-api-client";
 
 export default class extends Component {
   constructor(props) {
@@ -76,15 +79,6 @@ export default class extends Component {
             ...this.state.paginationOptions,
             total: res.data.count
           }
-        },() => {
-          console.log("now new state", {
-            loading: false,
-            data: res.data.rows,
-            paginationOptions: {
-              ...this.state.paginationOptions,
-              total: res.data.count
-            }
-          })
         });
       })
       .catch(err => {
@@ -145,7 +139,7 @@ export default class extends Component {
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      console.log(this.props.history.push("create"));
+                      this.props.history.push("create")
                     }}
                   >
                     <Icon type="plus" />
