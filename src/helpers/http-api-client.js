@@ -97,10 +97,9 @@ export const getClientTeam = function(clientTeamId) {
 //Users
 export const addCompanyUser = function(user) {
   delete user.company;
-  // console.log(user);
   user = _.omit(user, 'isClientUser');
   user = _.omit(user, 'isProviderUser');
-  // console.log('user2', user);
+
   return _post('user', user);
 };
 
