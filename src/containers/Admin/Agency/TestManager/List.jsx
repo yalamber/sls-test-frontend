@@ -63,7 +63,7 @@ export default class extends Component {
   fetchData() {
     this.setState({ loading: true });
     getAgency().then(res => {
-      this.setState({ dataSource: res.data, loading: false });
+      this.setState({ dataSource: res.data.rows, loading: false });
     });
   }
 

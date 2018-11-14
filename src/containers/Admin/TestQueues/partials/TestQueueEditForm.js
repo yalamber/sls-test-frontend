@@ -51,7 +51,7 @@ class TestQueueEditForm extends Component {
 
   componentDidMount() {
     getCompanies().then(res => {
-      this.setState({ companies: res.data });
+      this.setState({ companies: res.data.rows });
       this.handleCompanyChange(this.props.match.params.companyId);
       this.handleTeamChange(this.props.match.params.teamId);
     });

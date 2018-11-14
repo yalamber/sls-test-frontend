@@ -48,6 +48,12 @@ export default class extends Component {
       ],
       dataSource: [],
       companies: [],
+      tablePaginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 5,
+        total: 1
+      },
       selectedCompany: null,
       loading: false,
     };
@@ -62,8 +68,11 @@ export default class extends Component {
   }
 
   componentDidMount() {
-    getCompanies().then(res => {
-      this.setState({companies: res.data})
+    getCompanies({
+      tablePaginationOptions: this.state.tablePaginationOptions
+    }).then(res => {
+      console.log('osow', res);
+      this.setState({companies: res.data.rows})
     });
     this.fetchData();
   }
