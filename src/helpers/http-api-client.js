@@ -1,25 +1,12 @@
 /*
 *
-* HOW TO A ADD NEW ACTION
+* HOW TO ADD A NEW ACTION
 *
 *
-* 1. create your action the old way
-* export const addCompany = (company) => {
-*   return _post('client', company)
-* };
-*
-* 2. export the created action at #1 from the last line of this file
-* export {
-*   post,
-*   get,
-*   put,
-*   deleteRecord,
-*   createAgency,
-*   getAgencyTeams,
-*   getUsers,
-*   getAgencyTeamMembers,
-*   getAgency
-*   addCompany
+* 1. create your action just like the old way
+* make sure to place it in the public section
+* export const createAgency = function(company) {
+*   return _post("client", company);
 * };
 *
 */
@@ -31,8 +18,8 @@ import qs from "qs";
 import _ from 'lodash';
 
 axios.defaults.baseURL =
-  // "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
-axios.defaults.baseURL = 'http://localhost:8080/';
+  "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
+// axios.defaults.baseURL = 'http://localhost:8080/';
 
 const _middlewares = [];
 
@@ -43,8 +30,8 @@ const _middlewares = [];
 */
 
 /** AGENCY **/
-export const createAgency = function(company) {
-  return _post("client", company);
+export const createAgency = function(agency) {
+  return _post("client", agency);
 };
 
 export const getAgencyTeams = function(query) {
@@ -58,8 +45,6 @@ export const getAgencyUsers = function(agencyId, teamId) {
 export const getAgencyTeamMembers = function(teamId) {
   if (teamId) {
     return _get(`agency-team/${teamId}/member`);
-  } else {
-    // return _get('user?clientId=' + companyId);
   }
 };
 
@@ -74,6 +59,8 @@ export const getAgency = function(agencyId) {
 
 /** Company **/
 export const addCompany = function(company) {
+  company = _.omit(company, 'isClientUser');
+  company = _.omit(company, 'isProviderUser');
   return _post('client', company)
 };
 export const editCompany = function(id, company) {
@@ -82,8 +69,17 @@ export const editCompany = function(id, company) {
 export const deleteCompany = function(id) {
   return _deleteRecord('client/' + id)
 };
-export const getCompanies = function() {
-  return _get('client');
+export const getCompanies = (objOrCompanyId) => {
+  const option = objOrCompanyId;
+  if (typeof option === 'object') {
+    const { tablePaginationOptions } = option;
+    return _get(`client`, {
+      limit: tablePaginationOptions.pageSize,
+      offset: tablePaginationOptions.pageSize * (tablePaginationOptions.current-1)
+    })
+  }
+
+  return _get(`client`)
 };
 export const getCompany = function(id) {
   return _get('client/' + id);
@@ -110,10 +106,9 @@ export const getClientTeam = function(clientTeamId) {
 //Users
 export const addCompanyUser = function(user) {
   delete user.company;
-  // console.log(user);
   user = _.omit(user, 'isClientUser');
   user = _.omit(user, 'isProviderUser');
-  // console.log('user2', user);
+
   return _post('user', user);
 };
 
@@ -258,37 +253,37 @@ export const signIn = (userCred) => {
 export const _post = function(url, data = []) {
   return _sendRequest(url, data, "POST");
 };
-export const post = function(url, data = []) {
-  return _sendRequest(url, data, "POST");
-};
+// export const post = function(url, data = []) {
+//   return _sendRequest(url, data, "POST");
+// };
 
 export const _patch = function(url, data = []) {
   return _sendRequest(url, data, "PATCH");
 };
-export const patch = function(url, data = []) {
-  return _sendRequest(url, data, "PATCH");
-};
+// export const patch = function(url, data = []) {
+//   return _sendRequest(url, data, "PATCH");
+// };
 
 export const _put = function(url, data = []) {
   return _sendRequest(url, data, "PUT");
 };
-export const put = function(url, data = []) {
-  return _sendRequest(url, data, "PUT");
-};
+// export const put = function(url, data = []) {
+//   return _sendRequest(url, data, "PUT");
+// };
 
 export const _deleteRecord = function(url, data = []) {
   return _sendRequest(url, data, "DELETE");
 };
-export const deleteRecord = function(url, data = []) {
-  return _sendRequest(url, data, "DELETE");
-};
+// export const deleteRecord = function(url, data = []) {
+//   return _sendRequest(url, data, "DELETE");
+// };
 
 export const _get = function(url, data = {}) {
   return _sendRequest(url, data, "GET");
 };
-export const get = function(url, data = {}) {
-  return _sendRequest(url, data, "GET");
-};
+// export const get = function(url, data = {}) {
+//   return _sendRequest(url, data, "GET");
+// };
 
 
 
