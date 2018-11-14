@@ -136,7 +136,9 @@ export default class extends Component {
           const { teamId } = this.props.match.params;
           const teamDefault = teamId
             ? teamId + ""
-            : res.data[0].clientTeamId + "";
+            : res.data && res.data.length
+              ? res.data[0].clientTeamId + ""
+              : undefined;
 
           this.updateRecords(companyId, teamDefault, (err, users) => {
             if (err) {
@@ -162,6 +164,9 @@ export default class extends Component {
   }
 
   updateRecords(companyId, teamId, cb) {
+    if (!teamId) {
+      return this.setState({ selectedTeam: undefined, teams: [], dataSource: [] });
+    }
     this.setState({ loading: true });
     if (cb) {
       return getCompanyUsers(companyId, teamId)
