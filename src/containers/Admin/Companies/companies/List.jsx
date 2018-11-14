@@ -26,12 +26,12 @@ export default class extends Component {
         },
         {
           title: "Company Admin",
-          dataIndex: "user.username",
+          dataIndex: "owner.username",
           key: "company_admin"
         },
         {
           title: "Company Admin Email",
-          dataIndex: "user.contactInformation.emailAddress",
+          dataIndex: "owner.contactInformation.emailAddress",
           key: "company_admin_email"
         },
         {
