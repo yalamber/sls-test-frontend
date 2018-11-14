@@ -69,8 +69,17 @@ export const editCompany = function(id, company) {
 export const deleteCompany = function(id) {
   return _deleteRecord('client/' + id)
 };
-export const getCompanies = function() {
-  return _get('client');
+export const getCompanies = (objOrCompanyId) => {
+  const option = objOrCompanyId;
+  if (typeof option === 'object') {
+    const { tablePaginationOptions } = option;
+    return _get(`client`, {
+      limit: tablePaginationOptions.pageSize,
+      offset: tablePaginationOptions.pageSize * (tablePaginationOptions.current-1)
+    })
+  }
+
+  return _get(`client`)
 };
 export const getCompany = function(id) {
   return _get('client/' + id);
