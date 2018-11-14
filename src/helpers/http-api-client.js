@@ -34,6 +34,10 @@ export const createAgency = function(agency) {
   return _post("agency", agency);
 };
 
+export const updateAgency = function(agencyId, data) {
+  return _put(`agency/${agencyId}`, data);
+};
+
 export const getAgencyTeams = function(query) {
   return _get(`agency-team`, query);
 };
