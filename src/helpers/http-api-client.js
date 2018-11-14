@@ -1,25 +1,12 @@
 /*
 *
-* HOW TO A ADD NEW ACTION
+* HOW TO ADD A NEW ACTION
 *
 *
-* 1. create your action the old way
-* export const addCompany = (company) => {
-*   return _post('client', company)
-* };
-*
-* 2. export the created action at #1 from the last line of this file
-* export {
-*   post,
-*   get,
-*   put,
-*   deleteRecord,
-*   createAgency,
-*   getAgencyTeams,
-*   getUsers,
-*   getAgencyTeamMembers,
-*   getAgency
-*   addCompany
+* 1. create your action just like the old way
+* make sure to place it in the public section
+* export const createAgency = function(company) {
+*   return _post("client", company);
 * };
 *
 */
@@ -258,37 +245,37 @@ export const signIn = (userCred) => {
 export const _post = function(url, data = []) {
   return _sendRequest(url, data, "POST");
 };
-export const post = function(url, data = []) {
-  return _sendRequest(url, data, "POST");
-};
+// export const post = function(url, data = []) {
+//   return _sendRequest(url, data, "POST");
+// };
 
 export const _patch = function(url, data = []) {
   return _sendRequest(url, data, "PATCH");
 };
-export const patch = function(url, data = []) {
-  return _sendRequest(url, data, "PATCH");
-};
+// export const patch = function(url, data = []) {
+//   return _sendRequest(url, data, "PATCH");
+// };
 
 export const _put = function(url, data = []) {
   return _sendRequest(url, data, "PUT");
 };
-export const put = function(url, data = []) {
-  return _sendRequest(url, data, "PUT");
-};
+// export const put = function(url, data = []) {
+//   return _sendRequest(url, data, "PUT");
+// };
 
 export const _deleteRecord = function(url, data = []) {
   return _sendRequest(url, data, "DELETE");
 };
-export const deleteRecord = function(url, data = []) {
-  return _sendRequest(url, data, "DELETE");
-};
+// export const deleteRecord = function(url, data = []) {
+//   return _sendRequest(url, data, "DELETE");
+// };
 
 export const _get = function(url, data = {}) {
   return _sendRequest(url, data, "GET");
 };
-export const get = function(url, data = {}) {
-  return _sendRequest(url, data, "GET");
-};
+// export const get = function(url, data = {}) {
+//   return _sendRequest(url, data, "GET");
+// };
 
 
 
