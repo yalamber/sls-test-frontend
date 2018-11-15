@@ -150,6 +150,7 @@ export default class extends Component {
     const margin = {
       margin: "5px 5px 10px 0px"
     };
+    const { agencyId } = this.props.match.params;
     const { rowStyle, colStyle, gutter } = basicStyle;
     const agenciesOptions = this.state.agencies.map(agency => (
       <Option key={agency.agencyId}>{agency.name}</Option>
@@ -169,7 +170,7 @@ export default class extends Component {
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push("/dashboard/agency/user/create");
+                      this.props.history.push(`/dashboard/agency/users-create/${agencyId}`);
                     }}
                   >
                     <Icon type="plus" />

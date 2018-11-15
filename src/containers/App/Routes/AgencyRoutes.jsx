@@ -33,8 +33,10 @@ export default [
     path: "agency/teams-create/:agencyId",
     component: asyncComponent(() => import("../../Admin/Agency/Teams/Create"))
   },
-
-
+  {
+    path: "agency/users-create/:agencyId",
+    component: asyncComponent(() => import("../../Admin/Agency/users/Create"))
+  },
 
   {
     path: "agency/test-manager",

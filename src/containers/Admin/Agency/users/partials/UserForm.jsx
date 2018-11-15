@@ -7,7 +7,7 @@ import {
   ActionWrapper,
 } from '../../../crud.style';
 import Card from "../../../../../components/uielements/styles/card.style";
-import { getCompanies, getTeams } from "../../../../../helpers/http-api-client";
+import { getAgency, getTeams } from "../../../../../helpers/http-api-client";
 import { userStatus } from "../../../../../constants/userStatus";
 import Errors from "../../../../Errors";
 
@@ -23,25 +23,25 @@ class UserForm extends Component {
     this.state = {
       status: userStatus,
       teams: [],
-      companies: [],
+      agencies: [],
       passwordType: false,
       selected: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.generatePassword = this.generatePassword.bind(this);
     this.resetForm = this.resetForm.bind(this);
-    this.handleCompanyChange = this.handleCompanyChange.bind(this);
+    this.handleAgencyChange = this.handleAgencyChange.bind(this);
   }
 
   componentDidMount() {
-    getCompanies().then(res => {
-      this.setState({ companies: res.data.rows })
+    getAgency().then(res => {
+      this.setState({ agencies: res.data.rows })
     })
   }
 
   componentWillReceiveProps(props) {
     if (props.user) {
-      this.handleCompanyChange(props.user.clientTeams[0].clientId)
+      this.handleAgencyChange(props.user.clientTeams[0].agencyId)
     }
   }
 
@@ -54,8 +54,8 @@ class UserForm extends Component {
     });
   }
 
-  handleCompanyChange(companyId) {
-    getTeams(companyId).then(res => {
+  handleAgencyChange(agencyId) {
+    getTeams(agencyId).then(res => {
       this.setState({ teams: res.data });
       this.setState({ selected: [] });
     });
@@ -96,8 +96,8 @@ class UserForm extends Component {
     };
     const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
     const teamOptions = this.state.teams.map(team => <Option key={team.clientTeamId}>{team.name}</Option>);
-    const companiesOptions = this.state.companies.map(company => <Option
-      key={company.clientId}>{company.name}</Option>);
+    const agenciesOptions = this.state.agencies.map(agency => <Option
+      key={agency.agencyId}>{agency.name}</Option>);
     const { getFieldDecorator } = this.props.form;
 
     const selectAfter = (
@@ -129,10 +129,10 @@ class UserForm extends Component {
             <Col {...formResSpan}>
               <Row>
                 <Col span={24}>
-                  <FormItem label="Company Name" style={margin}>
-                    {getFieldDecorator('company', { rules: userValidation.company })(
-                      <Select showSearch placeholder="Company" onChange={this.handleCompanyChange}>
-                        {companiesOptions}
+                  <FormItem label="Agency Name" style={margin}>
+                    {getFieldDecorator('agency', { rules: userValidation.agency })(
+                      <Select showSearch placeholder="Agency" onChange={this.handleAgencyChange}>
+                        {agenciesOptions}
                       </Select>
                     )}
                   </FormItem>
@@ -311,10 +311,10 @@ const mapPropsToFields = (props) => {
   let teams = props.user.clientTeams.map(function(team) {
     return team.clientTeamId.toString();
   });
-  let clientId = props.user.clientTeams[0].clientId.toString();
+  let agencyId = props.user.clientTeams[0].agencyId.toString();
   return {
-    company: Form.createFormField({
-      value: clientId
+    agency: Form.createFormField({
+      value: agencyId
     }),
     clientTeams: Form.createFormField({
       value: teams

@@ -69,6 +69,11 @@ export const getAgencyTeamMembers = function(teamId) {
   }
 };
 
+/** Agency Users **/
+export const addAgencyUser = function(user) {
+  return _post('user', user);
+};
+
 /** Company **/
 export const addCompany = function(company) {
   return _post('client', company)
@@ -87,8 +92,16 @@ export const getCompanies = (objOrCompanyId) => {
 
   return _get(`client`)
 };
-export const getCompany = function(id) {
-  return _get('client/' + id);
+
+export const getCompany = function(objOrCompanyId) {
+  const option = objOrCompanyId;
+  if (typeof option === 'object') {
+    return _getWithLimitOffset(`client`, option)
+  } else if (option) {
+    return _get(`client/${option}`);
+  }
+
+  return _get(`client`);
 };
 
 //Teams
@@ -109,11 +122,9 @@ export const getClientTeam = function(clientTeamId) {
 };
 
 
-//Users
+/** Company Users **/
 export const addCompanyUser = function(user) {
   delete user.company;
-  user = _.omit(user, 'isClientUser');
-  user = _.omit(user, 'isProviderUser');
 
   return _post('user', user);
 };
