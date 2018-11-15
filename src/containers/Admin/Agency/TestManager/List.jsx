@@ -26,15 +26,15 @@ export default class extends Component {
           sorter: true
         },
         {
-          title: "Company Admin",
+          title: "Agency Admin",
           dataIndex: "owner.username",
-          key: "company_admin",
+          key: "agency_admin",
           sorter: true
         },
         {
-          title: "Company Admin Email",
+          title: "Agency Admin Email",
           dataIndex: "owner.contactInformation.emailAddress",
-          key: "company_admin_email",
+          key: "agency_admin_email",
           sorter: true
         },
         {
