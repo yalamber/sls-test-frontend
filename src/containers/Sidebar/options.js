@@ -47,25 +47,6 @@ const options = [
         label: "sidebar.company.testingManager"
       }
     ]
-  },
-  {
-    key: "companies",
-    label: "sidebar.softwareCompany",
-    leftIcon: "ion-briefcase",
-    children: [
-      {
-        key: "company/list",
-        label: "sidebar.company.companies"
-      },
-      {
-        key: "company/teams",
-        label: "sidebar.company.teams"
-      },
-      {
-        key: "company/users",
-        label: "sidebar.company.users"
-      }
-    ]
   }
 ];
 export default options;
