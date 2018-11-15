@@ -115,6 +115,7 @@ class TeamsList extends Component {
     };
 
     const { rowStyle, colStyle, gutter } = basicStyle;
+    const { agencyId } = this.props.match.params;
 
     return (
       <LayoutWrapper>
@@ -130,7 +131,7 @@ class TeamsList extends Component {
                     <ActionBtn
                       type="primary"
                       onClick={() => {
-                        this.props.history.push("teams/create");
+                        this.props.history.push(`/dashboard/agency/teams-create/${agencyId}`);
                       }}
                     >
                       <Icon type="usergroup-add" />
@@ -147,8 +148,7 @@ class TeamsList extends Component {
                   rowKey="providerTeamId"
                   onRow={row => ({
                     onDoubleClick: () => {
-                      console.log("we gotta row", row);
-                      this.props.history.push("teams/team-members");
+                      this.props.history.push("/dashboard/agency/teams/team-members");
                     }
                   })}
                 />

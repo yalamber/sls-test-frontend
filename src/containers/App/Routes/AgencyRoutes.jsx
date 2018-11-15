@@ -18,13 +18,24 @@ export default [
     component: asyncComponent(() => import("../../Admin/Agency/Edit"))
   },
   {
-    path: "agency/teams/:agencyId?",
-    component: asyncComponent(() => import("../../Admin/Agency/Teams/List"))
-  },
-  {
     path: "agency/users/:agencyId/team",
     component: asyncComponent(() => import("../../Admin/Agency/users/List"))
   },
+  {
+    path: "agency/teams/:agencyId",
+    component: asyncComponent(() => import("../../Admin/Agency/Teams/List"))
+  },
+  {
+    path: "agency/teams/:agencyId/edit",
+    component: asyncComponent(() => import("../../Admin/Agency/Teams/Edit"))
+  },
+  {
+    path: "agency/teams-create/:agencyId",
+    component: asyncComponent(() => import("../../Admin/Agency/Teams/Create"))
+  },
+
+
+
   {
     path: "agency/test-manager",
     component: asyncComponent(() =>

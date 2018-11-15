@@ -11,7 +11,7 @@ import {
 
 import Box from '../../../../components/utility/box';
 import UserForm from "./partials/TeamForm";
-import {addProviderTeam} from "../../../../helpers/http-api-client";
+import {createAgencyTeam} from "../../../../helpers/http-api-client";
 
 export default class extends Component {
 
@@ -26,7 +26,7 @@ export default class extends Component {
 
   handleSubmit(formData, resetForm) {
     this.setState({loading: true});
-    addProviderTeam(formData).then(res => {
+    createAgencyTeam(formData).then(res => {
       resetForm();
     }).finally(() => {
       this.setState({loading: false});

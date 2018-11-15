@@ -38,18 +38,8 @@ export const updateAgency = function(agencyId, data) {
   return _put(`agency/${agencyId}`, data);
 };
 
-export const getAgencyTeams = function(query) {
-  return _get(`agency-team`, query);
-};
-
 export const getAgencyUsers = function(agencyId, teamId) {
   return getAgencyTeamMembers(teamId);
-};
-
-export const getAgencyTeamMembers = function(teamId) {
-  if (teamId) {
-    return _get(`agency-team/${teamId}/member`);
-  }
 };
 
 export const getAgency = function(objOrAgencyId) {
@@ -63,6 +53,21 @@ export const getAgency = function(objOrAgencyId) {
   return _get(`agency`);
 };
 
+/** Agency Team **/
+
+export const getAgencyTeams = function(query) {
+  return _get(`agency-team`, query);
+};
+
+export const createAgencyTeam = (teamData) => {
+  return _post('agency-team', teamData);
+};
+
+export const getAgencyTeamMembers = function(teamId) {
+  if (teamId) {
+    return _get(`agency-team/${teamId}/member`);
+  }
+};
 
 /** Company **/
 export const addCompany = function(company) {
@@ -138,7 +143,7 @@ export const getCompanyUsers = function(companyId, teamId) {
   if (teamId) {
     return _get('client-team/' + teamId + '/member');
   } else {
-    // return _get('user?clientId=' + companyId);
+    return _get('user');
   }
 };
 
@@ -207,10 +212,6 @@ export const getTestingProviderTeam = (id) => {
 };
 export const deleteProviderTeam = (id) => {
   return _deleteRecord("agency-team/" + id);
-};
-
-export const addProviderTeam = (teamData) => {
-  return _post('agency-team', teamData);
 };
 
 export const updateProviderTeam = (id, teamData) => {
