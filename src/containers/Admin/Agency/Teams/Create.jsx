@@ -35,13 +35,15 @@ export default class extends Component {
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { agencyId } = this.props.match.params;
+    const { name } = this.props.location.state;
+    const agencyName = name;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={12} sm={12} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Create new Team</ComponentTitle>
+                <ComponentTitle>Create new Team for {agencyName}</ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <TeamForm submit={this.handleSubmit} />
