@@ -30,7 +30,7 @@ export default [
     component: asyncComponent(() => import("../../Admin/Companies/teams/List"))
   },
   {
-    path: "system-admin-company/teams/create/:id?",
+    path: "system-admin-company/team/:id/create/",
     component: asyncComponent(() => import("../../Admin/Companies/teams/Create"))
   },
   {
@@ -81,7 +81,7 @@ export default [
     component: asyncComponent(() => import("../../Admin/Companies/teams/List"))
   },
   {
-    path: "company/teams/create/:id?",
+    path: "company/team/:id/create",
     component: asyncComponent(() => import("../../Admin/Companies/teams/Create"))
   },
   {

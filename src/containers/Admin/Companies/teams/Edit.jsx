@@ -30,7 +30,7 @@ class Create extends Component {
     updateTeam(formData, this.props.match.params.id).then(res => {
       resetForm();
       this.setState({loading: true});
-      message.success('Successfully Saved.')
+      message.success('Successfully Saved.');
     });
     return true;
   }

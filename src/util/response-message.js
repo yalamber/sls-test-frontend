@@ -4,7 +4,10 @@ export const getErrorDataFromApiResponseError = caughtError => {
   if (caughtError) {
     let errors;
     if (caughtError.response && caughtError.response.data) {
-      if (caughtError.response.data.details && caughtError.response.data.details.length) {
+      if (
+        caughtError.response.data.details &&
+        caughtError.response.data.details.length
+      ) {
         errors = caughtError.response.data;
       } else {
         errors = {
@@ -29,4 +32,16 @@ export const getErrorDataFromApiResponseError = caughtError => {
   }
 
   return { details: [] };
+};
+
+export const getErrorMessageFromApiResponseError = caughtError => {
+  let errorMessage = getErrorDataFromApiResponseError(caughtError);
+  errorMessage =
+    errorMessage && errorMessage.details && errorMessage.details[0]
+      ? errorMessage.details[0].message
+      : "";
+
+  errorMessage = !errorMessage ? getNetworkError() : errorMessage;
+
+  return errorMessage;
 };

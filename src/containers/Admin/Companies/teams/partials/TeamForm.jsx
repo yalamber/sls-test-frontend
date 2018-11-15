@@ -54,20 +54,6 @@ class TeamForm extends Component {
             <Col span={24}>
               <Row>
                 <Col span={24}>
-                  <FormItem label="Company Name" style={margin}>
-                    {getFieldDecorator('clientId', {
-                      rules: teamValidation.companyName,
-                      //initialValue: this.props.match.params.id
-                    })(
-                      <Select showSearch placeholder="Company">
-                        {clientsOptions}
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={24}>
                   <FormItem label="Team Name" style={margin}>
                     {getFieldDecorator('name', {rules: teamValidation.teamName})(
                       <Input placeholder="Team Name"/>
