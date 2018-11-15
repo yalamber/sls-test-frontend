@@ -131,7 +131,7 @@ class TeamsList extends Component {
                     <ActionBtn
                       type="primary"
                       onClick={() => {
-                        this.props.history.push(`/dashboard/agency/teams-create/${agencyId}`);
+                        this.props.history.push(`/dashboard/agency/team/${agencyId}/create`);
                       }}
                     >
                       <Icon type="usergroup-add" />
