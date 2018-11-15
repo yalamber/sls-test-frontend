@@ -35,14 +35,12 @@ class TeamsList extends Component {
         ? location.state.name + ""
         : "";
     const { agencyId } = this.props.match.params;
-    console.log("location.state", location.state);
     const defaultAgency = agencyId
       ? agencyId
       : agencyIdfromLocation
         ? agencyIdfromLocation
         : "";
-    console.log("defaultAgency", defaultAgency, agencyId, agencyIdfromLocation);
-    this.state = {
+      this.state = {
       selectedAgency: undefined,
       agencyName,
       columns: [
@@ -86,8 +84,6 @@ class TeamsList extends Component {
         .then(res => {
           this.setState({
             dataSource: res.data,
-            agencyName:
-              res.data && res.data.length ? res.data[0].agency.name : "",
             loading: false
           });
         })
@@ -131,7 +127,11 @@ class TeamsList extends Component {
                     <ActionBtn
                       type="primary"
                       onClick={() => {
-                        this.props.history.push(`/dashboard/agency/team/${agencyId}/create`);
+                        this.props.history.push({
+                          pathname: `/dashboard/agency/team/${agencyId}/create`
+                        }, {
+                          ...this.props.location.state
+                        });
                       }}
                     >
                       <Icon type="usergroup-add" />
