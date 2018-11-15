@@ -65,9 +65,7 @@ class CompanyDetails extends Component {
         {
           title: "Actions",
           key: "actions",
-          render: row => (
-            <TeamActionButtons row={row} info={this.handleInfo} />
-          )
+          render: row => <TeamActionButtons row={row} info={this.handleInfo} />
         }
       ],
       teams: [],
@@ -146,7 +144,7 @@ class CompanyDetails extends Component {
   }
 
   handleInfo(row) {
-    alert("Show Info")
+    alert("Show Info");
     // deleteTeam(row.clientTeamId).then(res => {
     //   message.success("Successfully Deleted");
     //   this.fetchData();
@@ -165,71 +163,75 @@ class CompanyDetails extends Component {
     const margin = {
       margin: "10px 20px 18px 10px"
     };
+
     return (
       <LayoutWrapper>
-        <PageHeader>
-          {this.state.company ? this.state.company.name : ""}
-        </PageHeader>
-        <Row style={rowStyle} gutter={gutter} justify="start">
-          <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>
-              <TitleWrapper style={margin}>
-                <ComponentTitle>
-                  <ActionBtn
-                    type="secondary"
-                    onClick={() => this.props.history.goBack()}
-                  >
-                    <Icon type="left" />Go Back
-                  </ActionBtn>
-                </ComponentTitle>
-                <ButtonHolders>
-                  <ActionBtn
-                    type="primary"
-                    onClick={() => {
-                      this.props.history.push(
-                        "../teams/create/" + this.props.match.params.id
-                      );
-                    }}
-                  >
-                    <Icon type="usergroup-add" />
-                    Add Team
-                  </ActionBtn>
-                </ButtonHolders>
-              </TitleWrapper>
-              <Col md={24} sm={24} xs={24}>
-                <Table
-                  size="middle"
-                  style={margin}
-                  columns={this.state.teamColumns}
-                  dataSource={this.state.teams}
-                  pagination={false}
-                  rowClassName={record => (record.isSelected ? "selected" : "")}
-                  onRow={record => {
-                    return {
-                      onDoubleClick: (e) => {
-                        this.props.history.push(`/dashboard/company/users/${record.clientId}/team/${record.clientTeamId}`)
-                      },
-                      onClick: () => this.handleTeamSelect(record)
-                    };
-                  }}
-                  bordered
-                />
-              </Col>
-              {/*<Col md={16} sm={24} xs={24}>
-                <Spin spinning={this.state.loading}>
+          <PageHeader>
+            {this.state.company ? this.state.company.name : ""}
+          </PageHeader>
+          <Row style={rowStyle} gutter={gutter} justify="start">
+            <Col md={24} sm={24} xs={24} style={colStyle}>
+              <Box>
+              <Spin spinning={this.state.loading}>
+                <TitleWrapper style={margin}>
+                  <ComponentTitle>
+                    <ActionBtn
+                      type="secondary"
+                      onClick={() => this.props.history.goBack()}
+                    >
+                      <Icon type="left" />Go Back
+                    </ActionBtn>
+                  </ComponentTitle>
+                  <ButtonHolders>
+                    <ActionBtn
+                      type="primary"
+                      onClick={() => {
+                        this.props.history.push(
+                          {
+                            pathname: `/dashboard/company/team/${
+                              this.props.match.params.id
+                            }/create`
+                          },
+                          {
+                            ...this.props.location.state
+                          }
+                        );
+                      }}
+                    >
+                      <Icon type="usergroup-add" />
+                      Add Team
+                    </ActionBtn>
+                  </ButtonHolders>
+                </TitleWrapper>
+                <Col md={24} sm={24} xs={24}>
                   <Table
                     size="middle"
                     style={margin}
-                    columns={this.state.userColumns}
-                    dataSource={this.state.users}
-                    pagination={{pageSize: 5}}
+                    columns={this.state.teamColumns}
+                    dataSource={this.state.teams}
+                    pagination={false}
+                    rowClassName={record =>
+                      record.isSelected ? "selected" : ""
+                    }
+                    onRow={record => {
+                      return {
+                        onDoubleClick: e => {
+                          this.props.history.push(
+                            `/dashboard/company/users/${record.clientId}/team/${
+                              record.clientTeamId
+                            }`
+                          );
+                        },
+                        // onClick: () => this.handleTeamSelect(record)
+                      };
+                    }}
                     bordered
                   />
+                </Col>
                 </Spin>
-              </Col>*/}
-            </Box>
-          </Col>
-        </Row>
+              </Box>
+            </Col>
+          </Row>
       </LayoutWrapper>
     );
   }
