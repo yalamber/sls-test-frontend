@@ -15,16 +15,12 @@ class TeamForm extends Component {
   constructor() {
     super();
     this.state = {
-      users: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.resetForm = this.resetForm.bind(this);
   }
 
   componentDidMount() {
-    getCompanyUsers().then(res => {
-      this.setState({users: res.data})
-    })
   }
 
   handleSubmit(e) {
@@ -47,7 +43,6 @@ class TeamForm extends Component {
     const margin = {
       margin: '5px 5px 0px 0'
     };
-    const userOptions = this.state.users.map(user => <Option key={user.userId}>{user.username}</Option>);
 
     const {getFieldDecorator} = this.props.form;
     return (
@@ -55,21 +50,6 @@ class TeamForm extends Component {
         <Form onSubmit={this.handleSubmit} id="clientForm">
           <Row gutter={16}>
             <Col span={24}>
-              <Row>
-                <Col span={24}>
-                  <FormItem label="Team Manager" style={margin}>
-                    {getFieldDecorator('teamManagerUserId', {rules: teamValidation.teamManager})(
-                      <Select
-                        showSearch
-                        placeholder="Select Team Manager"
-                        optionFilterProp="children"
-                      >
-                        {userOptions}
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-              </Row>
               <Row>
                 <Col span={24}>
                   <FormItem label="Team Name" style={margin}>
@@ -101,9 +81,6 @@ const mapPropsToFields = (props) => {
     return;
   }
   return {
-    teamManagerUserId: Form.createFormField({
-      value: props.team.teamManagerUserId ? props.team.teamManagerUserId.toString() : ''
-    }),
     name: Form.createFormField({
       value: props.team.name
     }),

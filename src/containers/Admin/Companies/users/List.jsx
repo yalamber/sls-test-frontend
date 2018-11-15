@@ -59,6 +59,12 @@ export default class extends Component {
       ],
       dataSource: [],
       companies: [],
+      paginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 5,
+        total: 1
+      },
       companiesPaginationOptions: {
         defaultCurrent: 1,
         current: 1,
@@ -73,14 +79,12 @@ export default class extends Component {
     this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.handleInfo = this.handleInfo.bind(this);
-    // this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
+    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   componentDidMount() {
     this.setState({ loading: true });
-    getCompanies({
-      paginationOptions: this.state.companiesPaginationOptions
-    })
+    getCompanies()
       .then(res => {
         this.setState({
           companies: res.data.rows,
@@ -97,27 +101,27 @@ export default class extends Component {
       });
   }
 
-  /*onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange(page, pageSize) {
     this.setState(
       {
         loading: true,
-        companiesPaginationOptions: {
-          ...this.state.companiesPaginationOptions,
+        paginationOptions: {
+          ...this.state.paginationOptions,
           current: page,
           pageSize
         }
       },
       () => {
         getCompanies({
-          companiesPaginationOptions: this.state.companiesPaginationOptions
+          companiesPaginationOptions: this.state.paginationOptions
         })
-          .then(companies => {
+          .then(res => {
             this.setState({
               loading: false,
-              companies: companies.data.rows,
-              companiesPaginationOptions: {
-                ...this.state.companiesPaginationOptions,
-                total: companies.data.count
+              dataSource: res.data.rows,
+              paginationOptions: {
+                ...this.state.paginationOptions,
+                total: res.data.count
               }
             });
           })
@@ -126,7 +130,7 @@ export default class extends Component {
           });
       }
     );
-  }*/
+  }
 
   handleCompanyChange(companyId) {
     this.setState(
@@ -165,7 +169,11 @@ export default class extends Component {
 
   updateRecords(companyId, teamId, cb) {
     if (!teamId) {
-      return this.setState({ selectedTeam: undefined, teams: [], dataSource: [] });
+      return this.setState({
+        selectedTeam: undefined,
+        teams: [],
+        dataSource: []
+      });
     }
     this.setState({ loading: true });
     if (cb) {
@@ -261,7 +269,10 @@ export default class extends Component {
                   locale={{ emptyText: "Please Select Company name" }}
                   size="middle"
                   bordered
-                  pagination={true}
+                  pagination={{
+                    ...this.state.paginationOptions,
+                    onChange: this.onTablePaginationChange
+                  }}
                   columns={this.state.columns}
                   onRow={row => ({
                     onDoubleClick: () => {

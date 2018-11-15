@@ -1,21 +1,17 @@
-import React, {Component} from 'react';
-import {Row, Col, Spin} from 'antd';
-import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../../settings/basicStyle';
-import ContentHolder from '../../../../components/utility/contentHolder';
+import React, { Component } from "react";
+import { Row, Col, Spin } from "antd";
+import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
+import basicStyle from "../../../../settings/basicStyle";
+import ContentHolder from "../../../../components/utility/contentHolder";
 
-import {
-  TitleWrapper,
-  ComponentTitle,
-} from '../../crud.style';
+import { TitleWrapper, ComponentTitle } from "../../crud.style";
 
-import Box from '../../../../components/utility/box';
-import UserForm from "./partials/TeamForm";
-import {addProviderTeam} from "../../../../helpers/http-api-client";
+import Box from "../../../../components/utility/box";
+import TeamForm from "./partials/TeamForm";
+import { message } from "antd/lib/index";
+import { createAgencyTeam } from "../../../../helpers/http-api-client";
 
 export default class extends Component {
-
-
   constructor() {
     super();
     this.state = {
@@ -25,18 +21,21 @@ export default class extends Component {
   }
 
   handleSubmit(formData, resetForm) {
-    this.setState({loading: true});
-    addProviderTeam(formData).then(res => {
-      resetForm();
-    }).finally(() => {
-      this.setState({loading: false});
-    })
+    this.setState({ loading: true });
+    const { agencyId } = this.props.match.params;
+    createAgencyTeam({ ...formData, agencyId })
+      .then(res => {
+        resetForm();
+      })
+      .finally(() => {
+        this.setState({ loading: false });
+      });
   }
 
   render() {
-    const {rowStyle, colStyle, gutter} = basicStyle;
+    const { rowStyle, colStyle, gutter } = basicStyle;
+    const { agencyId } = this.props.match.params;
     return (
-
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={12} sm={12} xs={24} style={colStyle}>
@@ -45,15 +44,21 @@ export default class extends Component {
                 <ComponentTitle>Create new Team</ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
-                <UserForm submit={this.handleSubmit}/>
+                <TeamForm submit={this.handleSubmit} />
               </Spin>
             </Box>
           </Col>
           <Col md={12} sm={12} xs={24} style={colStyle}>
             <Box title="Instruction">
               <ContentHolder>
-                <p><b>Team Manager : </b> You can search team manager from the list. </p>
-                <p><b>Team Name : </b> Team name must be alphabet with 5 to 25 characters.</p>
+                <p>
+                  <b>Team Manager : </b> You can search team manager from the
+                  list.{" "}
+                </p>
+                <p>
+                  <b>Team Name : </b> Team name must be alphabet with 5 to 25
+                  characters.
+                </p>
               </ContentHolder>
             </Box>
           </Col>
