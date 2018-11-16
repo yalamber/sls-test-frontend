@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, message, Spin } from "antd";
 import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
+import PageHeader from "../../../../components/utility/pageHeader";
 import basicStyle from "../../../../settings/basicStyle";
 import Box from "../../../../components/utility/box";
 import ActionButtons from "./partials/ActionButtons";
@@ -66,25 +67,24 @@ export default class extends Component {
     this.fetchData();
   }
 
-  fetchData() {
-    this.setState({ loading: true });
-    getCompanies({
-      paginationOptions: this.state.paginationOptions
-    })
-      .then(res => {
-        this.setState({
-          loading: false,
-          data: res.data.rows,
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: res.data.count
-          }
-        });
-      })
-      .catch(err => {
-        message.error("Problem occured.");
-        this.setState({ loading: false });
+  async fetchData() {
+    try{
+      this.setState({ loading: true });
+      let companies = await getCompanies({
+        paginationOptions: this.state.paginationOptions
       });
+      this.setState({
+        loading: false,
+        data: companies.data.rows,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          total: companies.data.count
+        }
+      });
+    } catch(e) {
+      message.error("Something went wrong.");
+      this.setState({ loading: false });
+    }
   }
 
   onTablePaginationChange(page, pageSize) {
@@ -97,23 +97,22 @@ export default class extends Component {
           pageSize
         }
       },
-      () => {
-        getCompanies({
-          paginationOptions: this.state.paginationOptions
-        })
-          .then(companies => {
-            this.setState({
-              loading: false,
-              data: companies.data.rows,
-              paginationOptions: {
-                ...this.state.paginationOptions,
-                total: companies.data.count
-              }
-            });
-          })
-          .catch(companies => {
-            this.setState({ loading: false, data: [] });
+      async () => {
+        try{
+          let companies = await getCompanies({
+            paginationOptions: this.state.paginationOptions
           });
+          this.setState({
+            loading: false,
+            data: companies.data.rows,
+            paginationOptions: {
+              ...this.state.paginationOptions,
+              total: companies.data.count
+            }
+          });
+        } catch(e) {
+          this.setState({ loading: false, data: [] });
+        }
       }
     );
   }
@@ -129,12 +128,15 @@ export default class extends Component {
     const { rowStyle, colStyle, gutter } = basicStyle;
     return (
       <LayoutWrapper>
+        <PageHeader>
+           Companies
+        </PageHeader>
+          
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Companies List</ComponentTitle>
-
+                <ComponentTitle></ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"

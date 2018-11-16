@@ -14,17 +14,14 @@ import {
 } from "../../crud.style";
 
 import Box from "../../../../components/utility/box";
-import UsersActionButtons from "./../users/partials/ActionButtons";
-import TeamActionButtons from "./../teams/partials/ActionButtons";
+import TeamActionButtons from "../teams/partials/ActionButtons";
 import {
-  deleteCompanyUser,
-  deleteTeam,
+  deleteCompanyTeam,
   getCompany,
-  getCompanyUsersByTeamId,
-  getTeams
+  getCompanyTeams
 } from "../../../../helpers/http-api-client";
 
-class CompanyDetails extends Component {
+class CompanyTeams extends Component {
   constructor() {
     super();
     this.state = {
@@ -68,94 +65,85 @@ class CompanyDetails extends Component {
           render: row => <TeamActionButtons row={row} info={this.handleInfo} />
         }
       ],
-      teams: [],
+      data: [],
+      paginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 5,
+        total: 1
+      },
       company: null,
-      // userColumns: [
-      //   {
-      //     title: "Users List",
-      //     children: [
-      //       {
-      //         title: 'Name',
-      //         dataIndex: 'username',
-      //         key: 'name',
-      //       },
-      //       {
-      //         title: 'Address',
-      //         dataIndex: 'contactInformation.postalAddress',
-      //         key: 'address',
-      //       },
-      //       {
-      //         title: 'Email',
-      //         dataIndex: 'contactInformation.emailAddress',
-      //         key: 'email',
-      //       },
-      //       {
-      //         title: 'Actions',
-      //         key: 'actions',
-      //         render: (row) => <UsersActionButtons row={row} delete={this.handleDeleteUser}/>
-      //       }
-      //     ]
-      //   }
-      // ],
-      selectedTeam: {},
-      users: [],
       loading: false
     };
-    this.handleInfo = this.handleInfo.bind(this);
-    this.handleDeleteUser = this.handleDeleteUser.bind(this);
     this.fetchData = this.fetchData.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   componentDidMount() {
     this.fetchData();
   }
 
-  fetchData() {
-    getTeams(this.props.match.params.id).then(res => {
-      this.setState({ teams: res.data });
-      if (this.state.teams.length) {
-        this.handleTeamSelect(this.state.teams[0]);
+  async fetchData() {
+    try{
+      this.setState({ loading: true });
+      let company = await getCompany(this.props.match.params.companyId);
+      let teams = await getCompanyTeams(this.props.match.params.companyId, {
+        paginationOptions: this.state.paginationOptions
+      });
+      this.setState({ 
+        company: company.data,
+        data: teams.data.rows,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          total: teams.data.count
+        },
+        loading: false
+      });
+    } catch(e) {
+      message.error("Something went wrong.");
+      this.setState({ loading: false });
+    }
+  }
+
+  onTablePaginationChange(page, pageSize) {
+    this.setState(
+      {
+        loading: true,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          current: page,
+          pageSize
+        }
+      },
+      async () => {
+        try{
+          let teams = await getCompanyTeams(this.props.match.params.companyId, {
+            paginationOptions: this.state.paginationOptions
+          });
+          this.setState({
+            loading: false,
+            data: teams.data.rows,
+            paginationOptions: {
+              ...this.state.paginationOptions,
+              total: teams.data.count
+            }
+          });
+        } catch(e) {
+          this.setState({ loading: false, data: [] });
+        }
       }
-    });
-    getCompany(this.props.match.params.id).then(res => {
-      this.setState({ company: res.data });
-    });
+    );
   }
 
-  handleTeamSelect(record) {
-    this.setState({ loading: true });
-    // this.setState({
-    //   userColumns: [
-    //     {
-    //       ...this.state.userColumns[0],
-    //       title: record.name,
-    //     }
-    //   ]
-    // });
-    this.setState({
-      selectedTeam: record
-    });
-    this.state.teams.map(row => {
-      return (row.isSelected = row.clientTeamId === record.clientTeamId);
-    });
-    getCompanyUsersByTeamId(record.clientTeamId).then(res => {
-      this.setState({ users: res.data, loading: false });
-    });
-  }
-
-  handleInfo(row) {
-    alert("Show Info");
-    // deleteTeam(row.clientTeamId).then(res => {
-    //   message.success("Successfully Deleted");
-    //   this.fetchData();
-    // });
-  }
-
-  handleDeleteUser(row) {
-    deleteCompanyUser(row.userId).then(res => {
-      message.success("Successfully Deleted");
+  async handleDelete(row) {
+    try{
+      let deleteCompanyTeam = await deleteCompanyTeam(row.teamId);
+      message.success("Successfully Deleted.");
       this.fetchData();
-    });
+    } catch(e) {
+      //TODO: show msg
+    }
   }
 
   render() {
@@ -163,11 +151,10 @@ class CompanyDetails extends Component {
     const margin = {
       margin: "10px 20px 18px 10px"
     };
-
     return (
       <LayoutWrapper>
           <PageHeader>
-            {this.state.company ? this.state.company.name : ""}
+            {this.state.company ? this.state.company.name : ""} Teams
           </PageHeader>
           <Row style={rowStyle} gutter={gutter} justify="start">
             <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -189,7 +176,7 @@ class CompanyDetails extends Component {
                         this.props.history.push(
                           {
                             pathname: `/dashboard/company/team/${
-                              this.props.match.params.id
+                              this.props.match.params.companyId
                             }/create`
                           },
                           {
@@ -205,28 +192,27 @@ class CompanyDetails extends Component {
                 </TitleWrapper>
                 <Col md={24} sm={24} xs={24}>
                   <Table
+                    pagination={{
+                      ...this.state.paginationOptions,
+                      onChange: this.onTablePaginationChange
+                    }}
                     size="middle"
                     style={margin}
                     columns={this.state.teamColumns}
-                    dataSource={this.state.teams}
-                    pagination={false}
-                    rowClassName={record =>
-                      record.isSelected ? "selected" : ""
-                    }
+                    dataSource={this.state.data}
+                    rowKey="teamId"
                     onRow={record => {
                       return {
                         onDoubleClick: e => {
                           this.props.history.push(
-                            `/dashboard/company/users/${record.clientId}/team/${
-                              record.clientTeamId
-                            }`
+                            `/dashboard/company/teams/${record.clientTeamId}/members`
                           );
-                        },
-                        // onClick: () => this.handleTeamSelect(record)
+                        }
                       };
                     }}
                     bordered
                   />
+
                 </Col>
                 </Spin>
               </Box>
@@ -237,4 +223,4 @@ class CompanyDetails extends Component {
   }
 }
 
-export default withRouter(CompanyDetails);
+export default withRouter(CompanyTeams);

@@ -49,8 +49,8 @@ export const updateAgency = function(agencyId, data) {
   return _put(`agency/${agencyId}`, data);
 };
 
-export const getAgencyUsers = function(agencyId, teamId) {
-  return getAgencyTeamMembers(teamId);
+export const getAgencyUsers = function(agencyId) {
+  return _get(`agency/${agencyId}/user`);
 };
 
 export const getAgency = function(objOrAgencyId) {
@@ -75,9 +75,7 @@ export const createAgencyTeam = teamData => {
 };
 
 export const getAgencyTeamMembers = function(teamId) {
-  if (teamId) {
-    return _get(`agency-team/${teamId}/member`);
-  }
+  return _get(`agency-team/${teamId}/member`);
 };
 
 /** Agency Users **/
@@ -138,6 +136,26 @@ export const getClientTeam = function(clientTeamId) {
   return _get("client-team/" + clientTeamId);
 };
 
+export const getCompanyTeam = function(companyTeamId) {
+  return _get("client-team/" + companyTeamId);
+};
+
+export const getCompanyTeams = function(companyId, option = {}) {
+  return _getWithLimitOffset(`client-team/?clientId=${companyId}`, option);
+};
+
+export const deleteCompanyTeam = function(teamId) {
+  return _deleteRecord("client-team/" + teamId);
+};
+
+export const getCompanyTeamMembers = function(teamId, option = {}) {
+  return _getWithLimitOffset(`client-team/${teamId}/member`, option);
+};
+
+export const deleteCompanyTeamMember = function(teamId, userId) {
+  return _deleteRecord(`client-team/${teamId}/member/${userId}`);
+};
+
 /** Company Team Member **/
 
 export const addCompanyTeamMember = function({ teamId, userId }) {
@@ -170,12 +188,12 @@ export const getCompanyUsersByTeamId = function(teamId) {
   return _get("client-team/" + teamId + "/member");
 };
 
-export const getCompanyUsers = function(companyId, teamId) {
-  if (teamId) {
-    return _get("client-team/" + teamId + "/member");
-  } else {
-    return _get("user");
-  }
+export const getCompanyUsers = function(companyId, option = {}) {
+  return _getWithLimitOffset(`client/${companyId}/user`, option);
+};
+
+export const getCompanyTeamUsers = function(teamId, option = {}) {
+  return _getWithLimitOffset(`client-team/${teamId}/member`, option);
 };
 
 // Test Manager Action
@@ -294,6 +312,10 @@ export const getRole = function(roleId) {
   return _get(`role/${roleId}`);
 };
 
+export const getRoleTypes = (option) => {
+  return _getWithLimitOffset(`role/types`, option);
+};
+
 /*
 *
 * Private Start
@@ -320,7 +342,7 @@ export const _get = function(url, data = {}) {
   return _sendRequest(url, data, "GET");
 };
 
-export const _getWithLimitOffset = function(url, option) {
+export const _getWithLimitOffset = function(url, option = {}) {
   const { paginationOptions, query } = option;
   let queryObj = {};
   if (query) {
@@ -339,6 +361,7 @@ export const _getWithLimitOffset = function(url, option) {
         paginationOptions.pageSize * (paginationOptions.current - 1);
     }
   }
+
   return _get(url, queryObj);
 };
 

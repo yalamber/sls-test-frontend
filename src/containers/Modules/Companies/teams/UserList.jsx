@@ -13,9 +13,9 @@ import {
   TableClickable as Table
 } from "../../crud.style";
 import {
-  getCompany,
-  getCompanyUsers,
-  deleteCompanyUser
+  getCompanyTeam,
+  getCompanyTeamMembers,
+  deleteCompanyTeamMember
 } from "../../../../helpers/http-api-client";
 
 export default class extends Component {
@@ -54,6 +54,7 @@ export default class extends Component {
         }
       ],
       company: {},
+      companyTeam: {},
       data: [],
       paginationOptions: {
         defaultCurrent: 1,
@@ -68,19 +69,20 @@ export default class extends Component {
   }
 
   componentDidMount() {
-    this.fetchData();  
+    this.fetchData();
   }
 
   async fetchData() {
     this.setState({ loading: true });
     try {
-      let company = await getCompany(this.props.match.params.companyId);
-      let users = await getCompanyUsers(this.props.match.params.companyId, {
+      let companyTeam = await getCompanyTeam(this.props.match.params.teamId);
+      let users = await getCompanyTeamMembers(this.props.match.params.teamId, {
         paginationOptions: this.state.paginationOptions
       });
+      console.log(companyTeam);
       this.setState({
         loading: false,
-        company: company.data,
+        companyTeam: companyTeam.data,
         data: users.data.rows,
         paginationOptions: {
           ...this.state.paginationOptions,
@@ -103,7 +105,7 @@ export default class extends Component {
       }
     }, async () => {
       try{
-        let users = await getCompanyUsers(this.props.match.params.companyId, {
+        let users = await getCompanyTeamMembers(this.props.match.params.teamId, {
           paginationOptions: this.state.paginationOptions
         });
         this.setState({
@@ -128,7 +130,9 @@ export default class extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          Company -> {this.state.company.name} -> Users List
+          Company -> {
+            this.state.companyTeam && this.state.companyTeam.client && this.state.companyTeam.client.name
+          } -> {this.state.companyTeam && this.state.companyTeam.name } -> Members List
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -156,7 +160,7 @@ export default class extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table
-                  locale={{ emptyText: "No users in company" }}
+                  locale={{ emptyText: "No users in company team" }}
                   size="middle"
                   bordered
                   pagination={{

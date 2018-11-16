@@ -10,8 +10,8 @@ export default [
     component: asyncComponent(() => import("../../Modules/Companies/companies/List"))
   },
   {
-    path: "company/details/:id",
-    component: asyncComponent(() => import("../../Modules/Companies/companies/CompanyDetails"))
+    path: "company/teams/:companyId",
+    component: asyncComponent(() => import("../../Modules/Companies/companies/CompanyTeams"))
   },
   {
     path: "company/create",
@@ -34,6 +34,10 @@ export default [
     component: asyncComponent(() => import("../../Modules/Companies/teams/Edit"))
   },
   {
+    path: "company/teams/:teamId/members",
+    component: asyncComponent(() => import("../../Modules/Companies/teams/UserList"))
+  },
+  {
     path: "company/user/create",
     exact: true,
     component: asyncComponent(() => import("../../Modules/Companies/users/Create"))
@@ -43,7 +47,7 @@ export default [
     component: asyncComponent(() => import("../../Modules/Companies/users/Edit"))
   },
   {
-    path: "company/users/:companyId?/team/:teamId?",
+    path: "company/users/:companyId",
     component: asyncComponent(() => import("../../Modules/Companies/users/List"))
   },
 

@@ -7,10 +7,10 @@ export default [
   },
   {
     path: "roles/create",
-    component: asyncComponent(() => import("../../Modules/Roles/Create.jsx"))
+    component: asyncComponent(() => import("../../Modules/Roles/CreateOrEdit.jsx"))
   },
   {
     path: "roles/edit",
-    component: asyncComponent(() => import("../../Modules/Roles/Create.jsx"))
+    component: asyncComponent(() => import("../../Modules/Roles/CreateOrEdit.jsx"))
   }
 ];

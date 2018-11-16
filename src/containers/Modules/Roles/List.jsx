@@ -14,7 +14,7 @@ import {
 } from '../crud.style';
 import {
     deleteRole,
-    getRoles
+    getRoles,
 } from "../../../helpers/http-api-client";
 
 export default class extends Component {
@@ -23,9 +23,9 @@ export default class extends Component {
         this.state = {
             columns: [
                 {
-                    title: 'Role',
-                    dataIndex: 'role',
-                    key: 'role',
+                    title: 'Title',
+                    dataIndex: 'title',
+                    key: 'title',
                     sorter: true
                 },
                 {
@@ -126,13 +126,14 @@ export default class extends Component {
         deleteRole(row.roleId).then(res => {
             message.success("Successfully Deleted.");
             this.fetchData();
-        });
+        }).catch(res => {
+          message.success("Something went wrong.");
+        })
     }
 
     render() {
         const { rowStyle, colStyle, gutter } = basicStyle;
         return (
-
             <LayoutWrapper>
                 <Row style={rowStyle} gutter={gutter} justify="start">
                     <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -159,8 +160,8 @@ export default class extends Component {
                                 dataSource={this.state.data}
                                 onRow={row => ({
                                     onDoubleClick: () => {
-                                    // this.props.history.push('details/' + row.clientId)
-                                    this.props.history.push(`details/${row.clientId}`);
+                                        // this.props.history.push('details/' + row.clientId)
+                                        this.props.history.push(`details/${row.roleId}`);
                                     }
                                 })}
                                 />
