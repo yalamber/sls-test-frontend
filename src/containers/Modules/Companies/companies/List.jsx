@@ -161,7 +161,7 @@ export default class extends Component {
                   onRow={row => ({
                     onDoubleClick: () => {
                       // this.props.history.push('details/' + row.clientId)
-                      this.props.history.push(`details/${row.clientId}`);
+                      //this.props.history.push(`details/${row.clientId}`);
                     }
                   })}
                 />

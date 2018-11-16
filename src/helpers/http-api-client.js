@@ -68,6 +68,14 @@ export const getAgency = function(objOrAgencyId) {
   return _get(`agency`);
 };
 
+export const getAgencies = (option) => {
+  return _getWithLimitOffset(`agency`, option);
+}
+
+export const deleteAgency = function(id) {
+  return _deleteRecord("agency/" + id);
+};
+
 /** Agency Team **/
 
 export const getAgencyTeam = function(agencyTeamId) {

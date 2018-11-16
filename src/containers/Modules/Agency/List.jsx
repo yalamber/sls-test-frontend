@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, Spin } from "antd";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
+import PageHeader from "../../../components/utility/pageHeader";
 import basicStyle from "../../../settings/basicStyle";
 import Box from "../../../components/utility/box";
-import { getAgency } from "../../../helpers/http-api-client";
+import { getAgencies, deleteAgency } from "../../../helpers/http-api-client";
 import ActionButtons from "./partials/ActionButtons";
 
 import {
@@ -13,10 +14,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from "../crud.style";
-import {
-  getTestingProviderTeams,
-  deleteProviderTeam
-} from "../../../helpers/http-api-client";
+
 import { message } from "antd/lib/index";
 import actions from "../../../redux/agency/actions";
 import { connect } from "react-redux";
@@ -48,13 +46,7 @@ class List extends Component {
         {
           title: "Actions",
           key: "actions",
-          render: row => (
-            <ActionButtons
-              row={row}
-              onPress={this.openPage.bind(this)}
-              delete={this.handleDelete}
-            />
-          )
+          render: row => <ActionButtons row={row} delete={this.handleDelete} />
         }
       ],
       data: [],
@@ -66,65 +58,32 @@ class List extends Component {
       },
       loading: false
     };
+    this.fetchData = this.fetchData.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
-  openPage = (path, key, row) => {
-    const { history } = this.props;
-    this.updateForm(key, row);
-    history.push(path);
-  };
-
-  updateForm = (key, value) => {
-    const { _updateForm } = this.props;
-
-    _updateForm(
-      Object.assign(this.props[actions.FORM_DATA_AGENCY_KEY], { [key]: value })
-    );
-  };
-
   componentDidMount() {
-    this.setState({ loading: true });
-    getAgency({
-      paginationOptions: this.state.paginationOptions
-    })
-      .then(agencies => {
-        this.setState({
-          loading: false,
-          data: agencies.data.rows,
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: agencies.data.count
-          }
-        });
-      })
-      .catch(agencies => {
-        this.setState({ loading: false, data: [] });
+    this.fetchData();
+  }
+
+  async fetchData() {
+    try{
+      this.setState({ loading: true });
+      let agencies = await getAgencies({
+        paginationOptions: this.state.paginationOptions
       });
-  }
-
-  handleDelete(row) {
-    message.success("Successfully Deleted.");
-  }
-
-  onChange(pagination, filters, sorter) {
-    const { data } = this.state;
-
-    if (sorter && sorter.columnKey && sorter.order) {
-      if (sorter.order === "ascend") {
-        this.setState({
-          data: data.sort(function(a, b) {
-            return a[sorter.columnKey] < b[sorter.columnKey];
-          })
-        });
-      } else {
-        this.setState({
-          data: data.sort(function(a, b) {
-            return a[sorter.columnKey] > b[sorter.columnKey];
-          })
-        });
-      }
+      this.setState({
+        loading: false,
+        data: agencies.data.rows,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          total: agencies.data.count
+        }
+      });
+    } catch(e) {
+      message.error("Something went wrong.");
+      this.setState({ loading: false });
     }
   }
 
@@ -138,33 +97,42 @@ class List extends Component {
           pageSize
         }
       },
-      () => {
-        getAgency({
-          paginationOptions: this.state.paginationOptions
-        })
-          .then(agencies => {
-            this.setState({
-              loading: false,
-              data: agencies.data.rows,
-              paginationOptions: {
-                ...this.state.paginationOptions,
-                total: agencies.data.count
-              }
-            });
-          })
-          .catch(agencies => {
-            this.setState({ loading: false, data: [] });
+      async () => {
+        try{
+          let agencies = await getAgencies({
+            paginationOptions: this.state.paginationOptions
           });
+          this.setState({
+            loading: false,
+            data: agencies.data.rows,
+            paginationOptions: {
+              ...this.state.paginationOptions,
+              total: agencies.data.count
+            }
+          });
+        } catch(e) {
+          this.setState({ loading: false, data: [] });
+        }
       }
     );
   }
 
+  handleDelete(row) {
+    deleteAgency(row.agencyId).then(res => {
+      message.success("Successfully Deleted.");
+      this.fetchData();
+    });
+  }
+
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { data, columns } = this.state;
 
     return (
       <LayoutWrapper>
+        <PageHeader>
+           Agencies
+        </PageHeader>
+        
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -183,24 +151,17 @@ class List extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table
-                  size="middle"
-                  bordered
                   pagination={{
                     ...this.state.paginationOptions,
                     onChange: this.onTablePaginationChange
                   }}
-                  columns={columns}
-                  onChange={this.onChange.bind(this)}
-                  dataSource={data}
-                  rowKey="providerTeamId"
+                  rowKey="agencyId"
+                  columns={this.state.columns}
+                  dataSource={this.state.data}
                   onRow={row => ({
                     onDoubleClick: () => {
-                      this.props.history.push({
-                        pathname: `/dashboard/agency/teams/${row.agencyId}`,
-                        state: {
-                          ...row
-                        }
-                      });
+                      // this.props.history.push('details/' + row.clientId)
+                      //this.props.history.push(`details/${row.clientId}`);
                     }
                   })}
                 />
