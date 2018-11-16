@@ -27,6 +27,19 @@ const _middlewares = [];
 *
 */
 
+/** User Roles **/
+
+export const getUserRoles = function(obj) {
+  const options = obj;
+  if (typeof options === "object") {
+    return _getWithLimitOffset(`role`, options)
+  }/* else if (options) {
+    return _get(`role/${options}`);
+  }*/
+
+  return _get(`role`);
+};
+
 /** AGENCY **/
 export const createAgency = function(agency) {
   return _post("agency", agency);
@@ -70,6 +83,12 @@ export const getAgencyTeamMembers = function(teamId) {
 /** Agency Users **/
 export const addAgencyUser = function(user) {
   return _post("user", user);
+};
+
+/** Agency Team Member **/
+
+export const addAgencyTeamMember = function({ teamId, userId }) {
+  return _post(`agency-team/${teamId}/member`, { userId, roleId: 2 });
 };
 
 /** Company **/
@@ -281,11 +300,25 @@ export const _get = function(url, data = {}) {
 };
 
 export const _getWithLimitOffset = function(url, option) {
-  const { paginationOptions } = option;
-  return _get(url, {
-    limit: paginationOptions.pageSize,
-    offset: paginationOptions.pageSize * (paginationOptions.current - 1)
-  });
+  const { paginationOptions, query } = option;
+  let queryObj = {};
+  if (query) {
+    queryObj = { ...query };
+  }
+
+  if (paginationOptions) {
+    if (paginationOptions.pageSize) {
+      queryObj.limit = paginationOptions.pageSize;
+    }
+    if (
+      typeof paginationOptions.current !== "undefined" &&
+      typeof paginationOptions.pageSize !== "undefined"
+    ) {
+      queryObj.offset =
+        paginationOptions.pageSize * (paginationOptions.current - 1);
+    }
+  }
+  return _get(url, queryObj);
 };
 
 /* middlewareOption - param
