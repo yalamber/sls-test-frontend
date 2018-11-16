@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Row, Col, Icon, Select, Spin, Form } from "antd";
+import { Row, Col, Icon, Spin, message } from "antd";
 import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
 import basicStyle from "../../../../settings/basicStyle";
 import Box from "../../../../components/utility/box";
 import UsersActionButtons from "./partials/ActionButtons";
-
 import {
   ActionBtn,
   TitleWrapper,
@@ -13,14 +12,10 @@ import {
   TableClickable as Table
 } from "../../crud.style";
 import {
-  getCompanies,
-  getTeams,
+  getCompany,
   getCompanyUsers,
   deleteCompanyUser
 } from "../../../../helpers/http-api-client";
-
-const Option = Select.Option;
-const FormItem = Form.Item;
 
 export default class extends Component {
   constructor() {
@@ -29,7 +24,7 @@ export default class extends Component {
       columns: [
         {
           title: "Name",
-          dataIndex: "username",
+          dataIndex: "user.username",
           key: "name",
           sorter: (a, b) => a.name >= b.name
         },
@@ -57,152 +52,71 @@ export default class extends Component {
           )
         }
       ],
-      dataSource: [],
-      companies: [],
+      company: {},
+      data: [],
       paginationOptions: {
         defaultCurrent: 1,
         current: 1,
         pageSize: 5,
         total: 1
       },
-      companiesPaginationOptions: {
-        defaultCurrent: 1,
-        current: 1,
-        pageSize: 5,
-        total: 1
-      },
-      teams: [],
-      selectedCompany: undefined,
-      selectedTeam: undefined,
       loading: false
     };
-    this.handleCompanyChange = this.handleCompanyChange.bind(this);
-    this.handleTeamChange = this.handleTeamChange.bind(this);
-    this.handleInfo = this.handleInfo.bind(this);
+    this.fetchData = this.fetchData.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   componentDidMount() {
-    this.setState({ loading: true });
-    getCompanies()
-      .then(res => {
-        this.setState({
-          companies: res.data.rows,
-          companiesPaginationOptions: {
-            ...this.state.companiesPaginationOptions,
-            total: res.data.count
-          }
-        });
-        this.handleCompanyChange(this.props.match.params.companyId);
-        // this.handleTeamChange(this.props.match.params.teamId);
-      })
-      .catch(() => {
-        this.setState({ loading: false });
-      });
+    this.fetchData();  
   }
 
-  onTablePaginationChange(page, pageSize) {
-    this.setState(
-      {
-        loading: true,
+  async fetchData() {
+    this.setState({ loading: true });
+    try {
+      let company = await getCompany(this.props.match.params.companyId);
+      let users = await getCompanyUsers(this.props.match.params.companyId, {
+        paginationOptions: this.state.paginationOptions
+      });
+      this.setState({
+        loading: false,
+        company: company.data,
+        data: users.data.rows,
         paginationOptions: {
           ...this.state.paginationOptions,
-          current: page,
-          pageSize
+          total: users.data.count
         }
-      },
-      () => {
-        getCompanies({
-          companiesPaginationOptions: this.state.paginationOptions
-        })
-          .then(res => {
-            this.setState({
-              loading: false,
-              dataSource: res.data.rows,
-              paginationOptions: {
-                ...this.state.paginationOptions,
-                total: res.data.count
-              }
-            });
-          })
-          .catch(companies => {
-            this.setState({ loading: false, dataSource: [] });
-          });
-      }
-    );
-  }
-
-  handleCompanyChange(companyId) {
-    this.setState(
-      { selectedTeam: undefined, selectedCompany: companyId },
-      () => {
-        getTeams(companyId).then(res => {
-          const { teamId } = this.props.match.params;
-          const teamDefault = teamId
-            ? teamId + ""
-            : res.data && res.data.length
-              ? res.data[0].clientTeamId + ""
-              : undefined;
-
-          this.updateRecords(companyId, teamDefault, (err, users) => {
-            if (err) {
-              return this.setState({
-                loading: false
-              });
-            }
-            this.setState({
-              teams: res.data,
-              selectedTeam: teamDefault,
-              dataSource: users.data,
-              loading: false
-            });
-          });
-        });
-      }
-    );
-  }
-
-  handleTeamChange(teamId) {
-    this.setState({ selectedTeam: teamId });
-    this.updateRecords(null, teamId);
-  }
-
-  updateRecords(companyId, teamId, cb) {
-    if (!teamId) {
-      return this.setState({
-        selectedTeam: undefined,
-        teams: [],
-        dataSource: []
       });
+    } catch(e) {
+      message.error("Problem occured.");
+      this.setState({ loading: false });
     }
-    this.setState({ loading: true });
-    if (cb) {
-      return getCompanyUsers(companyId, teamId)
-        .then(res => {
-          return cb(null, res);
-        })
-        .catch(resErr => {
-          return cb(resErr);
-        });
-    }
-    getCompanyUsers(companyId, teamId)
-      .then(res => {
-        this.setState({ dataSource: res.data });
-      })
-      .finally(() => {
-        this.setState({ loading: false });
-      });
   }
 
-  handleInfo(row) {
-    alert("show info");
-    // deleteCompanyUser(row.userId)
-    //   .then(res => {
-    //     this.updateRecords(this.state.selectedCompany, this.state.selectedTeam);
-    //   })
-    //   .catch(error => {
-    //     console.log(error);
-    //   });
+  async onTablePaginationChange(page, pageSize) {
+    this.setState({
+      loading: true,
+      paginationOptions: {
+        ...this.state.paginationOptions,
+        current: page,
+        pageSize
+      }
+    }, async () => {
+      try{
+        let users = await getCompanyUsers(this.props.match.params.companyId, {
+          paginationOptions: this.state.paginationOptions
+        });
+        this.setState({
+          loading: false,
+          data: users.data.rows,
+          paginationOptions: {
+            ...this.state.paginationOptions,
+            total: users.data.count
+          }
+        });
+      } catch(e) {
+        this.setState({ loading: false, dataSource: [] });
+      }
+    });
   }
 
   render() {
@@ -210,20 +124,13 @@ export default class extends Component {
       margin: "5px 5px 10px 0px"
     };
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const companiesOptions = this.state.companies.map(company => (
-      <Option key={company.clientId}>{company.name}</Option>
-    ));
-    const teamsOptions = this.state.teams.map(team => (
-      <Option key={team.clientTeamId}>{team.name}</Option>
-    ));
-
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Company - Users List</ComponentTitle>
+                <ComponentTitle>Company -> {this.state.company.name} -> Users List</ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"
@@ -236,37 +143,9 @@ export default class extends Component {
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Row>
-                <Col md={6} sm={24} xs={24} style={margin}>
-                  <FormItem label="Company Name *">
-                    <Select
-                      showSearch
-                      placeholder="Please Choose Company Name"
-                      style={{ width: "100%" }}
-                      onChange={this.handleCompanyChange}
-                      value={this.state.selectedCompany}
-                    >
-                      {companiesOptions}
-                    </Select>
-                  </FormItem>
-                </Col>
-                <Col md={6} sm={24} xs={24} style={margin}>
-                  <FormItem label="Team Name:">
-                    <Select
-                      showSearch
-                      placeholder="Please Choose Team"
-                      style={{ width: "100%" }}
-                      onChange={this.handleTeamChange}
-                      value={this.state.selectedTeam}
-                    >
-                      {teamsOptions}
-                    </Select>
-                  </FormItem>
-                </Col>
-              </Row>
               <Spin spinning={this.state.loading}>
                 <Table
-                  locale={{ emptyText: "Please Select Company name" }}
+                  locale={{ emptyText: "No users in company" }}
                   size="middle"
                   bordered
                   pagination={{
@@ -281,17 +160,12 @@ export default class extends Component {
                           this.props.match.params.companyId
                         }/edit/${row.userId}`,
                         state: {
-                          row,
-                          selectedTeam: row.ClientTeamMember.teamId + ""
+                          row
                         }
                       });
                     }
                   })}
-                  dataSource={
-                    this.state.dataSource && this.state.dataSource.length
-                      ? this.state.dataSource
-                      : []
-                  }
+                  dataSource={this.state.data}
                   rowKey="userId"
                 />
               </Spin>

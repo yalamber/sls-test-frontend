@@ -66,25 +66,24 @@ export default class extends Component {
     this.fetchData();
   }
 
-  fetchData() {
-    this.setState({ loading: true });
-    getCompanies({
-      paginationOptions: this.state.paginationOptions
-    })
-      .then(res => {
-        this.setState({
-          loading: false,
-          data: res.data.rows,
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: res.data.count
-          }
-        });
-      })
-      .catch(err => {
-        message.error("Problem occured.");
-        this.setState({ loading: false });
+  async fetchData() {
+    try{
+      this.setState({ loading: true });
+      let companies = await getCompanies({
+        paginationOptions: this.state.paginationOptions
       });
+      this.setState({
+        loading: false,
+        data: companies.data.rows,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          total: companies.data.count
+        }
+      });
+      this.setState({ loading: false });
+    } catch(e) {
+      message.error("Problem occured.");
+    }
   }
 
   onTablePaginationChange(page, pageSize) {

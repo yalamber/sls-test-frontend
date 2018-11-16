@@ -149,12 +149,12 @@ export const getCompanyUsersByTeamId = function(teamId) {
   return _get("client-team/" + teamId + "/member");
 };
 
-export const getCompanyUsers = function(companyId) {
-  return _get(`client/${companyId}/user`);
+export const getCompanyUsers = function(companyId, option = {}) {
+  return _getWithLimitOffset(`client/${companyId}/user`, option);
 };
 
-export const getCompanyTeamUsers = function(teamId) {
-  return _get("client-team/" + teamId + "/member");
+export const getCompanyTeamUsers = function(teamId, option = {}) {
+  return _getWithLimitOffset(`client-team/${teamId}/member`, option);
 };
 
 // Test Manager Action
