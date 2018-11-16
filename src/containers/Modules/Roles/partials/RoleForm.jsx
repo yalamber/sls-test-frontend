@@ -16,7 +16,7 @@ const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
 
-class CompanyForm extends Component {
+class GenericForm extends Component {
   constructor() {
     super();
     this.state = {
@@ -36,6 +36,10 @@ class CompanyForm extends Component {
 
   }
 
+  renderTypeOptions() {
+    return this.props.types.map(type => <Option key={type.key}>{type.name}</Option>)
+  }
+
   resetForm() {
     this.setState({passwordType: false});
     this.props.form.resetFields();
@@ -48,30 +52,25 @@ class CompanyForm extends Component {
     const {getFieldDecorator} = this.props.form;
     return (
       <div>
-        <Form onSubmit={this.handleSubmit} id="companyForm">
+        <Form onSubmit={this.handleSubmit} id="GenericForm">
           <Row>
             <Col lg={6} md={6} sm={24} xs={24} style={margin}>
               <FormItem hasFeedback label="Role Name" style={{marginBottom: '0px'}}>
-                {getFieldDecorator('role.name', {rules: editRolesValidation.name})(
+                {getFieldDecorator('title', {rules: editRolesValidation.title})(
                   <Input placeholder="Enter Role Name"/>)}
               </FormItem>
             </Col>
             <Col lg={6} md={6} sm={24} xs={24} style={margin}>
               <FormItem hasFeedback label="Key" style={{marginBottom: '0px'}}>
-                {getFieldDecorator('role.key', {rules: editRolesValidation.key})(
+                {getFieldDecorator('key', {rules: editRolesValidation.key})(
                   <Input placeholder="Enter Key"/>)}
               </FormItem>
             </Col>
             <Col lg={6} md={6} sm={24} xs={24} style={margin}>
               <FormItem hasFeedback label="Type" style={{marginBottom: '0px'}}>
-                {getFieldDecorator('company.type', {rules: editRolesValidation.type})(
+                {getFieldDecorator('type', {rules: editRolesValidation.type})(
                   <Select showSearch placeholder="Please Choose Type" style={{...margin, width: '100%'}}>
-                    <Option key="type 1">Type 1</Option>
-                    <Option key="type 2">Type 2</Option>
-                    <Option key="type 3">Type 3</Option>
-                    <Option key="type 4">Type 4</Option>
-                    <Option key="type 5">Type 5</Option>
-                    <Option key="type 6">Type 6</Option>
+                    {this.renderTypeOptions()}
                   </Select>)}
               </FormItem>
             </Col>
@@ -79,7 +78,7 @@ class CompanyForm extends Component {
           <Row>
             <Col lg={19} md={20} sm={24} xs={24} style={margin}>
               <FormItem label="Description" style={margin}>
-                {getFieldDecorator('role.description', {rules: editRolesValidation.description})(
+                {getFieldDecorator('description', {rules: editRolesValidation.description})(
                   <Input placeholder="Enter Description"/>
                 )}
               </FormItem>
@@ -100,17 +99,23 @@ class CompanyForm extends Component {
 }
 
 const mapPropsToFields = (props) => {
-  if (!props.hasOwnProperty('company')) {
+  if (!props.hasOwnProperty('rowData')) {
     return;
   }
   return {
-    name: Form.createFormField({
-      value: props.company.name
+    title: Form.createFormField({
+      value: props.rowData.title
     }),
-    location: Form.createFormField({
-      value: props.company.location
+    key: Form.createFormField({
+      value: props.rowData.key
+    }),
+    description: Form.createFormField({
+      value: props.rowData.description
+    }),
+    type: Form.createFormField({
+      value: props.rowData.type
     }),
   };
 };
-const form = Form.create({mapPropsToFields})(CompanyForm);
+const form = Form.create({mapPropsToFields})(GenericForm);
 export default withRouter(form);
