@@ -56,7 +56,7 @@ class UserForm extends Component {
 
   handleCompanyChange(companyId) {
     getTeams(companyId).then(res => {
-      this.setState({ teams: res.data });
+      this.setState({ teams: res.data.rows });
       this.setState({ selected: [] });
     });
   }

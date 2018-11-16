@@ -49,8 +49,12 @@ export const updateAgency = function(agencyId, data) {
   return _put(`agency/${agencyId}`, data);
 };
 
-export const getAgencyUsers = function(agencyId) {
-  return _get(`agency/${agencyId}/user`);
+export const deleteAgencyUser = function(id) {
+  return _deleteRecord("user/" + id);
+};
+
+export const getAgencyUsers = function(agencyId, option = {}) {
+  return _getWithLimitOffset(`agency/${agencyId}/user`, option);
 };
 
 export const getAgency = function(objOrAgencyId) {
@@ -66,16 +70,16 @@ export const getAgency = function(objOrAgencyId) {
 
 /** Agency Team **/
 
-export const getAgencyTeams = function(query) {
-  return _get(`agency-team`, query);
+export const getAgencyTeam = function(agencyTeamId) {
+  return _get("agency-team/" + agencyTeamId);
+};
+
+export const getAgencyTeams = function(option = {}) {
+  return _getWithLimitOffset(`agency-team`, option);
 };
 
 export const createAgencyTeam = teamData => {
   return _post("agency-team", teamData);
-};
-
-export const getAgencyTeamMembers = function(teamId) {
-  return _get(`agency-team/${teamId}/member`);
 };
 
 /** Agency Users **/
@@ -87,6 +91,10 @@ export const addAgencyUser = function(user) {
 
 export const addAgencyTeamMember = function({ teamId, userId }) {
   return _post(`agency-team/${teamId}/member`, { userId, roleId: 2 });
+};
+
+export const getAgencyTeamMembers = function(teamId, option = {}) {
+  return _getWithLimitOffset(`agency-team/${teamId}/member`, option);
 };
 
 /** Company **/
@@ -140,8 +148,8 @@ export const getCompanyTeam = function(companyTeamId) {
   return _get("client-team/" + companyTeamId);
 };
 
-export const getCompanyTeams = function(companyId, option = {}) {
-  return _getWithLimitOffset(`client-team/?clientId=${companyId}`, option);
+export const getCompanyTeams = function(option = {}) {
+  return _getWithLimitOffset(`client-team`, option);
 };
 
 export const deleteCompanyTeam = function(teamId) {

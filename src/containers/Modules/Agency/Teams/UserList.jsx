@@ -13,8 +13,8 @@ import {
   TableClickable as Table
 } from "../../crud.style";
 import {
-  getAgency,
-  getAgencyUsers
+  getAgencyTeam,
+  getAgencyTeamMembers
 } from "../../../../helpers/http-api-client";
 
 export default class extends Component {
@@ -53,6 +53,7 @@ export default class extends Component {
         }
       ],
       agency: {},
+      agencyTeam: {},
       data: [],
       paginationOptions: {
         defaultCurrent: 1,
@@ -73,14 +74,13 @@ export default class extends Component {
   async fetchData() {
     this.setState({ loading: true });
     try {
-      const { agencyId } = this.props.match.params;
-      let agency = await getAgency(agencyId);
-      let users = await getAgencyUsers(agencyId, {
+      let agencyTeam = await getAgencyTeam(this.props.match.params.teamId);
+      let users = await getAgencyTeamMembers(this.props.match.params.teamId, {
         paginationOptions: this.state.paginationOptions
       });
       this.setState({
         loading: false,
-        agency: agency.data,
+        agencyTeam: agencyTeam.data,
         data: users.data.rows,
         paginationOptions: {
           ...this.state.paginationOptions,
@@ -103,7 +103,7 @@ export default class extends Component {
       }
     }, async () => {
       try{
-        let users = await getAgencyUsers(this.props.match.params.agencyId, {
+        let users = await getAgencyTeamMembers(this.props.match.params.teamId, {
           paginationOptions: this.state.paginationOptions
         });
         this.setState({
@@ -128,7 +128,9 @@ export default class extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          Agency -> {this.state.agency.name} -> Users List
+          Agency -> {
+            this.state.agencyTeam && this.state.agencyTeam.client && this.state.agencyTeam.client.name
+          } -> {this.state.agencyTeam && this.state.agencyTeam.name } -> Members List
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -156,7 +158,7 @@ export default class extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table
-                  locale={{ emptyText: "No users in agency" }}
+                  locale={{ emptyText: "No users in agency team" }}
                   size="middle"
                   bordered
                   pagination={{

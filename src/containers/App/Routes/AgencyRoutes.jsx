@@ -22,6 +22,10 @@ export default [
     component: asyncComponent(() => import("../../Modules/Agency/Teams/List"))
   },
   {
+    path: "agency/teams/:teamId/members",
+    component: asyncComponent(() => import("../../Modules/Agency/Teams/UserList"))
+  },
+  {
     path: "agency/teams/:agencyId/edit",
     component: asyncComponent(() => import("../../Modules/Agency/Teams/Edit"))
   },
