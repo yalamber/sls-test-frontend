@@ -14,7 +14,7 @@ import {
 } from '../crud.style';
 import {
     deleteRole,
-    getRoles
+    getRoles,
 } from "../../../helpers/http-api-client";
 
 export default class extends Component {
@@ -126,7 +126,9 @@ export default class extends Component {
         deleteRole(row.roleId).then(res => {
             message.success("Successfully Deleted.");
             this.fetchData();
-        });
+        }).catch(res => {
+          message.success("Something went wrong.");
+        })
     }
 
     render() {
