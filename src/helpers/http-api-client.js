@@ -11,15 +11,13 @@
 *
 */
 
-
-
 import axios from "axios";
 import qs from "qs";
-import _ from 'lodash';
+import _ from "lodash";
 
 axios.defaults.baseURL =
   "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
-// axios.defaults.baseURL = 'http://localhost:8080/';
+// axios.defaults.baseURL = "http://localhost:8080/";
 
 const _middlewares = [];
 
@@ -44,8 +42,8 @@ export const getAgencyUsers = function(agencyId, teamId) {
 
 export const getAgency = function(objOrAgencyId) {
   const option = objOrAgencyId;
-  if (typeof option === 'object') {
-    return _getWithLimitOffset(`agency`, option)
+  if (typeof option === "object") {
+    return _getWithLimitOffset(`agency`, option);
   } else if (option) {
     return _get(`agency/${option}`);
   }
@@ -59,8 +57,8 @@ export const getAgencyTeams = function(query) {
   return _get(`agency-team`, query);
 };
 
-export const createAgencyTeam = (teamData) => {
-  return _post('agency-team', teamData);
+export const createAgencyTeam = teamData => {
+  return _post("agency-team", teamData);
 };
 
 export const getAgencyTeamMembers = function(teamId) {
@@ -71,32 +69,32 @@ export const getAgencyTeamMembers = function(teamId) {
 
 /** Agency Users **/
 export const addAgencyUser = function(user) {
-  return _post('user', user);
+  return _post("user", user);
 };
 
 /** Company **/
 export const addCompany = function(company) {
-  return _post('client', company)
+  return _post("client", company);
 };
 export const editCompany = function(id, company) {
-  return _put('client/' + id, company)
+  return _put("client/" + id, company);
 };
 export const deleteCompany = function(id) {
-  return _deleteRecord('client/' + id)
+  return _deleteRecord("client/" + id);
 };
-export const getCompanies = (objOrCompanyId) => {
+export const getCompanies = objOrCompanyId => {
   const option = objOrCompanyId;
-  if (typeof option === 'object') {
-    return _getWithLimitOffset(`client`, option)
+  if (typeof option === "object") {
+    return _getWithLimitOffset(`client`, option);
   }
 
-  return _get(`client`)
+  return _get(`client`);
 };
 
 export const getCompany = function(objOrCompanyId) {
   const option = objOrCompanyId;
-  if (typeof option === 'object') {
-    return _getWithLimitOffset(`client`, option)
+  if (typeof option === "object") {
+    return _getWithLimitOffset(`client`, option);
   } else if (option) {
     return _get(`client/${option}`);
   }
@@ -106,153 +104,154 @@ export const getCompany = function(objOrCompanyId) {
 
 //Teams
 export const addTeam = function(team) {
-  return _post('client-team', team);
+  return _post("client-team", team);
 };
 export const updateTeam = function(team, id) {
-  return _put('client-team/' + id, team);
+  return _put("client-team/" + id, team);
 };
 export const deleteTeam = function(teamId) {
-  return _deleteRecord('client-team/' + teamId);
+  return _deleteRecord("client-team/" + teamId);
 };
 export const getTeams = function(companyId) {
-  return _get('client-team', {clientId: companyId});
+  return _get("client-team", { clientId: companyId });
 };
 export const getClientTeam = function(clientTeamId) {
-  return _get('client-team/' + clientTeamId);
+  return _get("client-team/" + clientTeamId);
 };
 
+/** Company Team Member **/
+
+export const addCompanyTeamMember = function({ teamId, userId }) {
+  return _post(`client-team/${teamId}/member`, { userId, roleId: 2 });
+};
 
 /** Company Users **/
 export const addCompanyUser = function(user) {
-  delete user.company;
-
-  return _post('user', user);
+  return _post("user", user);
 };
 
 export const saveEditCompanyUser = function(params, user) {
   delete user.company;
   const { companyId, userId } = params;
-  user = _.omit(user, 'isClientUser');
-  user = _.omit(user, 'isProviderUser');
-  user = _.omit(user, 'clientTeams');
+  user = _.omit(user, "isClientUser");
+  user = _.omit(user, "isProviderUser");
+  user = _.omit(user, "clientTeams");
 
   return _put(`user/${userId}`, user);
 };
 
 export const getCompanyUserOld = function() {
-  return _get('user');
+  return _get("user");
 };
 export const deleteCompanyUser = function(id) {
-  return _deleteRecord('user/' + id);
+  return _deleteRecord("user/" + id);
 };
 
 export const getCompanyUsersByTeamId = function(teamId) {
-  return _get('client-team/' + teamId + '/member');
+  return _get("client-team/" + teamId + "/member");
 };
 
 export const getCompanyUsers = function(companyId, teamId) {
   if (teamId) {
-    return _get('client-team/' + teamId + '/member');
+    return _get("client-team/" + teamId + "/member");
   } else {
-    return _get('user');
+    return _get("user");
   }
 };
 
 // Test Manager Action
 export const getSuites = (clientId = null, clientTeamId = null) => {
   if (clientId) {
-    return _get('test/suite', {clientId});
+    return _get("test/suite", { clientId });
   } else if (clientTeamId) {
-    return _get('test/suite', {clientTeamId});
+    return _get("test/suite", { clientTeamId });
   }
   return Promise.resolve({});
 };
-export const addSuite = (formData) => {
-  return _post('test/suite', formData);
+export const addSuite = formData => {
+  return _post("test/suite", formData);
 };
-export const deleteSuite = (row) => {
-  return _deleteRecord('test/suite/' + row.testSuiteId);
+export const deleteSuite = row => {
+  return _deleteRecord("test/suite/" + row.testSuiteId);
 };
 
 //cases
 export const getCases = (companyId, teamId, suiteId) => {
-  return _get('test/case?suiteId='+suiteId);
+  return _get("test/case?suiteId=" + suiteId);
 };
 
-export const addTestCase = (formData) => {
+export const addTestCase = formData => {
   delete formData.company;
   delete formData.team;
   delete formData.title;
-  return _post('test/case', formData)
+  return _post("test/case", formData);
 };
 
-export const deleteTestCase = (id) => {
-  return _deleteRecord('test/case/' + id)
+export const deleteTestCase = id => {
+  return _deleteRecord("test/case/" + id);
 };
 
 // Dashboard Actions
 export const getDashboards = (clientId = null) => {
-  return _get('dashboard', {clientId});
+  return _get("dashboard", { clientId });
 };
 
-export const getDashboard = (id) => {
-  return _get('dashboard/' + id);
+export const getDashboard = id => {
+  return _get("dashboard/" + id);
 };
 
-export const addDashboard = (formData) => {
+export const addDashboard = formData => {
   delete formData.company;
-  return _post('dashboard', {...formData, teamType: 'client'});
+  return _post("dashboard", { ...formData, teamType: "client" });
 };
 
 export const updateDashboard = (id, formData) => {
-  return _put('dashboard/' + id, formData);
+  return _put("dashboard/" + id, formData);
 };
 
-export const deleteDashboard = (id) => {
-  return _deleteRecord('dashboard/' + id);
+export const deleteDashboard = id => {
+  return _deleteRecord("dashboard/" + id);
 };
 
 // Testing Provider Actions
 
-export const getTestingProviderTeams = (query) => {
+export const getTestingProviderTeams = query => {
   return _get(`agency-team`, query);
 };
 
-export const getTestingProviderTeam = (id) => {
+export const getTestingProviderTeam = id => {
   return _get("agency-team/" + id);
 };
-export const deleteProviderTeam = (id) => {
+export const deleteProviderTeam = id => {
   return _deleteRecord("agency-team/" + id);
 };
 
 export const updateProviderTeam = (id, teamData) => {
-  return _put('agency-team/' + id, teamData);
+  return _put("agency-team/" + id, teamData);
 };
 
-
 //Members
-export const getTestingProviderTeamMembers = (teamId) => {
+export const getTestingProviderTeamMembers = teamId => {
   if (teamId) {
-    return _get('agency-team/' + teamId + '/member')
+    return _get("agency-team/" + teamId + "/member");
   } else {
-    return _get('user');
+    return _get("user");
   }
 };
 
-export const addProviderUser = (user) => {
-  return _post('user', user);
+export const addProviderUser = user => {
+  return _post("user", user);
 };
-export const getProviderUser = (id) => {
-  return _get('user/' + id);
+export const getProviderUser = id => {
+  return _get("user/" + id);
 };
-export const deleteProviderUser = (id) => {
-  return _deleteRecord('user/' + id);
+export const deleteProviderUser = id => {
+  return _deleteRecord("user/" + id);
 };
-
 
 // User Actions
-export const signIn = (userCred) => {
-  return _post('auth/signin', userCred);
+export const signIn = userCred => {
+  return _post("auth/signin", userCred);
 };
 
 /*
@@ -260,7 +259,6 @@ export const signIn = (userCred) => {
 * Private Start
 *
 */
-
 
 export const _post = function(url, data = []) {
   return _sendRequest(url, data, "POST");
@@ -286,8 +284,8 @@ export const _getWithLimitOffset = function(url, option) {
   const { paginationOptions } = option;
   return _get(url, {
     limit: paginationOptions.pageSize,
-    offset: paginationOptions.pageSize * (paginationOptions.current-1)
-  })
+    offset: paginationOptions.pageSize * (paginationOptions.current - 1)
+  });
 };
 
 /* middlewareOption - param
@@ -348,28 +346,28 @@ export const _sendRequest = function(url, data = [], method) {
   if (possibleOverride !== false) {
     return possibleOverride; // return the already invoked promise
   } else {*/
-    if (method.toLowerCase() === 'get') {
-      return axios({
-        url: url + "?" + qs.stringify(data),
-        method: "GET"
-      }).catch(error => {
-        if (error.response === undefined) {
-          alert("Network Error");
-        } else {
-          if (error.response.status !== 422) {
-            alert("Something went wrong please try again.");
-          }
-        }
-        throw error;
-      });
-    }
-
+  if (method.toLowerCase() === "get") {
     return axios({
-      url: url,
-      method: method,
-      data: data
+      url: url + "?" + qs.stringify(data),
+      method: "GET"
     }).catch(error => {
+      if (error.response === undefined) {
+        alert("Network Error");
+      } else {
+        if (error.response.status !== 422) {
+          alert("Something went wrong please try again.");
+        }
+      }
       throw error;
     });
+  }
+
+  return axios({
+    url: url,
+    method: method,
+    data: data
+  }).catch(error => {
+    throw error;
+  });
   // }
 };
