@@ -1,11 +1,19 @@
-import {Map} from 'immutable';
+import { Map } from 'immutable';
 
 export function setToken(token) {
   localStorage.setItem('id_token', token);
 }
 
+export function setUserData(data) {
+  localStorage.setItem('user', JSON.stringify(data));
+}
+
 export function clearToken() {
   localStorage.removeItem('id_token');
+}
+
+export function clearUserData() {
+  localStorage.removeItem('user');
 }
 
 export function generatePassword() {
@@ -21,9 +29,19 @@ export function generatePassword() {
 export function getToken() {
   try {
     const idToken = localStorage.getItem('id_token');
-    return new Map({idToken});
+    return new Map({ idToken });
   } catch (err) {
     clearToken();
+    return new Map();
+  }
+}
+
+export function getUserData() {
+  try {
+    const userData = localStorage.getItem('user');
+    return new Map({ userData });
+  } catch (err) {
+    clearUserData();
     return new Map();
   }
 }

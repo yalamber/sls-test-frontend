@@ -12,6 +12,7 @@ import appActions from '../../redux/app/actions';
 import Logo from '../../components/utility/logo';
 import themes from '../../settings/themes';
 import { themeConfig } from '../../settings';
+import { getUserData } from '../../helpers/utility';
 
 const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
@@ -32,6 +33,10 @@ const stripTrailingSlash = str => {
 class Sidebar extends Component {
   constructor(props) {
     super(props);
+
+    let user = getUserData().get('userData');
+    this.userData = JSON.parse(user);
+
     this.handleClick = this.handleClick.bind(this);
     this.onOpenChange = this.onOpenChange.bind(this);
   }
@@ -87,6 +92,7 @@ class Sidebar extends Component {
             const linkTo = child.withoutDashboard
               ? `/${child.key}`
               : `${url}/${child.key}`;
+
             return (
               <Menu.Item style={submenuStyle} key={child.key}>
                 <Link style={submenuColor} to={linkTo}>
@@ -111,10 +117,28 @@ class Sidebar extends Component {
       </Menu.Item>
     );
   };
+
+  /** 
+    * Authorize menu on the bases of user role
+    * 'sytemUser', 'clientUser', 'clientTeamUser', 'providerTeamUser', 'agencyUser'
+    **/
+  isAuthorizedMenu = (key) => {
+
+    if (!this.userData) return;
+
+    var userRole = this.userData.systemUser ? this.userData.systemUser.role.type : {};
+    if ('systemAdmin' === key && userRole !== 'sytemUser') return false;
+    if ('company' === key && this.userData.clientCompanyCount === 0) return false;
+    if ('agency' === key && this.userData.agencyCount === 0) return false;
+
+    return true;
+  }
+
   render() {
     const { app, toggleOpenDrawer, height } = this.props;
     const collapsed = clone(app.collapsed) && !clone(app.openDrawer);
     const { openDrawer } = app;
+
     const mode = collapsed === true ? 'vertical' : 'inline';
     const onMouseEnter = event => {
       if (openDrawer === false) {
@@ -163,7 +187,8 @@ class Sidebar extends Component {
               onOpenChange={this.onOpenChange}
             >
               {options.map(singleOption =>
-                this.getMenuItem({ submenuStyle, submenuColor, singleOption })
+                this.isAuthorizedMenu(singleOption.key) ?
+                  this.getMenuItem({ submenuStyle, submenuColor, singleOption }) : null
               )}
             </Menu>
           </Scrollbars>
