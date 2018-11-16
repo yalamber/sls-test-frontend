@@ -14,7 +14,7 @@ const options = [
       },
       {
         key: "roles/list",
-        label: "sidebar.editRoles"
+        label: "sidebar.roles"
       }
     ]
   },
