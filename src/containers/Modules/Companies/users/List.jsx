@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, Spin, message } from "antd";
 import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
+import PageHeader from "../../../../components/utility/pageHeader";
 import basicStyle from "../../../../settings/basicStyle";
 import Box from "../../../../components/utility/box";
 import UsersActionButtons from "./partials/ActionButtons";
@@ -126,11 +127,21 @@ export default class extends Component {
     const { rowStyle, colStyle, gutter } = basicStyle;
     return (
       <LayoutWrapper>
+        <PageHeader>
+          Company -> {this.state.company.name} -> Users List
+        </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Company -> {this.state.company.name} -> Users List</ComponentTitle>
+                <ComponentTitle>
+                  <ActionBtn
+                    type="secondary"
+                    onClick={() => this.props.history.goBack()}
+                  >
+                    <Icon type="left" />Go Back
+                  </ActionBtn>
+                </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"

@@ -117,6 +117,16 @@ export const getClientTeam = function(clientTeamId) {
   return _get("client-team/" + clientTeamId);
 };
 
+export const getCompanyTeams = function(companyId, option = {}) {
+  return _getWithLimitOffset(`client-team/?clientId=${companyId}`, option);
+};
+
+export const deleteCompanyTeam = function(teamId) {
+  return _deleteRecord("client-team/" + teamId);
+};
+
+
+
 /** Company Team Member **/
 
 export const addCompanyTeamMember = function({ teamId, userId }) {
