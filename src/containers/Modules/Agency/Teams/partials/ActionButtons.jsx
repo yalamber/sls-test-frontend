@@ -12,7 +12,9 @@ const ActionButtons = function ActionButtons(props) {
         <a
           className="infoBtn"
           onClick={() =>
-            props.history.push(`/dashboard/agency/teams/${props.row.agencyId}/members`)
+            props.history.push(
+              `/dashboard/agency/teams/${props.row.agencyTeamId}/members`
+            )
           }
         >
           <i className="ion-ios-person" />
@@ -20,19 +22,13 @@ const ActionButtons = function ActionButtons(props) {
       </Tooltip>
       <Tooltip placement="topLeft" title="Edit Record">
         <a
-          onClick={() =>
-            props.history.push("teams/edit/" + props.row.agencyId)
-          }
+          onClick={() => props.history.push("teams/edit/" + props.row.agencyId)}
         >
           <i className="ion-android-create" />
         </a>
       </Tooltip>
       <Tooltip placement="topLeft" title="Show Record">
-        <a
-          onClick={() =>
-            alert("show info")
-          }
-        >
+        <a onClick={() => alert("show info")}>
           <i className="ion-information-circled" />
         </a>
       </Tooltip>

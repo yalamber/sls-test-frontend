@@ -7,8 +7,10 @@ import { TitleWrapper, ComponentTitle } from "../../crud.style";
 
 import Box from "../../../../components/utility/box";
 import UserForm from "./partials/UserForm";
+import _ from 'lodash';
+import { getErrorDataFromApiResponseError } from '../../../../util/response-message';
 import { message } from "antd/lib/index";
-import { addAgencyUser } from "../../../../helpers/http-api-client";
+import { addAgencyUser, addAgencyTeamMember } from "../../../../helpers/http-api-client";
 
 class Create extends Component {
   constructor() {
@@ -23,28 +25,40 @@ class Create extends Component {
   }
 
   handleSubmit(formData, resetForm) {
-    alert("sending")
-    // this.setState({ loading: true });
-    // if (formData || !formData) {
-    //   console.log("o we got", formData);
-      // return this.setState({ loading: false });
-    // }
-    /*addAgencyUser({ ...formData })
+    this.setState({ loading: true });
+    const teamId = formData.agencyTeams;
+    const status = formData.status;
+    formData = _.omit(formData, "agency");
+    formData = _.omit(formData, "agencyTeams");
+
+    let userAdded = false;
+    addAgencyUser({ ...formData })
       .then(res => {
         if (res.status) {
-          message.success("Successfully Saved");
-          resetForm();
-          this.setState({ errors: { details: [] } });
+          userAdded = true;
+
+          const { userId } = res.data;
+          return addAgencyTeamMember({ teamId: teamId[0], status, userId });
         }
       })
+      .then(res => {
+        message.success("Successfully Saved");
+        resetForm();
+        this.setState({ errors: { details: [] } });
+        this.props.history.goBack();
+      })
       .catch(error => {
-        if (error.response.status === 422) {
-          this.setState({ errors: error.response.data });
+        if (userAdded === true) {
+          message.success("Successfully added the new user");
+          message.error("But failed to assign to the team");
         }
+        // if (error.response.status === 422) {
+        this.setState({ errors: getErrorDataFromApiResponseError(error) });
+        // }
       })
       .finally(() => {
         this.setState({ loading: false });
-      });*/
+      });
   }
 
   render() {

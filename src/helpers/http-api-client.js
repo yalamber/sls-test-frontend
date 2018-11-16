@@ -89,8 +89,8 @@ export const addAgencyUser = function(user) {
 
 /** Agency Team Member **/
 
-export const addAgencyTeamMember = function({ teamId, userId }) {
-  return _post(`agency-team/${teamId}/member`, { userId, roleId: 2 });
+export const addAgencyTeamMember = function({ teamId, userId, status }) {
+  return _post(`agency-team/${teamId}/member`, { userId, status, roleId: 2 });
 };
 
 export const getAgencyTeamMembers = function(teamId, option = {}) {
