@@ -36,8 +36,8 @@ export const updateAgency = function(agencyId, data) {
   return _put(`agency/${agencyId}`, data);
 };
 
-export const getAgencyUsers = function(agencyId, teamId) {
-  return getAgencyTeamMembers(teamId);
+export const getAgencyUsers = function(agencyId) {
+  return _get(`agency/${agencyId}/user`);
 };
 
 export const getAgency = function(objOrAgencyId) {
@@ -62,9 +62,7 @@ export const createAgencyTeam = teamData => {
 };
 
 export const getAgencyTeamMembers = function(teamId) {
-  if (teamId) {
-    return _get(`agency-team/${teamId}/member`);
-  }
+  return _get(`agency-team/${teamId}/member`);
 };
 
 /** Agency Users **/
@@ -151,12 +149,12 @@ export const getCompanyUsersByTeamId = function(teamId) {
   return _get("client-team/" + teamId + "/member");
 };
 
-export const getCompanyUsers = function(companyId, teamId) {
-  if (teamId) {
-    return _get("client-team/" + teamId + "/member");
-  } else {
-    return _get("user");
-  }
+export const getCompanyUsers = function(companyId) {
+  return _get(`client/${companyId}/user`);
+};
+
+export const getCompanyTeamUsers = function(teamId) {
+  return _get("client-team/" + teamId + "/member");
 };
 
 // Test Manager Action
