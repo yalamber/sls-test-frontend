@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import { Form, Select, Row, Col, Input, Radio, Icon } from 'antd';
-import { withRouter } from 'react-router-dom'
-import Button from '../../../../../components/uielements/button';
-import { userValidation } from '../../../../../Validations/usersValidation';
-import {
-  ActionWrapper,
-} from '../../../crud.style';
+import React, { Component } from "react";
+import { Form, Select, Row, Col, Input, Radio, Icon } from "antd";
+import { withRouter } from "react-router-dom";
+import Button from "../../../../../components/uielements/button";
+import { userValidation } from "../../../../../Validations/usersValidation";
+import { ActionWrapper } from "../../../crud.style";
 import Card from "../../../../../components/uielements/styles/card.style";
-import { getAgency, getTeams } from "../../../../../helpers/http-api-client";
+import {
+  getAgency,
+  getAgencyTeams
+} from "../../../../../helpers/http-api-client";
 import { userStatus } from "../../../../../constants/userStatus";
 import Errors from "../../../../Errors";
 
@@ -35,13 +36,13 @@ class UserForm extends Component {
 
   componentDidMount() {
     getAgency().then(res => {
-      this.setState({ agencies: res.data.rows })
-    })
+      this.setState({ agencies: res.data.rows });
+    });
   }
 
   componentWillReceiveProps(props) {
     if (props.user) {
-      this.handleAgencyChange(props.user.clientTeams[0].agencyId)
+      this.handleAgencyChange(props.user.clientTeams[0].agencyId);
     }
   }
 
@@ -55,20 +56,21 @@ class UserForm extends Component {
   }
 
   handleAgencyChange(agencyId) {
-    getTeams(agencyId).then(res => {
+    getAgencyTeams({ query: { agencyId } }).then(res => {
       this.setState({ teams: res.data });
       this.setState({ selected: [] });
     });
   }
 
   resetForm() {
-    this.setState({passwordType: false});
+    this.setState({ passwordType: false });
     this.props.form.resetFields();
   }
 
   generage() {
     let length = 8,
-      charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      charset =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
       retVal = "";
     for (let i = 0, n = charset.length; i < length; ++i) {
       retVal += charset.charAt(Math.floor(Math.random() * n));
@@ -78,7 +80,7 @@ class UserForm extends Component {
 
   generatePassword(e) {
     this.setState({ passwordType: !this.state.passwordType });
-    let password = '';
+    let password = "";
     if (e.target.value) {
       this.props.form.setFieldsValue({
         password: this.generage()
@@ -92,12 +94,17 @@ class UserForm extends Component {
 
   render() {
     const margin = {
-      margin: '5px 5px 0px 0'
+      margin: "5px 5px 0px 0"
     };
-    const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
-    const teamOptions = this.state.teams.map(team => <Option key={team.agencyTeamId}>{team.name}</Option>);
-    const agenciesOptions = this.state.agencies.map(agency => <Option
-      key={agency.agencyId}>{agency.name}</Option>);
+    const statusOptions = this.state.status.map(status => (
+      <Option key={status.id}>{status.name}</Option>
+    ));
+    const teamOptions = this.state.teams.map(team => (
+      <Option key={team.agencyTeamId}>{team.name}</Option>
+    ));
+    const agenciesOptions = this.state.agencies.map(agency => (
+      <Option key={agency.agencyId}>{agency.name}</Option>
+    ));
     const { getFieldDecorator } = this.props.form;
 
     const selectAfter = (
@@ -119,7 +126,7 @@ class UserForm extends Component {
       xl: { span: 12 },
       lg: { span: 12 },
       md: { span: 24 },
-      sm: { span: 24 },
+      sm: { span: 24 }
     };
 
     return (
@@ -130,8 +137,14 @@ class UserForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Agency Name" style={margin}>
-                    {getFieldDecorator('agency', { rules: userValidation.agency })(
-                      <Select showSearch placeholder="Agency" onChange={this.handleAgencyChange}>
+                    {getFieldDecorator("agency", {
+                      rules: userValidation.agency
+                    })(
+                      <Select
+                        showSearch
+                        placeholder="Agency"
+                        onChange={this.handleAgencyChange}
+                      >
                         {agenciesOptions}
                       </Select>
                     )}
@@ -141,7 +154,9 @@ class UserForm extends Component {
               <Row>
                 <Col span={24}>
                   <FormItem label="Status" style={margin}>
-                    {getFieldDecorator('status', { rules: userValidation.status })(
+                    {getFieldDecorator("status", {
+                      rules: userValidation.status
+                    })(
                       <Select showSearch placeholder="Status">
                         {statusOptions}
                       </Select>
@@ -151,19 +166,21 @@ class UserForm extends Component {
               </Row>
 
               <FormItem label="User Name" style={margin}>
-                {getFieldDecorator('username', { rules: userValidation.username })(
-                  <Input placeholder="Enter User Name" />
-                )}
+                {getFieldDecorator("username", {
+                  rules: userValidation.username
+                })(<Input placeholder="Enter User Name" />)}
               </FormItem>
               <FormItem label="Password" style={margin}>
-                {getFieldDecorator('password', {})(
-                  <Input
-                    placeholder="Enter Password"
-                  />
+                {getFieldDecorator("password", {})(
+                  <Input placeholder="Enter Password" />
                 )}
               </FormItem>
               <FormItem style={margin}>
-                <RadioGroup style={margin} onChange={this.generatePassword} value={this.state.passwordType}>
+                <RadioGroup
+                  style={margin}
+                  onChange={this.generatePassword}
+                  value={this.state.passwordType}
+                >
                   <Radio value={false}>Custom Password</Radio>
                   <Radio value={true}>Generate Password</Radio>
                 </RadioGroup>
@@ -174,14 +191,30 @@ class UserForm extends Component {
                 <FormItem style={margin} label="Select Teams">
                   <InputGroup size="large">
                     <Col span={2}>
-                      <Icon type="search" style={{ fontSize: '24px', color: '#08c', margin: '5px' }} />
+                      <Icon
+                        type="search"
+                        style={{
+                          fontSize: "24px",
+                          color: "#08c",
+                          margin: "5px"
+                        }}
+                      />
                     </Col>
                     <Col span={22}>
-                      {getFieldDecorator('agentTeams', { rules: userValidation.team })(
-                        <Select showSearch mode="multiple"
-                          filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                      {getFieldDecorator("agencyTeams", {
+                        rules: userValidation.team
+                      })(
+                        <Select
+                          showSearch
+                          mode="multiple"
+                          filterOption={(input, option) =>
+                            option.props.children
+                              .toLowerCase()
+                              .indexOf(input.toLowerCase()) >= 0
+                          }
                           placeholder="Please choose teams"
-                          style={{ width: '100%' }}>
+                          style={{ width: "100%" }}
+                        >
                           {teamOptions}
                         </Select>
                       )}
@@ -194,30 +227,32 @@ class UserForm extends Component {
 
           <Row gutter={16}>
             <Col span={24}>
-              <Card title="Contact Information" style={{ marginTop: '20px' }}>
+              <Card title="Contact Information" style={{ marginTop: "20px" }}>
                 <Row gutter={16}>
                   <Col {...formResSpan}>
                     <FormItem style={margin} label="Postal Address:">
-                      {getFieldDecorator('contactInformation.postalAddress', { rules: userValidation.client })(
+                      {getFieldDecorator("contactInformation.postalAddress", {
+                        rules: userValidation.client
+                      })(
                         <TextArea placeholder="Enter Postal Address" rows={9} />
                       )}
                     </FormItem>
                     <FormItem style={margin} label="Email Address:">
-                      {getFieldDecorator('contactInformation.emailAddress', { rules: userValidation.email })(
-                        <Input placeholder="Enter Email Address" />
-                      )}
+                      {getFieldDecorator("contactInformation.emailAddress", {
+                        rules: userValidation.email
+                      })(<Input placeholder="Enter Email Address" />)}
                     </FormItem>
                   </Col>
                   <Col {...formResSpan}>
                     <FormItem style={margin} label="Mobile Phone:">
-                      {getFieldDecorator('contactInformation.mobilePhone', { rules: userValidation.client })(
-                        <Input placeholder="Enter Mobile Phone" />
-                      )}
+                      {getFieldDecorator("contactInformation.mobilePhone", {
+                        rules: userValidation.client
+                      })(<Input placeholder="Enter Mobile Phone" />)}
                     </FormItem>
                     <FormItem style={margin} label="SMS:">
-                      {getFieldDecorator('contactInformation.smsPhone', { rules: userValidation.client })(
-                        <Input placeholder="Enter SMS Phone" />
-                      )}
+                      {getFieldDecorator("contactInformation.smsPhone", {
+                        rules: userValidation.client
+                      })(<Input placeholder="Enter SMS Phone" />)}
                     </FormItem>
                     <Row>
                       <Col span={24}>
@@ -226,11 +261,11 @@ class UserForm extends Component {
                             <Input placeholder="Facebook Account"/>
                           )}
                         </FormItem>*/}
-                        <FormItem
-                          style={margin}
-                          label="Instant Messaging:"
-                          >
-                          {getFieldDecorator('contactInformation.instantMessaging1', {  })(
+                        <FormItem style={margin} label="Instant Messaging:">
+                          {getFieldDecorator(
+                            "contactInformation.instantMessaging1",
+                            {}
+                          )(
                             <Input
                               addonAfter={selectAfter}
                               defaultValue="mysite"
@@ -246,11 +281,11 @@ class UserForm extends Component {
                             <Input placeholder="Twitter Account" />
                           )}
                         </FormItem>*/}
-                        <FormItem
-                          style={margin}
-                          label="Instant Messaging:"
-                        >
-                          {getFieldDecorator('contactInformation.instantMessaging2', {})(
+                        <FormItem style={margin} label="Instant Messaging:">
+                          {getFieldDecorator(
+                            "contactInformation.instantMessaging2",
+                            {}
+                          )(
                             <Input
                               addonAfter={selectAfter}
                               defaultValue="mysite"
@@ -267,19 +302,15 @@ class UserForm extends Component {
 
           <Row gutter={16}>
             <Col span={24}>
-              <Card title="Skills" style={{ marginTop: '20px' }}>
+              <Card title="Skills" style={{ marginTop: "20px" }}>
                 <FormItem label="LinkedIn URL" style={margin}>
-                  {getFieldDecorator('contactInformation.linkedInUrl', { rules: userValidation.client })(
-                    <Input
-                      placeholder="Linkedin URL"
-                    />
-                  )}
+                  {getFieldDecorator("contactInformation.linkedInUrl", {
+                    rules: userValidation.client
+                  })(<Input placeholder="Linkedin URL" />)}
                 </FormItem>
                 <FormItem label="Resume URL" style={margin}>
-                  {getFieldDecorator('resumeUrl', {})(
-                    <Input
-                      placeholder="Resume URL"
-                    />
+                  {getFieldDecorator("resumeUrl", {})(
+                    <Input placeholder="Resume URL" />
                   )}
                 </FormItem>
               </Card>
@@ -287,14 +318,30 @@ class UserForm extends Component {
           </Row>
           <Row style={margin}>
             <Col span={24}>
-              {this.props.errors.details.length ? <Errors errors={this.props.errors} /> : ''}
+              {this.props.errors.details.length ? (
+                <Errors errors={this.props.errors} />
+              ) : (
+                ""
+              )}
             </Col>
           </Row>
           <ActionWrapper style={margin}>
-            <Button type="primary" style={margin} icon="left" onClick={() => this.props.history.goBack()}>
+            <Button
+              type="primary"
+              style={margin}
+              icon="left"
+              onClick={() => this.props.history.goBack()}
+            >
               Cancel
             </Button>
-            <Button id="btnSubmit" type="primary" style={margin} htmlType="submit" className="" icon="save">
+            <Button
+              id="btnSubmit"
+              type="primary"
+              style={margin}
+              htmlType="submit"
+              className=""
+              icon="save"
+            >
               Submit
             </Button>
           </ActionWrapper>
@@ -304,8 +351,8 @@ class UserForm extends Component {
   }
 }
 
-const mapPropsToFields = (props) => {
-  if (!props.hasOwnProperty('user') || !props.user) {
+const mapPropsToFields = props => {
+  if (!props.hasOwnProperty("user") || !props.user) {
     return;
   }
   let teams = props.user.agencyTeams.map(function(team) {
@@ -325,31 +372,31 @@ const mapPropsToFields = (props) => {
     username: Form.createFormField({
       value: props.user.username
     }),
-    'contactInformation.emailAddress': Form.createFormField({
+    "contactInformation.emailAddress": Form.createFormField({
       value: props.user.contactInformation.emailAddress
     }),
-    'contactInformation.postalAddress': Form.createFormField({
+    "contactInformation.postalAddress": Form.createFormField({
       value: props.user.contactInformation.postalAddress
     }),
-    'contactInformation.mobilePhone': Form.createFormField({
+    "contactInformation.mobilePhone": Form.createFormField({
       value: props.user.contactInformation.mobilePhone
     }),
-    'contactInformation.smsPhone': Form.createFormField({
+    "contactInformation.smsPhone": Form.createFormField({
       value: props.user.contactInformation.smsPhone
     }),
-    'contactInformation.facebookHandle': Form.createFormField({
+    "contactInformation.facebookHandle": Form.createFormField({
       value: props.user.contactInformation.facebookHandle
     }),
-    'contactInformation.twitterHandle': Form.createFormField({
+    "contactInformation.twitterHandle": Form.createFormField({
       value: props.user.contactInformation.twitterHandle
     }),
-    'contactInformation.linkedInUrl': Form.createFormField({
+    "contactInformation.linkedInUrl": Form.createFormField({
       value: props.user.contactInformation.linkedInUrl
     }),
     resumeUrl: Form.createFormField({
       value: props.user.contactInformation.resumeUrl
-    }),
+    })
   };
 };
-const form = Form.create({mapPropsToFields})(UserForm);
+const form = Form.create({ mapPropsToFields })(UserForm);
 export default withRouter(form);

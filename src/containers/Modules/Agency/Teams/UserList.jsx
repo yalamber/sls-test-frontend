@@ -4,7 +4,7 @@ import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
 import PageHeader from "../../../../components/utility/pageHeader";
 import basicStyle from "../../../../settings/basicStyle";
 import Box from "../../../../components/utility/box";
-import UsersActionButtons from "./partials/ActionButtons";
+import UsersActionButtons from "../users/partials/ActionButtons";
 import {
   ActionBtn,
   TitleWrapper,
