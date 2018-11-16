@@ -273,6 +273,10 @@ export const getRole = function(roleId) {
   return _get(`role/${roleId}`);
 };
 
+export const getRoleTypes = (option) => {
+  return _getWithLimitOffset(`role/types`, option);
+};
+
 /*
 *
 * Private Start
@@ -300,11 +304,26 @@ export const _get = function(url, data = {}) {
 };
 
 export const _getWithLimitOffset = function(url, option) {
-  const { paginationOptions } = option;
-  return _get(url, {
-    limit: paginationOptions.pageSize,
-    offset: paginationOptions.pageSize * (paginationOptions.current - 1)
-  });
+  const { paginationOptions, query } = option;
+  let queryObj = {};
+  if (query) {
+    queryObj = { ...query };
+  }
+
+  if (paginationOptions) {
+    if (paginationOptions.pageSize) {
+      queryObj.limit = paginationOptions.pageSize;
+    }
+    if (
+      typeof paginationOptions.current !== "undefined" &&
+      typeof paginationOptions.pageSize !== "undefined"
+    ) {
+      queryObj.offset =
+        paginationOptions.pageSize * (paginationOptions.current - 1);
+    }
+  }
+
+  return _get(url, queryObj);
 };
 
 /* middlewareOption - param
