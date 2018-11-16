@@ -3,14 +3,14 @@ import asyncComponent from "../../../helpers/AsyncFunc";
 export default [
   {
     path: "dashboards/list",
-    component: asyncComponent(() => import("../../Admin/Dashboard/List"))
+    component: asyncComponent(() => import("../../Modules/Dashboard/List"))
   },
   {
     path: "dashboards/create/:id?",
-    component: asyncComponent(() => import("../../Admin/Dashboard/Create"))
+    component: asyncComponent(() => import("../../Modules/Dashboard/Create"))
   },
   {
     path: "dashboards/edit/:id?",
-    component: asyncComponent(() => import("../../Admin/Dashboard/Edit"))
+    component: asyncComponent(() => import("../../Modules/Dashboard/Edit"))
   },
 ]

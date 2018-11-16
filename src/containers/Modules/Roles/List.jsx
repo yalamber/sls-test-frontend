@@ -99,7 +99,7 @@ export default class extends Component {
     }
 
     handleDelete() {
-        alert('Delete')
+        alert('Delete');
     }
 
     render() {

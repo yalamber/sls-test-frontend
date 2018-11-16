@@ -6,105 +6,50 @@ export default [
     component: asyncComponent(() => import("../../dashboard"))
   },
   {
-    path: "system-admin-company",
-    component: asyncComponent(() => import("../../Admin/Companies/companies/List"))
-  },
-  {
-    path: "system-admin-company/list",
-    component: asyncComponent(() => import("../../Admin/Companies/companies/List"))
-  },
-  {
-    path: "system-admin-company/details/:id",
-    component: asyncComponent(() => import("../../Admin/Companies/companies/CompanyDetails"))
-  },
-  {
-    path: "system-admin-company/create",
-    component: asyncComponent(() => import("../../Admin/Companies/companies/Create"))
-  },
-  {
-    path: "system-admin-company/edit/:id",
-    component: asyncComponent(() => import("../../Admin/Companies/companies/Edit"))
-  },
-  {
-    path: "system-admin-company/teams",
-    component: asyncComponent(() => import("../../Admin/Companies/teams/List"))
-  },
-  {
-    path: "system-admin-company/team/:id/create/",
-    component: asyncComponent(() => import("../../Admin/Companies/teams/Create"))
-  },
-  {
-    path: "system-admin-company/teams/edit/:id",
-    component: asyncComponent(() => import("../../Admin/Companies/teams/Edit"))
-  },
-  {
-    path: "system-admin-company/user/create",
-    exact: true,
-    component: asyncComponent(() => import("../../Admin/Companies/users/Create"))
-  },
-  {
-    path: "system-admin-company/users/:companyId?/:teamId?",
-    component: asyncComponent(() => import("../../Admin/Companies/users/List"))
-  },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  {
     path: "company/list",
-    component: asyncComponent(() => import("../../Admin/Companies/companies/List"))
+    component: asyncComponent(() => import("../../Modules/Companies/companies/List"))
   },
   {
     path: "company/details/:id",
-    component: asyncComponent(() => import("../../Admin/Companies/companies/CompanyDetails"))
+    component: asyncComponent(() => import("../../Modules/Companies/companies/CompanyDetails"))
   },
   {
     path: "company/create",
-    component: asyncComponent(() => import("../../Admin/Companies/companies/Create"))
+    component: asyncComponent(() => import("../../Modules/Companies/companies/Create"))
   },
   {
     path: "company/edit/:id",
-    component: asyncComponent(() => import("../../Admin/Companies/companies/Edit"))
+    component: asyncComponent(() => import("../../Modules/Companies/companies/Edit"))
   },
   {
     path: "company/teams",
-    component: asyncComponent(() => import("../../Admin/Companies/teams/List"))
+    component: asyncComponent(() => import("../../Modules/Companies/teams/List"))
   },
   {
     path: "company/team/:id/create",
-    component: asyncComponent(() => import("../../Admin/Companies/teams/Create"))
+    component: asyncComponent(() => import("../../Modules/Companies/teams/Create"))
   },
   {
     path: "company/teams/edit/:id",
-    component: asyncComponent(() => import("../../Admin/Companies/teams/Edit"))
+    component: asyncComponent(() => import("../../Modules/Companies/teams/Edit"))
   },
   {
     path: "company/user/create",
     exact: true,
-    component: asyncComponent(() => import("../../Admin/Companies/users/Create"))
+    component: asyncComponent(() => import("../../Modules/Companies/users/Create"))
   },
   {
     path: "company/user/:companyId/edit/:userId",
-    component: asyncComponent(() => import("../../Admin/Companies/users/Edit"))
+    component: asyncComponent(() => import("../../Modules/Companies/users/Edit"))
   },
   {
     path: "company/users/:companyId?/team/:teamId?",
-    component: asyncComponent(() => import("../../Admin/Companies/users/List"))
+    component: asyncComponent(() => import("../../Modules/Companies/users/List"))
   },
 
   /* test manager */
   {
     path: "company/test-manager",
-    component: asyncComponent(() => import("../../Admin/Companies/TestManager/List"))
+    component: asyncComponent(() => import("../../Modules/Companies/TestManager/List"))
   },
 ]
