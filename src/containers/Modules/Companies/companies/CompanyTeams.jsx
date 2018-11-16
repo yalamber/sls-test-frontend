@@ -85,13 +85,16 @@ class CompanyTeams extends Component {
   }
 
   async fetchData() {
-    try{
+    try {
       this.setState({ loading: true });
       let company = await getCompany(this.props.match.params.companyId);
-      let teams = await getCompanyTeams(this.props.match.params.companyId, {
+      let teams = await getCompanyTeams({
+        query: {
+          clientId: this.props.match.params.companyId
+        },
         paginationOptions: this.state.paginationOptions
       });
-      this.setState({ 
+      this.setState({
         company: company.data,
         data: teams.data.rows,
         paginationOptions: {
@@ -100,7 +103,7 @@ class CompanyTeams extends Component {
         },
         loading: false
       });
-    } catch(e) {
+    } catch (e) {
       message.error("Something went wrong.");
       this.setState({ loading: false });
     }
@@ -117,8 +120,11 @@ class CompanyTeams extends Component {
         }
       },
       async () => {
-        try{
-          let teams = await getCompanyTeams(this.props.match.params.companyId, {
+        try {
+          let teams = await getCompanyTeams({
+            query: {
+              companyId: this.props.match.params.companyId
+            },
             paginationOptions: this.state.paginationOptions
           });
           this.setState({
@@ -129,7 +135,7 @@ class CompanyTeams extends Component {
               total: teams.data.count
             }
           });
-        } catch(e) {
+        } catch (e) {
           this.setState({ loading: false, data: [] });
         }
       }
@@ -137,11 +143,11 @@ class CompanyTeams extends Component {
   }
 
   async handleDelete(row) {
-    try{
+    try {
       let deleteCompanyTeam = await deleteCompanyTeam(row.teamId);
       message.success("Successfully Deleted.");
       this.fetchData();
-    } catch(e) {
+    } catch (e) {
       //TODO: show msg
     }
   }
@@ -153,12 +159,12 @@ class CompanyTeams extends Component {
     };
     return (
       <LayoutWrapper>
-          <PageHeader>
-            {this.state.company ? this.state.company.name : ""} Teams
-          </PageHeader>
-          <Row style={rowStyle} gutter={gutter} justify="start">
-            <Col md={24} sm={24} xs={24} style={colStyle}>
-              <Box>
+        <PageHeader>
+          {this.state.company ? this.state.company.name : ""} Teams
+        </PageHeader>
+        <Row style={rowStyle} gutter={gutter} justify="start">
+          <Col md={24} sm={24} xs={24} style={colStyle}>
+            <Box>
               <Spin spinning={this.state.loading}>
                 <TitleWrapper style={margin}>
                   <ComponentTitle>
@@ -205,19 +211,20 @@ class CompanyTeams extends Component {
                       return {
                         onDoubleClick: e => {
                           this.props.history.push(
-                            `/dashboard/company/teams/${record.clientTeamId}/members`
+                            `/dashboard/company/teams/${
+                              record.clientTeamId
+                            }/members`
                           );
                         }
                       };
                     }}
                     bordered
                   />
-
                 </Col>
-                </Spin>
-              </Box>
-            </Col>
-          </Row>
+              </Spin>
+            </Box>
+          </Col>
+        </Row>
       </LayoutWrapper>
     );
   }

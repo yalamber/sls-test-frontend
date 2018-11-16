@@ -3,6 +3,7 @@ import { Row, Col, Spin } from "antd";
 import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import basicStyle from "../../../settings/basicStyle";
 import { TitleWrapper, ComponentTitle } from "../crud.style";
+import { getErrorDataFromApiResponseError } from '../../../util/response-message';
 
 import Box from "../../../components/utility/box";
 import AgencyForm from "./partials/AgencyForm";
@@ -41,7 +42,7 @@ export default class extends Component {
         }
       })
       .catch(error => {
-        this.setState({ loading: false, errors: error.response.data });
+        this.setState({ loading: false, errors: getErrorDataFromApiResponseError(error) });
         // resetForm();
         // message.error("Failed to save");
         // this.props.history.goBack();

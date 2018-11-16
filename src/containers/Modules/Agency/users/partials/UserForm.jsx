@@ -95,7 +95,7 @@ class UserForm extends Component {
       margin: '5px 5px 0px 0'
     };
     const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
-    const teamOptions = this.state.teams.map(team => <Option key={team.clientTeamId}>{team.name}</Option>);
+    const teamOptions = this.state.teams.map(team => <Option key={team.agencyTeamId}>{team.name}</Option>);
     const agenciesOptions = this.state.agencies.map(agency => <Option
       key={agency.agencyId}>{agency.name}</Option>);
     const { getFieldDecorator } = this.props.form;
@@ -177,7 +177,7 @@ class UserForm extends Component {
                       <Icon type="search" style={{ fontSize: '24px', color: '#08c', margin: '5px' }} />
                     </Col>
                     <Col span={22}>
-                      {getFieldDecorator('clientTeams', { rules: userValidation.team })(
+                      {getFieldDecorator('agentTeams', { rules: userValidation.team })(
                         <Select showSearch mode="multiple"
                           filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                           placeholder="Please choose teams"
@@ -308,15 +308,15 @@ const mapPropsToFields = (props) => {
   if (!props.hasOwnProperty('user') || !props.user) {
     return;
   }
-  let teams = props.user.clientTeams.map(function(team) {
-    return team.clientTeamId.toString();
+  let teams = props.user.agencyTeams.map(function(team) {
+    return team.agencyTeamId.toString();
   });
-  let agencyId = props.user.clientTeams[0].agencyId.toString();
+  let agencyId = props.user.agencyTeams[0].agencyId.toString();
   return {
     agency: Form.createFormField({
       value: agencyId
     }),
-    clientTeams: Form.createFormField({
+    agencyTeams: Form.createFormField({
       value: teams
     }),
     status: Form.createFormField({

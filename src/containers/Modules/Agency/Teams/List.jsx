@@ -40,7 +40,7 @@ class TeamsList extends Component {
       : agencyIdfromLocation
         ? agencyIdfromLocation
         : "";
-      this.state = {
+    this.state = {
       selectedAgency: undefined,
       agencyName,
       columns: [
@@ -80,7 +80,7 @@ class TeamsList extends Component {
   fetchData() {
     const { agencyId } = this.props.match.params;
     this.setState({ loading: true }, () => {
-      getAgencyTeams({ agencyId })
+      getAgencyTeams({ query: { agencyId } })
         .then(res => {
           this.setState({
             dataSource: res.data,
@@ -127,11 +127,14 @@ class TeamsList extends Component {
                     <ActionBtn
                       type="primary"
                       onClick={() => {
-                        this.props.history.push({
-                          pathname: `/dashboard/agency/team/${agencyId}/create`
-                        }, {
-                          ...this.props.location.state
-                        });
+                        this.props.history.push(
+                          {
+                            pathname: `/dashboard/agency/team/${agencyId}/create`
+                          },
+                          {
+                            ...this.props.location.state
+                          }
+                        );
                       }}
                     >
                       <Icon type="usergroup-add" />
@@ -148,7 +151,9 @@ class TeamsList extends Component {
                   rowKey="providerTeamId"
                   onRow={row => ({
                     onDoubleClick: () => {
-                      this.props.history.push("/dashboard/agency/teams/team-members");
+                      this.props.history.push(
+                        "/dashboard/agency/teams/team-members"
+                      );
                     }
                   })}
                 />

@@ -12,7 +12,7 @@ const ActionButtons = function ActionButtons(props) {
         <a
           className="infoBtn"
           onClick={() =>
-            props.history.push("/dashboard/providers/teams/team-members")
+            props.history.push(`/dashboard/agency/teams/${props.row.agencyId}/members`)
           }
         >
           <i className="ion-ios-person" />
