@@ -273,6 +273,27 @@ export const signIn = userCred => {
   return _post("auth/signin", userCred);
 };
 
+/** Roles **/
+export const addRole = function(role) {
+  return _post("role", role);
+};
+
+export const editRole = function(id, role) {
+  return _put("role/" + id, role);
+};
+
+export const deleteRole = function(id) {
+  return _deleteRecord("role/" + id);
+};
+
+export const getRoles = (option) => {
+  return _getWithLimitOffset(`role`, option);
+};
+
+export const getRole = function(roleId) {
+  return _get(`role/${roleId}`);
+};
+
 /*
 *
 * Private Start

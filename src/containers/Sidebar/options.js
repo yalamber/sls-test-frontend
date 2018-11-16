@@ -5,16 +5,16 @@ const options = [
     leftIcon: "ion-settings",
     children: [
       {
-        key: "system-admin-company/list",
+        key: "company/list",
         label: "sidebar.company"
       },
       {
-        key: "system-admin/agency/list",
+        key: "agency/list",
         label: "sidebar.agency"
       },
       {
-        key: "system-admin/edit-roles/list",
-        label: "sidebar.editRoles"
+        key: "roles/list",
+        label: "sidebar.roles"
       }
     ]
   },
