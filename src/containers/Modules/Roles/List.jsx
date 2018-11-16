@@ -12,7 +12,10 @@ import {
     ComponentTitle,
     TableClickable as Table
 } from '../crud.style';
-import { deleteCompany, getCompanies } from "../../../helpers/http-api-client";
+import {
+    deleteRole,
+    getRoles
+} from "../../../helpers/http-api-client";
 
 export default class extends Component {
     constructor(props) {
@@ -49,57 +52,81 @@ export default class extends Component {
                     render: (row) => <ActionButtons row={row} delete={this.handleDelete} />
                 }
             ],
-            dataSource: [
-                {
-                    role: "System Administrator",
-                    key: "S-ADMIN",
-                    description: "Super User Rights for the entire system",
-                    type: "System",
-                },
-                {
-                    role: "Company Owner",
-                    key: "C-OWNER",
-                    description: "All rights for a company",
-                    type: "Company",
-                },
-                {
-                    role: "Agency Owner",
-                    key: "A-ADMIN",
-                    description: "All rights for an company",
-                    type: "Agency",
-                }
-            ],
-            loading: false,
+            data: [],
+            paginationOptions: {
+                defaultCurrent: 1,
+                current: 1,
+                pageSize: 5,
+                total: 1
+            },
+            loading: false
         };
+        this.fetchData = this.fetchData.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     }
 
     componentDidMount() {
+        this.fetchData();
     }
 
-    onChange(pagination, filters, sorter) {
-        const { dataSource } = this.state;
-        console.log(sorter);
+    fetchData() {
+        this.setState({ loading: true });
+        getRoles({
+            paginationOptions: this.state.paginationOptions
+        })
+            .then(res => {
+                this.setState({
+                    loading: false,
+                    data: res.data.rows,
+                    paginationOptions: {
+                        ...this.state.paginationOptions,
+                        total: res.data.count
+                    }
+                });
+            })
+            .catch(err => {
+                message.error("Problem occured.");
+                this.setState({ loading: false });
+            });
+    }
 
-        if (sorter && sorter.columnKey && sorter.order) {
-            if (sorter.order === "ascend") {
-                this.setState({
-                    dadataSourceta: dataSource.sort(function(a, b) {
-                        return a[sorter.columnKey] < b[sorter.columnKey];
+    onTablePaginationChange(page, pageSize) {
+        this.setState(
+            {
+                loading: true,
+                paginationOptions: {
+                    ...this.state.paginationOptions,
+                    current: page,
+                    pageSize
+                }
+            },
+            () => {
+                getRoles({
+                    paginationOptions: this.state.paginationOptions
+                })
+                    .then(roles => {
+                        this.setState({
+                            loading: false,
+                            data: roles.data.rows,
+                            paginationOptions: {
+                                ...this.state.paginationOptions,
+                                total: roles.data.count
+                            }
+                        });
                     })
-                });
-            } else {
-                this.setState({
-                    ddataSourceata: dataSource.sort(function(a, b) {
-                        return a[sorter.columnKey] > b[sorter.columnKey];
-                    })
-                });
+                    .catch(e => {
+                        this.setState({ loading: false, data: [] });
+                    });
             }
-        }
+        );
     }
 
-    handleDelete() {
-        alert('Delete');
+    handleDelete(row) {
+        deleteRole(row.roleId).then(res => {
+            message.success("Successfully Deleted.");
+            this.fetchData();
+        });
     }
 
     render() {
@@ -111,31 +138,31 @@ export default class extends Component {
                     <Col md={24} sm={24} xs={24} style={colStyle}>
                         <Box>
                             <TitleWrapper>
-                                <ComponentTitle></ComponentTitle>
-
+                                <ComponentTitle>Roles</ComponentTitle>
                                 <ButtonHolders>
                                     <ActionBtn type="primary" onClick={() => {
                                         console.log(this.props.history.push('create'))
                                     }}>
                                         <Icon type="plus" />
                                         Add Role
-                  </ActionBtn>
+                                    </ActionBtn>
                                 </ButtonHolders>
                             </TitleWrapper>
                             <Spin spinning={this.state.loading}>
                                 <Table
-                                    size="middle"
-                                    bordered
-                                    pagination={true}
-                                    rowKey="roleId"
-                                    columns={this.state.columns}
-                                    onChange={this.onChange.bind(this)}
-                                    dataSource={this.state.dataSource}
-                                    onRow={(row) => ({
-                                        onDoubleClick: () => {
-                                            // this.props.history.push('details/' + row.clientId)
-                                        },
-                                    })}
+                                pagination={{
+                                    ...this.state.paginationOptions,
+                                    onChange: this.onTablePaginationChange
+                                }}
+                                rowKey="roleId"
+                                columns={this.state.columns}
+                                dataSource={this.state.data}
+                                onRow={row => ({
+                                    onDoubleClick: () => {
+                                    // this.props.history.push('details/' + row.clientId)
+                                    this.props.history.push(`details/${row.clientId}`);
+                                    }
+                                })}
                                 />
                             </Spin>
                         </Box>
