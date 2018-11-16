@@ -79,9 +79,10 @@ export default class extends Component {
       let users = await getCompanyTeamMembers(this.props.match.params.teamId, {
         paginationOptions: this.state.paginationOptions
       });
+      console.log(companyTeam);
       this.setState({
         loading: false,
-        companyTeam,
+        companyTeam: companyTeam.data,
         data: users.data.rows,
         paginationOptions: {
           ...this.state.paginationOptions,
