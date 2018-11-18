@@ -30,8 +30,6 @@ export const agencyValidation = {
         { required: false }
     ],
     mobile: [
-        { min: 10, message: "Please enter valid mobile address" },
-        { max: 12, message: "Please enter valid mobile address" },
         { required: true, message: "Mobile address is required" }
     ],
     sms: [
