@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Select, Row, Col, Input, Radio, Icon } from "antd";
+import { Form, Select, Row, Col, Input, Radio, Icon, InputNumber } from "antd";
 import { withRouter } from "react-router-dom";
 import Button from "../../../../components/uielements/button";
 import { userValidation } from "../../../../Validations/usersValidation";
@@ -26,7 +26,8 @@ class AgencyForm extends Component {
       teams: [],
       companies: [],
       passwordType: false,
-      selected: []
+      selected: [],
+      mobileNumber: ''
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -39,7 +40,10 @@ class AgencyForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+
     this.props.form.validateFieldsAndScroll((err, values) => {
+      values.owner.contactInformation.mobilePhone = values.owner.contactInformation.mobilePhone ? `${values.owner.contactInformation.mobilePhone}` : values.owner.contactInformation.mobilePhone;
+
       if (!err) {
         this.props.submit(values, this.resetForm);
       }
@@ -49,6 +53,25 @@ class AgencyForm extends Component {
   resetForm() {
     this.setState({ passwordType: false });
     this.props.form.resetFields();
+  }
+
+  formatMobileNumber(v) {
+    var value = `${v}`.substr(0, 15);
+    value = value.replace(/\D/g, '');
+    value = value.replace(/(\d{3})(\d)/, '$1 $2');
+    value = value.replace(/(\d{4})(\d)/, '$1 $2');
+    value = value.replace(/(\d{4})(\d)/, '$1 $2');
+
+    return `${value}`;
+  }
+
+  formatMobileParser(v) {
+    if (value && value.length > 14) return `${value}`;
+
+    var value = `${v}`;
+    value = value.replace(/\D/g, '');
+
+    return parseInt(value);
   }
 
   render() {
@@ -194,7 +217,12 @@ class AgencyForm extends Component {
                     {getFieldDecorator("owner.contactInformation.mobilePhone", {
                       initialValue: "",
                       rules: agencyValidation.mobile
-                    })(<Input placeholder="Enter Mobile Phone" />)}
+                    })(
+                      <InputNumber
+                        placeholder="Enter Mobile Phone"
+                        formatter={this.formatMobileNumber.bind(this)}
+                        parser={this.formatMobileParser.bind(this)}
+                      />)}
                   </FormItem>
                   <FormItem
                     style={marginBottom}
@@ -291,8 +319,8 @@ class AgencyForm extends Component {
               {this.props.errors.details.length ? (
                 <Errors errors={this.props.errors} />
               ) : (
-                ""
-              )}
+                  ""
+                )}
             </Col>
           </Row>
           <Row type={"flex"} align={"middle"} justify={"center"}>

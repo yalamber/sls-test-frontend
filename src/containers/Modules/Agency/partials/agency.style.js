@@ -8,6 +8,10 @@ const AgencyFormWrapper = styled.div`
   .ant-form-item-label {
         text-align: left;
    }
+
+  .ant-input-number {
+        width: 100%!important;
+    }
 `;
 
 export default WithDirection(AgencyFormWrapper);
