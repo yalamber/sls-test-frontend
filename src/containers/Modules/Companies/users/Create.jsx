@@ -12,7 +12,8 @@ import UserForm from "../users/partials/UserForm";
 import { message } from "antd/lib/index";
 import {
   getCompany,
-  addCompanyUser
+  addUser,
+  addUserToCompany
 } from "../../../../helpers/http-api-client";
 
 class Create extends Component {
@@ -50,13 +51,14 @@ class Create extends Component {
   async handleSubmit(formData, resetForm) {
     try {
       this.setState({ loading: true });
-      const teamIds = formData.clientTeams;
-      console.log(formData);
-      formData = _.omit(formData, "company");
-      formData = _.omit(formData, "clientTeams");
-      return;
-      let companyUser = await addCompanyUser({ ...formData });
-      if (companyUser.status) {
+      let role = formData.role;
+      formData = _.omit(formData, "role");
+      let user = await addUser({ ...formData });
+      let companyUser = await addUserToCompany(user.data.userId, this.state.company.clientId, {
+        roleId: role,
+        status: formData.status
+      })
+      if (companyUser.status === 200) {
         message.success("Successfully Saved");
         resetForm();
         this.setState({ errors: { details: [] } });

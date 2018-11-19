@@ -7,7 +7,7 @@ import {
   ActionWrapper,
 } from '../../../crud.style';
 import Card from "../../../../../components/uielements/styles/card.style";
-import { getCompany, getAgency, getRoles, getCompanyTeams } from "../../../../../helpers/http-api-client";
+import { getCompany, getAgency, getRoles } from "../../../../../helpers/http-api-client";
 import { userStatus } from "../../../../../constants/userStatus";
 import Errors from "../../../../Errors";
 
@@ -22,7 +22,6 @@ class UserForm extends Component {
     super();
     this.state = {
       status: userStatus,
-      teams: [],
       roles: [],
       passwordType: false,
       selected: []
@@ -54,22 +53,9 @@ class UserForm extends Component {
       switch(this.props.userType){
         case 'clientUser':
           let company = await getCompany(this.props.relId);
-          //get teams
-          let teams = await getCompanyTeams({
-            query: {
-              clientId: this.props.relId
-            },
-            paginationOptions: {
-              defaultCurrent: 1,
-              current: 1,
-              pageSize: 50,
-              total: 1
-            }
-          });
           this.setState({
             roles: roles.data.rows,
-            company: company.data,
-            teams: teams.data.rows
+            company: company.data
           });
         break;
         case 'agencyUser':
@@ -129,22 +115,26 @@ class UserForm extends Component {
     };
     const statusOptions = this.state.status.map(status => <Option key={status.id}>{status.name}</Option>);
     const roleOptions = this.state.roles.map(role => <Option key={role.roleId}>{role.title}</Option>);
-    const teamOptions = this.state.teams.map(team => <Option key={team.clientTeamId}>{team.name}</Option>);
     const { getFieldDecorator } = this.props.form;
 
-    const selectAfter = (
-      <Select defaultValue="Services" style={{ width: 120 }}>
-        <Option value="skype">Skype</Option>
-        <Option value="whatsapp messenger">WhatsApp Messenger</Option>
-        <Option value="facebook messenger">Facebook Messenger</Option>
-        <Option value="viber">Viber</Option>
-        <Option value="wechat">WeChat</Option>
-        <Option value="bbm">BBM</Option>
-        <Option value="telgram">Telegram</Option>
-        <Option value="line">LINE</Option>
-        <Option value="zalo">Zalo</Option>
-      </Select>
-    );
+    const IMSelectAfter = (name) => {
+      return getFieldDecorator(name, {
+        initialValue: '',
+      })(
+        <Select  style={{ width: 120 }}>
+          <Option value="">Services</Option>
+          <Option value="skype">Skype</Option>
+          <Option value="whatsapp">WhatsApp Messenger</Option>
+          <Option value="facebook">Facebook Messenger</Option>
+          <Option value="viber">Viber</Option>
+          <Option value="wechat">WeChat</Option>
+          <Option value="bbm">BBM</Option>
+          <Option value="telgram">Telegram</Option>
+          <Option value="line">LINE</Option>
+          <Option value="zalo">Zalo</Option>
+        </Select>
+      );
+    }
 
     //Responsive span
     const formResSpan = {
@@ -190,31 +180,11 @@ class UserForm extends Component {
               </Row>
             </Col>
             <Col {...formResSpan}>
-              <Card title="Teams">
-                <FormItem style={margin} label="Select Teams">
-                  <InputGroup size="large">
-                    <Col span={2}>
-                      <Icon type="search" style={{ fontSize: '24px', color: '#08c', margin: '5px' }} />
-                    </Col>
-                    <Col span={22}>
-                      {getFieldDecorator('clientTeams', { rules: userValidation.team })(
-                        <Select showSearch mode="multiple"
-                          filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                          placeholder="Please choose teams"
-                          style={{ width: '100%' }}>
-                          {teamOptions}
-                        </Select>
-                      )}
-                    </Col>
-                  </InputGroup>
-                </FormItem>
-              </Card>
-              <br />
               <Card title="Role">
                 <FormItem style={margin} label="Select Role">
                   <InputGroup size="large">
                     <Col span={22}>
-                      {getFieldDecorator('clientRoles', { rules: userValidation.role })(
+                      {getFieldDecorator('role', { rules: userValidation.role })(
                         <Select showSearch
                           filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                           placeholder="Please choose role"
@@ -262,10 +232,11 @@ class UserForm extends Component {
                           style={margin}
                           label="Instant Messaging:"
                           >
-                          {getFieldDecorator('instantMessengerInfo[]', {  })(
+                          {getFieldDecorator('instantMessengerInfos[0]["messengerId"]', { 
+                            initialValue: ''
+                           })(
                             <Input
-                              addonAfter={selectAfter}
-                              defaultValue="mysite"
+                              addonAfter={IMSelectAfter('instantMessengerInfos[0]["service"]')}
                             />
                           )}
                         </FormItem>
@@ -277,10 +248,9 @@ class UserForm extends Component {
                           style={margin}
                           label="Instant Messaging:"
                         >
-                          {getFieldDecorator('instantMessengerInfo[]', {})(
+                          {getFieldDecorator('instantMessengerInfos[1]["messengerId"]', {})(
                             <Input
-                              addonAfter={selectAfter}
-                              defaultValue="mysite"
+                              addonAfter={IMSelectAfter('instantMessengerInfos[1]["service"]')}
                             />
                           )}
                         </FormItem>
@@ -335,17 +305,16 @@ const mapPropsToFields = (props) => {
   if (!props.hasOwnProperty('user') || !props.user) {
     return;
   }
-  let teams = props.user.clientTeams.map(function(team) {
-    return team.clientTeamId.toString();
-  });
+  //get role and set for edit
+  
   let clientId = props.relId;
   return {
     company: Form.createFormField({
       value: clientId
     }),
-    clientTeams: Form.createFormField({
-      value: teams
-    }),
+    /*role: Form.createFormField({
+      value: role
+    }),*/
     status: Form.createFormField({
       value: props.user.status
     }),

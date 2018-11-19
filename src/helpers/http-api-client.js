@@ -1,5 +1,5 @@
 /*
-*
+*npm s
 * HOW TO ADD A NEW ACTION
 *
 *
@@ -15,8 +15,8 @@ import axios from "axios";
 import qs from "qs";
 import _ from "lodash";
 
-axios.defaults.baseURL = "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
-//axios.defaults.baseURL = "http://localhost:8080/";
+//axios.defaults.baseURL = "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
+axios.defaults.baseURL = "http://localhost:8080/";
 
 const _middlewares = [];
 
@@ -37,6 +37,16 @@ export const getUserRoles = function(obj) {
   }*/
 
   return _get(`role`);
+};
+
+/* Users */
+export const addUser = (user) => {
+  return _post("user", user);
+};
+
+export const addUserToCompany = (userId, companyId, data) => {
+  data.userId = userId;
+  return _post(`client/${companyId}/user`, data);
 };
 
 /** AGENCY **/
