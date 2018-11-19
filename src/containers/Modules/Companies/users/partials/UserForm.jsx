@@ -7,7 +7,7 @@ import {
   ActionWrapper,
 } from '../../../crud.style';
 import Card from "../../../../../components/uielements/styles/card.style";
-import { getCompany, getRoles } from "../../../../../helpers/http-api-client";
+import { getCompany, getAgency, getRoles, getCompanyTeams } from "../../../../../helpers/http-api-client";
 import { userStatus } from "../../../../../constants/userStatus";
 import Errors from "../../../../Errors";
 
@@ -47,16 +47,38 @@ class UserForm extends Component {
         paginationOptions: {
           defaultCurrent: 1,
           current: 1,
-          pageSize: 10,
+          pageSize: 20,
           total: 1
         }
       });
-      if(this.props.userType === 'clientUser'){
-        let company = await getCompany(this.props.relId);
-        this.setState({
-          roles: roles.data.rows,
-          company: company.data
-        });
+      switch(this.props.userType){
+        case 'clientUser':
+          let company = await getCompany(this.props.relId);
+          //get teams
+          let teams = await getCompanyTeams({
+            query: {
+              clientId: this.props.relId
+            },
+            paginationOptions: {
+              defaultCurrent: 1,
+              current: 1,
+              pageSize: 50,
+              total: 1
+            }
+          });
+          this.setState({
+            roles: roles.data.rows,
+            company: company.data,
+            teams: teams.data.rows
+          });
+        break;
+        case 'agencyUser':
+          let agency = await getAgency(this.props.relId);
+          this.setState({
+            roles: roles.data.rows,
+            agency: agency.data
+          });
+        break;
       }
     } catch(e) {
 
@@ -143,7 +165,7 @@ class UserForm extends Component {
                 )}
               </FormItem>
               <FormItem label="Password" style={margin}>
-                {getFieldDecorator('password', {})(
+                {getFieldDecorator('password', { rules: userValidation.password })(
                   <Input
                     placeholder="Enter Password"
                   />
@@ -240,7 +262,7 @@ class UserForm extends Component {
                           style={margin}
                           label="Instant Messaging:"
                           >
-                          {getFieldDecorator('contactInformation.instantMessaging1', {  })(
+                          {getFieldDecorator('instantMessengerInfo[]', {  })(
                             <Input
                               addonAfter={selectAfter}
                               defaultValue="mysite"
@@ -255,7 +277,7 @@ class UserForm extends Component {
                           style={margin}
                           label="Instant Messaging:"
                         >
-                          {getFieldDecorator('contactInformation.instantMessaging2', {})(
+                          {getFieldDecorator('instantMessengerInfo[]', {})(
                             <Input
                               addonAfter={selectAfter}
                               defaultValue="mysite"
@@ -316,7 +338,7 @@ const mapPropsToFields = (props) => {
   let teams = props.user.clientTeams.map(function(team) {
     return team.clientTeamId.toString();
   });
-  let clientId = props.user.clientTeams[0].clientId.toString();
+  let clientId = props.relId;
   return {
     company: Form.createFormField({
       value: clientId

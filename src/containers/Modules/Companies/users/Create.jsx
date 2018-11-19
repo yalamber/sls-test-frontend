@@ -7,14 +7,12 @@ import basicStyle from "../../../../settings/basicStyle";
 import { getErrorDataFromApiResponseError } from "../../../../util/response-message";
 import { TitleWrapper, ComponentTitle } from "../../crud.style";
 import _ from "lodash";
-
 import Box from "../../../../components/utility/box";
 import UserForm from "../users/partials/UserForm";
 import { message } from "antd/lib/index";
 import {
   getCompany,
-  addCompanyUser,
-  addCompanyTeamMember
+  addCompanyUser
 } from "../../../../helpers/http-api-client";
 
 class Create extends Component {
@@ -52,9 +50,11 @@ class Create extends Component {
   async handleSubmit(formData, resetForm) {
     try {
       this.setState({ loading: true });
-      const teamId = formData.clientTeams;
+      const teamIds = formData.clientTeams;
+      console.log(formData);
       formData = _.omit(formData, "company");
       formData = _.omit(formData, "clientTeams");
+      return;
       let companyUser = await addCompanyUser({ ...formData });
       if (companyUser.status) {
         message.success("Successfully Saved");
