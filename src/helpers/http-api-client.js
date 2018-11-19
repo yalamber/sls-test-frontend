@@ -341,6 +341,14 @@ export const getRoleTypes = (option) => {
   return _getWithLimitOffset(`role/types`, option);
 };
 
+
+
+/** Test Queue **/
+export const getTestQueues = function(options) {
+  return _getWithLimitOffset("test/queue", options);
+};
+
+
 /*
 *
 * Private Start
