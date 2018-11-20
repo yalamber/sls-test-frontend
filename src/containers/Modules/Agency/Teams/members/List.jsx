@@ -1,22 +1,21 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, Spin, message } from "antd";
-import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
-import PageHeader from "../../../../components/utility/pageHeader";
-import basicStyle from "../../../../settings/basicStyle";
-import Box from "../../../../components/utility/box";
-import UsersActionButtons from "../users/partials/ActionButtons";
+import LayoutWrapper from "../../../../../components/utility/layoutWrapper.js";
+import PageHeader from "../../../../../components/utility/pageHeader";
+import basicStyle from "../../../../../settings/basicStyle";
+import Box from "../../../../../components/utility/box";
+import UsersActionButtons from "./partials/ActionButtons";
 import {
   ActionBtn,
   TitleWrapper,
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from "../../crud.style";
+} from "../../../crud.style";
 import {
-  getCompanyTeam,
-  getCompanyTeamMembers,
-  deleteCompanyTeamMember
-} from "../../../../helpers/http-api-client";
+  getAgencyTeam,
+  getAgencyTeamMembers
+} from "../../../../../helpers/http-api-client";
 
 export default class extends Component {
   constructor() {
@@ -53,8 +52,8 @@ export default class extends Component {
           )
         }
       ],
-      company: {},
-      companyTeam: {},
+      agency: {},
+      agencyTeam: {},
       data: [],
       paginationOptions: {
         defaultCurrent: 1,
@@ -75,17 +74,19 @@ export default class extends Component {
   async fetchData() {
     this.setState({ loading: true });
     try {
-      let companyTeam = await getCompanyTeam(this.props.match.params.teamId);
-      let users = await getCompanyTeamMembers(this.props.match.params.teamId, {
+      let responseAgencyTeam = await getAgencyTeam(this.props.match.params.teamId);
+      let reponseUsers = await getAgencyTeamMembers(this.props.match.params.teamId, {
         paginationOptions: this.state.paginationOptions
       });
+
       this.setState({
         loading: false,
-        companyTeam: companyTeam.data,
-        data: users.data.rows,
+        agency: responseAgencyTeam.data.agency,
+        agencyTeam: responseAgencyTeam.data,
+        data: reponseUsers.data.rows,
         paginationOptions: {
           ...this.state.paginationOptions,
-          total: users.data.count
+          total: reponseUsers.data.count
         }
       });
     } catch(e) {
@@ -104,7 +105,7 @@ export default class extends Component {
       }
     }, async () => {
       try{
-        let users = await getCompanyTeamMembers(this.props.match.params.teamId, {
+        let users = await getAgencyTeamMembers(this.props.match.params.teamId, {
           paginationOptions: this.state.paginationOptions
         });
         this.setState({
@@ -130,9 +131,9 @@ export default class extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          Company -> {
-            this.state.companyTeam && this.state.companyTeam.client && this.state.companyTeam.client.name
-          } -> {this.state.companyTeam && this.state.companyTeam.name } -> Members List
+          Agency -> {
+            this.state.agency && this.state.agency.name
+          } -> {this.state.agencyTeam && this.state.agencyTeam.name } -> Members List
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -150,7 +151,7 @@ export default class extends Component {
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push(`/dashboard/company/teams/${teamId}/member/add`);
+                      this.props.history.push(`/dashboard/agency/teams/${teamId}/member/add`);
                     }}
                   >
                     <Icon type="plus" />
@@ -160,7 +161,7 @@ export default class extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table
-                  locale={{ emptyText: "No users in company team" }}
+                  locale={{ emptyText: "No users in agency team" }}
                   size="middle"
                   bordered
                   pagination={{
@@ -171,8 +172,8 @@ export default class extends Component {
                   onRow={row => ({
                     onDoubleClick: () => {
                       this.props.history.push({
-                        pathname: `/dashboard/company/user/${
-                          this.props.match.params.companyId
+                        pathname: `/dashboard/agency/user/${
+                          this.props.match.params.agencyId
                         }/edit/${row.userId}`,
                         state: {
                           row

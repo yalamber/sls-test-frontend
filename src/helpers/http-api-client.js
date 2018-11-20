@@ -193,8 +193,8 @@ export const deleteCompanyTeamMember = function(teamId, userId) {
 
 /** Company Team Member **/
 
-export const addCompanyTeamMember = function({ teamId, userId }) {
-  return _post(`client-team/${teamId}/member`, { userId, roleId: 2 });
+export const addCompanyTeamMember = function({ teamId, userId, status, roleId }) {
+  return _post(`client-team/${teamId}/member`, { userId, roleId, status });
 };
 
 /** Company Users **/

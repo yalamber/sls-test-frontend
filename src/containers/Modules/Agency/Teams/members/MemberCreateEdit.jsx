@@ -12,8 +12,8 @@ import MemberForm from "./partials/MemberForm";
 import { message } from "antd/lib/index";
 import {
   getUser,
-  getCompanyTeam,
-  addCompanyTeamMember,
+  getAgencyTeam,
+  addAgencyTeamMember,
   getRoles
 } from "../../../../../helpers/http-api-client";
 
@@ -21,7 +21,7 @@ class Create extends Component {
   constructor() {
     super();
     this.state = {
-      company: {},
+      agency: {},
       team: {},
       users: [],
       roles: [],
@@ -42,14 +42,14 @@ class Create extends Component {
     const { teamId } = this.props.match.params;
     this.setState({ loading: true });
     try {
-      let responseCompanyTeam = await getCompanyTeam(teamId);
+      let responseAgencyTeam = await getAgencyTeam(teamId);
       let responseUser = await getUser();
       let responseRoles = await this.getRolesByType();
 
       this.setState({
         loading: false,
-        team: responseCompanyTeam.data,
-        company: responseCompanyTeam.data.client,
+        team: responseAgencyTeam.data,
+        agency: responseAgencyTeam.data.agency,
         roles: responseRoles.data.rows,
         users: responseUser.data.rows
       });
@@ -65,13 +65,13 @@ class Create extends Component {
       this.setState({ loading: true });
 
       const { status, userId, roleId } = formData;
-      let responseCompanyTeamMember = await addCompanyTeamMember({
+      let responseAgencyTeamMember = await addAgencyTeamMember({
         userId,
         teamId,
         status,
         roleId,
       });
-      if (responseCompanyTeamMember.status === 200) {
+      if (responseAgencyTeamMember.status === 200) {
         message.success("Successfully Saved");
         resetForm();
         this.setState({ errors: { details: [] } });
@@ -85,7 +85,7 @@ class Create extends Component {
   }
 
   async getRolesByType(opts = {}) {
-    const { type = 'clientTeamUser' } = opts;
+    const { type = 'agencyTeamUser' } = opts;
     const data = await getRoles({ query: { type } });
     return data;
   }
@@ -95,7 +95,7 @@ class Create extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          {this.state.company.name} -> {this.state.team.name}
+          Agency -> {this.state.agency.name} -> {this.state.team.name}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -105,8 +105,8 @@ class Create extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <MemberForm
-                  relId={this.state.company.clientId}
-                  userType="clientUser"
+                  relId={this.state.agency.agencyId}
+                  userType="agencyUser"
                   submit={this.handleSubmit}
                   users={this.state.users}
                   roles={this.state.roles}
