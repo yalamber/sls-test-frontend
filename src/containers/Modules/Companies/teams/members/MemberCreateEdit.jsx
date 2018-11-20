@@ -12,9 +12,8 @@ import MemberForm from "./partials/MemberForm";
 import { message } from "antd/lib/index";
 import {
   getUser,
-  addUser,
   getCompanyTeam,
-  addUserToCompany,
+  addCompanyTeamMember,
   getRoles
 } from "../../../../../helpers/http-api-client";
 
@@ -62,19 +61,17 @@ class Create extends Component {
 
   async handleSubmit(formData, resetForm) {
     try {
+      const { teamId } = this.props.match.params;
       this.setState({ loading: true });
-      let role = formData.role;
-      formData = _.omit(formData, "role");
-      let user = await addUser({ ...formData });
-      let companyUser = await addUserToCompany(
-        user.data.userId,
-        this.state.company.clientId,
-        {
-          roleId: role,
-          status: formData.status
-        }
-      );
-      if (companyUser.status === 200) {
+
+      const { status, userId, roleId } = formData;
+      let responseCompanyTeamMember = await addCompanyTeamMember({
+        userId,
+        teamId,
+        status,
+        roleId,
+      });
+      if (responseCompanyTeamMember.status === 200) {
         message.success("Successfully Saved");
         resetForm();
         this.setState({ errors: { details: [] } });
@@ -94,7 +91,6 @@ class Create extends Component {
   }
 
   render() {
-    console.log("this.prop", this.props);
     const { rowStyle, colStyle, gutter } = basicStyle;
     return (
       <LayoutWrapper>
