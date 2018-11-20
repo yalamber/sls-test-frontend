@@ -10,8 +10,8 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from "../../../crud.style";
-import { getCompanies, getTeams } from "../../../../../helpers/http-api-client";
-import { getSuites } from "../../../../../helpers/http-api-client";
+import { getTestQueues } from "../../../../../helpers/http-api-client";
+import { getErrorDataFromApiResponseError } from '../../../../../util/response-message';
 
 const Option = Select.Option;
 
@@ -59,7 +59,7 @@ export default class extends Component {
         },
         {
           title: "Test Case Title",
-          dataIndex: "title",
+          dataIndex: "testCase.title",
           key: "title",
           sorter: true
         },
@@ -76,77 +76,26 @@ export default class extends Component {
           sorter: true
         }
       ],
-      dataSource: [
-        {
-          number: 111,
-          title: "Lorem Ipsum is simply dummy text of the printing",
-          date: "2018-11-21"
-        },
-        {
-          number: 112,
-          title: "Lorem Ipsum is simply dummy text of the printing",
-          date: "2018-12-21"
-        },
-        {
-          number: 113,
-          title: "Lorem Ipsum is simply dummy text of the printing",
-          date: "2018-09-21"
-        }
-      ],
-      companies: [],
-      teams: [],
-      suites: [],
-      selectedCompany: undefined,
-      selectedTeam: undefined,
-      selectedSuite: undefined,
+      dataSource: [],
       loading: false
     };
-    this.handleCompanyChange = this.handleCompanyChange.bind(this);
-    this.handleTeamChange = this.handleTeamChange.bind(this);
-    this.handleSuiteChange = this.handleSuiteChange.bind(this);
   }
 
   componentDidMount() {
-    getCompanies().then(res => {
-      this.setState({ companies: res.data.rows });
-    });
-  }
-
-  handleCompanyChange(companyId) {
-    this.setState({ selectedTeam: undefined });
-    getTeams(companyId).then(res => {
-      this.setState({ teams: res.data });
-    });
-    this.setState({ selectedCompany: companyId });
-    this.updateRecords(companyId, null);
-  }
-
-  handleTeamChange(teamId) {
-    this.setState({ selectedTeam: teamId });
-    this.updateRecords(null, teamId);
-  }
-
-  handleSuiteChange(suiteId) {
-    this.setState({ selectedSuite: suiteId });
-  }
-
-  updateRecords(companyId, teamId) {
-    getSuites(companyId, teamId).then(res => {
-      this.setState({ suites: res.data });
-    });
+    this.setState({
+      loading: true
+    }, async () => {
+      try {
+        const response = await getTestQueues();
+        this.setState({ dataSource: response.data.rows, loading: false });
+      } catch (err) {
+        this.setState({ error: getErrorDataFromApiResponseError(err), loading: false });
+      }
+    })
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const companiesOptions = this.state.companies.map(company => (
-      <Option key={company.clientId}>{company.name}</Option>
-    ));
-    const teamsOptions = this.state.teams.map(team => (
-      <Option key={team.clientTeamId}>{team.name}</Option>
-    ));
-    const suiteOptions = this.state.suites.map(suite => (
-      <Option key={suite.testSuiteId}>{suite.name}</Option>
-    ));
 
     return (
       <LayoutWrapper>

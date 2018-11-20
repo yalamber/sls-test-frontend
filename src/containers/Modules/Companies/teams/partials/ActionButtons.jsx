@@ -7,7 +7,7 @@ import { withRouter } from "react-router-dom";
 const ActionButtons = props => {
   return (
     <ActionWrapper>
-      <Tooltip placement="topLeft" title="Show Users List">
+      <Tooltip placement="topLeft" title="Show Members List">
         <a
           onClick={() => {
             props.history.push(`/dashboard/company/teams/${props.row.clientTeamId}/members`);

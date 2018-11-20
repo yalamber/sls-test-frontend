@@ -79,7 +79,6 @@ export default class extends Component {
       let users = await getCompanyTeamMembers(this.props.match.params.teamId, {
         paginationOptions: this.state.paginationOptions
       });
-      console.log(companyTeam);
       this.setState({
         loading: false,
         companyTeam: companyTeam.data,
@@ -127,6 +126,7 @@ export default class extends Component {
       margin: "5px 5px 10px 0px"
     };
     const { rowStyle, colStyle, gutter } = basicStyle;
+    const { teamId } = this.props.match.params;
     return (
       <LayoutWrapper>
         <PageHeader>
@@ -150,11 +150,11 @@ export default class extends Component {
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push("/dashboard/company/user/create");
+                      this.props.history.push(`/dashboard/company/teams/${teamId}/member/add`);
                     }}
                   >
                     <Icon type="plus" />
-                    Add new User
+                    Add team member
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
