@@ -1,22 +1,22 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, Spin, message } from "antd";
-import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
-import PageHeader from "../../../../components/utility/pageHeader";
-import basicStyle from "../../../../settings/basicStyle";
-import Box from "../../../../components/utility/box";
-import UsersActionButtons from "../users/partials/ActionButtons";
+import LayoutWrapper from "../../../../../components/utility/layoutWrapper.js";
+import PageHeader from "../../../../../components/utility/pageHeader";
+import basicStyle from "../../../../../settings/basicStyle";
+import Box from "../../../../../components/utility/box";
+import UsersActionButtons from "../../users/partials/ActionButtons";
 import {
   ActionBtn,
   TitleWrapper,
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from "../../crud.style";
+} from "../../../crud.style";
 import {
   getCompanyTeam,
   getCompanyTeamMembers,
   deleteCompanyTeamMember
-} from "../../../../helpers/http-api-client";
+} from "../../../../../helpers/http-api-client";
 
 export default class extends Component {
   constructor() {

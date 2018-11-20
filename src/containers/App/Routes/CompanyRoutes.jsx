@@ -35,7 +35,7 @@ export default [
   },
   {
     path: "company/teams/:teamId/members",
-    component: asyncComponent(() => import("../../Modules/Companies/teams/UserList"))
+    component: asyncComponent(() => import("../../Modules/Companies/teams/members/List"))
   },
   {
     path: "company/user/create/:companyId",
