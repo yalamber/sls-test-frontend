@@ -1,20 +1,22 @@
 import React, { Component } from "react";
 import { Row, Col, Spin } from "antd";
 import { withRouter } from "react-router-dom";
-import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
-import PageHeader from "../../../../components/utility/pageHeader";
-import basicStyle from "../../../../settings/basicStyle";
-import { getErrorDataFromApiResponseError } from "../../../../util/response-message";
-import { TitleWrapper, ComponentTitle } from "../../crud.style";
+import LayoutWrapper from "../../../../../components/utility/layoutWrapper.js";
+import PageHeader from "../../../../../components/utility/pageHeader";
+import basicStyle from "../../../../../settings/basicStyle";
+import { getErrorDataFromApiResponseError } from "../../../../../util/response-message";
+import { TitleWrapper, ComponentTitle } from "../../../crud.style";
 import _ from "lodash";
-import Box from "../../../../components/utility/box";
-import UserForm from "../users/partials/UserForm";
+import Box from "../../../../../components/utility/box";
+import MemberForm from "./partials/MemberForm";
 import { message } from "antd/lib/index";
 import {
-  getCompanyTeam,
+  getUser,
   addUser,
-  addUserToCompany
-} from "../../../../helpers/http-api-client";
+  getCompanyTeam,
+  addUserToCompany,
+  getRoles
+} from "../../../../../helpers/http-api-client";
 
 class Create extends Component {
   constructor() {
@@ -22,6 +24,8 @@ class Create extends Component {
     this.state = {
       company: {},
       team: {},
+      users: [],
+      roles: [],
       errors: {
         details: []
       },
@@ -36,16 +40,21 @@ class Create extends Component {
   }
 
   async fetchData() {
-    this.setState({ loading: true });
     const { teamId } = this.props.match.params;
+    this.setState({ loading: true });
     try {
-      let response = await getCompanyTeam(teamId);
+      let responseCompanyTeam = await getCompanyTeam(teamId);
+      let responseUser = await getUser();
+      let responseRoles = await this.getRolesByType();
+
       this.setState({
         loading: false,
-        team: response.data,
-        company: response.data.client
+        team: responseCompanyTeam.data,
+        company: responseCompanyTeam.data.client,
+        roles: responseRoles.data.rows,
+        users: responseUser.data.rows
       });
-    } catch(e) {
+    } catch (e) {
       message.error("Problem occured.");
       this.setState({ loading: false });
     }
@@ -57,24 +66,35 @@ class Create extends Component {
       let role = formData.role;
       formData = _.omit(formData, "role");
       let user = await addUser({ ...formData });
-      let companyUser = await addUserToCompany(user.data.userId, this.state.company.clientId, {
-        roleId: role,
-        status: formData.status
-      })
+      let companyUser = await addUserToCompany(
+        user.data.userId,
+        this.state.company.clientId,
+        {
+          roleId: role,
+          status: formData.status
+        }
+      );
       if (companyUser.status === 200) {
         message.success("Successfully Saved");
         resetForm();
         this.setState({ errors: { details: [] } });
         this.props.history.goBack();
       }
-    } catch(error) {
+    } catch (error) {
       this.setState({ errors: getErrorDataFromApiResponseError(error) });
     } finally {
       this.setState({ loading: false });
     }
   }
 
+  async getRolesByType(opts = {}) {
+    const { type = 'clientTeamUser' } = opts;
+    const data = await getRoles({ query: { type } });
+    return data;
+  }
+
   render() {
+    console.log("this.prop", this.props);
     const { rowStyle, colStyle, gutter } = basicStyle;
     return (
       <LayoutWrapper>
@@ -85,13 +105,15 @@ class Create extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Create Team Member</ComponentTitle>
+                <ComponentTitle>Add Team Member</ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
-                <UserForm
+                <MemberForm
                   relId={this.state.company.clientId}
                   userType="clientUser"
                   submit={this.handleSubmit}
+                  users={this.state.users}
+                  roles={this.state.roles}
                   errors={this.state.errors}
                 />
               </Spin>

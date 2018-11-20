@@ -12,4 +12,3 @@ export const userValidation = {
   company: [required],
   role: [required]
 };
-

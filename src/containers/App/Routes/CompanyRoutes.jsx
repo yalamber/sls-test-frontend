@@ -45,7 +45,7 @@ export default [
   {
     path: "company/teams/:teamId/member/add",
     exact: true,
-    component: asyncComponent(() => import("../../Modules/Companies/teams/UserCreateEdit"))
+    component: asyncComponent(() => import("../../Modules/Companies/teams/members/MemberCreateEdit"))
   },
   {
     path: "company/user/:companyId/edit/:userId",
