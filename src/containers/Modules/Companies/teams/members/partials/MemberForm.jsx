@@ -125,7 +125,10 @@ class MemberForm extends Component {
     return getFieldDecorator(field, fieldDecoratorOptions)(
       <Select {...elementProp}>
         {data.map(d => (
-          <Option {...optionPropOptions.props}>
+          <Option
+            key={d[optionPropOptions.props.key] + ""}
+            value={d[optionPropOptions.props.value] + ""}
+          >
             {d[optionPropOptions.display]}
           </Option>
         ))}
