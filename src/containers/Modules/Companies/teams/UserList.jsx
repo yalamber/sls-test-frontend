@@ -130,7 +130,7 @@ export default class extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          Company -> {
+          {
             this.state.companyTeam && this.state.companyTeam.client && this.state.companyTeam.client.name
           } -> {this.state.companyTeam && this.state.companyTeam.name } -> Members List
         </PageHeader>
