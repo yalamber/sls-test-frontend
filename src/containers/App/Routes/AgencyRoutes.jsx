@@ -23,7 +23,7 @@ export default [
   },
   {
     path: "agency/teams/:teamId/members",
-    component: asyncComponent(() => import("../../Modules/Agency/Teams/UserList"))
+    component: asyncComponent(() => import("../../Modules/Agency/Teams/members/List"))
   },
   {
     path: "agency/teams/:agencyId/edit",
@@ -37,7 +37,11 @@ export default [
     path: "agency/user/create",
     component: asyncComponent(() => import("../../Modules/Agency/users/Create"))
   },
-
+  {
+    path: "agency/teams/:teamId/member/add",
+    exact: true,
+    component: asyncComponent(() => import("../../Modules/Agency/Teams/members/MemberCreateEdit"))
+  },
   {
     path: "agency/test-manager",
     component: asyncComponent(() =>

@@ -121,7 +121,7 @@ class TeamsList extends Component {
               <Spin spinning={this.state.loading}>
                 <TitleWrapper>
                   <ComponentTitle className="captialize-data">
-                    {this.state.agencyName} - Teams List
+                    Agency -> {this.state.agencyName} - Team List
                   </ComponentTitle>
                   <ButtonHolders>
                     <ActionBtn
