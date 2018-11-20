@@ -15,8 +15,8 @@ import axios from "axios";
 import qs from "qs";
 import _ from "lodash";
 
-//axios.defaults.baseURL = "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
-axios.defaults.baseURL = "http://localhost:8080/";
+axios.defaults.baseURL = "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
+//axios.defaults.baseURL = "http://localhost:8080/";
 
 const _middlewares = [];
 
