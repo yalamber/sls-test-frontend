@@ -16,7 +16,7 @@ import qs from "qs";
 import _ from "lodash";
 
 axios.defaults.baseURL = "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
-//axios.defaults.baseURL = "http://localhost:8080/";
+// axios.defaults.baseURL = "http://localhost:8080/";
 
 const _middlewares = [];
 
@@ -42,6 +42,16 @@ export const getUserRoles = function(obj) {
 /* Users */
 export const addUser = (user) => {
   return _post("user", user);
+};
+
+export const getUser = (option) => {
+  if (typeof option === "object") {
+    return _getWithLimitOffset(`user`, option);
+  } else if (option) {
+    return _get(`user/${option}`);
+  }
+
+  return _get(`user`);
 };
 
 export const addUserToCompany = (userId, companyId, data) => {
