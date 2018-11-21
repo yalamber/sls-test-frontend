@@ -146,7 +146,7 @@ export default class extends Component {
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push("/dashboard/agency/user/create");
+                      this.props.history.push(`/dashboard/agency/user/create/${this.props.match.params.agencyId}`);
                     }}
                   >
                     <Icon type="plus" />

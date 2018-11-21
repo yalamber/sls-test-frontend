@@ -43,7 +43,7 @@ class Create extends Component {
     this.setState({ loading: true });
     try {
       let responseAgencyTeam = await getAgencyTeam(teamId);
-      let responseUser = await getUser();
+      let responseUser = await getUser({ query: { limit: 99 } });
       let responseRoles = await this.getRolesByType();
 
       this.setState({
@@ -69,7 +69,7 @@ class Create extends Component {
         userId,
         teamId,
         status,
-        roleId,
+        roleId
       });
       if (responseAgencyTeamMember.status === 200) {
         message.success("Successfully Saved");
@@ -85,7 +85,7 @@ class Create extends Component {
   }
 
   async getRolesByType(opts = {}) {
-    const { type = 'agencyTeamUser' } = opts;
+    const { type = "agencyTeamUser" } = opts;
     const data = await getRoles({ query: { type } });
     return data;
   }
