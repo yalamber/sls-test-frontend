@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, Select, Tooltip, Spin, Form } from "antd";
 import LayoutWrapper from "../../../../../components/utility/layoutWrapper.js";
+import PageHeader from "../../../../../components/utility/pageHeader";
 import basicStyle from "../../../../../settings/basicStyle";
 import Box from "../../../../../components/utility/box";
 import ActionButtons from "./partials/ActionButtons";
@@ -52,116 +53,92 @@ export default class extends Component {
         {
           title: "Actions",
           key: "actions",
-          render: row => <ActionButtons row={row}/>
+          render: row => <ActionButtons row={row} />
         }
       ],
+      company: {},
       dataSource: [],
-      companies: [],
       teams: [],
-      selectedCompany: undefined,
       selectedTeam: undefined,
       loading: false
     };
-    this.handleCompanyChange = this.handleCompanyChange.bind(this);
+    // this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
-    this.isCompanyAndTeamSelected = this.isCompanyAndTeamSelected.bind(this);
+    this.isTeamSelected = this.isTeamSelected.bind(this);
     // this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
+    const { companyId } = this.props.match.params;
     this.setState({ loading: true }, async () => {
       try {
-        const responseCompanies = await getCompanies();
-        this.setState({ companies: responseCompanies.data.rows }, async () => {
-          try {
-            await this.companyDropdownHasChanged(
-              null,
-              responseCompanies.data.rows
-            );
-            const { selectedCompany, teams } = this.state;
-            const responseSuites = await this.teamDropdownHasChanged();
-
-            if (
-              responseCompanies.data.rows &&
-              responseCompanies.data.rows.length
-            ) {
-              const companyFirst = responseCompanies.data.rows[0];
-              const responseCompanyTeams = await getCompanyTeams({
-                query: { clientId: companyFirst.clientId }
-              });
-              if (responseCompanyTeams && responseCompanyTeams.data) {
-                this.setState({
-                  selectedCompany: companyFirst.clientId,
-                  teams: responseCompanyTeams.data.rows,
-                  loading: false
-                });
-              } else {
-                this.setState({
-                  loading: false,
-                  selectedTeam: undefined,
-                  teams: []
-                });
-              }
-            } else {
-              this.setState({
-                loading: false,
-                selectedTeam: undefined,
-                teams: []
-              });
-            }
-          } catch (errorInner) {
-            this.setState({ loading: false });
-          }
+        const responseTeams = await getCompanyTeams({
+          query: { clientId: companyId }
         });
+
+        const {
+          data: { rows = [] }
+        } = responseTeams;
+
+        if (rows.length === 0) {
+          return this.setState({ loading: false });
+        }
+
+        const teams = rows,
+          selectedTeam = rows[0].clientTeamId;
+
+        this.setState(
+          {
+            company: rows[0].client,
+            teams,
+            selectedTeam
+          },
+          async () => {
+            try {
+              const responseSuites = await this.setTeamDropdown();
+            } catch (errorInner) {
+              this.setState({ loading: false });
+            }
+          }
+        );
       } catch (error) {
         this.setState({ loading: false });
       }
     });
   }
 
-  async teamDropdownHasChanged() {
-    const { teams, selectedTeam } = this.state;
-    let teamId = selectedTeam;
-    if (selectedTeam) {
-      teamId = selectedTeam;
-    } else if (teams && teams.length) {
-      teamId = teams[0].clientTeamId;
-    } else {
-      return Promise.resolve([]);
-    }
-
+  async setTeamDropdown() {
     return new Promise(async (resolve, reject) => {
-      this.setState({ selectedTeam: teamId, loading: true }, async () => {
-        try {
-          const responseCompanySuites = await getCompanySuites({
-            query: {
-              clientTeamId: teamId /* clientId: this.state.selectedCompany */
-            }
-          });
-          if (
-            responseCompanySuites &&
-            responseCompanySuites.data &&
-            responseCompanySuites.data.rows &&
-            responseCompanySuites.data.rows.length
-          ) {
-            this.setState(
-              {
-                dataSource: responseCompanySuites.data.rows,
-                loading: false
-              },
-              () => {
-                return resolve(responseCompanySuites.data.rows);
-              }
-            );
-          } else {
-            this.setState({ loading: false, dataSource: [] }, () => {
-              return resolve([]);
-            });
+      const { teams, selectedTeam } = this.state;
+      try {
+        const responseCompanySuites = await getCompanySuites({
+          query: {
+            clientTeamId: selectedTeam /* clientId: this.state.selectedCompany */
           }
-        } catch (error) {
-          return reject(error);
+        });
+        if (
+          responseCompanySuites &&
+          responseCompanySuites.data &&
+          responseCompanySuites.data.rows &&
+          responseCompanySuites.data.rows.length
+        ) {
+          this.setState(
+            {
+              dataSource: responseCompanySuites.data.rows,
+              loading: false
+            },
+            () => {
+              return resolve(responseCompanySuites.data.rows);
+            }
+          );
+        } else {
+          this.setState({ loading: false, dataSource: [] }, () => {
+            return resolve([]);
+          });
         }
-      });
+      } catch (err1) {
+        return reject(err1);
+      }
     });
   }
 
@@ -259,7 +236,7 @@ export default class extends Component {
       async () => {
         try {
           const { selectedCompany } = this.state;
-          const responseSuites = await this.teamDropdownHasChanged();
+          const responseSuites = await this.setTeamDropdown();
         } catch (e) {
           this.setState({ loading: false });
         }
@@ -267,8 +244,8 @@ export default class extends Component {
     );
   }
 
-  isCompanyAndTeamSelected() {
-    return !!this.state.selectedCompany && !!this.state.selectedTeam;
+  isTeamSelected() {
+    return !!this.state.selectedTeam;
   }
 
   // handleDelete(id) {
@@ -287,11 +264,7 @@ export default class extends Component {
       margin: "5px 5px 10px 0px"
     };
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const companiesOptions = this.state.companies.map(company => (
-      <Option key={company.clientId} value={company.clientId}>
-        {company.name}
-      </Option>
-    ));
+
     const { teams = [] } = this.state;
     const teamsOptions = teams.length ? (
       teams.map(team => (
@@ -307,6 +280,9 @@ export default class extends Component {
 
     return (
       <LayoutWrapper>
+        <PageHeader>
+          {this.state.company ? this.state.company.name : ""} -> Test Suite List
+        </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -316,20 +292,21 @@ export default class extends Component {
                   <Tooltip
                     placement="topRight"
                     title={
-                      !this.isCompanyAndTeamSelected()
+                      !this.isTeamSelected()
                         ? "Please select company and team."
                         : ""
                     }
                   >
                     <ActionBtn
                       type="primary"
-                      disabled={!this.isCompanyAndTeamSelected()}
+                      disabled={!this.isTeamSelected()}
                       onClick={() => {
                         this.props.history.push(
-                          "/dashboard/test-manager/suite/create/" +
-                            this.state.selectedCompany +
-                            "/" +
+                          `/dashboard/company/${
+                            this.props.match.params.companyId
+                          }/test-manager/suite/create/${
                             this.state.selectedTeam
+                          }`
                         );
                       }}
                     >
@@ -340,19 +317,6 @@ export default class extends Component {
                 </ButtonHolders>
               </TitleWrapper>
               <Row>
-                <Col md={6} sm={24} xs={24} style={margin}>
-                  <FormItem label="Company Name *">
-                    <Select
-                      showSearch
-                      placeholder="Please Choose Company Name"
-                      style={{ width: "100%" }}
-                      onChange={this.handleCompanyChange}
-                      value={this.state.selectedCompany}
-                    >
-                      {companiesOptions}
-                    </Select>
-                  </FormItem>
-                </Col>
                 <Col md={6} sm={24} xs={24} style={margin}>
                   <FormItem label="Team Name:">
                     <Select
