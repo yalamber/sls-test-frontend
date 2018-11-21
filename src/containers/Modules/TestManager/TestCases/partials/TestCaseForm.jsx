@@ -6,7 +6,7 @@ import {
   ActionWrapper,
 } from '../../../crud.style';
 import {getCompanies, getTeams} from "../../../../../helpers/http-api-client";
-import {getSuites} from "../../../../../helpers/http-api-client";
+import {getCompanySuites} from "../../../../../helpers/http-api-client";
 import {testCaseValidation} from "../../../../../Validations/testCaseValidation";
 
 const FormItem = Form.Item;
@@ -86,7 +86,7 @@ class TeamForm extends Component {
   }
 
   updateSuite(companyId, teamId) {
-    getSuites(companyId, teamId).then(res => {
+    getCompanySuites(companyId, teamId).then(res => {
       this.setState({suites: res.data});
     })
   }

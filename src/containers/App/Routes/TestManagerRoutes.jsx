@@ -1,15 +1,15 @@
 import asyncComponent from "../../../helpers/AsyncFunc";
 
 export default [
-  //Suite
-  {
-    path: "test-manager/suite/list/:companyId?/:teamId?",
-    component: asyncComponent(() => import("../../Modules/TestManager/TestSuite/List"))
-  },
-  {
-    path: "test-manager/suite/create/:companyId?/:teamId?",
-    component: asyncComponent(() => import("../../Modules/TestManager/TestSuite/Create"))
-  },
+  //Suite deprecated by Company/TestManager/Suite
+  // {
+  //   path: "test-manager/suite/list/:companyId?/:teamId?",
+  //   component: asyncComponent(() => import("../../Modules/TestManager/TestSuite/List"))
+  // },
+  // {
+  //   path: "test-manager/suite/create/:companyId?/:teamId?",
+  //   component: asyncComponent(() => import("../../Modules/TestManager/TestSuite/Create"))
+  // },
 
   //Cases
   {
