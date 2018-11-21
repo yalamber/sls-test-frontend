@@ -31,8 +31,8 @@ const _middlewares = [];
 export const getUserRoles = function(obj) {
   const options = obj;
   if (typeof options === "object") {
-    return _getWithLimitOffset(`role`, options)
-  }/* else if (options) {
+    return _getWithLimitOffset(`role`, options);
+  } /* else if (options) {
     return _get(`role/${options}`);
   }*/
 
@@ -40,11 +40,11 @@ export const getUserRoles = function(obj) {
 };
 
 /* Users */
-export const addUser = (user) => {
+export const addUser = user => {
   return _post("user", user);
 };
 
-export const getUser = (option) => {
+export const getUser = option => {
   if (typeof option === "object") {
     return _getWithLimitOffset(`user`, option);
   } else if (option) {
@@ -87,9 +87,9 @@ export const getAgency = function(objOrAgencyId) {
   return _get(`agency`);
 };
 
-export const getAgencies = (option) => {
+export const getAgencies = option => {
   return _getWithLimitOffset(`agency`, option);
-}
+};
 
 export const deleteAgency = function(id) {
   return _deleteRecord("agency/" + id);
@@ -188,18 +188,23 @@ export const deleteCompanyTeam = function(teamId) {
   return _deleteRecord("client-team/" + teamId);
 };
 
-export const getCompanyTeamMembers = function(teamId, option = {}) {
-  return _getWithLimitOffset(`client-team/${teamId}/member`, option);
-};
-
 export const deleteCompanyTeamMember = function(teamId, userId) {
   return _deleteRecord(`client-team/${teamId}/member/${userId}`);
 };
 
 /** Company Team Member **/
 
-export const addCompanyTeamMember = function({ teamId, userId, status, roleId }) {
+export const addCompanyTeamMember = function({
+  teamId,
+  userId,
+  status,
+  roleId
+}) {
   return _post(`client-team/${teamId}/member`, { userId, roleId, status });
+};
+
+export const getCompanyTeamMembers = function(teamId, option = {}) {
+  return _getWithLimitOffset(`client-team/${teamId}/member`, option);
 };
 
 /** Company Users **/
@@ -224,7 +229,7 @@ export const deleteCompanyUser = function(id) {
   return _deleteRecord("user/" + id);
 };
 
-export const getCompanyUsersByTeamId = function(teamId) {
+export const getCompanyMembersByTeamId = function(teamId) {
   return _get("client-team/" + teamId + "/member");
 };
 
@@ -232,19 +237,17 @@ export const getCompanyUsers = function(companyId, option = {}) {
   return _getWithLimitOffset(`client/${companyId}/user`, option);
 };
 
-export const getCompanyTeamUsers = function(teamId, option = {}) {
-  return _getWithLimitOffset(`client-team/${teamId}/member`, option);
+/** Test Manager **/
+export const getCompanySuites = option => {
+  if (option && typeof option === "object" && Object.keys(option).length) {
+    return _getWithLimitOffset(`test/suite`, option);
+  } else if (option) {
+    return _get(`test/suite/${option}`);
+  }
+
+  return _get(`test/suite`);
 };
 
-// Test Manager Action
-export const getSuites = (clientId = null, clientTeamId = null) => {
-  if (clientId) {
-    return _get("test/suite", { clientId });
-  } else if (clientTeamId) {
-    return _get("test/suite", { clientTeamId });
-  }
-  return Promise.resolve({});
-};
 export const addSuite = formData => {
   return _post("test/suite", formData);
 };
@@ -344,7 +347,7 @@ export const deleteRole = function(id) {
   return _deleteRecord("role/" + id);
 };
 
-export const getRoles = (option) => {
+export const getRoles = option => {
   return _getWithLimitOffset(`role`, option);
 };
 
@@ -352,17 +355,14 @@ export const getRole = function(roleId) {
   return _get(`role/${roleId}`);
 };
 
-export const getRoleTypes = (option) => {
+export const getRoleTypes = option => {
   return _getWithLimitOffset(`role/types`, option);
 };
-
-
 
 /** Test Queue **/
 export const getTestQueues = function(options) {
   return _getWithLimitOffset("test/queue", options);
 };
-
 
 /*
 *
@@ -391,7 +391,7 @@ export const _get = function(url, data = {}) {
 };
 
 export const _getWithLimitOffset = function(url, option = {}) {
-  const { paginationOptions, query } = option;
+  const { paginationOptions = {}, query } = option;
   let queryObj = {};
   if (query) {
     queryObj = { ...query };

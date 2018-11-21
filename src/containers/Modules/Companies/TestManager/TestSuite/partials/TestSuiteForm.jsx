@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {Form, Row, Col, Input, Select} from 'antd';
 import {withRouter} from 'react-router-dom'
-import Button from '../../../../../components/uielements/button';
+import Button from '../../../../../../components/uielements/button';
 import {
   ActionWrapper,
-} from '../../../crud.style';
-import {testSuiteValidation} from "../../../../../Validations/testSuiteValidation";
+} from '../../../../crud.style';
+import {testSuiteValidation} from "../../../../../../Validations/testSuiteValidation";
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;

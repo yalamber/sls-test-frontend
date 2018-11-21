@@ -1,9 +1,9 @@
 import React from "react";
-import Popconfirms from '../../../../../components/feedback/popconfirm';
+import Popconfirms from '../../../../../../components/feedback/popconfirm';
 
 import {
   ActionWrapper,
-} from '../../../crud.style';
+} from '../../../../crud.style';
 import {Tooltip} from "antd";
 
 export default function ActionButtons(props) {
@@ -24,7 +24,7 @@ export default function ActionButtons(props) {
           okText="Yes"
           cancelText="No"
           placement="topRight"
-          onConfirm={() => props.delete(props.row)}
+          onConfirm={() => alert("...")}
         >
           <a className="deleteBtn">
             <i className="ion-android-delete"/>

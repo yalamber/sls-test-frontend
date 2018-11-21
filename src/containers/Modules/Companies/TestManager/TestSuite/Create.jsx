@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import { Row, Col, message, Spin } from "antd";
-import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
-import basicStyle from "../../../../settings/basicStyle";
-import PageHeader from "../../../../components/utility/pageHeader";
+import LayoutWrapper from "../../../../../components/utility/layoutWrapper.js";
+import basicStyle from "../../../../../settings/basicStyle";
+import PageHeader from "../../../../../components/utility/pageHeader";
 
-import { TitleWrapper, ComponentTitle } from "../../crud.style";
+import { TitleWrapper, ComponentTitle } from "../../../crud.style";
 
-import Box from "../../../../components/utility/box";
+import Box from "../../../../../components/utility/box";
 import TestSuiteForm from "./partials/TestSuiteForm";
-import { addSuite } from "../../../../helpers/http-api-client";
-import { getClientTeam, getCompany } from "../../../../helpers/http-api-client";
-import Errors from "../../../Errors";
-import { scrollToTop } from '../../../../util/dom-util';
+import { addSuite } from "../../../../../helpers/http-api-client";
+import { getClientTeam, getCompany } from "../../../../../helpers/http-api-client";
+import Errors from "../../../../Errors";
+import { scrollToTop } from '../../../../../util/dom-util';
 
 export default class extends Component {
   constructor() {
