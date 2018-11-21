@@ -1,6 +1,7 @@
 import {required, email} from './rules'
 
 export const userValidation = {
+  genericRequiredRule: [required],
   status: [required],
   username: [
     {required: true, message: "This field is required."},
