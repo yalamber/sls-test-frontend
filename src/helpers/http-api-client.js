@@ -114,6 +114,11 @@ export const addAgencyUser = function(user) {
   return _post("user", user);
 };
 
+export const addUserToAgency = (userId, agencyId, data) => {
+  data.userId = userId;
+  return _post(`agency/${agencyId}/user`, data);
+};
+
 /** Agency Team Member **/
 
 export const addAgencyTeamMember = function({ teamId, userId, status }) {
