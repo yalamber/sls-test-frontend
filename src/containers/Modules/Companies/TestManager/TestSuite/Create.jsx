@@ -41,12 +41,7 @@ export default class extends Component {
     addSuite({ clientTeamId: this.props.match.params.teamId, ...formData })
       .then(res => {
         message.success("Successfully Saved");
-        this.props.history.push(
-          "../../list/" +
-            this.props.match.params.companyId +
-            "/" +
-            this.props.match.params.teamId
-        );
+        this.props.history.goBack();
         resetForm();
       })
       .catch(error => {
