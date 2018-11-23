@@ -237,7 +237,7 @@ export const getCompanyUsers = function(companyId, option = {}) {
   return _getWithLimitOffset(`client/${companyId}/user`, option);
 };
 
-/** Test Manager **/
+/** Test Manager -> Test Suite  **/
 export const getCompanySuites = option => {
   if (option && typeof option === "object" && Object.keys(option).length) {
     return _getWithLimitOffset(`test/suite`, option);
@@ -253,6 +253,21 @@ export const addSuite = formData => {
 };
 export const deleteSuite = row => {
   return _deleteRecord("test/suite/" + row.testSuiteId);
+};
+
+/** Test Manager -> Test Suite  **/
+export const getCompanyTestRun = option => {
+  if (option && typeof option === "object" && Object.keys(option).length) {
+    return _getWithLimitOffset(`test/run`, option);
+  } else if (option) {
+    return _get(`test/run/${option}`);
+  }
+
+  return _get(`test/run`);
+};
+
+export const addCompanyTestRun = formData => {
+  return _post("test/run", formData);
 };
 
 //cases

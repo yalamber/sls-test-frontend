@@ -61,6 +61,8 @@ export default [
     path: "company/test-manager",
     component: asyncComponent(() => import("../../Modules/Companies/TestManager/List"))
   },
+
+  /* test manager -> Test Suite */
   {
     path: "company/:companyId/test-manager/suite/create/:teamId",
     component: asyncComponent(() => import("../../Modules/Companies/TestManager/TestSuite/Create"))
@@ -69,4 +71,11 @@ export default [
     path: "company/:companyId/test-manager/",
     component: asyncComponent(() => import("../../Modules/Companies/TestManager/TestSuite/List"))
   },
+
+  /* test manager -> Test Run */
+  {
+    path: "company/test-manager/test-run",
+    component: asyncComponent(() => import("../../Modules/Companies/TestManager/TestRun/List"))
+  },
+
 ]
