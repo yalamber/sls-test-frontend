@@ -15,7 +15,7 @@ import {
   TableClickable as Table
 } from "../../../crud.style";
 import {
-  getCompanies,
+  getCompany,
   getCompanyTestRun
   // addCompanyTestRun
 } from "../../../../../helpers/http-api-client";
@@ -28,11 +28,12 @@ export default class extends Component {
   constructor() {
     super();
     this.state = {
+      company: {},
       columns: [
         {
-          title: "Team",
-          dataIndex: "team",
-          key: "team"
+          title: "Agency Team",
+          dataIndex: "agencyTeam.name",
+          key: "agencyTeam"
         },
         {
           title: "Run Title",
@@ -64,14 +65,17 @@ export default class extends Component {
     const { companyId } = this.props.match.params;
     this.setState({ loading: true }, async () => {
       try {
-        const responseTestRun = await getCompanyTestRun({
+        const responseCompany = await getCompany(companyId);
+        console.log("i got!", responseCompany)
+        const responseTestRun = await getCompanyTestRun(/*{
           query: { clientId: companyId }
-        });
+        }*/);
 
         const {
           data: { rows = [] }
         } = responseTestRun;
         this.setState({
+          company: responseCompany.data,
           dataSource: rows,
           loading: false
         });
@@ -104,7 +108,7 @@ export default class extends Component {
                       this.props.history.push(
                         `/dashboard/company/${
                           this.props.match.params.companyId
-                        }/test-manager/suite/create/`
+                        }/test-manager/test-run/create/`
                       );
                     }}
                   >

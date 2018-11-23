@@ -248,6 +248,10 @@ export const getCompanySuites = option => {
   return _get(`test/suite`);
 };
 
+export const getSuites = option => {
+  return getCompanySuites(option);
+}
+
 export const addSuite = formData => {
   return _post("test/suite", formData);
 };
@@ -266,7 +270,7 @@ export const getCompanyTestRun = option => {
   return _get(`test/run`);
 };
 
-export const addCompanyTestRun = formData => {
+export const addTestRun = formData => {
   return _post("test/run", formData);
 };
 

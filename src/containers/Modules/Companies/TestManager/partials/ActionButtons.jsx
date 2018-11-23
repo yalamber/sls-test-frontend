@@ -21,7 +21,7 @@ const ActionButtons = (props) => {
         </a>
       </Tooltip>
       <Tooltip placement="topLeft" title="Show Test Run">
-        <a onClick={() => props.history.push(`test-manager/test-run`)}>
+        <a onClick={() => props.history.push(`${props.row.clientId}/test-manager/test-run`)}>
           <i className="ion-ios-paperplane"/>
         </a>
       </Tooltip>
