@@ -190,6 +190,7 @@ export default class extends Component {
     const margin = {
       margin: "5px 5px 10px 0px"
     };
+
     const { rowStyle, colStyle, gutter } = basicStyle;
     const suiteOptions = this.state.suites.map(suite => (
       <Option key={suite.testSuiteId} value={suite.testSuiteId}>
@@ -220,7 +221,7 @@ export default class extends Component {
                       type="primary"
                       disabled={!this.isSuiteSelected()}
                       onClick={() => {
-                        this.props.history.push(`create`);
+                        this.props.history.push(`create/${this.state.selectedSuite}`);
                       }}
                     >
                       <Icon type="plus" />
@@ -233,7 +234,7 @@ export default class extends Component {
                 <Col md={6} sm={24} xs={24} style={margin}>
                   <Select
                     showSearch
-                    placeholder="Please Choose Suite"
+                    placeholder="Please Choose Test Suite"
                     style={{ width: "100%" }}
                     onChange={this.handleSuiteChange}
                   >
