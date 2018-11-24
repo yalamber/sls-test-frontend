@@ -260,7 +260,7 @@ export const deleteSuite = row => {
 };
 
 /** Test Manager -> Test Suite  **/
-export const getCompanyTestRun = option => {
+export const getTestRun = option => {
   if (option && typeof option === "object" && Object.keys(option).length) {
     return _getWithLimitOffset(`test/run`, option);
   } else if (option) {
@@ -274,17 +274,27 @@ export const addTestRun = formData => {
   return _post("test/run", formData);
 };
 
-//cases
-export const getCases = (companyId, teamId, suiteId) => {
-  return _get("test/case?suiteId=" + suiteId);
+/** Test Manager -> Test Case  **/
+export const getTestCase = option => {
+  if (option && typeof option === "object" && Object.keys(option).length) {
+    return _getWithLimitOffset(`test/case`, option);
+  } else if (option) {
+    return _get(`test/case/${option}`);
+  }
+
+  return _get(`test/case`);
 };
 
 export const addTestCase = formData => {
-  delete formData.company;
-  delete formData.team;
-  delete formData.title;
   return _post("test/case", formData);
 };
+
+// export const addTestCase = formData => {
+//   delete formData.company;
+//   delete formData.team;
+//   delete formData.title;
+//   return _post("test/case", formData);
+// };
 
 export const deleteTestCase = id => {
   return _deleteRecord("test/case/" + id);

@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {Form, Row, Col, Input, message, Select, Divider} from 'antd';
 import {withRouter} from 'react-router-dom'
-import Button from '../../../../../components/uielements/button';
+import Button from '../../../../../../components/uielements/button';
 import {
   ActionWrapper,
-} from '../../../crud.style';
-import {getCompanies, getTeams} from "../../../../../helpers/http-api-client";
-import {getSuites} from "../../../../../helpers/http-api-client";
-import {testCaseValidation} from "../../../../../Validations/testCaseValidation";
+} from '../../../../crud.style';
+import {getCompanies, getTeams} from "../../../../../../helpers/http-api-client";
+import {getCompanySuites} from "../../../../../../helpers/http-api-client";
+import {testCaseValidation} from "../../../../../../Validations/testCaseValidation";
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;
@@ -86,7 +86,7 @@ class TeamForm extends Component {
   }
 
   updateSuite(companyId, teamId) {
-    getSuites(companyId, teamId).then(res => {
+    getCompanySuites(companyId, teamId).then(res => {
       this.setState({suites: res.data});
     })
   }

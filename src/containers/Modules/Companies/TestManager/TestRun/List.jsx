@@ -16,7 +16,7 @@ import {
 } from "../../../crud.style";
 import {
   getCompany,
-  getCompanyTestRun
+  getTestRun
   // addCompanyTestRun
 } from "../../../../../helpers/http-api-client";
 import { dateTime } from "../../../../../constants/dateFormat";
@@ -66,8 +66,7 @@ export default class extends Component {
     this.setState({ loading: true }, async () => {
       try {
         const responseCompany = await getCompany(companyId);
-        console.log("i got!", responseCompany)
-        const responseTestRun = await getCompanyTestRun(/*{
+        const responseTestRun = await getTestRun(/*{
           query: { clientId: companyId }
         }*/);
 

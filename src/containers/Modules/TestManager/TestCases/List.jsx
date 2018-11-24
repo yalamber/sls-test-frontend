@@ -12,7 +12,7 @@ import {
   TableClickable as Table
 } from '../../crud.style';
 import {getCompanies, getTeams} from "../../../../helpers/http-api-client";
-import {deleteTestCase, getCases} from "../../../../helpers/http-api-client";
+import {deleteTestCase, getTestCase} from "../../../../helpers/http-api-client";
 import Moment from "react-moment";
 import {dateTime} from "../../../../constants/dateFormat";
 
@@ -82,7 +82,7 @@ export default class extends Component {
   }
 
   updateRecords() {
-    getCases(this.state.selectedCompany, this.state.selectedTeam).then(res => {
+    getTestCase(this.state.selectedCompany, this.state.selectedTeam).then(res => {
       this.setState({dataSource: res.data})
     })
   }

@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import {Row, Col, Spin} from 'antd';
-import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../../settings/basicStyle';
+import LayoutWrapper from '../../../../../components/utility/layoutWrapper.js';
+import basicStyle from '../../../../../settings/basicStyle';
 import {
   TitleWrapper,
   ComponentTitle,
-} from '../../crud.style';
+} from '../../../crud.style';
 
-import Box from '../../../../components/utility/box';
+import Box from '../../../../../components/utility/box';
 import TestCaseForm from "./partials/TestCaseForm";
-import {addTestCase} from "../../../../helpers/http-api-client";
-import Errors from "../../../Errors";
+import {addTestCase} from "../../../../../helpers/http-api-client";
+import Errors from "../../../../Errors";
 
 export default class extends Component {
 
