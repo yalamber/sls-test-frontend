@@ -252,6 +252,10 @@ export const getSuites = option => {
   return getCompanySuites(option);
 }
 
+export const getSuite = option => {
+  return getSuites(option);
+}
+
 export const addSuite = formData => {
   return _post("test/suite", formData);
 };
