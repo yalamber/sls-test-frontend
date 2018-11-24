@@ -11,7 +11,7 @@ const ActionButtons = (props) => {
   return (
     <ActionWrapper>
       <Tooltip placement="topLeft" title="Show Test Case List">
-        <a onClick={() => props.history.push(`users/${props.row.clientId}/1`)}>
+        <a onClick={() => props.history.push(`${props.row.clientId}/test-manager/test-case/list`)}>
           <i className="ion-ios-flask"/>
         </a>
       </Tooltip>

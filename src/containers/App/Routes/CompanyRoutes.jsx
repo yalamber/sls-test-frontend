@@ -62,6 +62,16 @@ export default [
     component: asyncComponent(() => import("../../Modules/Companies/TestManager/List"))
   },
 
+  /* test manager -> Test Case */
+  {
+    path: "company/:companyId/test-manager/test-case/list",
+    component: asyncComponent(() => import("../../Modules/Companies/TestManager/TestCases/List"))
+  },
+  {
+    path: "company/:companyId/test-manager/test-case/create",
+    component: asyncComponent(() => import("../../Modules/Companies/TestManager/TestCases/Create"))
+  },
+
   /* test manager -> Test Suite */
   {
     path: "company/:companyId/test-manager/suite/create/:teamId",
