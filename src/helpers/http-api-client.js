@@ -1,5 +1,4 @@
 /*
-*npm s
 * HOW TO ADD A NEW ACTION
 *
 *
@@ -9,6 +8,7 @@
 *   return _post("client", company);
 * };
 *
+* TODO: Refactor this to make it proper resource based actions
 */
 
 import axios from "axios";

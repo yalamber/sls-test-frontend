@@ -1,4 +1,5 @@
 import { Map } from 'immutable';
+import jwtDecode from "jwt-decode";
 
 export function setToken(token) {
   localStorage.setItem('id_token', token);
@@ -36,9 +37,20 @@ export function getToken() {
   }
 }
 
+export function getUserTokenData() {
+  try {
+    const idToken = localStorage.getItem('id_token');
+    return jwtDecode(idToken);
+  } catch (err) {
+    clearToken();
+    return false;
+  }
+}
+
 export function getUserData() {
   try {
     const userData = localStorage.getItem('user');
+    
     return new Map({ userData });
   } catch (err) {
     clearUserData();

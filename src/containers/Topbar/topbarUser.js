@@ -21,10 +21,6 @@ class TopbarUser extends Component {
     };
   }
 
-  componentDidMount = () => {
-    this.getUserName();
-  }
-
   hide() {
     this.setState({ visible: false });
   }
@@ -33,17 +29,8 @@ class TopbarUser extends Component {
     this.setState({ visible: !this.state.visible });
   }
 
-  getUserName() {
-    var token = getToken().get('idToken');
-
-    var tokenData = token.split('.')[1]
-    var decodedTokenData = JSON.parse(window.atob(tokenData))
-
-    this.setState({ userName: decodedTokenData && decodedTokenData.username ? decodedTokenData.username : "No name found" });
-  }
-
   render() {
-    const { userName } = this.state;
+    const { userData, logout, closeAll } = this.props;
 
     const content = (
       <TopbarDropdownWrapper className="isoUserDropdown">
@@ -53,8 +40,8 @@ class TopbarUser extends Component {
         <a
           className="isoDropdownLink"
           onClick={() => {
-            this.props.logout();
-            this.props.closeAll();
+            logout();
+            closeAll();
           }}
         >
           <IntlMessages id="topbar.logout" />
@@ -71,7 +58,10 @@ class TopbarUser extends Component {
         arrowPointAtCenter={true}
         placement="bottomLeft"
       >
-        <h3>{userName}</h3>
+        <div className="isoIconWrapper">
+          <i className="ion-ios-person-outline"/> &nbsp;
+          {userData.username}
+        </div>
       </Popover>
     );
   }
