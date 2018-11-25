@@ -6,6 +6,7 @@ import basicStyle from "../../../settings/basicStyle";
 import Box from "../../../components/utility/box";
 import { getAgencies, deleteAgency } from "../../../helpers/http-api-client";
 import ActionButtons from "./partials/ActionButtons";
+import TestManagerActionButtons from "./TestManager/partials/ActionButtons";
 
 import {
   ActionBtn,
@@ -42,6 +43,11 @@ class List extends Component {
           dataIndex: "location",
           key: "location",
           sorter: true
+        },
+        {
+          title: "Test Manager Actions",
+          key: "testManagerActions",
+          render: row => <TestManagerActionButtons row={row} />
         },
         {
           title: "Actions",
@@ -132,7 +138,7 @@ class List extends Component {
         <PageHeader>
            Agencies
         </PageHeader>
-        
+
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
