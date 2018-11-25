@@ -281,7 +281,7 @@ export default class extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          {this.state.company ? this.state.company.name : ""} -> Test Suite List
+          {this.state.company ? this.state.company.name : ""} | Test Suite List
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
