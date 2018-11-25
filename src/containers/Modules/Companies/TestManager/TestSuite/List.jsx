@@ -62,13 +62,14 @@ export default class extends Component {
       selectedTeam: undefined,
       loading: false
     };
-    // this.handleCompanyChange = this.handleCompanyChange.bind(this);
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.isTeamSelected = this.isTeamSelected.bind(this);
     // this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
+    const routerStateClientTeamId =
+      this.props.location.state && this.props.location.state.clientTeamId;
     const { companyId } = this.props.match.params;
     this.setState({ loading: true }, async () => {
       try {
@@ -85,7 +86,9 @@ export default class extends Component {
         }
 
         const teams = rows,
-          selectedTeam = rows[0].clientTeamId;
+          selectedTeam = routerStateClientTeamId
+            ? routerStateClientTeamId
+            : rows[0].clientTeamId;
 
         this.setState(
           {
@@ -142,90 +145,6 @@ export default class extends Component {
     });
   }
 
-  async companyDropdownHasChanged(selectedCompanyId, companies) {
-    let companyId = selectedCompanyId;
-    if (selectedCompanyId) {
-      companyId = selectedCompanyId;
-    } else if (companies && companies.length) {
-      companyId = companies[0].clientId;
-    } else {
-      return Promise.resolve([]);
-    }
-
-    return new Promise((resolve, reject) => {
-      this.setState(
-        {
-          selectedCompany: companyId,
-          teams: [],
-          selectedTeam: undefined,
-          loading: true
-        },
-        async () => {
-          try {
-            const responseTeams = await getCompanyTeams({
-              query: { clientId: companyId }
-            });
-
-            if (
-              responseTeams &&
-              responseTeams.data &&
-              responseTeams.data.rows &&
-              responseTeams.data.rows.length
-            ) {
-              const { rows } = responseTeams.data;
-              this.setState(
-                {
-                  teams: rows,
-                  selectedTeam: rows[0].clientTeamId,
-                  loading: false
-                },
-                () => {
-                  return resolve(rows);
-                }
-              );
-            } else {
-              this.setState(
-                { loading: false, selectedTeam: undefined, teams: [] },
-                () => {
-                  return resolve([]);
-                }
-              );
-            }
-          } catch (error) {
-            return reject(error);
-          }
-        }
-      );
-    });
-  }
-
-  handleCompanyChange(companyId) {
-    this.setState(
-      {
-        selectedCompany: companyId,
-        selectedTeam: undefined,
-        dataSource: [],
-        teams: [],
-        loading: true
-      },
-      async () => {
-        try {
-          const { selectedCompany } = this.state;
-          const responseTeams = await this.companyDropdownHasChanged(
-            selectedCompany
-          );
-          if (responseTeams && responseTeams.length) {
-            this.handleTeamChange(responseTeams[0].clientTeamId);
-          } else {
-            this.setState({ loading: false });
-          }
-        } catch (e) {
-          this.setState({ loading: false });
-        }
-      }
-    );
-  }
-
   handleTeamChange(teamId) {
     if (!teamId || !this.state.teams.length) {
       return this.setState({ selectedTeam: undefined, dataSource: [] });
@@ -247,17 +166,6 @@ export default class extends Component {
   isTeamSelected() {
     return !!this.state.selectedTeam;
   }
-
-  // handleDelete(id) {
-  //   deleteSuite(id)
-  //     .then(res => {
-  //       this.updateRecords(this.state.selectedCompany, this.state.selectedTeam);
-  //     })
-  //     .catch(error => {
-  //       this.updateRecords(this.state.selectedCompany, this.state.selectedTeam);
-  //       console.log(error);
-  //     });
-  // }
 
   render() {
     const margin = {
