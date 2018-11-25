@@ -83,7 +83,7 @@ class TeamsList extends Component {
       getAgencyTeams({ query: { agencyId } })
         .then(res => {
           this.setState({
-            dataSource: res.data,
+            dataSource: res.data.rows,
             loading: false
           });
         })

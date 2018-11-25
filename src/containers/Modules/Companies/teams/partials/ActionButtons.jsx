@@ -10,10 +10,26 @@ const ActionButtons = props => {
       <Tooltip placement="topLeft" title="Show Members List">
         <a
           onClick={() => {
-            props.history.push(`/dashboard/company/teams/${props.row.clientTeamId}/members`);
+            props.history.push(
+              `/dashboard/company/teams/${props.row.clientTeamId}/members`
+            );
           }}
         >
           <i className="ion-ios-person" />
+        </a>
+      </Tooltip>
+      <Tooltip placement="topLeft" title="Show Test Suite">
+        <a
+          onClick={() =>
+            props.history.push({
+              pathname: `/dashboard/company/${props.row.clientId}/test-manager`,
+              state: {
+                clientTeamId: props.row.clientTeamId
+              }
+            })
+          }
+        >
+          <i className="ion-ios-photos" />
         </a>
       </Tooltip>
       <Tooltip placement="topLeft" title="Edit Record">

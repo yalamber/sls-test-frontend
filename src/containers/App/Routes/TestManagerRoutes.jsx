@@ -12,20 +12,20 @@ export default [
   // },
 
   //Cases
-  {
-    path: "test-manager/cases/list",
-    component: asyncComponent(() => import("../../Modules/TestManager/TestCases/List"))
-  },
-  {
-    path: "test-manager/cases/create/:companyId?/:teamId?",
-    component: asyncComponent(() => import("../../Modules/TestManager/TestCases/Create"))
-  },
+  // {
+  //   path: "test-manager/cases/list",
+  //   component: asyncComponent(() => import("../../Modules/TestManager/TestCases/List"))
+  // },
+  // {
+  //   path: "test-manager/cases/create/:companyId?/:teamId?",
+  //   component: asyncComponent(() => import("../../Modules/TestManager/TestCases/Create"))
+  // },
 
   //Runs
-  {
-    path: "test-manager/runs/list",
-    component: asyncComponent(() => import("../../Modules/TestManager/TestRun/List"))
-  },
+  // {
+  //   path: "test-manager/runs/list",
+  //   component: asyncComponent(() => import("../../Modules/TestManager/TestRun/List"))
+  // },
 
   //QueueManage
   {
