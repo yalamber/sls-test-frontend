@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import Popover from '../../components/uielements/popover';
 import IntlMessages from '../../components/utility/intlMessages';
 import TopbarDropdownWrapper from './topbarDropdown.style';
 
-class TopbarUser extends Component {
+class TopbarAgency extends Component {
   constructor(props) {
     super(props);
     this.handleVisibleChange = this.handleVisibleChange.bind(this);
     this.hide = this.hide.bind(this);
     this.state = {
-      visible: false,
+      visible: false
     };
   }
 
@@ -23,21 +22,15 @@ class TopbarUser extends Component {
   }
 
   render() {
-    const { userData, logout, closeAll } = this.props;
+    const { agencies } = this.props;
+
     const content = (
       <TopbarDropdownWrapper className="isoUserDropdown">
-        <a className="isoDropdownLink">
-          <IntlMessages id="themeSwitcher.settings" />
-        </a>
-        <a
-          className="isoDropdownLink"
-          onClick={() => {
-            logout();
-            closeAll();
-          }}
-        >
-          <IntlMessages id="topbar.logout" />
-        </a>
+        {
+          agencies.map((agency) => <div>
+            {agency.name}
+          </div>)
+        }
       </TopbarDropdownWrapper>
     );
 
@@ -51,12 +44,14 @@ class TopbarUser extends Component {
         placement="bottomLeft"
       >
         <div className="isoIconWrapper">
-          <i className="ion-ios-person-outline"/> &nbsp;
-          {userData.username}
+          <i
+            className="ion-grid"
+          /> &nbsp;
+          Agencies
         </div>
       </Popover>
     );
   }
 }
 
-export default TopbarUser;
+export default TopbarAgency;

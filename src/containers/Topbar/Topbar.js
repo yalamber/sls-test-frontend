@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Layout } from "antd";
 import appActions from "../../redux/app/actions";
 import authAction from '../../redux/auth/actions';
+import userAction from '../../redux/user/actions';
 import TopbarUser from "./topbarUser";
 import TopbarCompany from "./topbarCompany";
 import TopbarAgency from "./topbarAgency";
@@ -14,28 +15,31 @@ import { getUserTokenData } from '../../helpers/utility';
 const { Header } = Layout;
 const { toggleCollapsed, closeAll } = appActions;
 const { logout } = authAction;
+const { requestMyAgencies } = userAction;
 const customizedTheme = themes[themeConfig.theme];
 
 class Topbar extends Component {
   state = {
-    userData: {}
+    userTokenData: {}
   };
 
   componentDidMount() {
-    this.getUserName();
+    this.props.requestMyAgencies();
+    //TODO: make these available throuh redux store
+    this.getUserTokenData();
   }
 
-  getUserName() {
-    var userData = getUserTokenData();
-    if(userData) {
-      console.log(userData);
-      this.setState({userData: userData});
+  getUserTokenData() {
+    let userTokenData = getUserTokenData();
+    if(userTokenData) {
+      this.setState({ userTokenData });
     }
   }
 
   render() {
-    const { userData } = this.state;
-    const { toggleCollapsed, logout, closeAll } = this.props;
+    const { userTokenData } = this.state;
+    const { toggleCollapsed, logout, closeAll, myAgencies = [] } = this.props;
+    console.log(myAgencies);
     const collapsed = this.props.collapsed && !this.props.openDrawer;
     const styling = {
       background: customizedTheme.backgroundColor,
@@ -62,25 +66,30 @@ class Topbar extends Component {
           </div>
 
           <ul className="isoRight">
-          
-            <li
-              onClick={() => this.setState({ selectedItem: "agency" })}
-              className="isoAgency"
-            >
-              <TopbarAgency />
-            </li>
-            <li
-              onClick={() => this.setState({ selectedItem: "company" })}
-              className="isoCompany"
-            >
-              <TopbarCompany />
-            </li>
+            { userTokenData.agencyCount > 0 && 
+              <li
+                onClick={() => this.setState({ selectedItem: "agency" })}
+                className="isoAgency"
+              >
+                <TopbarAgency agencies={myAgencies} />
+              </li>
+            }
+            { userTokenData.clientCompanyCount > 0 && 
+              <li
+                onClick={() => this.setState({ selectedItem: "company" })}
+                className="isoCompany"
+              >
+                <TopbarCompany companies={[]} />
+              </li>
+            }
+            {userTokenData && userTokenData.userData &&
             <li
               onClick={() => this.setState({ selectedItem: "user" })}
               className="isoUser"
             >
-              <TopbarUser userData={userData} logout={logout} closeAll={closeAll} />
+              <TopbarUser userData={userTokenData.userData} logout={logout} closeAll={closeAll} />
             </li>
+            }
           </ul>
         </Header>
       </TopbarWrapper>
@@ -90,7 +99,8 @@ class Topbar extends Component {
 
 export default connect(
   state => ({
-    ...state.App
+    ...state.App,
+    ...state.User
   }),
-  { toggleCollapsed, logout, closeAll }
+  { toggleCollapsed, logout, closeAll, requestMyAgencies }
 )(Topbar);

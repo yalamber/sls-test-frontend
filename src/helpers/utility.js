@@ -1,60 +1,58 @@
-import { Map } from 'immutable';
 import jwtDecode from "jwt-decode";
 
-export function setToken(token) {
-  localStorage.setItem('id_token', token);
+export function setUserToken(token) {
+  localStorage.setItem('user_token', token);
 }
 
-export function setUserData(data) {
-  localStorage.setItem('user', JSON.stringify(data));
+export function clearUserToken() {
+  localStorage.removeItem('user_token');
 }
 
-export function clearToken() {
-  localStorage.removeItem('id_token');
-}
-
-export function clearUserData() {
-  localStorage.removeItem('user');
-}
-
-export function generatePassword() {
-  let length = 8,
-    charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-    retVal = "";
-  for (let i = 0, n = charset.length; i < length; ++i) {
-    retVal += charset.charAt(Math.floor(Math.random() * n));
-  }
-  return retVal;
-}
-
-export function getToken() {
+export function getUserToken() {
   try {
-    const idToken = localStorage.getItem('id_token');
-    return new Map({ idToken });
+    const token = localStorage.getItem('user_token');
+    return token;
   } catch (err) {
-    clearToken();
-    return new Map();
+    clearUserToken();
+    return false;
   }
 }
 
 export function getUserTokenData() {
   try {
-    const idToken = localStorage.getItem('id_token');
-    return jwtDecode(idToken);
+    const token = localStorage.getItem('user_token');
+    return jwtDecode(token);
   } catch (err) {
-    clearToken();
+    clearUserToken();
     return false;
   }
 }
 
-export function getUserData() {
+export function setCompanyToken(token) {
+  localStorage.setItem('company_token', token);
+}
+
+export function clearCompanyToken() {
+  localStorage.removeItem('company_token');
+}
+
+export function getCompanyToken() {
   try {
-    const userData = localStorage.getItem('user');
-    
-    return new Map({ userData });
+    const token = localStorage.getItem('company_token');
+    return token;
   } catch (err) {
-    clearUserData();
-    return new Map();
+    clearUserToken();
+    return false;
+  }
+}
+
+export function getCompanyTokenData() {
+  try {
+    const token = localStorage.getItem('company_token');
+    return jwtDecode(token);
+  } catch (err) {
+    clearCompanyToken();
+    return false;
   }
 }
 
@@ -109,4 +107,14 @@ export function timeDifference(givenTime) {
     return 'a few seconds ago';
   };
   return getTime();
+}
+
+export function generatePassword() {
+  let length = 8,
+    charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+    retVal = "";
+  for (let i = 0, n = charset.length; i < length; ++i) {
+    retVal += charset.charAt(Math.floor(Math.random() * n));
+  }
+  return retVal;
 }

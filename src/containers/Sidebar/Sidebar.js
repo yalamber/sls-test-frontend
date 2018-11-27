@@ -12,7 +12,7 @@ import appActions from '../../redux/app/actions';
 import Logo from '../../components/utility/logo';
 import themes from '../../settings/themes';
 import { themeConfig } from '../../settings';
-import { getUserData } from '../../helpers/utility';
+import { getUserTokenData } from '../../helpers/utility';
 
 const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
@@ -33,13 +33,11 @@ const stripTrailingSlash = str => {
 class Sidebar extends Component {
   constructor(props) {
     super(props);
-
-    let user = getUserData().get('userData');
-    this.userData = JSON.parse(user);
-
+    this.userData = getUserTokenData();
     this.handleClick = this.handleClick.bind(this);
     this.onOpenChange = this.onOpenChange.bind(this);
   }
+
   handleClick(e) {
     this.props.changeCurrent([e.key]);
     if (this.props.app.view === 'MobileView') {
@@ -49,6 +47,7 @@ class Sidebar extends Component {
       }, 100);
     }
   }
+  
   onOpenChange(newOpenKeys) {
     const { app, changeOpenKeys } = this.props;
     const latestOpenKey = newOpenKeys.find(
