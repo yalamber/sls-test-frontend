@@ -71,7 +71,7 @@ class Topbar extends Component {
                 onClick={() => this.setState({ selectedItem: "agency" })}
                 className="isoAgency"
               >
-                <TopbarAgency agencies={myAgencies} />
+                <TopbarAgency myAgencies={myAgencies} />
               </li>
             }
             { userTokenData.clientCompanyCount > 0 && 
@@ -79,7 +79,7 @@ class Topbar extends Component {
                 onClick={() => this.setState({ selectedItem: "company" })}
                 className="isoCompany"
               >
-                <TopbarCompany companies={[]} />
+                <TopbarCompany myCompanies={[]} />
               </li>
             }
             {userTokenData && userTokenData.userData &&

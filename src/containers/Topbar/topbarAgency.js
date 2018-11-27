@@ -22,13 +22,13 @@ class TopbarAgency extends Component {
   }
 
   render() {
-    const { agencies } = this.props;
+    const { myAgencies } = this.props;
 
     const content = (
       <TopbarDropdownWrapper className="isoUserDropdown">
         {
-          agencies.map((agency) => <div>
-            {agency.name}
+          myAgencies.map((myAgency, index) => <div key={index}>
+            {myAgency.agency.name}
           </div>)
         }
       </TopbarDropdownWrapper>
