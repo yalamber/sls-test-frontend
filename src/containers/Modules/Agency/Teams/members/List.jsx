@@ -1,21 +1,21 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, Spin, message } from "antd";
-import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
-import PageHeader from "../../../../components/utility/pageHeader";
-import basicStyle from "../../../../settings/basicStyle";
-import Box from "../../../../components/utility/box";
-import UsersActionButtons from "../users/partials/ActionButtons";
+import LayoutWrapper from "../../../../../components/utility/layoutWrapper.js";
+import PageHeader from "../../../../../components/utility/pageHeader";
+import basicStyle from "../../../../../settings/basicStyle";
+import Box from "../../../../../components/utility/box";
+import UsersActionButtons from "./partials/ActionButtons";
 import {
   ActionBtn,
   TitleWrapper,
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from "../../crud.style";
+} from "../../../crud.style";
 import {
   getAgencyTeam,
   getAgencyTeamMembers
-} from "../../../../helpers/http-api-client";
+} from "../../../../../helpers/http-api-client";
 
 export default class extends Component {
   constructor() {
@@ -74,17 +74,19 @@ export default class extends Component {
   async fetchData() {
     this.setState({ loading: true });
     try {
-      let agencyTeam = await getAgencyTeam(this.props.match.params.teamId);
-      let users = await getAgencyTeamMembers(this.props.match.params.teamId, {
+      let responseAgencyTeam = await getAgencyTeam(this.props.match.params.teamId);
+      let reponseUsers = await getAgencyTeamMembers(this.props.match.params.teamId, {
         paginationOptions: this.state.paginationOptions
       });
+
       this.setState({
         loading: false,
-        agencyTeam: agencyTeam.data,
-        data: users.data.rows,
+        agency: responseAgencyTeam.data.agency,
+        agencyTeam: responseAgencyTeam.data,
+        data: reponseUsers.data.rows,
         paginationOptions: {
           ...this.state.paginationOptions,
-          total: users.data.count
+          total: reponseUsers.data.count
         }
       });
     } catch(e) {
@@ -115,7 +117,7 @@ export default class extends Component {
           }
         });
       } catch(e) {
-        this.setState({ loading: false, data: [] });
+        this.setState({ loading: false, dataSource: [] });
       }
     });
   }
@@ -125,11 +127,12 @@ export default class extends Component {
       margin: "5px 5px 10px 0px"
     };
     const { rowStyle, colStyle, gutter } = basicStyle;
+    const { teamId } = this.props.match.params;
     return (
       <LayoutWrapper>
         <PageHeader>
           Agency -> {
-            this.state.agencyTeam && this.state.agencyTeam.client && this.state.agencyTeam.client.name
+            this.state.agency && this.state.agency.name
           } -> {this.state.agencyTeam && this.state.agencyTeam.name } -> Members List
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -148,11 +151,11 @@ export default class extends Component {
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push("/dashboard/agency/user/create");
+                      this.props.history.push(`/dashboard/agency/teams/${teamId}/member/add`);
                     }}
                   >
                     <Icon type="plus" />
-                    Add new User
+                    Add team member
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>

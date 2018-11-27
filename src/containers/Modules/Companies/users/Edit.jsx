@@ -7,7 +7,7 @@ import { getErrorDataFromApiResponseError } from '../../../../util/response-mess
 import { TitleWrapper, ComponentTitle } from "../../crud.style";
 
 import Box from "../../../../components/utility/box";
-import UserEditForm from "../users/partials/UserEditForm";
+import UserForm from "../users/partials/UserForm";
 import { updateLastUserRowData } from '../../../../util/history-location-helper';
 import { message } from "antd/lib/index";
 import { saveEditCompanyUser } from "../../../../helpers/http-api-client";
@@ -72,7 +72,7 @@ class Create extends Component {
                 <ComponentTitle>Edit User</ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
-                <UserEditForm
+                <UserForm
                   data={this.props.location.state}
                   submit={this.handleSubmit}
                   errors={this.state.errors}

@@ -10,7 +10,7 @@ import {
   TableClickable as Table
 } from '../crud.style';
 import {getCompanies, getTeams} from "../../../helpers/http-api-client";
-import {getSuites} from "../../../helpers/http-api-client";
+import {getCompanySuites} from "../../../helpers/http-api-client";
 
 const Option = Select.Option;
 const RadioGroup = Radio.Group;
@@ -102,7 +102,7 @@ export default class extends Component {
   }
 
   updateRecords(companyId, teamId) {
-    getSuites(companyId, teamId).then(res => {
+    getCompanySuites(companyId, teamId).then(res => {
       this.setState({suites: res.data})
     })
   }

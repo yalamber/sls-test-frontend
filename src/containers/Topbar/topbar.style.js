@@ -77,6 +77,7 @@ const TopbarWrapper = styled.div`
         line-height: normal;
         position: relative;
         display: inline-block;
+        text-transform: capitalize;
 
         @media only screen and (max-width: 360px) {
           margin-left: ${props => (props["data-rtl"] === "rtl" ? "25px" : "0")};

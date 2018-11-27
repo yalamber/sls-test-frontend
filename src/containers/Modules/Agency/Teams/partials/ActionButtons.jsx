@@ -8,7 +8,7 @@ import { withRouter } from "react-router-dom";
 const ActionButtons = function ActionButtons(props) {
   return (
     <ActionWrapper>
-      <Tooltip placement="topLeft" title="Show Users List">
+      <Tooltip placement="topLeft" title="Show Members List">
         <a
           className="infoBtn"
           onClick={() =>

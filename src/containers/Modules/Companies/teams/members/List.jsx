@@ -1,22 +1,22 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, Spin, message } from "antd";
-import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
-import PageHeader from "../../../../components/utility/pageHeader";
-import basicStyle from "../../../../settings/basicStyle";
-import Box from "../../../../components/utility/box";
-import UsersActionButtons from "../users/partials/ActionButtons";
+import LayoutWrapper from "../../../../../components/utility/layoutWrapper.js";
+import PageHeader from "../../../../../components/utility/pageHeader";
+import basicStyle from "../../../../../settings/basicStyle";
+import Box from "../../../../../components/utility/box";
+import UsersActionButtons from "../../users/partials/ActionButtons";
 import {
   ActionBtn,
   TitleWrapper,
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from "../../crud.style";
+} from "../../../crud.style";
 import {
   getCompanyTeam,
   getCompanyTeamMembers,
   deleteCompanyTeamMember
-} from "../../../../helpers/http-api-client";
+} from "../../../../../helpers/http-api-client";
 
 export default class extends Component {
   constructor() {
@@ -79,7 +79,6 @@ export default class extends Component {
       let users = await getCompanyTeamMembers(this.props.match.params.teamId, {
         paginationOptions: this.state.paginationOptions
       });
-      console.log(companyTeam);
       this.setState({
         loading: false,
         companyTeam: companyTeam.data,
@@ -127,10 +126,11 @@ export default class extends Component {
       margin: "5px 5px 10px 0px"
     };
     const { rowStyle, colStyle, gutter } = basicStyle;
+    const { teamId } = this.props.match.params;
     return (
       <LayoutWrapper>
         <PageHeader>
-          Company -> {
+          {
             this.state.companyTeam && this.state.companyTeam.client && this.state.companyTeam.client.name
           } -> {this.state.companyTeam && this.state.companyTeam.name } -> Members List
         </PageHeader>
@@ -150,11 +150,11 @@ export default class extends Component {
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push("/dashboard/company/user/create");
+                      this.props.history.push(`/dashboard/company/teams/${teamId}/member/add`);
                     }}
                   >
                     <Icon type="plus" />
-                    Add new User
+                    Add team member
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>

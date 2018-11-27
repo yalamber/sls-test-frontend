@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
-import {Row, Col, Icon, Select, Tooltip, message} from 'antd';
-import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../../settings/basicStyle';
-import Box from '../../../../components/utility/box';
+import React, { Component } from "react";
+import { Row, Col, Icon, Select, Tooltip, message } from "antd";
+import LayoutWrapper from "../../../../../components/utility/layoutWrapper";
+import PageHeader from "../../../../../components/utility/pageHeader";
+import basicStyle from "../../../../../settings/basicStyle";
+import Box from "../../../../../components/utility/box";
 import ActionButtons from "./partials/ActionButtons";
 import {
   ActionBtn,
@@ -10,14 +11,18 @@ import {
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from '../../crud.style';
-import {getCompanies, getTeams} from "../../../../helpers/http-api-client";
-import {deleteTestCase, getCases} from "../../../../helpers/http-api-client";
+} from "../../../crud.style";
+import { getCompanies, getTeams } from "../../../../../helpers/http-api-client";
+import {
+  getSuites,
+  getCompany,
+  deleteTestCase,
+  getTestCase
+} from "../../../../../helpers/http-api-client";
 import Moment from "react-moment";
-import {dateTime} from "../../../../constants/dateFormat";
+import { dateTime } from "../../../../../constants/dateFormat";
 
 const Option = Select.Option;
-
 
 export default class extends Component {
   constructor() {
@@ -25,103 +30,201 @@ export default class extends Component {
     this.state = {
       columns: [
         {
-          title: 'Title',
-          dataIndex: 'title',
-          key: 'title',
+          title: "Title",
+          dataIndex: "title",
+          key: "title"
         },
         {
-          title: 'Last Updated',
-          render: (row) => <Moment format={dateTime}>{row.updatedAt}</Moment>,
-          key: 'updatedAt',
+          title: "Last Updated",
+          render: row => <Moment format={dateTime}>{row.updatedAt}</Moment>,
+          key: "updatedAt"
         },
         {
-          title: 'Suite',
-          dataIndex: 'suite',
-          key: 'suite',
+          title: "Suite",
+          dataIndex: "testSuite.name",
+          key: "suite"
         },
         {
-          title: 'Last Updated by',
-          dataIndex: 'lastUpdatedBy',
-          key: 'lastUpdatedBy',
+          title: "Created by",
+          dataIndex: "createdByUserId",
+          key: "createdByUserId"
         },
         {
-          title: 'Actions',
-          key: 'actions',
-          render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
+          title: "Actions",
+          key: "actions",
+          render: row => <ActionButtons row={row} delete={this.handleDelete} />
         }
       ],
+      company: {},
       dataSource: [],
-      companies: [],
-      teams: [],
-      selectedCompany: 0,
-      selectedTeam: 0,
+      paginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 5,
+        total: 1
+      },
+      suites: [],
+      selectedSuite: undefined
     };
-    this.handleCompanyChange = this.handleCompanyChange.bind(this);
-    this.handleTeamChange = this.handleTeamChange.bind(this);
-    this.isCompanyAndTeamSelected = this.isCompanyAndTeamSelected.bind(this);
+    this.handleSuiteChange = this.handleSuiteChange.bind(this);
+    this.isSuiteSelected = this.isSuiteSelected.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   componentDidMount() {
-    getCompanies().then(res => {
-      this.setState({companies: res.data})
+    this.setState({ loading: true }, async () => {
+      try {
+        const resCompany = await getCompany(this.props.match.params.companyId);
+        const resCompanySuites = await getSuites({
+          query: {
+            clientId: this.props.match.params.companyId
+          },
+          paginationOptions: this.state.paginationOptions
+        });
+
+        const {
+          data: { rows = [], count }
+        } = resCompanySuites;
+
+        this.setState({
+          loading: false,
+          company: resCompany.data,
+          suites: rows,
+          paginationOptions: {
+            ...this.state.paginationOptions,
+            total: count
+          },
+        });
+      } catch (error) {
+        this.setState({ loading: false });
+      }
     });
   }
 
   handleCompanyChange(companyId) {
-    getTeams(companyId).then(res => {
-      this.setState({teams: res.data});
+    this.setState({ loading: true }, async () => {
+      try {
+        const resCompanySuites = await getSuites({
+          query: { clientId: companyId }
+        });
+        this.setState({ suites: resCompanySuites.data.rows });
+      } catch (error) {
+        this.setState({ loading: false });
+      }
     });
-    this.setState({selectedCompany: companyId});
-    this.updateRecords();
   }
 
-  handleTeamChange(teamId) {
-    this.setState({selectedTeam: teamId});
-    this.updateRecords();
+  handleSuiteChange(suiteId) {
+    const { companyId } = this.props.match.params;
+    this.setState({ loading: true, selectedSuite: suiteId }, async () => {
+      try {
+        const resTestCase = await getTestCase({
+          query: { clientId: companyId, testSuiteId: suiteId },
+          paginationOptions: this.state.paginationOptions
+        });
+        const {
+          data: { rows = [], count = 1 }
+        } = resTestCase;
+        this.setState({ dataSource: rows, loading: false });
+      } catch (error) {
+        this.setState({ loading: false });
+      }
+    });
   }
 
   updateRecords() {
-    getCases(this.state.selectedCompany, this.state.selectedTeam).then(res => {
-      this.setState({dataSource: res.data})
-    })
+    getTestCase({
+      query: {
+        clientId: this.props.match.params.companyId,
+        testSuiteId: this.state.selectedSuite
+      },
+      paginationOptions: this.state.paginationOptions
+    }).then(res => {
+      this.setState({ dataSource: res.data.rows });
+    });
   }
 
-  isCompanyAndTeamSelected() {
-    return !!this.state.selectedCompany && !!this.state.selectedTeam;
+  isSuiteSelected() {
+    return !!this.state.selectedSuite;
   }
 
   handleDelete(row) {
     deleteTestCase(row.testCaseId).then(res => {
-      message.success('Successfully Deleted.');
+      message.success("Successfully Deleted.");
       this.updateRecords();
-    })
+    });
+  }
+
+  onTablePaginationChange(page, pageSize) {
+    this.setState(
+      {
+        loading: true,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          current: page,
+          pageSize
+        }
+      },
+      async () => {
+        try{
+          const resTestCase = await getTestCase({
+            paginationOptions: this.state.paginationOptions
+          });
+          this.setState({
+            loading: false,
+            dataSource: resTestCase.data.rows,
+            paginationOptions: {
+              ...this.state.paginationOptions,
+              total: resTestCase.data.count
+            }
+          });
+        } catch(e) {
+          this.setState({ loading: false, dataSource: [] });
+        }
+      }
+    );
   }
 
   render() {
     const margin = {
-      margin: '5px 5px 10px 0px'
+      margin: "5px 5px 10px 0px"
     };
-    const {rowStyle, colStyle, gutter} = basicStyle;
-    const companiesOptions = this.state.companies.map(company => <Option
-      key={company.clientId}>{company.name}</Option>);
-    const teamsOptions = this.state.teams.map(team => <Option key={team.clientTeamId}>{team.name}</Option>);
+
+    const { rowStyle, colStyle, gutter } = basicStyle;
+    const suiteOptions = this.state.suites.map(suite => (
+      <Option key={suite.testSuiteId} value={suite.testSuiteId}>
+        {suite.name}
+      </Option>
+    ));
 
     return (
-
       <LayoutWrapper>
+        <PageHeader>
+          {this.state.company && this.state.company.name
+            ? this.state.company.name
+            : ""}
+        </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
                 <ComponentTitle>Test Cases</ComponentTitle>
                 <ButtonHolders>
-                  <Tooltip placement="topRight"
-                           title={!this.isCompanyAndTeamSelected() ? 'Please select company and team.' : ''}>
-                    <ActionBtn type="primary" disabled={!this.isCompanyAndTeamSelected()} onClick={() => {
-                      this.props.history.push('create/' + this.state.selectedCompany + '/' + this.state.selectedTeam)
-                    }}>
-                      <Icon type="plus"/>
+                  <Tooltip
+                    placement="topRight"
+                    title={
+                      !this.isSuiteSelected() ? "Please select Suite." : ""
+                    }
+                  >
+                    <ActionBtn
+                      type="primary"
+                      disabled={!this.isSuiteSelected()}
+                      onClick={() => {
+                        this.props.history.push(`create/${this.state.selectedSuite}`);
+                      }}
+                    >
+                      <Icon type="plus" />
                       Add New
                     </ActionBtn>
                   </Tooltip>
@@ -129,27 +232,24 @@ export default class extends Component {
               </TitleWrapper>
               <Row>
                 <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch
-                          placeholder="Please Choose Company Name"
-                          style={{width: '100%'}}
-                          onChange={this.handleCompanyChange}>
-                    {companiesOptions}
-                  </Select>
-                </Col>
-                <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select showSearch
-                          placeholder="Please Choose Team"
-                          style={{width: '100%'}}
-                          onChange={this.handleTeamChange}>
-                    {teamsOptions}
+                  <Select
+                    showSearch
+                    placeholder="Please Choose Test Suite"
+                    style={{ width: "100%" }}
+                    onChange={this.handleSuiteChange}
+                  >
+                    {suiteOptions}
                   </Select>
                 </Col>
               </Row>
               <Table
-                locale={{emptyText: 'Please Select Company name'}}
+                locale={{ emptyText: "Please Select Company name" }}
                 size="middle"
                 bordered
-                pagination={true}
+                pagination={{
+                  ...this.state.paginationOptions,
+                  onChange: this.onTablePaginationChange
+                }}
                 columns={this.state.columns}
                 dataSource={this.state.dataSource}
                 rowKey="testCaseId"
