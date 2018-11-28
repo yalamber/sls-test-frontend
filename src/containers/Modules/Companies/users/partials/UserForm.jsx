@@ -139,7 +139,7 @@ class UserForm extends Component {
       };
     }
 
-    return [{ min: 6 }];
+    return { rules: [{ min: 6 }] };
   }
 
   renderIMSelect({ name, onChange = () => {} }) {
