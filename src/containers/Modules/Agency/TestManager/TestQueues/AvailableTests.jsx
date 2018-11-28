@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Row, Col, Select, Spin, Button } from "antd";
 import styled, { injectGlobal } from "styled-components";
-import LayoutWrapper from "../../../../../components/utility/layoutWrapper.js";
+import LayoutWrapper from "../../../../../components/utility/layoutWrapper";
+import PageHeader from "../../../../../components/utility/pageHeader";
 import basicStyle from "../../../../../settings/basicStyle";
 import Box from "../../../../../components/utility/box";
 
@@ -13,7 +14,8 @@ import {
 } from "../../../crud.style";
 import {
   getTestQueues,
-  testQueueAssign
+  testQueueAssign,
+  getAgency
 } from "../../../../../helpers/http-api-client";
 import { getErrorDataFromApiResponseError } from "../../../../../util/response-message";
 
@@ -45,6 +47,13 @@ injectGlobal`
   }
 `;
 
+const defaultPaginationOptions = {
+  defaultCurrent: 1,
+  current: 1,
+  pageSize: 5,
+  total: 1
+};
+
 class AvailableTests extends Component {
   constructor() {
     super();
@@ -75,20 +84,46 @@ class AvailableTests extends Component {
           sorter: true
         }
       ],
+      paginationOptions: Object.assign({}, defaultPaginationOptions),
+      agency: {},
       dataSource: [],
       loading: false
     };
+
+    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   componentDidMount() {
     this.setState(
       {
-        loading: true
+        loading: true,
+        paginationOptions: Object.assign({}, defaultPaginationOptions)/*,
+        dataSource: []*/
       },
       async () => {
         try {
-          const response = await getTestQueues();
-          this.setState({ dataSource: response.data.rows, loading: false });
+          let responseAgency = this.state.agency;
+          if (!this.state.agency.name) {
+            responseAgency = await getAgency(this.props.match.params.agencyId);
+          }
+
+          const response = await getTestQueues({
+            paginationOptions: this.state.paginationOptions
+          });
+
+          console.log("guts!", this.state.paginationOptions, response)
+
+          const { data: { rows = [], count = 1 } } = response;
+
+          this.setState({
+            agency: responseAgency.data,
+            dataSource: rows,
+            paginationOptions: {
+              ...this.state.paginationOptions,
+              total: count
+            },
+            loading: false
+          });
         } catch (err) {
           this.setState({
             error: getErrorDataFromApiResponseError(err),
@@ -97,6 +132,34 @@ class AvailableTests extends Component {
         }
       }
     );
+  }
+
+  onTablePaginationChange(page, pageSize) {
+    this.setState({
+      loading: true,
+      paginationOptions: {
+        ...this.state.paginationOptions,
+        current: page,
+        pageSize
+      }
+    }, async () => {
+      try{
+        let responseData = await getTestQueues({
+          paginationOptions: this.state.paginationOptions
+        });
+        const { data : { rows = [], count = 1 } } = responseData;
+        this.setState({
+          loading: false,
+          dataSource: rows,
+          paginationOptions: {
+            ...this.state.paginationOptions,
+            total: count
+          }
+        });
+      } catch(e) {
+        this.setState({ loading: false, dataSource: [] });
+      }
+    });
   }
 
   onSelectChange = selectedRowKeys => {
@@ -135,12 +198,15 @@ class AvailableTests extends Component {
 
     return (
       <LayoutWrapper>
+        <PageHeader>
+          {this.state.agency && this.state.agency.name ? this.state.agency.name : '' } - Test Cases
+        </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
                 <ComponentTitle>
-                  Agency - Available for Assignment{" "}
+                Available for Assignment{" "}
                 </ComponentTitle>
               </TitleWrapper>
               <Row>
@@ -156,10 +222,12 @@ class AvailableTests extends Component {
               </Row>
               <Spin spinning={this.state.loading}>
                 <Table
-                  locale={{ emptyText: "Please Select Company name" }}
                   size="middle"
                   bordered
-                  pagination={true}
+                  pagination={{
+                    ...this.state.paginationOptions,
+                    onChange: this.onTablePaginationChange
+                  }}
                   rowSelection={rowSelection}
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
