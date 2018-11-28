@@ -44,6 +44,10 @@ export const addUser = user => {
   return _post("user", user);
 };
 
+export const editUser = (userId, user) => {
+  return _put(`user/${userId}`, user);
+};
+
 export const getUser = option => {
   if (typeof option === "object") {
     return _getWithLimitOffset(`user`, option);
