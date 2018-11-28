@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import Popover from '../../components/uielements/popover';
 import IntlMessages from '../../components/utility/intlMessages';
 import TopbarDropdownWrapper from './topbarDropdown.style';
@@ -22,8 +21,8 @@ class TopbarUser extends Component {
     this.setState({ visible: !this.state.visible });
   }
 
-  render() {
-    const { userData, logout, closeAll } = this.props;
+  dropdownContent() {
+    const { logout, closeAll } = this.props;
     const content = (
       <TopbarDropdownWrapper className="isoUserDropdown">
         <a className="isoDropdownLink">
@@ -40,10 +39,14 @@ class TopbarUser extends Component {
         </a>
       </TopbarDropdownWrapper>
     );
+    return content;
+  }
 
+  render() {
+    const { userData } = this.props;
     return (
       <Popover
-        content={content}
+        content={this.dropdownContent()}
         trigger="click"
         visible={this.state.visible}
         onVisibleChange={this.handleVisibleChange}

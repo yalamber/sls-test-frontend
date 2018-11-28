@@ -278,9 +278,13 @@ const TopbarDropdownWrapper = styled.div`
       display: flex;
       justify-content: flex-start;
       ${transition()};
-
+      border-bottom: 1px solid #EEE;
       &:hover {
         background-color: ${palette("secondary", 6)};
+      }
+      
+      .smallText {
+        font-size: 10px !important;
       }
     }
   }

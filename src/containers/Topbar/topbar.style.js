@@ -186,7 +186,6 @@ const TopbarWrapper = styled.div`
       }
     }
   }
-
   .isoUserDropdown {
     .ant-popover-inner {
       .ant-popover-inner-content {
@@ -213,8 +212,8 @@ const TopbarWrapper = styled.div`
             padding: 7px 15px;
             background-color: transparent;
             text-decoration: none;
-            display: flex;
-            justify-content: flex-start;
+            display: block;
+            justify-content: inherit;
             ${transition()};
 
             &:hover {

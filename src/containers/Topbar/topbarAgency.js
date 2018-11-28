@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { Spin } from "antd";
 import Popover from '../../components/uielements/popover';
-import IntlMessages from '../../components/utility/intlMessages';
 import TopbarDropdownWrapper from './topbarDropdown.style';
 
 class TopbarAgency extends Component {
@@ -21,22 +21,35 @@ class TopbarAgency extends Component {
     this.setState({ visible: !this.state.visible });
   }
 
-  render() {
-    const { myAgencies } = this.props;
-
-    const content = (
+  dropdownContent() {
+    const { myAgencies, myAgenciesLoading, requestAgencyLogin } = this.props;
+    return (
       <TopbarDropdownWrapper className="isoUserDropdown">
+        { myAgencies.loading && <Spin />}
+        { myAgencies.error && <div className="error-msg">Could not load Agencies</div>}
         {
-          myAgencies.map((myAgency, index) => <div key={index}>
-            {myAgency.agency.name}
-          </div>)
+          myAgencies.data.map((myAgency, index) => (
+            <div key={index}>
+              <a className="isoDropdownLink" onClick={() => {
+                requestAgencyLogin({ agencyId: myAgency.agency.agencyId  });
+              }}>
+                {myAgency.agency.name} 
+                <br />
+                <span className="smallText">
+                  &nbsp; {myAgency.role.title}
+                </span>
+              </a>
+            </div>
+          ))
         }
       </TopbarDropdownWrapper>
-    );
+    )
+  }
 
+  render() {
     return (
       <Popover
-        content={content}
+        content={this.dropdownContent()}
         trigger="click"
         visible={this.state.visible}
         onVisibleChange={this.handleVisibleChange}
@@ -47,7 +60,7 @@ class TopbarAgency extends Component {
           <i
             className="ion-grid"
           /> &nbsp;
-          Agencies
+          Agencies 
         </div>
       </Popover>
     );

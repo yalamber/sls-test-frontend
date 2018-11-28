@@ -31,20 +31,15 @@ export function* loginRequest() {
 }
 
 export function* loginSuccess() {
-  try {
-    yield takeEvery(actions.LOGIN_SUCCESS, function* ({ payload, history }) {
-      if (payload) {
-        const { token } = payload;
-        yield setUserToken(token);
-        if (history) {
-          history.push('/dashboard');
-        }
+  yield takeEvery(actions.LOGIN_SUCCESS, function* ({ payload, history }) {
+    if (payload) {
+      const { token } = payload;
+      yield setUserToken(token);
+      if (history) {
+        history.push('/dashboard');
       }
-    });
-  } catch (e) {
-    console.log(e);
-    notification('error', 'Server error');
-  }
+    }
+  });
 }
 
 export function* loginError() {

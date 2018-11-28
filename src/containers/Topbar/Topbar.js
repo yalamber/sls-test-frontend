@@ -15,7 +15,7 @@ import { getUserTokenData } from '../../helpers/utility';
 const { Header } = Layout;
 const { toggleCollapsed, closeAll } = appActions;
 const { logout } = authAction;
-const { requestMyAgencies } = userAction;
+const { requestMyAgencies, requestAgencyLogin,  } = userAction;
 const customizedTheme = themes[themeConfig.theme];
 
 class Topbar extends Component {
@@ -25,11 +25,11 @@ class Topbar extends Component {
 
   componentDidMount() {
     this.props.requestMyAgencies();
-    //TODO: make these available throuh redux store
     this.getUserTokenData();
   }
 
   getUserTokenData() {
+    //TODO: make token available throuh redux store
     let userTokenData = getUserTokenData();
     if(userTokenData) {
       this.setState({ userTokenData });
@@ -38,8 +38,13 @@ class Topbar extends Component {
 
   render() {
     const { userTokenData } = this.state;
-    const { toggleCollapsed, logout, closeAll, myAgencies = [] } = this.props;
-    console.log(myAgencies);
+    const { 
+      toggleCollapsed, 
+      logout, 
+      closeAll, 
+      myAgencies = { data: [], loading: true, error: false},
+      requestAgencyLogin
+    } = this.props;
     const collapsed = this.props.collapsed && !this.props.openDrawer;
     const styling = {
       background: customizedTheme.backgroundColor,
@@ -71,7 +76,8 @@ class Topbar extends Component {
                 onClick={() => this.setState({ selectedItem: "agency" })}
                 className="isoAgency"
               >
-                <TopbarAgency myAgencies={myAgencies} />
+                <TopbarAgency myAgencies={myAgencies}
+                  requestAgencyLogin={requestAgencyLogin} />
               </li>
             }
             { userTokenData.clientCompanyCount > 0 && 
@@ -87,7 +93,9 @@ class Topbar extends Component {
               onClick={() => this.setState({ selectedItem: "user" })}
               className="isoUser"
             >
-              <TopbarUser userData={userTokenData.userData} logout={logout} closeAll={closeAll} />
+              <TopbarUser userData={userTokenData.userData} 
+                logout={logout} 
+                closeAll={closeAll} />
             </li>
             }
           </ul>
@@ -102,5 +110,5 @@ export default connect(
     ...state.App,
     ...state.User
   }),
-  { toggleCollapsed, logout, closeAll, requestMyAgencies }
+  { toggleCollapsed, logout, closeAll, requestMyAgencies, requestAgencyLogin }
 )(Topbar);
