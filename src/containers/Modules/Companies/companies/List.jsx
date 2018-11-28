@@ -5,6 +5,8 @@ import PageHeader from "../../../../components/utility/pageHeader";
 import basicStyle from "../../../../settings/basicStyle";
 import Box from "../../../../components/utility/box";
 import ActionButtons from "./partials/ActionButtons";
+import TestManagerActionButtons from "../TestManager/partials/ActionButtons";
+
 
 import {
   ActionBtn,
@@ -42,6 +44,11 @@ export default class extends Component {
           title: "Location",
           dataIndex: "location",
           key: "location"
+        },
+        {
+          title: "Test Manager Actions",
+          key: "testManagerActions",
+          render: row => <TestManagerActionButtons row={row} />
         },
         {
           title: "Actions",
@@ -131,7 +138,7 @@ export default class extends Component {
         <PageHeader>
            Companies
         </PageHeader>
-          
+
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>

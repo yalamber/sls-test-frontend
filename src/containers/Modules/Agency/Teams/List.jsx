@@ -83,7 +83,7 @@ class TeamsList extends Component {
       getAgencyTeams({ query: { agencyId } })
         .then(res => {
           this.setState({
-            dataSource: res.data,
+            dataSource: res.data.rows,
             loading: false
           });
         })
@@ -152,7 +152,7 @@ class TeamsList extends Component {
                   onRow={row => ({
                     onDoubleClick: () => {
                       this.props.history.push(
-                        "/dashboard/agency/teams/team-members"
+                        `/dashboard/agency/teams/${row.agencyTeamId}/members`
                       );
                     }
                   })}

@@ -12,10 +12,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from "../../crud.style";
-import {
-  getAgency,
-  getAgencyUsers
-} from "../../../../helpers/http-api-client";
+import { getAgency, getAgencyUsers } from "../../../../helpers/http-api-client";
 
 export default class extends Component {
   constructor() {
@@ -36,7 +33,7 @@ export default class extends Component {
         },
         {
           title: "Status",
-          dataIndex: "status",
+          dataIndex: "user.status",
           key: "status",
           sorter: (a, b) => a.status >= b.status
         },
@@ -87,37 +84,40 @@ export default class extends Component {
           total: users.data.count
         }
       });
-    } catch(e) {
+    } catch (e) {
       message.error("Problem occured.");
       this.setState({ loading: false });
     }
   }
 
   async onTablePaginationChange(page, pageSize) {
-    this.setState({
-      loading: true,
-      paginationOptions: {
-        ...this.state.paginationOptions,
-        current: page,
-        pageSize
+    this.setState(
+      {
+        loading: true,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          current: page,
+          pageSize
+        }
+      },
+      async () => {
+        try {
+          let users = await getAgencyUsers(this.props.match.params.agencyId, {
+            paginationOptions: this.state.paginationOptions
+          });
+          this.setState({
+            loading: false,
+            data: users.data.rows,
+            paginationOptions: {
+              ...this.state.paginationOptions,
+              total: users.data.count
+            }
+          });
+        } catch (e) {
+          this.setState({ loading: false, data: [] });
+        }
       }
-    }, async () => {
-      try{
-        let users = await getAgencyUsers(this.props.match.params.agencyId, {
-          paginationOptions: this.state.paginationOptions
-        });
-        this.setState({
-          loading: false,
-          data: users.data.rows,
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: users.data.count
-          }
-        });
-      } catch(e) {
-        this.setState({ loading: false, data: [] });
-      }
-    });
+    );
   }
 
   render() {
@@ -146,7 +146,11 @@ export default class extends Component {
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push(`/dashboard/agency/user/create/${this.props.match.params.agencyId}`);
+                      this.props.history.push(
+                        `/dashboard/agency/user/create/${
+                          this.props.match.params.agencyId
+                        }`
+                      );
                     }}
                   >
                     <Icon type="plus" />
@@ -171,7 +175,7 @@ export default class extends Component {
                           this.props.match.params.agencyId
                         }/edit/${row.userId}`,
                         state: {
-                          row
+                          ...row
                         }
                       });
                     }

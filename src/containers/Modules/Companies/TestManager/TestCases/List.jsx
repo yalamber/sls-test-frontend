@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { Row, Col, Icon, Select, Tooltip, message } from "antd";
+import { Row, Col, Icon, Select, Tooltip, message, Spin } from "antd";
 import LayoutWrapper from "../../../../../components/utility/layoutWrapper";
 import PageHeader from "../../../../../components/utility/pageHeader";
 import basicStyle from "../../../../../settings/basicStyle";
 import Box from "../../../../../components/utility/box";
+import { getErrorDataFromApiResponseError } from "../../../../../util/response-message";
+import Errors from "../../../../Errors";
 import ActionButtons from "./partials/ActionButtons";
 import {
   ActionBtn,
@@ -17,7 +19,8 @@ import {
   getSuites,
   getCompany,
   deleteTestCase,
-  getTestCase
+  getTestCase,
+  addTestCaseToQueue
 } from "../../../../../helpers/http-api-client";
 import Moment from "react-moment";
 import { dateTime } from "../../../../../constants/dateFormat";
@@ -28,6 +31,10 @@ export default class extends Component {
   constructor() {
     super();
     this.state = {
+      errors: {
+        details: []
+      },
+      selectedRowKeys: [],
       columns: [
         {
           title: "Title",
@@ -94,7 +101,7 @@ export default class extends Component {
           paginationOptions: {
             ...this.state.paginationOptions,
             total: count
-          },
+          }
         });
       } catch (error) {
         this.setState({ loading: false });
@@ -133,6 +140,42 @@ export default class extends Component {
     });
   }
 
+  onSelectChange = selectedRowKeys => {
+    this.setState({ selectedRowKeys });
+  };
+
+  submitTestCasesToQueue = () => {
+    this.setState(
+      {
+        loading: true
+      },
+      async () => {
+        if (this.state.selectedRowKeys && this.state.selectedRowKeys.length) {
+          try {
+            let responseAddTestCaseToQueue = await addTestCaseToQueue({
+              testCaseIds: this.state.selectedRowKeys
+            });
+            // responseAddTestCaseToQueue
+            message.success("Successfully sent the test cases to queue.");
+            this.setState(
+              {
+                loading: false
+              },
+              () => {
+                this.componentDidMount();
+              }
+            );
+          } catch (error) {
+            this.setState({
+              loading: false,
+              errors: getErrorDataFromApiResponseError(error)
+            });
+          }
+        }
+      }
+    );
+  };
+
   updateRecords() {
     getTestCase({
       query: {
@@ -167,7 +210,7 @@ export default class extends Component {
         }
       },
       async () => {
-        try{
+        try {
           const resTestCase = await getTestCase({
             paginationOptions: this.state.paginationOptions
           });
@@ -179,7 +222,7 @@ export default class extends Component {
               total: resTestCase.data.count
             }
           });
-        } catch(e) {
+        } catch (e) {
           this.setState({ loading: false, dataSource: [] });
         }
       }
@@ -189,6 +232,10 @@ export default class extends Component {
   render() {
     const margin = {
       margin: "5px 5px 10px 0px"
+    };
+    const rowSelection = {
+      selectedRowKeys: this.state.selectedRowKeys,
+      onChange: this.onSelectChange
     };
 
     const { rowStyle, colStyle, gutter } = basicStyle;
@@ -207,54 +254,85 @@ export default class extends Component {
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>
-              <TitleWrapper>
-                <ComponentTitle>Test Cases</ComponentTitle>
-                <ButtonHolders>
-                  <Tooltip
-                    placement="topRight"
-                    title={
-                      !this.isSuiteSelected() ? "Please select Suite." : ""
-                    }
-                  >
-                    <ActionBtn
-                      type="primary"
-                      disabled={!this.isSuiteSelected()}
-                      onClick={() => {
-                        this.props.history.push(`create/${this.state.selectedSuite}`);
-                      }}
+            <Spin spinning={this.state.loading}>
+              <Box>
+                <TitleWrapper>
+                  <ComponentTitle>Test Cases</ComponentTitle>
+                  <ButtonHolders>
+                    <Tooltip
+                      placement="topRight"
+                      title={
+                        this.state.selectedRowKeys.length
+                          ? "Please select cases to queue."
+                          : ""
+                      }
                     >
-                      <Icon type="plus" />
-                      Add New
-                    </ActionBtn>
-                  </Tooltip>
-                </ButtonHolders>
-              </TitleWrapper>
-              <Row>
-                <Col md={6} sm={24} xs={24} style={margin}>
-                  <Select
-                    showSearch
-                    placeholder="Please Choose Test Suite"
-                    style={{ width: "100%" }}
-                    onChange={this.handleSuiteChange}
-                  >
-                    {suiteOptions}
-                  </Select>
-                </Col>
-              </Row>
-              <Table
-                locale={{ emptyText: "Please Select Company name" }}
-                size="middle"
-                bordered
-                pagination={{
-                  ...this.state.paginationOptions,
-                  onChange: this.onTablePaginationChange
-                }}
-                columns={this.state.columns}
-                dataSource={this.state.dataSource}
-                rowKey="testCaseId"
-              />
-            </Box>
+                      <ActionBtn
+                        type="primary"
+                        disabled={!this.state.selectedRowKeys.length}
+                        onClick={this.submitTestCasesToQueue}
+                      >
+                        <Icon type="plus" />
+                        Queue Test Case/s
+                      </ActionBtn>
+                    </Tooltip>
+                    <Tooltip
+                      placement="topRight"
+                      title={
+                        !this.isSuiteSelected() ? "Please select Suite." : ""
+                      }
+                    >
+                      <ActionBtn
+                        type="primary"
+                        disabled={!this.isSuiteSelected()}
+                        onClick={() => {
+                          this.props.history.push(
+                            `create/${this.state.selectedSuite}`
+                          );
+                        }}
+                      >
+                        <Icon type="plus" />
+                        Add New
+                      </ActionBtn>
+                    </Tooltip>
+                  </ButtonHolders>
+                </TitleWrapper>
+                <Row gutter={24}>
+                  <Col span={24}>
+                    {this.state.errors.details.length ? (
+                      <Errors errors={this.state.errors} />
+                    ) : (
+                      ""
+                    )}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={6} sm={24} xs={24} style={margin}>
+                    <Select
+                      showSearch
+                      placeholder="Please Choose Test Suite"
+                      style={{ width: "100%" }}
+                      onChange={this.handleSuiteChange}
+                    >
+                      {suiteOptions}
+                    </Select>
+                  </Col>
+                </Row>
+                <Table
+                  locale={{ emptyText: "Please Select Company name" }}
+                  size="middle"
+                  bordered
+                  rowSelection={rowSelection}
+                  pagination={{
+                    ...this.state.paginationOptions,
+                    onChange: this.onTablePaginationChange
+                  }}
+                  columns={this.state.columns}
+                  dataSource={this.state.dataSource}
+                  rowKey="testCaseId"
+                />
+              </Box>
+            </Spin>
           </Col>
         </Row>
       </LayoutWrapper>

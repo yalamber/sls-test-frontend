@@ -22,6 +22,14 @@ const InputGroup = Input.Group;
 const margin = {
   margin: "5px 5px 0px 0"
 };
+
+//Responsive span
+const formResSpan = {
+  xl: { span: 12 },
+  lg: { span: 12 },
+  md: { span: 24 },
+  sm: { span: 24 }
+};
 class UserForm extends Component {
   constructor() {
     super();
@@ -124,6 +132,16 @@ class UserForm extends Component {
     this.setState({ isIMInput2Hidden: false });
   }
 
+  getPasswordFieldDecoratorOption() {
+    if (this.props.formType === "create") {
+      return {
+        rules: userValidation.password
+      };
+    }
+
+    return { rules: [{ min: 6 }] };
+  }
+
   renderIMSelect({ name, onChange = () => {} }) {
     const { getFieldDecorator } = this.props.form;
 
@@ -160,22 +178,54 @@ class UserForm extends Component {
     );
   }
 
-  render() {
-    const statusOptions = this.state.status.map(status => (
-      <Option key={status.id}>{status.name}</Option>
-    ));
+  renderRoleColumn() {
     const roleOptions = this.state.roles.map(role => (
-      <Option key={role.roleId}>{role.title}</Option>
+      <Option key={role.roleId} value={role.roleId}>
+        {role.title}
+      </Option>
     ));
     const { getFieldDecorator } = this.props.form;
+    if (this.props.formType === "create") {
+      return (
+        <Col {...formResSpan}>
+          <Card title="Role">
+            <FormItem style={margin} label="Select Role">
+              <InputGroup size="large">
+                <Col span={22}>
+                  {getFieldDecorator("role", {
+                    rules: userValidation.role
+                  })(
+                    <Select
+                      showSearch
+                      filterOption={(input, option) =>
+                        option.props.children
+                          .toLowerCase()
+                          .indexOf(input.toLowerCase()) >= 0
+                      }
+                      placeholder="Please choose role"
+                      style={{ width: "100%" }}
+                    >
+                      {roleOptions}
+                    </Select>
+                  )}
+                </Col>
+              </InputGroup>
+            </FormItem>
+          </Card>
+        </Col>
+      );
+    } else {
+      return <div />;
+    }
+  }
 
-    //Responsive span
-    const formResSpan = {
-      xl: { span: 12 },
-      lg: { span: 12 },
-      md: { span: 24 },
-      sm: { span: 24 }
-    };
+  render() {
+    const statusOptions = this.state.status.map(status => (
+      <Option key={status.id} value={status.id}>
+        {status.name}
+      </Option>
+    ));
+    const { getFieldDecorator } = this.props.form;
 
     return (
       <div>
@@ -188,9 +238,10 @@ class UserForm extends Component {
                 })(<Input placeholder="Enter User Name" />)}
               </FormItem>
               <FormItem label="Password" style={margin}>
-                {getFieldDecorator("password", {
-                  rules: userValidation.password
-                })(<Input placeholder="Enter Password" />)}
+                {getFieldDecorator(
+                  "password",
+                  this.getPasswordFieldDecoratorOption()
+                )(<Input placeholder="Enter Password" />)}
               </FormItem>
               <FormItem style={margin}>
                 <RadioGroup
@@ -216,32 +267,7 @@ class UserForm extends Component {
                 </Col>
               </Row>
             </Col>
-            <Col {...formResSpan}>
-              <Card title="Role">
-                <FormItem style={margin} label="Select Role">
-                  <InputGroup size="large">
-                    <Col span={22}>
-                      {getFieldDecorator("role", {
-                        rules: userValidation.role
-                      })(
-                        <Select
-                          showSearch
-                          filterOption={(input, option) =>
-                            option.props.children
-                              .toLowerCase()
-                              .indexOf(input.toLowerCase()) >= 0
-                          }
-                          placeholder="Please choose role"
-                          style={{ width: "100%" }}
-                        >
-                          {roleOptions}
-                        </Select>
-                      )}
-                    </Col>
-                  </InputGroup>
-                </FormItem>
-              </Card>
-            </Col>
+            {this.renderRoleColumn()}
           </Row>
 
           <Row gutter={16}>
@@ -359,48 +385,52 @@ class UserForm extends Component {
 }
 
 const mapPropsToFields = props => {
-  if (!props.hasOwnProperty("user") || !props.user) {
+  if (!props.hasOwnProperty("rowData") || !props.rowData.userId) {
     return;
   }
-  //get role and set for edit
+  const { rowData = {} } = props;
+  const { user } = rowData;
+  const {
+    user: { contactInformation = {} }
+  } = rowData;
 
   let clientId = props.relId;
   return {
     company: Form.createFormField({
       value: clientId
     }),
-    /*role: Form.createFormField({
-      value: role
-    }),*/
+    role: Form.createFormField({
+      value: rowData.roleId
+    }),
     status: Form.createFormField({
-      value: props.user.status
+      value: user.status
     }),
     username: Form.createFormField({
-      value: props.user.username
+      value: user.username
     }),
     "contactInformation.emailAddress": Form.createFormField({
-      value: props.user.contactInformation.emailAddress
+      value: contactInformation.emailAddress
     }),
     "contactInformation.postalAddress": Form.createFormField({
-      value: props.user.contactInformation.postalAddress
+      value: contactInformation.postalAddress
     }),
     "contactInformation.mobilePhone": Form.createFormField({
-      value: props.user.contactInformation.mobilePhone
+      value: contactInformation.mobilePhone
     }),
     "contactInformation.smsPhone": Form.createFormField({
-      value: props.user.contactInformation.smsPhone
+      value: contactInformation.smsPhone
     }),
     "contactInformation.facebookHandle": Form.createFormField({
-      value: props.user.contactInformation.facebookHandle
+      value: contactInformation.facebookHandle
     }),
     "contactInformation.twitterHandle": Form.createFormField({
-      value: props.user.contactInformation.twitterHandle
+      value: contactInformation.twitterHandle
     }),
     "contactInformation.linkedInUrl": Form.createFormField({
-      value: props.user.contactInformation.linkedInUrl
+      value: contactInformation.linkedInUrl
     }),
     resumeUrl: Form.createFormField({
-      value: props.user.contactInformation.resumeUrl
+      value: contactInformation.resumeUrl
     })
   };
 };

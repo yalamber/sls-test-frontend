@@ -107,12 +107,7 @@ class TestRunForm extends Component {
               style={margin}
               icon="left"
               onClick={() => {
-                this.props.history.push(
-                  "../../list/" +
-                    this.props.match.params.companyId +
-                    "/" +
-                    this.props.match.params.teamId
-                );
+                this.props.history.goBack();
               }}
             >
               Cancel
