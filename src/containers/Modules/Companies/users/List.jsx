@@ -37,7 +37,7 @@ export default class extends Component {
         },
         {
           title: "Status",
-          dataIndex: "status",
+          dataIndex: "user.status",
           key: "status",
           sorter: (a, b) => a.status >= b.status
         },
@@ -68,7 +68,7 @@ export default class extends Component {
   }
 
   componentDidMount() {
-    this.fetchData();  
+    this.fetchData();
   }
 
   async fetchData() {
@@ -171,7 +171,7 @@ export default class extends Component {
                           this.props.match.params.companyId
                         }/edit/${row.userId}`,
                         state: {
-                          row
+                          ...row
                         }
                       });
                     }

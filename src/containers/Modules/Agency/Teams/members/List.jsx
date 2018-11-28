@@ -36,7 +36,7 @@ export default class extends Component {
         },
         {
           title: "Status",
-          dataIndex: "status",
+          dataIndex: "user.status",
           key: "status",
           sorter: (a, b) => a.status >= b.status
         },
@@ -173,10 +173,10 @@ export default class extends Component {
                     onDoubleClick: () => {
                       this.props.history.push({
                         pathname: `/dashboard/agency/user/${
-                          this.props.match.params.agencyId
+                          this.state.agency.agencyId
                         }/edit/${row.userId}`,
                         state: {
-                          row
+                          ...row
                         }
                       });
                     }
