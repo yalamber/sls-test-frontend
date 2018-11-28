@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Row, Col, Select, Spin, Button, Checkbox } from "antd";
+import { connect } from 'react-redux';
+import { Row, Col, Select, Spin, Button } from "antd";
 import styled, { injectGlobal } from "styled-components";
 import LayoutWrapper from "../../../../../components/utility/layoutWrapper.js";
 import basicStyle from "../../../../../settings/basicStyle";
@@ -10,8 +11,11 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from "../../../crud.style";
-import { getTestQueues } from "../../../../../helpers/http-api-client";
-import { getErrorDataFromApiResponseError } from '../../../../../util/response-message';
+import {
+  getTestQueues,
+  testQueueAssign
+} from "../../../../../helpers/http-api-client";
+import { getErrorDataFromApiResponseError } from "../../../../../util/response-message";
 
 const Option = Select.Option;
 
@@ -41,17 +45,12 @@ injectGlobal`
   }
 `;
 
-export default class extends Component {
+class AvailableTests extends Component {
   constructor() {
     super();
     this.state = {
+      selectedRowKeys: [],
       columns: [
-        {
-          title: "",
-          render: () => <Checkbox />,
-          key: "check",
-          width: "1%"
-        },
         {
           title: "Number",
           dataIndex: "number",
@@ -82,19 +81,56 @@ export default class extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      loading: true
-    }, async () => {
-      try {
-        const response = await getTestQueues();
-        this.setState({ dataSource: response.data.rows, loading: false });
-      } catch (err) {
-        this.setState({ error: getErrorDataFromApiResponseError(err), loading: false });
+    this.setState(
+      {
+        loading: true
+      },
+      async () => {
+        try {
+          const response = await getTestQueues();
+          this.setState({ dataSource: response.data.rows, loading: false });
+        } catch (err) {
+          this.setState({
+            error: getErrorDataFromApiResponseError(err),
+            loading: false
+          });
+        }
       }
-    })
+    );
+  }
+
+  onSelectChange = selectedRowKeys => {
+    this.setState({ selectedRowKeys });
+  };
+
+  onAssignToMe = () => {
+    if (!this.state.selectedRowKeys.length) {
+      return;
+    }
+    // const { Auth : { idToken = '' }} = this.props
+    this.setState({ loading: true }, async () => {
+      try {
+        let responseTestQueueAssign = await testQueueAssign({
+          // assignedUserId: 1,
+          testQueueId: this.state.selectedRowKeys[0]
+        });
+
+        this.componentDidMount();
+      } catch (error) {
+        this.setState({ loading: false, error: getErrorDataFromApiResponseError(error) })
+      }
+    });
+  };
+
+  async submitParallel(arr) {
+    const promises = arr.map();
   }
 
   render() {
+    const rowSelection = {
+      selectedRowKeys: this.state.selectedRowKeys,
+      onChange: this.onSelectChange
+    };
     const { rowStyle, colStyle, gutter } = basicStyle;
 
     return (
@@ -108,18 +144,13 @@ export default class extends Component {
                 </ComponentTitle>
               </TitleWrapper>
               <Row>
-                <Col md={1} sm={24} xs={24} style={margin}>
-                  <Button shape="circle" icon="check" />
-                </Col>
                 <Col md={3} sm={24} xs={24} style={margin}>
-                  <Button type="primary">
+                  <Button type="primary" onClick={this.onAssignToMe}>
                     Assign To Me
                   </Button>
                 </Col>
                 <Col md={3} sm={24} xs={24} style={assignToTeamBackgroundStyle}>
-                  <Button className="greenButton">
-                    Assign To Team
-                  </Button>
+                  <Button className="greenButton">Assign To Team</Button>
                 </Col>
                 <Col md={18} sm={24} xs={24} />
               </Row>
@@ -129,14 +160,15 @@ export default class extends Component {
                   size="middle"
                   bordered
                   pagination={true}
+                  rowSelection={rowSelection}
                   columns={this.state.columns}
                   dataSource={this.state.dataSource}
                   onRow={() => ({
                     onDoubleClick: () => {
-                      alert("show test case details")
+                      alert("show test case details");
                     }
                   })}
-                  rowKey="testSuiteId"
+                  rowKey="testQueueId"
                 />
               </Spin>
             </Box>
@@ -146,3 +178,11 @@ export default class extends Component {
     );
   }
 }
+
+const mapStateToProps = (state, props) => {
+  return {
+    Auth: {...state.Auth}
+  }
+}
+
+export default connect(mapStateToProps)(AvailableTests);

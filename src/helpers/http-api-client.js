@@ -405,6 +405,11 @@ export const addTestCaseToQueue = function(options) {
   return _post("test/queue", options);
 };
 
+export const testQueueAssign = function(options) {
+  console.log('q!""', getToken().get("idToken"));
+  return _post("test/queue/assign", options);
+};
+
 /*
 *
 * Private Start
