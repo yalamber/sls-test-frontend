@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Row, Col, Select, Spin, Checkbox, Radio } from "antd";
+import { Row, Col, Select, Spin, Checkbox, Radio, message } from "antd";
 import LayoutWrapper from "../../../../../components/utility/layoutWrapper";
 import PageHeader from "../../../../../components/utility/pageHeader";
 import basicStyle from "../../../../../settings/basicStyle";
 import Box from "../../../../../components/utility/box";
+import ActionButtons from "./partials/AssignTestsActionButtons";
 
 import {
   TitleWrapper,
@@ -13,7 +14,8 @@ import {
 import {
   getAgency,
   getTeams,
-  getTestQueuesAssigned
+  getTestQueuesAssigned,
+  testQueueUnAssign
 } from "../../../../../helpers/http-api-client";
 
 const Option = Select.Option;
@@ -46,6 +48,13 @@ export default class extends Component {
           dataIndex: "status",
           key: "status",
           sorter: true
+        },
+        {
+          title: "Actions",
+          key: "actions",
+          render: row => (
+            <ActionButtons row={row} unassign={this.handleUnassign} />
+          )
         }
       ],
       paginationOptions: {
@@ -60,17 +69,22 @@ export default class extends Component {
     };
 
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
+    this.handleUnassign = this.handleUnassign.bind(this);
   }
 
   componentDidMount() {
     this.setState({ loading: true }, async () => {
       try {
-        const responseAgency = await getAgency(this.props.match.params.agencyId);
+        const responseAgency = await getAgency(
+          this.props.match.params.agencyId
+        );
         const responseAssignTestCases = await getTestQueuesAssigned({
           paginationOptions: this.state.paginationOptions
         });
 
-        const { data: { rows = [], count = 1 } } = responseAssignTestCases;
+        const {
+          data: { rows = [], count = 1 }
+        } = responseAssignTestCases;
 
         this.setState({
           loading: false,
@@ -81,39 +95,61 @@ export default class extends Component {
             total: count
           }
         });
-      } catch(error) {
-        console.log("osow!", error)
-        this.setState({ loading: false })
+      } catch (error) {
+        this.setState({ loading: false });
       }
-    })
+    });
   }
 
   onTablePaginationChange(page, pageSize) {
-    this.setState({
-      loading: true,
-      paginationOptions: {
-        ...this.state.paginationOptions,
-        current: page,
-        pageSize
+    this.setState(
+      {
+        loading: true,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          current: page,
+          pageSize
+        }
+      },
+      async () => {
+        try {
+          let responseData = await getTestQueuesAssigned({
+            paginationOptions: this.state.paginationOptions
+          });
+          const {
+            data: { rows = [], count = 1 }
+          } = responseData;
+          this.setState({
+            loading: false,
+            dataSource: rows,
+            paginationOptions: {
+              ...this.state.paginationOptions,
+              total: count
+            }
+          });
+        } catch (e) {
+          this.setState({ loading: false, dataSource: [] });
+        }
       }
-    }, async () => {
-      try{
-        let responseData = await getTestQueuesAssigned({
-          paginationOptions: this.state.paginationOptions
-        });
-        const { data : { rows = [], count = 1 } } = responseData;
-        this.setState({
-          loading: false,
-          dataSource: rows,
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: count
-          }
-        });
-      } catch(e) {
-        this.setState({ loading: false, dataSource: [] });
+    );
+  }
+
+  handleUnassign({ testQueueId }) {
+    this.setState(
+      {
+        loading: true
+      },
+      async () => {
+        try {
+          let responseData = await testQueueUnAssign(testQueueId);
+          message.success("Successfully unassigned test case");
+          this.componentDidMount();
+          this.setState({ loading: false });
+        } catch (e) {
+          this.setState({ loading: false });
+        }
       }
-    });
+    );
   }
 
   render() {
@@ -125,7 +161,10 @@ export default class extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          {this.state.agency && this.state.agency.name ? this.state.agency.name : ''} - Test Cases
+          {this.state.agency && this.state.agency.name
+            ? this.state.agency.name
+            : ""}{" "}
+          - Test Cases
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>

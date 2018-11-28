@@ -417,6 +417,10 @@ export const testQueueAssign = function(options) {
   return _post("test/queue/assign", options);
 };
 
+export const testQueueUnAssign = function(id) {
+  return _deleteRecord(`test/queue/${id}/unassign`);
+};
+
 /*
 *
 * Private Start
