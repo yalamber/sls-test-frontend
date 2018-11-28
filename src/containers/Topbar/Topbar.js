@@ -15,7 +15,7 @@ import { themeConfig } from "../../settings";
 const { Header } = Layout;
 const { toggleCollapsed, closeAll } = appActions;
 const { logout } = authAction;
-const { requestMyAgencies, requestAgencyLogin,  } = userAction;
+const { requestMyAgencies, requestAgencyLogin, } = userAction;
 const customizedTheme = themes[themeConfig.theme];
 
 class Topbar extends Component {
@@ -27,14 +27,31 @@ class Topbar extends Component {
     this.props.requestMyAgencies();
   }
 
+  getCompanyTitle() {
+    const { activeCompanyToken } = this.props;
+    try {
+      const companyTokenData = jwtDecode(activeCompanyToken);
+      return (
+        <h1 className="company-name">{ companyTokenData.agencyData.name }</h1>
+      )
+    } catch (e) {
+      console.log(e)
+      return (
+        <div>
+          
+        </div>
+      );
+    }
+  }
+
   render() {
-    const { 
-      toggleCollapsed, 
-      logout, 
-      closeAll, 
-      myAgencies = { data: [], loading: true, error: false},
+    const {
+      toggleCollapsed,
+      logout,
+      closeAll,
+      myAgencies = { data: [], loading: true, error: false },
       requestAgencyLogin,
-      userToken
+      userToken,
     } = this.props;
     const userTokenData = jwtDecode(userToken);
     const collapsed = this.props.collapsed && !this.props.openDrawer;
@@ -60,10 +77,11 @@ class Topbar extends Component {
               style={{ color: customizedTheme.textColor }}
               onClick={toggleCollapsed}
             />
+            {this.getCompanyTitle()}
           </div>
 
           <ul className="isoRight">
-            { userTokenData.agencyCount > 0 && 
+            {userTokenData.agencyCount > 0 &&
               <li
                 onClick={() => this.setState({ selectedItem: "agency" })}
                 className="isoAgency"
@@ -72,7 +90,7 @@ class Topbar extends Component {
                   requestAgencyLogin={requestAgencyLogin} />
               </li>
             }
-            { userTokenData.clientCompanyCount > 0 && 
+            {userTokenData.clientCompanyCount > 0 &&
               <li
                 onClick={() => this.setState({ selectedItem: "company" })}
                 className="isoCompany"
@@ -81,14 +99,14 @@ class Topbar extends Component {
               </li>
             }
             {userTokenData && userTokenData.userData &&
-            <li
-              onClick={() => this.setState({ selectedItem: "user" })}
-              className="isoUser"
-            >
-              <TopbarUser userData={userTokenData.userData} 
-                logout={logout} 
-                closeAll={closeAll} />
-            </li>
+              <li
+                onClick={() => this.setState({ selectedItem: "user" })}
+                className="isoUser"
+              >
+                <TopbarUser userData={userTokenData.userData}
+                  logout={logout}
+                  closeAll={closeAll} />
+              </li>
             }
           </ul>
         </Header>

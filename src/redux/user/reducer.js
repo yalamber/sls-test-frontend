@@ -6,12 +6,12 @@ const initState = {
     error: false,
     data: []
   },
-  myCompanies: {
+  myClients: {
     loading: true,
     error: false,
     data: []
   }, 
-  activeAccountToken: null 
+  activeCompanyToken: null 
 };
 
 export default function userReducer(state = initState, action) {
@@ -33,6 +33,11 @@ export default function userReducer(state = initState, action) {
           loading: false, 
           error: true
         }
+      };
+    case actions.SUCCESS_ACCOUNT_LOGIN:
+      return { 
+        ...state,
+        activeCompanyToken: action.token
       };
     default:
       return state;

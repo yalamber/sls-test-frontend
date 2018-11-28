@@ -1,7 +1,7 @@
 import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import { get } from 'lodash';
-import { setUserToken, clearUserToken, getUserToken } from '../../helpers/utility';
+import { setUserToken, clearUserToken, getUserToken, clearCompanyToken } from '../../helpers/utility';
 import actions from './actions';
 import SWQAClient from "../../helpers/apiClient";
 import notification from '../../components/notification';
@@ -49,9 +49,11 @@ export function* loginError() {
 export function* logout() {
   yield takeEvery(actions.LOGOUT, function* () {
     clearUserToken();
+    clearCompanyToken();
     yield put(push('/'));
   });
 }
+
 export function* checkAuthorization() {
   yield takeEvery(actions.CHECK_AUTHORIZATION, function* () {
     const token = getUserToken();

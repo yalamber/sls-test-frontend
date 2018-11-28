@@ -31,7 +31,12 @@ const TopbarWrapper = styled.div`
             : "0px 15px !important"};
       }
     }
+    .company-name {
+      margin-left: 10px;
+      margin-bottom: 0;
+      font-size: 18px;
 
+    }
     .isoLeft {
       display: flex;
       align-items: center;

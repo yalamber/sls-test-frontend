@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Spin } from "antd";
+import { Spin } from 'antd';
+import { withRouter } from 'react-router-dom';
 import Popover from '../../components/uielements/popover';
 import TopbarDropdownWrapper from './topbarDropdown.style';
 
@@ -22,7 +23,7 @@ class TopbarAgency extends Component {
   }
 
   dropdownContent() {
-    const { myAgencies, myAgenciesLoading, requestAgencyLogin } = this.props;
+    const { myAgencies, requestAgencyLogin, history } = this.props;
     return (
       <TopbarDropdownWrapper className="isoUserDropdown">
         { myAgencies.loading && <Spin />}
@@ -31,7 +32,12 @@ class TopbarAgency extends Component {
           myAgencies.data.map((myAgency, index) => (
             <div key={index}>
               <a className="isoDropdownLink" onClick={() => {
-                requestAgencyLogin({ agencyId: myAgency.agency.agencyId  });
+                requestAgencyLogin({
+                  history, 
+                  agencyData: { 
+                    agencyId: myAgency.agency.agencyId 
+                  }
+                });
               }}>
                 {myAgency.agency.name} 
                 <br />
@@ -67,4 +73,4 @@ class TopbarAgency extends Component {
   }
 }
 
-export default TopbarAgency;
+export default withRouter(TopbarAgency);
