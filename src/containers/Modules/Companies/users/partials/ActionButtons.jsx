@@ -7,7 +7,7 @@ import { Tooltip } from "antd";
 
 function ActionButtons(props) {
   const { companyId } = props.match.params;
-  const { row, selectedTeam } = props;
+  const { row } = props;
   return (
     <ActionWrapper>
       <Tooltip placement="topLeft" title="Edit Record">
@@ -18,8 +18,7 @@ function ActionButtons(props) {
                 row.userId
               }`,
               state: {
-                row,
-                selectedTeam: selectedTeam
+                ...row
               }
             });
           }}

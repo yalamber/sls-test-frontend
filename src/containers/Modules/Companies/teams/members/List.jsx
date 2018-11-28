@@ -37,7 +37,7 @@ export default class extends Component {
         },
         {
           title: "Status",
-          dataIndex: "status",
+          dataIndex: "user.status",
           key: "status",
           sorter: (a, b) => a.status >= b.status
         },
@@ -78,8 +78,7 @@ export default class extends Component {
       let companyTeam = await getCompanyTeam(this.props.match.params.teamId);
       let users = await getCompanyTeamMembers(this.props.match.params.teamId, {
         paginationOptions: this.state.paginationOptions
-      });
-      this.setState({
+      });this.setState({
         loading: false,
         companyTeam: companyTeam.data,
         data: users.data.rows,
@@ -172,10 +171,10 @@ export default class extends Component {
                     onDoubleClick: () => {
                       this.props.history.push({
                         pathname: `/dashboard/company/user/${
-                          this.props.match.params.companyId
+                          this.state.companyTeam.clientId
                         }/edit/${row.userId}`,
                         state: {
-                          row
+                          ...row
                         }
                       });
                     }

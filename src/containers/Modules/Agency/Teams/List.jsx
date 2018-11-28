@@ -152,7 +152,7 @@ class TeamsList extends Component {
                   onRow={row => ({
                     onDoubleClick: () => {
                       this.props.history.push(
-                        "/dashboard/agency/teams/team-members"
+                        `/dashboard/agency/teams/${row.agencyTeamId}/members`
                       );
                     }
                   })}

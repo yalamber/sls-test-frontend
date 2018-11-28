@@ -8,9 +8,9 @@ import { getErrorDataFromApiResponseError } from "../../../../util/response-mess
 import { TitleWrapper, ComponentTitle } from "../../crud.style";
 import _ from "lodash";
 import Box from "../../../../components/utility/box";
-import UserForm from "../users/partials/UserForm";
+import UserForm from "../../Companies/users/partials/UserForm";
 import { message } from "antd/lib/index";
-import { getAgency, addAgencyUser, addUserToAgency } from "../../../../helpers/http-api-client";
+import { getAgency, addAgencyUser, addUserToAgency, editUser } from "../../../../helpers/http-api-client";
 
 class Create extends Component {
   constructor() {
@@ -24,6 +24,7 @@ class Create extends Component {
     };
     this.fetchData = this.fetchData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleEditSubmit = this.handleEditSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -67,6 +68,65 @@ class Create extends Component {
     }
   }
 
+  handleEditSubmit(formData, resetForm) {
+    this.setState({ loading: true }, async () => {
+      try {
+        // let role = formData.role;
+        // formData = _.omit(formData, "role");
+        const { userId } = this.props.match.params;
+        let responseEditUser = await editUser(userId, { ...formData });
+        // let companyUser = await editUser(userId, formData);
+        if (responseEditUser.status === 200) {
+          message.success("Successfully Saved");
+          resetForm();
+          this.setState({ errors: { details: [] }, loading: false });
+          this.props.history.goBack();
+        } else {
+          this.setState({
+            errors: getErrorDataFromApiResponseError(responseEditUser),
+            loading: false
+          });
+        }
+      } catch (error) {
+        this.setState({
+          errors: getErrorDataFromApiResponseError(error),
+          loading: false
+        });
+      }
+    });
+  }
+
+  getFormMode() {
+    const isEditKeyWordFoundInUrl = new RegExp(`/edit`).test(
+      this.props.match.url
+    );
+    if (isEditKeyWordFoundInUrl) {
+      return "edit";
+    } else {
+      return "create";
+    }
+  }
+
+  renderFormTypeTitle() {
+    if (this.getFormMode() === "edit") {
+      const {
+        user: { username = "" }
+      } = this.props.location.state;
+
+      return (
+        <TitleWrapper>
+          <ComponentTitle>Edit User - {username}</ComponentTitle>
+        </TitleWrapper>
+      );
+    }
+
+    return (
+      <TitleWrapper>
+        <ComponentTitle>Create New User</ComponentTitle>
+      </TitleWrapper>
+    );
+  }
+
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     return (
@@ -77,14 +137,18 @@ class Create extends Component {
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
-              <TitleWrapper>
-                <ComponentTitle>Create User</ComponentTitle>
-              </TitleWrapper>
+              {this.renderFormTypeTitle()}
               <Spin spinning={this.state.loading}>
                 <UserForm
                   relId={this.state.agency.agencyId}
                   userType="agencyUser"
-                  submit={this.handleSubmit}
+                  formType={this.getFormMode()}
+                  rowData={{ ...this.props.history.location.state }}
+                  submit={
+                    this.getFormMode() === "create"
+                      ? this.handleSubmit
+                      : this.handleEditSubmit
+                  }
                   errors={this.state.errors}
                 />
               </Spin>
