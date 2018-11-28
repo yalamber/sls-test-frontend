@@ -6,7 +6,7 @@ export const userStatus = [
   {
     id: 'inactive',
     name: "Inactive"
-  },
+  }/*,
   {
     id: 'suspended',
     name: "Suspended"
@@ -18,5 +18,5 @@ export const userStatus = [
   {
     id: 'under-review',
     name: "Under Review"
-  },
+  },*/
 ];

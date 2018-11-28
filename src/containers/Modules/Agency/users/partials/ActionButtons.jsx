@@ -14,12 +14,9 @@ function ActionButtons(props) {
         <a
           onClick={() => {
             props.history.push({
-              pathname: `/dashboard/agency/user/${agencyId}/edit/${
-                row.userId
-              }`,
+              pathname: `/dashboard/agency/user/${agencyId}/edit/${row.userId}`,
               state: {
-                row,
-                selectedTeam: selectedTeam
+                ...row
               }
             });
           }}

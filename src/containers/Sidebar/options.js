@@ -13,14 +13,6 @@ const options = [
         label: "sidebar.agency"
       },
       {
-        key: "company/test-manager",
-        label: "sidebar.company.testingManagerTemporary"
-      },
-      {
-        key: "agency/test-manager",
-        label: "sidebar.agency.testingManagerTemporary"
-      },
-      {
         key: "roles/list",
         label: "sidebar.roles"
       }

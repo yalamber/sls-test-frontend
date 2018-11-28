@@ -35,7 +35,11 @@ export default [
   },
   {
     path: "agency/user/create/:agencyId",
-    component: asyncComponent(() => import("../../Modules/Agency/users/Create"))
+    component: asyncComponent(() => import("../../Modules/Agency/users/CreateOrEdit"))
+  },
+  {
+    path: "agency/user/:agencyId/edit/:userId",
+    component: asyncComponent(() => import("../../Modules/Companies/users/CreateOrEdit"))
   },
   {
     path: "agency/teams/:teamId/member/add",

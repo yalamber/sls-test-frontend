@@ -40,7 +40,7 @@ export default [
   {
     path: "company/user/create/:companyId",
     exact: true,
-    component: asyncComponent(() => import("../../Modules/Companies/users/Create"))
+    component: asyncComponent(() => import("../../Modules/Companies/users/CreateOrEdit"))
   },
   {
     path: "company/teams/:teamId/member/add",
@@ -49,7 +49,7 @@ export default [
   },
   {
     path: "company/user/:companyId/edit/:userId",
-    component: asyncComponent(() => import("../../Modules/Companies/users/Edit"))
+    component: asyncComponent(() => import("../../Modules/Companies/users/CreateOrEdit"))
   },
   {
     path: "company/users/:companyId",
