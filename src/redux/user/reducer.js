@@ -11,7 +11,7 @@ const initState = {
     error: false,
     data: []
   }, 
-  activeAccount: null 
+  activeAccountToken: null 
 };
 
 export default function userReducer(state = initState, action) {
@@ -34,8 +34,6 @@ export default function userReducer(state = initState, action) {
           error: true
         }
       };
-    case actions.RECEIVE_MY_COMPANIES:
-      return { ...state, myCompanies: action.payload, myCompaniesLoading: false };
     default:
       return state;
   }

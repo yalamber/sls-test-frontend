@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Layout } from "antd";
+import jwtDecode from "jwt-decode";
 import appActions from "../../redux/app/actions";
 import authAction from '../../redux/auth/actions';
 import userAction from '../../redux/user/actions';
@@ -10,7 +11,6 @@ import TopbarAgency from "./topbarAgency";
 import TopbarWrapper from "./topbar.style";
 import themes from "../../settings/themes";
 import { themeConfig } from "../../settings";
-import { getUserTokenData } from '../../helpers/utility';
 
 const { Header } = Layout;
 const { toggleCollapsed, closeAll } = appActions;
@@ -25,26 +25,18 @@ class Topbar extends Component {
 
   componentDidMount() {
     this.props.requestMyAgencies();
-    this.getUserTokenData();
-  }
-
-  getUserTokenData() {
-    //TODO: make token available throuh redux store
-    let userTokenData = getUserTokenData();
-    if(userTokenData) {
-      this.setState({ userTokenData });
-    }
   }
 
   render() {
-    const { userTokenData } = this.state;
     const { 
       toggleCollapsed, 
       logout, 
       closeAll, 
       myAgencies = { data: [], loading: true, error: false},
-      requestAgencyLogin
+      requestAgencyLogin,
+      userToken
     } = this.props;
+    const userTokenData = jwtDecode(userToken);
     const collapsed = this.props.collapsed && !this.props.openDrawer;
     const styling = {
       background: customizedTheme.backgroundColor,
@@ -108,7 +100,8 @@ class Topbar extends Component {
 export default connect(
   state => ({
     ...state.App,
-    ...state.User
+    ...state.User,
+    ...state.Auth
   }),
   { toggleCollapsed, logout, closeAll, requestMyAgencies, requestAgencyLogin }
 )(Topbar);
