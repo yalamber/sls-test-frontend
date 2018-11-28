@@ -401,6 +401,10 @@ export const getTestQueues = function(options) {
   return _getWithLimitOffset("test/queue", options);
 };
 
+export const addTestCaseToQueue = function(options) {
+  return _post("test/queue", options);
+};
+
 /*
 *
 * Private Start
