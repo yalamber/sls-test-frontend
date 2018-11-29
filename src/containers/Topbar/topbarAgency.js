@@ -23,6 +23,7 @@ class TopbarAgency extends Component {
   }
 
   dropdownContent() {
+    console.log("this we got", this.props)
     const { myAgencies, requestAgencyLogin, history } = this.props;
     return (
       <TopbarDropdownWrapper className="isoUserDropdown">
@@ -33,16 +34,16 @@ class TopbarAgency extends Component {
             <div key={index}>
               <a className="isoDropdownLink" onClick={() => {
                 requestAgencyLogin({
-                  history, 
-                  agencyData: { 
-                    agencyId: myAgency.agency.agencyId 
+                  history,
+                  agencyData: {
+                    agencyId: myAgency.agency.agencyId
                   }
                 });
               }}>
-                {myAgency.agency.name} 
+                {myAgency.agency.name}
                 <br />
                 <span className="smallText">
-                  &nbsp; {myAgency.role.title}
+                  &nbsp; {'testtyr myAgency.role.title'}
                 </span>
               </a>
             </div>
@@ -66,7 +67,7 @@ class TopbarAgency extends Component {
           <i
             className="ion-grid"
           /> &nbsp;
-          Agencies 
+          Agencies
         </div>
       </Popover>
     );

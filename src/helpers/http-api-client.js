@@ -30,7 +30,7 @@ const _middlewares = [];
 
 export const getUserRoles = function(obj) {
   const options = obj;
-  if (typeof options === "object") {
+  if (options && typeof options === "object" && Object.keys(options).length) {
     return _getWithLimitOffset(`role`, options);
   } /* else if (options) {
     return _get(`role/${options}`);
@@ -49,7 +49,7 @@ export const editUser = (userId, user) => {
 };
 
 export const getUser = option => {
-  if (typeof option === "object") {
+  if (option && typeof option === "object" && Object.keys(option).length) {
     return _getWithLimitOffset(`user`, option);
   } else if (option) {
     return _get(`user/${option}`);
@@ -82,7 +82,7 @@ export const getAgencyUsers = function(agencyId, option = {}) {
 
 export const getAgency = function(objOrAgencyId) {
   const option = objOrAgencyId;
-  if (typeof option === "object") {
+  if (option && typeof option === "object" && Object.keys(option).length) {
     return _getWithLimitOffset(`agency`, option);
   } else if (option) {
     return _get(`agency/${option}`);
@@ -145,7 +145,7 @@ export const deleteCompany = function(id) {
 };
 export const getCompanies = objOrCompanyId => {
   const option = objOrCompanyId;
-  if (typeof option === "object") {
+  if (option && typeof option === "object" && Object.keys(option).length) {
     return _getWithLimitOffset(`client`, option);
   }
 
@@ -154,7 +154,7 @@ export const getCompanies = objOrCompanyId => {
 
 export const getCompany = function(objOrCompanyId) {
   const option = objOrCompanyId;
-  if (typeof option === "object") {
+  if (option && typeof option === "object" && Object.keys(option).length) {
     return _getWithLimitOffset(`client`, option);
   } else if (option) {
     return _get(`client/${option}`);

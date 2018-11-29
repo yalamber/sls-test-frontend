@@ -31,14 +31,15 @@ class Topbar extends Component {
     const { activeCompanyToken } = this.props;
     try {
       const companyTokenData = jwtDecode(activeCompanyToken);
+      console.log("got!", companyTokenData)
       return (
-        <h1 className="company-name">{ companyTokenData.agencyData.name }</h1>
+        <h1 className="company-name">{ companyTokenData.agency.name }</h1>
       )
     } catch (e) {
       console.log(e)
       return (
         <div>
-          
+
         </div>
       );
     }
