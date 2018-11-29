@@ -254,11 +254,11 @@ export const getCompanySuites = option => {
 
 export const getSuites = option => {
   return getCompanySuites(option);
-}
+};
 
 export const getSuite = option => {
   return getSuites(option);
-}
+};
 
 export const addSuite = formData => {
   return _post("test/suite", formData);
@@ -401,8 +401,24 @@ export const getTestQueues = function(options) {
   return _getWithLimitOffset("test/queue", options);
 };
 
+export const getTestQueuesAssigned = function(options = {}) {
+  const { query = {} } = options;
+  return getTestQueues({
+    ...options,
+    query: { ...query, isAssignedOnly: "1" }
+  });
+};
+
 export const addTestCaseToQueue = function(options) {
   return _post("test/queue", options);
+};
+
+export const testQueueAssign = function(options) {
+  return _post("test/queue/assign", options);
+};
+
+export const testQueueUnAssign = function(id) {
+  return _deleteRecord(`test/queue/${id}/unassign`);
 };
 
 /*

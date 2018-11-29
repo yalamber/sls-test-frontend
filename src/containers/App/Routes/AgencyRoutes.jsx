@@ -59,13 +59,13 @@ export default [
     )
   },
   {
-    path: "agency/test-manager/available-tests",
+    path: "agency/test-manager/:agencyId/available-tests",
     component: asyncComponent(() =>
       import("../../Modules/Agency/TestManager/TestQueues/AvailableTests")
     )
   },
   {
-    path: "agency/test-manager/assigned-tests",
+    path: "agency/test-manager/:agencyId/assigned-tests",
     component: asyncComponent(() =>
       import("../../Modules/Agency/TestManager/TestQueues/AssignedTests")
     )

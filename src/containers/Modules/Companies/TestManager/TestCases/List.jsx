@@ -86,22 +86,17 @@ export default class extends Component {
         const resCompanySuites = await getSuites({
           query: {
             clientId: this.props.match.params.companyId
-          },
-          paginationOptions: this.state.paginationOptions
+          }
         });
 
         const {
-          data: { rows = [], count }
+          data: { rows = [] }
         } = resCompanySuites;
 
         this.setState({
           loading: false,
           company: resCompany.data,
-          suites: rows,
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: count
-          }
+          suites: rows
         });
       } catch (error) {
         this.setState({ loading: false });
@@ -124,30 +119,38 @@ export default class extends Component {
 
   handleSuiteChange(suiteId) {
     const { companyId } = this.props.match.params;
-    this.setState({ loading: true, selectedSuite: suiteId }, async () => {
-      try {
-        const resTestCase = await getTestCase({
-          query: { clientId: companyId, testSuiteId: suiteId },
-          paginationOptions: this.state.paginationOptions
-        });
-        const {
-          data: { rows = [], count = 1 }
-        } = resTestCase;
-        this.setState({ dataSource: rows, loading: false });
-      } catch (error) {
-        this.setState({ loading: false });
+    this.setState(
+      { loading: true, selectedSuite: suiteId, errors: { details: [] } },
+      async () => {
+        try {
+          const resTestCase = await getTestCase({
+            query: { clientId: companyId, testSuiteId: suiteId },
+            paginationOptions: this.state.paginationOptions
+          });
+          const {
+            data: { rows = [], count = 1 }
+          } = resTestCase;
+          this.setState({
+            dataSource: rows,
+            loading: false,
+            paginationOptions: { ...this.state.paginationOptions, total: count }
+          });
+        } catch (error) {
+          this.setState({ loading: false });
+        }
       }
-    });
+    );
   }
 
   onSelectChange = selectedRowKeys => {
-    this.setState({ selectedRowKeys });
+    this.setState({ selectedRowKeys, errors: { details: [] } });
   };
 
   submitTestCasesToQueue = () => {
     this.setState(
       {
-        loading: true
+        loading: true,
+        errors: { details: [] }
       },
       async () => {
         if (this.state.selectedRowKeys && this.state.selectedRowKeys.length) {
@@ -211,7 +214,12 @@ export default class extends Component {
       },
       async () => {
         try {
+          const { companyId } = this.props.match.params;
           const resTestCase = await getTestCase({
+            query: {
+              clientId: companyId,
+              testSuiteId: this.state.selectedSuite
+            },
             paginationOptions: this.state.paginationOptions
           });
           this.setState({
@@ -319,7 +327,6 @@ export default class extends Component {
                   </Col>
                 </Row>
                 <Table
-                  locale={{ emptyText: "Please Select Company name" }}
                   size="middle"
                   bordered
                   rowSelection={rowSelection}
