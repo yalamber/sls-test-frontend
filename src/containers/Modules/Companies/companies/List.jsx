@@ -21,6 +21,7 @@ import {
   deleteCompany,
   getCompanies
 } from "../../../../helpers/http-api-client";
+import { getDefaultPaginationOptions } from '../../../../util/default-objects';
 
 class List extends Component {
   constructor(props) {
@@ -59,70 +60,28 @@ class List extends Component {
         }
       ],
       data: [],
-      paginationOptions: {
-        defaultCurrent: 1,
-        current: 1,
-        pageSize: 5,
-        total: 1
-      },
-      loading: false
+      paginationOptions: getDefaultPaginationOptions().paginationOptions
     };
-    this.fetchData = this.fetchData.bind(this);
+    // this.fetchData = this.fetchData.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   componentDidMount() {
     this.props.actions.companiesListDidMount();
-    // this.fetchData();
-  }
-
-  async fetchData() {
-    try {
-      this.setState({ loading: true });
-      let companies = await getCompanies({
-        paginationOptions: this.state.paginationOptions
-      });
-      this.setState({
-        loading: false,
-        data: companies.data.rows,
-        paginationOptions: {
-          ...this.state.paginationOptions,
-          total: companies.data.count
-        }
-      });
-    } catch (e) {
-      message.error("Something went wrong.");
-      this.setState({ loading: false });
-    }
   }
 
   onTablePaginationChange(page, pageSize) {
     this.setState(
       {
-        loading: true,
         paginationOptions: {
           ...this.state.paginationOptions,
           current: page,
           pageSize
         }
-      },
-      async () => {
-        try {
-          let companies = await getCompanies({
-            paginationOptions: this.state.paginationOptions
-          });
-          this.setState({
-            loading: false,
-            data: companies.data.rows,
-            paginationOptions: {
-              ...this.state.paginationOptions,
-              total: companies.data.count
-            }
-          });
-        } catch (e) {
-          this.setState({ loading: false, data: [] });
-        }
+      }, () => {
+        const { paginationOptions } = this.state;
+        this.props.actions.companiesListFetch(paginationOptions);
       }
     );
   }
@@ -130,15 +89,19 @@ class List extends Component {
   handleDelete(row) {
     deleteCompany(row.clientId).then(res => {
       message.success("Successfully Deleted.");
-      this.fetchData();
+      // this.fetchData();
     });
+  }
+
+  getPaginationOptions() {
+    const { count } = this.props.Companies;
+    return { ...this.state.paginationOptions, total: count };
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    console.log("props!", this.props)
-    const { rows, count, loading } = this.props.Companies;
-    console.log("here rows, count!", rows, count);
+    const { rows, loading } = this.props.Companies;
+
     return (
       <LayoutWrapper>
         <PageHeader>Companies</PageHeader>
@@ -163,7 +126,7 @@ class List extends Component {
               <Spin spinning={loading}>
                 <Table
                   pagination={{
-                    ...this.state.paginationOptions,
+                    ...this.getPaginationOptions(),
                     onChange: this.onTablePaginationChange
                   }}
                   rowKey="clientId"

@@ -26,7 +26,6 @@ export default function companiesReducer(state = initState, action) {
         loading: loading === null ? false : loading
       }
     case COMPANIES_LIST_SUCCESS:
-    console.log("disp!", action)
       const { payload: { rows = [], count = ROW_COUNT } } = action;
 
       return {

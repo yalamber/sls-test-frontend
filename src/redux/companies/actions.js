@@ -10,8 +10,9 @@ export const companiesListDidMount = () => ({
   type: COMPANIES_LIST_DID_MOUNT
 });
 
-export const companiesListFetch = () => ({
-  type: COMPANIES_LIST_FETCH
+export const companiesListFetch = (payload = {}) => ({
+  type: COMPANIES_LIST_FETCH,
+  payload
 });
 
 export const companiesListSuccess = (payload = {}) => ({
