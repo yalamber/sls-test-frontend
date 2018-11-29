@@ -1,12 +1,14 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
 import { Row, Col, Icon, message, Spin } from "antd";
 import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
 import PageHeader from "../../../../components/utility/pageHeader";
 import basicStyle from "../../../../settings/basicStyle";
 import Box from "../../../../components/utility/box";
 import ActionButtons from "./partials/ActionButtons";
+import * as companiesListActions from "../../../../redux/companies/actions";
 import TestManagerActionButtons from "../TestManager/partials/ActionButtons";
-
 
 import {
   ActionBtn,
@@ -20,7 +22,7 @@ import {
   getCompanies
 } from "../../../../helpers/http-api-client";
 
-export default class extends Component {
+class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -71,11 +73,12 @@ export default class extends Component {
   }
 
   componentDidMount() {
-    this.fetchData();
+    this.props.actions.companiesListDidMount();
+    // this.fetchData();
   }
 
   async fetchData() {
-    try{
+    try {
       this.setState({ loading: true });
       let companies = await getCompanies({
         paginationOptions: this.state.paginationOptions
@@ -88,7 +91,7 @@ export default class extends Component {
           total: companies.data.count
         }
       });
-    } catch(e) {
+    } catch (e) {
       message.error("Something went wrong.");
       this.setState({ loading: false });
     }
@@ -105,7 +108,7 @@ export default class extends Component {
         }
       },
       async () => {
-        try{
+        try {
           let companies = await getCompanies({
             paginationOptions: this.state.paginationOptions
           });
@@ -117,7 +120,7 @@ export default class extends Component {
               total: companies.data.count
             }
           });
-        } catch(e) {
+        } catch (e) {
           this.setState({ loading: false, data: [] });
         }
       }
@@ -133,22 +136,23 @@ export default class extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
+    console.log("props!", this.props)
+    const { rows, count, loading } = this.props.Companies;
+    console.log("here rows, count!", rows, count);
     return (
       <LayoutWrapper>
-        <PageHeader>
-           Companies
-        </PageHeader>
+        <PageHeader>Companies</PageHeader>
 
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle></ComponentTitle>
+                <ComponentTitle />
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push("create")
+                      this.props.history.push("create");
                     }}
                   >
                     <Icon type="plus" />
@@ -156,7 +160,7 @@ export default class extends Component {
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Spin spinning={this.state.loading}>
+              <Spin spinning={loading}>
                 <Table
                   pagination={{
                     ...this.state.paginationOptions,
@@ -164,7 +168,7 @@ export default class extends Component {
                   }}
                   rowKey="clientId"
                   columns={this.state.columns}
-                  dataSource={this.state.data}
+                  dataSource={rows}
                   onRow={row => ({
                     onDoubleClick: () => {
                       // this.props.history.push('details/' + row.clientId)
@@ -180,3 +184,15 @@ export default class extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    ...state
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(companiesListActions, dispatch)
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(List);
