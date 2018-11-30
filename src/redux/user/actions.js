@@ -9,7 +9,9 @@ const actions = {
   //clients
   REQUEST_MY_CLIENTS: 'REQUEST_MY_CLIENTS',
   RECEIVE_MY_CLIENTS: 'RECEIVE_MY_CLIENTS',
+  ERROR_MY_CLIENTS: 'ERROR_MY_CLIENTS',
   REQUEST_CLIENT_LOGIN: 'REQUEST_CLIENT_LOGIN',
+  ERROR_CLIENT_LOGIN: 'ERROR_CLIENT_LOGIN',
   //same action for both in success
   SUCCESS_ACCOUNT_LOGIN: 'SUCCESS_ACCOUNT_LOGIN',
 
@@ -28,11 +30,7 @@ const actions = {
     type: actions.REQUEST_AGENCY_LOGIN,
     payload
   }),
-  successAccountLogin: (payload) => ({
-    type: actions.SUCCESS_ACCOUNT_LOGIN,
-    payload
-  }),
-  //client actions
+  //clients actions
   requestMyClients: () => ({
     type: actions.REQUEST_MY_CLIENTS
   }),
@@ -44,6 +42,10 @@ const actions = {
     type: actions.REQUEST_CLIENT_LOGIN,
     payload
   }),
-
+  //same action for success
+  successAccountLogin: (payload) => ({
+    type: actions.SUCCESS_ACCOUNT_LOGIN,
+    payload
+  }),
 };
 export default actions;

@@ -5,6 +5,7 @@ import actions from './actions';
 import SWQAClient from "../../helpers/apiClient";
 import notification from '../../components/notification';
 
+//agency
 export function* requestMyAgencies() {
   yield takeLatest('REQUEST_MY_AGENCIES', function* ({ payload }) {
     try {
@@ -45,6 +46,55 @@ export function* requestAgencyLogin() {
   });
 }
 
+export function* errorAgencyLogin() {
+  yield takeEvery(actions.ERROR_AGENCY_LOGIN, function* () { });
+}
+
+//client
+export function* requestMyClients() {
+  yield takeLatest('REQUEST_MY_CLIENTS', function* ({ payload }) {
+    try {
+      // do api call
+      const data = yield call(SWQAClient.getMyClients);
+      yield put(actions.receiveMyClients(data.rows));
+    } catch (e) {
+      console.log(e);
+      yield put({ type: actions.ERROR_MY_CLIENTS });
+    }
+  });
+}
+
+export function* errorMyClients() {
+  yield takeEvery(actions.ERROR_MY_CLIENTS, function* () { });
+}
+
+export function* requestClientLogin() {
+  yield takeLatest('REQUEST_CLIENT_LOGIN', function* ({ payload }) {
+    try {
+      const { history, clientData } = payload;
+      const data = yield call(SWQAClient.clientLogin, clientData);
+      if (get(data, 'token', false)) {
+        yield put({
+          type: actions.SUCCESS_ACCOUNT_LOGIN,
+          payload: data,
+          token: data.token,
+          history
+        });
+      } else {
+        notification('error', 'login failed');
+        yield put({ type: actions.ERROR_CLIENT_LOGIN });
+      }
+    } catch (e) {
+      notification('error', 'Client login failed');
+      yield put({ type: actions.ERROR_ClIENT_LOGIN });
+    }
+  });
+}
+
+export function* errorClientLogin() {
+  yield takeEvery(actions.ERROR_CLIENT_LOGIN, function* () { });
+}
+
 export function* successAccountLogin() {
   yield takeEvery(actions.SUCCESS_ACCOUNT_LOGIN, function* ({ payload, history }) {
     if (payload) {
@@ -56,10 +106,6 @@ export function* successAccountLogin() {
       }
     }
   });
-}
-
-export function* errorAgencyLogin() {
-  yield takeEvery(actions.ERROR_AGENCY_LOGIN, function* () { });
 }
 
 export function* checkActiveAccount() {
@@ -77,11 +123,18 @@ export function* checkActiveAccount() {
 
 export default function* rootSaga() {
   yield all([
+    //agencies
     fork(requestMyAgencies),
     fork(errorMyAgencies),
     fork(requestAgencyLogin),
-    fork(successAccountLogin),
     fork(errorAgencyLogin),
+    //clients
+    fork(requestMyClients),
+    fork(errorMyClients),
+    fork(requestClientLogin),
+    fork(errorClientLogin),
+    //common
+    fork(successAccountLogin),
     fork(checkActiveAccount),
   ]);
 }
