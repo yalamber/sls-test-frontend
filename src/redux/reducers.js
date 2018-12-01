@@ -3,11 +3,14 @@ import App from './app/reducer';
 import Agencies from './agencies/reducer';
 import User from './user/reducer';
 import Companies from './companies/reducer';
+import CompanyUsers from './companies/users/reducer';
+
 
 export default {
   Auth,
   App,
   Agencies,
   User,
-  Companies
+  Companies,
+  CompanyUsers
 };

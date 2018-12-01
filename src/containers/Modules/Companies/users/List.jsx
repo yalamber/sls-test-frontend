@@ -1,10 +1,13 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { Row, Col, Icon, Spin, message } from "antd";
 import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
 import PageHeader from "../../../../components/utility/pageHeader";
 import basicStyle from "../../../../settings/basicStyle";
 import Box from "../../../../components/utility/box";
 import UsersActionButtons from "./partials/ActionButtons";
+import * as companiesUsersListActions from "../../../../redux/companies/users/actions";
 import {
   ActionBtn,
   TitleWrapper,
@@ -17,8 +20,9 @@ import {
   getCompanyUsers,
   deleteCompanyUser
 } from "../../../../helpers/http-api-client";
+import { getDefaultPaginationOptions } from "../../../../util/default-objects";
 
-export default class extends Component {
+class List extends Component {
   constructor() {
     super();
     this.state = {
@@ -54,77 +58,72 @@ export default class extends Component {
         }
       ],
       company: {},
-      data: [],
-      paginationOptions: {
-        defaultCurrent: 1,
-        current: 1,
-        pageSize: 5,
-        total: 1
-      },
-      loading: false
+      paginationOptions: getDefaultPaginationOptions().paginationOptions
     };
-    this.fetchData = this.fetchData.bind(this);
+    // this.fetchData = this.fetchData.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   componentDidMount() {
-    this.fetchData();
+    const { companyId } = this.props.match.params;
+    this.props.actions.companiesUsersListDidMount({ companyId });
   }
 
-  async fetchData() {
-    this.setState({ loading: true });
-    try {
-      let company = await getCompany(this.props.match.params.companyId);
-      let users = await getCompanyUsers(this.props.match.params.companyId, {
-        paginationOptions: this.state.paginationOptions
-      });
-      this.setState({
-        loading: false,
-        company: company.data,
-        data: users.data.rows,
+  // async fetchData() {
+  //   this.setState({ loading: true });
+  //   try {
+  //     let company = await getCompany(this.props.match.params.companyId);
+  //     let users = await getCompanyUsers(this.props.match.params.companyId, {
+  //       paginationOptions: this.state.paginationOptions
+  //     });
+  //     this.setState({
+  //       loading: false,
+  //       company: company.data,
+  //       data: users.data.rows,
+  //       paginationOptions: {
+  //         ...this.state.paginationOptions,
+  //         total: users.data.count
+  //       }
+  //     });
+  //   } catch (e) {
+  //     message.error("Problem occured.");
+  //     this.setState({ loading: false });
+  //   }
+  // }
+
+  onTablePaginationChange(page, pageSize) {
+    const { companyId } = this.props.match.params;
+    this.setState(
+      {
         paginationOptions: {
           ...this.state.paginationOptions,
-          total: users.data.count
+          current: page,
+          pageSize
         }
-      });
-    } catch(e) {
-      message.error("Problem occured.");
-      this.setState({ loading: false });
-    }
+      },
+      () => {
+        const { paginationOptions } = this.state;
+        this.props.actions.companiesUsersListFetch({
+          paginationOptions,
+          companyId
+        });
+      }
+    );
   }
 
-  async onTablePaginationChange(page, pageSize) {
-    this.setState({
-      loading: true,
-      paginationOptions: {
-        ...this.state.paginationOptions,
-        current: page,
-        pageSize
-      }
-    }, async () => {
-      try{
-        let users = await getCompanyUsers(this.props.match.params.companyId, {
-          paginationOptions: this.state.paginationOptions
-        });
-        this.setState({
-          loading: false,
-          data: users.data.rows,
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: users.data.count
-          }
-        });
-      } catch(e) {
-        this.setState({ loading: false, dataSource: [] });
-      }
-    });
+  getPaginationOptions() {
+    const { count } = this.props.CompanyUsers;
+    return { ...this.state.paginationOptions, total: count };
   }
 
   render() {
     const margin = {
       margin: "5px 5px 10px 0px"
     };
+
     const { rowStyle, colStyle, gutter } = basicStyle;
+    const { rows, loading } = this.props.CompanyUsers;
+
     return (
       <LayoutWrapper>
         <PageHeader>
@@ -146,7 +145,11 @@ export default class extends Component {
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push(`/dashboard/company/user/create/${this.state.company.clientId}`);
+                      this.props.history.push(
+                        `/dashboard/company/user/create/${
+                          this.state.company.clientId
+                        }`
+                      );
                     }}
                   >
                     <Icon type="plus" />
@@ -154,13 +157,13 @@ export default class extends Component {
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Spin spinning={this.state.loading}>
+              <Spin spinning={loading}>
                 <Table
                   locale={{ emptyText: "No users in company" }}
                   size="middle"
                   bordered
                   pagination={{
-                    ...this.state.paginationOptions,
+                    ...this.getPaginationOptions(),
                     onChange: this.onTablePaginationChange
                   }}
                   columns={this.state.columns}
@@ -176,7 +179,7 @@ export default class extends Component {
                       });
                     }
                   })}
-                  dataSource={this.state.data}
+                  dataSource={rows}
                   rowKey="userId"
                 />
               </Spin>
@@ -187,3 +190,21 @@ export default class extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    Companies: state.Companies,
+    CompanyUsers: state.CompanyUsers
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: { ...bindActionCreators(companiesUsersListActions, dispatch) }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(List);
