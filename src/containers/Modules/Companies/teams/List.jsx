@@ -11,7 +11,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {deleteTeam, getCompanies, getTeams} from "../../../../helpers/http-api-client";
+import {deleteTeam, getCompanies, getCompanyTeams} from "../../../../helpers/http-api-client";
 
 const Option = Select.Option;
 export default class extends Component {
@@ -79,8 +79,8 @@ export default class extends Component {
 
   fetchData(companyId = null) {
     this.setState({loading: true});
-    getTeams(companyId).then(res => {
-      this.setState({dataSource: res.data, loading: false})
+    getCompanyTeams({ query: {companyId}}).then(res => {
+      this.setState({dataSource: res.data.rows, loading: false})
     })
   }
 

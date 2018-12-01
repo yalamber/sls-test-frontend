@@ -1,6 +1,5 @@
 // import { get } from 'lodash';
 import { all, call, put, takeEvery, takeLatest, fork } from "redux-saga/effects";
-import { setCompanyToken, getCompanyToken } from '../../helpers/utility';
 import * as actions from './actions';
 // import SWQAClient from "../../helpers/apiClient";
 // import notification from '../../components/notification';

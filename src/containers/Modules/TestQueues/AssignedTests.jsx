@@ -9,7 +9,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../crud.style';
-import {getCompanies, getTeams} from "../../../helpers/http-api-client";
+import {getCompanies, getCompanyTeams} from "../../../helpers/http-api-client";
 import {getCompanySuites} from "../../../helpers/http-api-client";
 
 const Option = Select.Option;
@@ -85,8 +85,8 @@ export default class extends Component {
 
   handleCompanyChange(companyId) {
     this.setState({selectedTeam: undefined});
-    getTeams(companyId).then(res => {
-      this.setState({teams: res.data});
+    getCompanyTeams({query:{companyId}}).then(res => {
+      this.setState({teams: res.data.rows});
     });
     this.setState({selectedCompany: companyId});
     this.updateRecords(companyId, null);

@@ -113,6 +113,10 @@ export const createAgencyTeam = teamData => {
   return _post("agency-team", teamData);
 };
 
+export const updateAgencyTeam = (id, teamData) => {
+  return _put("agency-team/" + id, teamData);
+};
+
 /** Agency Users **/
 export const addAgencyUser = function(user) {
   return _post("user", user);
@@ -173,9 +177,9 @@ export const updateTeam = function(team, id) {
 export const deleteTeam = function(teamId) {
   return _deleteRecord("client-team/" + teamId);
 };
-export const getTeams = function(companyId) {
-  return _get("client-team", { clientId: companyId });
-};
+// export const getTeams = function(companyId) {
+//   return _get("client-team", { clientId: companyId });
+// };
 export const getClientTeam = function(clientTeamId) {
   return _get("client-team/" + clientTeamId);
 };
@@ -308,6 +312,7 @@ export const deleteTestCase = id => {
   return _deleteRecord("test/case/" + id);
 };
 
+
 // Dashboard Actions
 export const getDashboards = (clientId = null) => {
   return _get("dashboard", { clientId });
@@ -332,39 +337,39 @@ export const deleteDashboard = id => {
 
 // Testing Provider Actions
 
-export const getTestingProviderTeams = query => {
-  return _get(`agency-team`, query);
-};
-
-export const getTestingProviderTeam = id => {
-  return _get("agency-team/" + id);
-};
-export const deleteProviderTeam = id => {
-  return _deleteRecord("agency-team/" + id);
-};
-
-export const updateProviderTeam = (id, teamData) => {
-  return _put("agency-team/" + id, teamData);
-};
+// export const getTestingProviderTeams = query => {
+//   return _get(`agency-team`, query);
+// };
+//
+// export const getTestingProviderTeam = id => {
+//   return _get("agency-team/" + id);
+// };
+// export const deleteProviderTeam = id => {
+//   return _deleteRecord("agency-team/" + id);
+// };
+//
+// export const updateProviderTeam = (id, teamData) => {
+//   return _put("agency-team/" + id, teamData);
+// };
 
 //Members
-export const getTestingProviderTeamMembers = teamId => {
-  if (teamId) {
-    return _get("agency-team/" + teamId + "/member");
-  } else {
-    return _get("user");
-  }
-};
-
-export const addProviderUser = user => {
-  return _post("user", user);
-};
-export const getProviderUser = id => {
-  return _get("user/" + id);
-};
-export const deleteProviderUser = id => {
-  return _deleteRecord("user/" + id);
-};
+// export const getTestingProviderTeamMembers = teamId => {
+//   if (teamId) {
+//     return _get("agency-team/" + teamId + "/member");
+//   } else {
+//     return _get("user");
+//   }
+// };
+//
+// export const addProviderUser = user => {
+//   return _post("user", user);
+// };
+// export const getProviderUser = id => {
+//   return _get("user/" + id);
+// };
+// export const deleteProviderUser = id => {
+//   return _deleteRecord("user/" + id);
+// };
 
 // User Actions
 export const signIn = userCred => {
