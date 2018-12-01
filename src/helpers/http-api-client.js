@@ -14,6 +14,7 @@
 import axios from "axios";
 import qs from "qs";
 import _ from "lodash";
+import { getUserToken } from './utility';
 
 // axios.defaults.baseURL = "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
 axios.defaults.baseURL = "http://localhost:8080/";
@@ -544,10 +545,18 @@ export const _sendRequest = function(url, data = [], method) {
   if (possibleOverride !== false) {
     return possibleOverride; // return the already invoked promise
   } else {*/
+  const token = getUserToken();
+
+  const headers = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   if (method.toLowerCase() === "get") {
     return axios({
       url: url + "?" + qs.stringify(data),
-      method: "GET"
+      method: "GET",
+      headers
     }).catch(error => {
       if (error.response === undefined) {
         alert("Network Error");
@@ -563,7 +572,8 @@ export const _sendRequest = function(url, data = [], method) {
   return axios({
     url: url,
     method: method,
-    data: data
+    data: data,
+    headers
   }).catch(error => {
     throw error;
   });

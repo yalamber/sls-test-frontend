@@ -23,7 +23,6 @@ class TopbarAgency extends Component {
   }
 
   dropdownContent() {
-    console.log("this we got", this.props)
     const { myAgencies, requestAgencyLogin, history } = this.props;
     return (
       <TopbarDropdownWrapper className="isoUserDropdown">
@@ -43,7 +42,7 @@ class TopbarAgency extends Component {
                 {myAgency.agency.name}
                 <br />
                 <span className="smallText">
-                  &nbsp; {'testtyr myAgency.role.title'}
+                  &nbsp; {myAgency.role.title}
                 </span>
               </a>
             </div>
