@@ -8,7 +8,7 @@ import notification from '../../components/notification';
 
 //agency
 export function* requestMyAgencies() {
-  yield takeLatest('REQUEST_MY_AGENCIES', function* ({ payload }) {
+  yield takeLatest(actions.REQUEST_MY_AGENCIES, function* ({ payload }) {
     try {
       // do api call
       const data = yield call(SWQAClient.getMyAgencies);
@@ -25,7 +25,7 @@ export function* errorMyAgencies() {
 }
 
 export function* requestAgencyLogin() {
-  yield takeLatest('REQUEST_AGENCY_LOGIN', function* ({ payload }) {
+  yield takeLatest(actions.REQUEST_AGENCY_LOGIN, function* ({ payload }) {
     try {
       const { history, agencyData } = payload;
       const data = yield call(SWQAClient.agencyLogin, agencyData);
@@ -54,7 +54,7 @@ export function* errorAgencyLogin() {
 
 //client
 export function* requestMyClients() {
-  yield takeLatest('REQUEST_MY_CLIENTS', function* ({ payload }) {
+  yield takeLatest(actions.REQUEST_MY_CLIENTS, function* ({ payload }) {
     try {
       // do api call
       const data = yield call(SWQAClient.getMyClients);
@@ -71,7 +71,7 @@ export function* errorMyClients() {
 }
 
 export function* requestClientLogin() {
-  yield takeLatest('REQUEST_CLIENT_LOGIN', function* ({ payload }) {
+  yield takeLatest(actions.REQUEST_CLIENT_LOGIN, function* ({ payload }) {
     try {
       const { history, clientData } = payload;
       const data = yield call(SWQAClient.clientLogin, clientData);
@@ -120,6 +120,10 @@ export function* checkActiveAccount() {
         payload: { token },
         token,
         activeCompanyTokenData: jwtDecode(token),
+      });
+    } else {
+      yield put({
+        type: actions.SWITCH_SYSTEM_ADMIN
       });
     }
   });

@@ -32,9 +32,6 @@ class Topbar extends Component {
   }
 
   systemAdminSwitch() { 
-    if(get(this.props, 'userTokenData.systemRole.key', false) !== 'system-admin'){
-      return false;
-    }
     return (
       <a className="switch-link" onClick={() => {
         this.props.switchSystemAdmin();
@@ -42,23 +39,27 @@ class Topbar extends Component {
     )
   }
 
-  getCompanyTitle() {
-    const { activeCompanyTokenData, activeSystemAdmin } = this.props;
+  getTopBarTitle() {
     try {
+      const { activeCompanyTokenData, activeSystemAdmin, userTokenData } = this.props;
+      let title = '';
       if(!isEmpty(activeCompanyTokenData)){
-        let title = '';
         if(activeCompanyTokenData.type === 'agencyUser'){
           title = activeCompanyTokenData.agencyData.name;
         } else if(activeCompanyTokenData.type === 'clientUser') {
           title = activeCompanyTokenData.clientData.name;
         }
-        return (
-          <div className="title-holder">
-            <h1>{ title }</h1>
-            { !activeSystemAdmin && this.systemAdminSwitch()}
-          </div>
-        )
+      } else {
+        if(get(userTokenData, 'systemRole.key', false) === 'system-admin'){
+          title = "System Administration"
+        }
       }
+      return (
+        <div className="title-holder">
+          <h1>{ title }</h1>
+          { !activeSystemAdmin && this.systemAdminSwitch()}
+        </div>
+      )
     } catch (e) {
       console.log(e);
       return (
@@ -105,7 +106,7 @@ class Topbar extends Component {
               style={{ color: customizedTheme.textColor }}
               onClick={toggleCollapsed}
             />
-            {this.getCompanyTitle()}
+            {this.getTopBarTitle()}
           </div>
 
           <ul className="isoRight">
