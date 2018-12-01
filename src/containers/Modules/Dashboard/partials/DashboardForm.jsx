@@ -5,7 +5,7 @@ import Button from '../../../../components/uielements/button';
 import {
   ActionWrapper,
 } from '../../crud.style';
-import {getCompanies, getTeams} from "../../../../helpers/http-api-client";
+import {getCompanies, getCompanyTeams} from "../../../../helpers/http-api-client";
 import {dashboardValidation} from "../../../../Validations/dashboardValidation";
 
 const FormItem = Form.Item;
@@ -33,8 +33,8 @@ class DashboardForm extends Component {
   }
 
   handleCompanyChange(companyId) {
-    getTeams(companyId).then(res => {
-      this.setState({teams: res.data});
+    getCompanyTeams({query:{companyId}}).then(res => {
+      this.setState({teams: res.data.rows});
     })
   }
 

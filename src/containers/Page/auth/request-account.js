@@ -1,24 +1,23 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import authAction from '../../redux/auth/actions';
-import IntlMessages from '../../components/utility/intlMessages';
+import IntlMessages from '../../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
-import LoginForm from './partials/loginForm';
-import {getToken} from '../../helpers/utility';
+import {getUserToken} from '../../../helpers/utility';
 
-const { login } = authAction;
 
-class SignIn extends Component {
+class RequestAccount extends Component {
   state = {
     redirectToReferrer: false
   };
+
   componentDidMount(){
-    const token = getToken().get('idToken');
+    const token = getUserToken();
     if (token) {
        this.props.history.push('/dashboard');
     }
   }
+  
   componentWillReceiveProps(nextProps) {
     if (
       this.props.isLoggedIn !== nextProps.isLoggedIn &&
@@ -27,11 +26,7 @@ class SignIn extends Component {
       this.setState({ redirectToReferrer: true });
     }
   }
-  handleLogin = (values) => {
-    const { login, history } = this.props;
-    login({ history, userInfo : values});
-    //this.props.history.push('/dashboard');
-  };
+
   render() {
     const from = { pathname: '/dashboard' };
     const { redirectToReferrer } = this.state;
@@ -44,13 +39,14 @@ class SignIn extends Component {
         <div className="isoLoginContentWrapper">
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
-              <Link to="/dashboard">
-                <IntlMessages id="page.signInTitle" />
-              </Link>
+              <IntlMessages id="page.requestAccount" />
             </div>
            
-            <div className="isoSignInForm">
-              <LoginForm submit={this.handleLogin}/>
+            <div className="isoSignInForm isoCenterComponent">
+                Please email at pat@ixod.com for account access.
+                <Link to="/signin">
+                    <IntlMessages id="page.signInTitle" />
+                </Link>
             </div>
           </div>
         </div>
@@ -62,6 +58,5 @@ class SignIn extends Component {
 export default connect(
   state => ({
     isLoggedIn: state.Auth.idToken !== null ? true : false
-  }),
-  { login }
-)(SignIn);
+  })
+)(RequestAccount);

@@ -1,5 +1,4 @@
 /*
-*npm s
 * HOW TO ADD A NEW ACTION
 *
 *
@@ -9,14 +8,16 @@
 *   return _post("client", company);
 * };
 *
+* TODO: Refactor this to make it proper resource based actions
 */
 
 import axios from "axios";
 import qs from "qs";
 import _ from "lodash";
+import { getUserToken } from './utility';
 
-axios.defaults.baseURL = "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
-// axios.defaults.baseURL = "http://localhost:8080/";
+// axios.defaults.baseURL = "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
+axios.defaults.baseURL = "http://localhost:8080/";
 
 const _middlewares = [];
 
@@ -30,7 +31,7 @@ const _middlewares = [];
 
 export const getUserRoles = function(obj) {
   const options = obj;
-  if (typeof options === "object") {
+  if (options && typeof options === "object" && Object.keys(options).length) {
     return _getWithLimitOffset(`role`, options);
   } /* else if (options) {
     return _get(`role/${options}`);
@@ -49,7 +50,7 @@ export const editUser = (userId, user) => {
 };
 
 export const getUser = option => {
-  if (typeof option === "object") {
+  if (option && typeof option === "object" && Object.keys(option).length) {
     return _getWithLimitOffset(`user`, option);
   } else if (option) {
     return _get(`user/${option}`);
@@ -82,7 +83,7 @@ export const getAgencyUsers = function(agencyId, option = {}) {
 
 export const getAgency = function(objOrAgencyId) {
   const option = objOrAgencyId;
-  if (typeof option === "object") {
+  if (option && typeof option === "object" && Object.keys(option).length) {
     return _getWithLimitOffset(`agency`, option);
   } else if (option) {
     return _get(`agency/${option}`);
@@ -111,6 +112,10 @@ export const getAgencyTeams = function(option = {}) {
 
 export const createAgencyTeam = teamData => {
   return _post("agency-team", teamData);
+};
+
+export const updateAgencyTeam = (id, teamData) => {
+  return _put("agency-team/" + id, teamData);
 };
 
 /** Agency Users **/
@@ -145,7 +150,7 @@ export const deleteCompany = function(id) {
 };
 export const getCompanies = objOrCompanyId => {
   const option = objOrCompanyId;
-  if (typeof option === "object") {
+  if (option && typeof option === "object" && Object.keys(option).length) {
     return _getWithLimitOffset(`client`, option);
   }
 
@@ -154,7 +159,7 @@ export const getCompanies = objOrCompanyId => {
 
 export const getCompany = function(objOrCompanyId) {
   const option = objOrCompanyId;
-  if (typeof option === "object") {
+  if (option && typeof option === "object" && Object.keys(option).length) {
     return _getWithLimitOffset(`client`, option);
   } else if (option) {
     return _get(`client/${option}`);
@@ -163,21 +168,28 @@ export const getCompany = function(objOrCompanyId) {
   return _get(`client`);
 };
 
+
 //Teams
-export const addTeam = function(team) {
+// export const addTeam = function(team) {
+//   return _post("client-team", team);
+// };
+// export const updateTeam = function(team, id) {
+//   return _put("client-team/" + id, team);
+// };
+// export const deleteCompanyTeam = function(teamId) {
+//   return _deleteRecord("client-team/" + teamId);
+// };
+// export const getTeams = function(companyId) {
+//   return _get("client-team", { clientId: companyId });
+// };
+// export const getClientTeam = function(clientTeamId) {
+//   return _get("client-team/" + clientTeamId);
+// };
+
+
+/** Company Team **/
+export const addCompanyTeam = function(team) {
   return _post("client-team", team);
-};
-export const updateTeam = function(team, id) {
-  return _put("client-team/" + id, team);
-};
-export const deleteTeam = function(teamId) {
-  return _deleteRecord("client-team/" + teamId);
-};
-export const getTeams = function(companyId) {
-  return _get("client-team", { clientId: companyId });
-};
-export const getClientTeam = function(clientTeamId) {
-  return _get("client-team/" + clientTeamId);
 };
 
 export const getCompanyTeam = function(companyTeamId) {
@@ -194,6 +206,10 @@ export const deleteCompanyTeam = function(teamId) {
 
 export const deleteCompanyTeamMember = function(teamId, userId) {
   return _deleteRecord(`client-team/${teamId}/member/${userId}`);
+};
+
+export const updateCompanyTeam = (id, teamData) => {
+  return _put("client-team/" + id, teamData);
 };
 
 /** Company Team Member **/
@@ -308,6 +324,7 @@ export const deleteTestCase = id => {
   return _deleteRecord("test/case/" + id);
 };
 
+
 // Dashboard Actions
 export const getDashboards = (clientId = null) => {
   return _get("dashboard", { clientId });
@@ -332,39 +349,39 @@ export const deleteDashboard = id => {
 
 // Testing Provider Actions
 
-export const getTestingProviderTeams = query => {
-  return _get(`agency-team`, query);
-};
-
-export const getTestingProviderTeam = id => {
-  return _get("agency-team/" + id);
-};
-export const deleteProviderTeam = id => {
-  return _deleteRecord("agency-team/" + id);
-};
-
-export const updateProviderTeam = (id, teamData) => {
-  return _put("agency-team/" + id, teamData);
-};
+// export const getTestingProviderTeams = query => {
+//   return _get(`agency-team`, query);
+// };
+//
+// export const getTestingProviderTeam = id => {
+//   return _get("agency-team/" + id);
+// };
+// export const deleteProviderTeam = id => {
+//   return _deleteRecord("agency-team/" + id);
+// };
+//
+// export const updateProviderTeam = (id, teamData) => {
+//   return _put("agency-team/" + id, teamData);
+// };
 
 //Members
-export const getTestingProviderTeamMembers = teamId => {
-  if (teamId) {
-    return _get("agency-team/" + teamId + "/member");
-  } else {
-    return _get("user");
-  }
-};
-
-export const addProviderUser = user => {
-  return _post("user", user);
-};
-export const getProviderUser = id => {
-  return _get("user/" + id);
-};
-export const deleteProviderUser = id => {
-  return _deleteRecord("user/" + id);
-};
+// export const getTestingProviderTeamMembers = teamId => {
+//   if (teamId) {
+//     return _get("agency-team/" + teamId + "/member");
+//   } else {
+//     return _get("user");
+//   }
+// };
+//
+// export const addProviderUser = user => {
+//   return _post("user", user);
+// };
+// export const getProviderUser = id => {
+//   return _get("user/" + id);
+// };
+// export const deleteProviderUser = id => {
+//   return _deleteRecord("user/" + id);
+// };
 
 // User Actions
 export const signIn = userCred => {
@@ -528,10 +545,18 @@ export const _sendRequest = function(url, data = [], method) {
   if (possibleOverride !== false) {
     return possibleOverride; // return the already invoked promise
   } else {*/
+  const token = getUserToken();
+
+  const headers = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   if (method.toLowerCase() === "get") {
     return axios({
       url: url + "?" + qs.stringify(data),
-      method: "GET"
+      method: "GET",
+      headers
     }).catch(error => {
       if (error.response === undefined) {
         alert("Network Error");
@@ -547,7 +572,8 @@ export const _sendRequest = function(url, data = [], method) {
   return axios({
     url: url,
     method: method,
-    data: data
+    data: data,
+    headers
   }).catch(error => {
     throw error;
   });

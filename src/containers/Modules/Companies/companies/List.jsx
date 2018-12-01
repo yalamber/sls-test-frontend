@@ -1,12 +1,14 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
 import { Row, Col, Icon, message, Spin } from "antd";
 import LayoutWrapper from "../../../../components/utility/layoutWrapper.js";
 import PageHeader from "../../../../components/utility/pageHeader";
 import basicStyle from "../../../../settings/basicStyle";
 import Box from "../../../../components/utility/box";
 import ActionButtons from "./partials/ActionButtons";
+import * as companiesListActions from "../../../../redux/companies/actions";
 import TestManagerActionButtons from "../TestManager/partials/ActionButtons";
-
 
 import {
   ActionBtn,
@@ -16,11 +18,11 @@ import {
   TableClickable as Table
 } from "../../crud.style";
 import {
-  deleteCompany,
-  getCompanies
+  deleteCompany
 } from "../../../../helpers/http-api-client";
+import { getDefaultPaginationOptions } from '../../../../util/default-objects';
 
-export default class extends Component {
+class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -57,69 +59,28 @@ export default class extends Component {
         }
       ],
       data: [],
-      paginationOptions: {
-        defaultCurrent: 1,
-        current: 1,
-        pageSize: 5,
-        total: 1
-      },
-      loading: false
+      paginationOptions: getDefaultPaginationOptions().paginationOptions
     };
-    this.fetchData = this.fetchData.bind(this);
+    // this.fetchData = this.fetchData.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   componentDidMount() {
-    this.fetchData();
-  }
-
-  async fetchData() {
-    try{
-      this.setState({ loading: true });
-      let companies = await getCompanies({
-        paginationOptions: this.state.paginationOptions
-      });
-      this.setState({
-        loading: false,
-        data: companies.data.rows,
-        paginationOptions: {
-          ...this.state.paginationOptions,
-          total: companies.data.count
-        }
-      });
-    } catch(e) {
-      message.error("Something went wrong.");
-      this.setState({ loading: false });
-    }
+    this.props.actions.companiesListDidMount();
   }
 
   onTablePaginationChange(page, pageSize) {
     this.setState(
       {
-        loading: true,
         paginationOptions: {
           ...this.state.paginationOptions,
           current: page,
           pageSize
         }
-      },
-      async () => {
-        try{
-          let companies = await getCompanies({
-            paginationOptions: this.state.paginationOptions
-          });
-          this.setState({
-            loading: false,
-            data: companies.data.rows,
-            paginationOptions: {
-              ...this.state.paginationOptions,
-              total: companies.data.count
-            }
-          });
-        } catch(e) {
-          this.setState({ loading: false, data: [] });
-        }
+      }, () => {
+        const { paginationOptions } = this.state;
+        this.props.actions.companiesListFetch(paginationOptions);
       }
     );
   }
@@ -127,28 +88,33 @@ export default class extends Component {
   handleDelete(row) {
     deleteCompany(row.clientId).then(res => {
       message.success("Successfully Deleted.");
-      this.fetchData();
+      // this.fetchData();
     });
+  }
+
+  getPaginationOptions() {
+    const { count } = this.props.Companies;
+    return { ...this.state.paginationOptions, total: count };
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
+    const { rows, loading } = this.props.Companies;
+
     return (
       <LayoutWrapper>
-        <PageHeader>
-           Companies
-        </PageHeader>
+        <PageHeader>Companies</PageHeader>
 
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle></ComponentTitle>
+                <ComponentTitle />
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push("create")
+                      this.props.history.push("create");
                     }}
                   >
                     <Icon type="plus" />
@@ -156,15 +122,15 @@ export default class extends Component {
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Spin spinning={this.state.loading}>
+              <Spin spinning={loading}>
                 <Table
                   pagination={{
-                    ...this.state.paginationOptions,
+                    ...this.getPaginationOptions(),
                     onChange: this.onTablePaginationChange
                   }}
                   rowKey="clientId"
                   columns={this.state.columns}
-                  dataSource={this.state.data}
+                  dataSource={rows}
                   onRow={row => ({
                     onDoubleClick: () => {
                       // this.props.history.push('details/' + row.clientId)
@@ -180,3 +146,15 @@ export default class extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    ...state
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: bindActionCreators(companiesListActions, dispatch)
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(List);

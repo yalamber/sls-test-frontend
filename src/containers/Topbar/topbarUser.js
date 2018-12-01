@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import Popover from '../../components/uielements/popover';
 import IntlMessages from '../../components/utility/intlMessages';
-import authAction from '../../redux/auth/actions';
-import appAction from '../../redux/app/actions';
 import TopbarDropdownWrapper from './topbarDropdown.style';
-import { getToken } from '../../helpers/utility';
-
-const { logout } = authAction;
-const { closeAll } = appAction;
 
 class TopbarUser extends Component {
   constructor(props) {
@@ -17,12 +10,7 @@ class TopbarUser extends Component {
     this.hide = this.hide.bind(this);
     this.state = {
       visible: false,
-      userName: ''
     };
-  }
-
-  componentDidMount = () => {
-    this.getUserName();
   }
 
   hide() {
@@ -33,18 +21,8 @@ class TopbarUser extends Component {
     this.setState({ visible: !this.state.visible });
   }
 
-  getUserName() {
-    var token = getToken().get('idToken');
-
-    var tokenData = token.split('.')[1]
-    var decodedTokenData = JSON.parse(window.atob(tokenData))
-
-    this.setState({ userName: decodedTokenData && decodedTokenData.username ? decodedTokenData.username : "No name found" });
-  }
-
-  render() {
-    const { userName } = this.state;
-
+  dropdownContent() {
+    const { logout, closeAll } = this.props;
     const content = (
       <TopbarDropdownWrapper className="isoUserDropdown">
         <a className="isoDropdownLink">
@@ -53,28 +31,35 @@ class TopbarUser extends Component {
         <a
           className="isoDropdownLink"
           onClick={() => {
-            this.props.logout();
-            this.props.closeAll();
+            logout();
+            closeAll();
           }}
         >
           <IntlMessages id="topbar.logout" />
         </a>
       </TopbarDropdownWrapper>
     );
+    return content;
+  }
 
+  render() {
+    const { userData } = this.props;
     return (
       <Popover
-        content={content}
+        content={this.dropdownContent()}
         trigger="click"
         visible={this.state.visible}
         onVisibleChange={this.handleVisibleChange}
         arrowPointAtCenter={true}
         placement="bottomLeft"
       >
-        <h3>{userName}</h3>
+        <div className="isoIconWrapper">
+          <i className="ion-ios-person-outline"/> &nbsp;
+          {userData.username}
+        </div>
       </Popover>
     );
   }
 }
 
-export default connect(null, { logout, closeAll })(TopbarUser);
+export default TopbarUser;

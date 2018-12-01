@@ -31,7 +31,12 @@ const TopbarWrapper = styled.div`
             : "0px 15px !important"};
       }
     }
+    .company-name {
+      margin-left: 10px;
+      margin-bottom: 0;
+      font-size: 18px;
 
+    }
     .isoLeft {
       display: flex;
       align-items: center;
@@ -186,7 +191,6 @@ const TopbarWrapper = styled.div`
       }
     }
   }
-
   .isoUserDropdown {
     .ant-popover-inner {
       .ant-popover-inner-content {
@@ -213,8 +217,8 @@ const TopbarWrapper = styled.div`
             padding: 7px 15px;
             background-color: transparent;
             text-decoration: none;
-            display: flex;
-            justify-content: flex-start;
+            display: block;
+            justify-content: inherit;
             ${transition()};
 
             &:hover {

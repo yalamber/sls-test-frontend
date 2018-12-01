@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Form, Input, Checkbox} from 'antd';
 import {withRouter, Link} from 'react-router-dom'
-import Button from '../../../components/uielements/button';
-import IntlMessages from '../../../components/utility/intlMessages';
-import {loginValidation} from '../../../Validations/loginValidation';
+import Button from '../../../../components/uielements/button';
+import IntlMessages from '../../../../components/utility/intlMessages';
+import {loginValidation} from '../../../../Validations/loginValidation';
 
 
 const FormItem = Form.Item;
@@ -54,11 +54,11 @@ class LoginForm extends Component {
             </FormItem>
             <FormItem>
                 <div className="isoCenterComponent isoHelperWrapper">
-                    <Link to="" className="isoForgotPass">
+                    {/*<Link to="/forgot-password" className="isoForgotPass">
                         <IntlMessages id="page.signInForgotPass" />
-                    </Link>
-                    <Link to="">
-                        <IntlMessages id="page.signInCreateAccount" />
+                    </Link>*/}
+                    <Link to="/request-account">
+                        <IntlMessages id="page.requestAccount" />
                     </Link>
                 </div>
             </FormItem>

@@ -11,7 +11,7 @@ import {
 
 import Box from '../../../../components/utility/box';
 import UserForm from "./partials/TeamForm";
-import {getTestingProviderTeam, updateProviderTeam} from "../../../../helpers/http-api-client";
+import {getAgencyTeams, updateAgencyTeam} from "../../../../helpers/http-api-client";
 
 export default class extends Component {
 
@@ -27,8 +27,8 @@ export default class extends Component {
 
   componentDidMount() {
     this.setState({loading: true});
-    getTestingProviderTeam(this.props.match.params.id).then(res => {
-      this.setState({team: res.data});
+    getAgencyTeams({query:{agencyId:this.props.match.params.id}}).then(res => {
+      this.setState({team: res.data.rows});
     }).finally(() => {
       this.setState({loading: false});
     });
@@ -36,7 +36,7 @@ export default class extends Component {
 
   handleSubmit(formData, resetForm) {
     this.setState({loading: true});
-    updateProviderTeam(this.props.match.params.id, formData).then(res => {
+    updateAgencyTeam(this.props.match.params.id, formData).then(res => {
       resetForm();
     }).finally(() => {
       this.setState({loading: false});
