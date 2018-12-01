@@ -14,7 +14,7 @@
 import axios from "axios";
 import qs from "qs";
 import _ from "lodash";
-import { getUserToken } from './utility';
+import { getUserToken } from "./utility";
 
 // axios.defaults.baseURL = "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
 axios.defaults.baseURL = "http://localhost:8080/";
@@ -26,6 +26,28 @@ const _middlewares = [];
 * Append public api's here below
 *
 */
+
+export const signIn = userCred => {
+  return _post("auth/signin", userCred);
+};
+
+/** My Paths **/
+
+export const getMyClients = () => {
+  return _get("my/client");
+};
+
+export const getMyAgencies = () => {
+  return _get("my/agency");
+};
+
+export const agencyLogin = payload => {
+  return _post("auth/signinAgency", payload);
+};
+
+export const clientLogin = payload => {
+  return _post("auth/signinClient", payload);
+};
 
 /** User Roles **/
 
@@ -168,7 +190,6 @@ export const getCompany = function(objOrCompanyId) {
   return _get(`client`);
 };
 
-
 //Teams
 // export const addTeam = function(team) {
 //   return _post("client-team", team);
@@ -185,7 +206,6 @@ export const getCompany = function(objOrCompanyId) {
 // export const getClientTeam = function(clientTeamId) {
 //   return _get("client-team/" + clientTeamId);
 // };
-
 
 /** Company Team **/
 export const addCompanyTeam = function(team) {
@@ -324,7 +344,6 @@ export const deleteTestCase = id => {
   return _deleteRecord("test/case/" + id);
 };
 
-
 // Dashboard Actions
 export const getDashboards = (clientId = null) => {
   return _get("dashboard", { clientId });
@@ -382,11 +401,6 @@ export const deleteDashboard = id => {
 // export const deleteProviderUser = id => {
 //   return _deleteRecord("user/" + id);
 // };
-
-// User Actions
-export const signIn = userCred => {
-  return _post("auth/signin", userCred);
-};
 
 /** Roles **/
 export const addRole = function(role) {
@@ -549,7 +563,7 @@ export const _sendRequest = function(url, data = [], method) {
 
   const headers = {};
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
   if (method.toLowerCase() === "get") {
@@ -557,16 +571,30 @@ export const _sendRequest = function(url, data = [], method) {
       url: url + "?" + qs.stringify(data),
       method: "GET",
       headers
-    }).catch(error => {
-      if (error.response === undefined) {
-        alert("Network Error");
-      } else {
-        if (error.response.status !== 422) {
-          alert("Something went wrong please try again.");
+    })
+      .then(response => {
+        if (response.status >= 400) {
+          // check for 4XX, 5XX, wtv
+          return Promise.reject({
+            status: response.status,
+            message: response.statusText
+          });
         }
-      }
-      throw error;
-    });
+        if (response.status >= 200 && response.status <= 202) {
+          return response.data;
+        }
+        return {};
+      })
+      .catch(error => {
+        if (error.response === undefined) {
+          alert("Network Error");
+        } else {
+          if (error.response.status !== 422) {
+            alert("Something went wrong please try again.");
+          }
+        }
+        throw error;
+      });
   }
 
   return axios({
@@ -574,8 +602,22 @@ export const _sendRequest = function(url, data = [], method) {
     method: method,
     data: data,
     headers
-  }).catch(error => {
-    throw error;
-  });
+  })
+    .then(response => {
+      if (response.status >= 400) {
+        // check for 4XX, 5XX, wtv
+        return Promise.reject({
+          status: response.status,
+          message: response.statusText
+        });
+      }
+      if (response.status >= 200 && response.status <= 202) {
+        return response.data;
+      }
+      return {};
+    })
+    .catch(error => {
+      throw error;
+    });
   // }
 };

@@ -2,15 +2,15 @@ import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import { get } from 'lodash';
 import { setUserToken, clearUserToken, getUserToken, clearCompanyToken } from '../../helpers/utility';
+import { signIn } from '../../helpers/http-api-client';
 import actions from './actions';
-import SWQAClient from "../../helpers/apiClient";
 import notification from '../../components/notification';
 
 export function* loginRequest() {
   yield takeEvery('LOGIN_REQUEST', function* ({ payload }) {
     const { history, userInfo } = payload;
     try {
-      const result = yield call(SWQAClient.signIn, userInfo);
+      const result = yield call(signIn, userInfo);
       if (get(result, 'token', false)) {
         yield put({
           type: actions.LOGIN_SUCCESS,
