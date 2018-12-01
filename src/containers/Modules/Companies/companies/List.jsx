@@ -58,7 +58,6 @@ class List extends Component {
           render: row => <ActionButtons row={row} delete={this.handleDelete} />
         }
       ],
-      data: [],
       paginationOptions: getDefaultPaginationOptions().paginationOptions
     };
     // this.fetchData = this.fetchData.bind(this);

@@ -5,6 +5,7 @@ import companiesSagas from './companies/saga';
 import agenciesSagas from './agencies/saga';
 import companiesTestManagerSagas from './companies/test-manager/saga';
 import agenciesTestManagerSagas from './agencies/test-manager/saga';
+import companiesUsersSagas from './companies/users/saga';
 
 export default function* rootSaga(getState) {
   yield all([
@@ -13,6 +14,7 @@ export default function* rootSaga(getState) {
     companiesSagas(),
     agenciesSagas(),
     companiesTestManagerSagas(),
-    agenciesTestManagerSagas()
+    agenciesTestManagerSagas(),
+    companiesUsersSagas()
   ]);
 }
