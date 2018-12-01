@@ -6,7 +6,7 @@ import appActions from "../../redux/app/actions";
 import authAction from '../../redux/auth/actions';
 import userAction from '../../redux/user/actions';
 import TopbarUser from "./topbarUser";
-import TopbarCompany from "./topbarCompany";
+import TopbarClient from "./topbarClient";
 import TopbarAgency from "./topbarAgency";
 import TopbarWrapper from "./topbar.style";
 import themes from "../../settings/themes";
@@ -15,7 +15,7 @@ import { themeConfig } from "../../settings";
 const { Header } = Layout;
 const { toggleCollapsed, closeAll } = appActions;
 const { logout } = authAction;
-const { requestMyAgencies, requestAgencyLogin, } = userAction;
+const { requestMyAgencies, requestAgencyLogin, requestMyClients, requestClientLogin } = userAction;
 const customizedTheme = themes[themeConfig.theme];
 
 class Topbar extends Component {
@@ -25,21 +25,28 @@ class Topbar extends Component {
 
   componentDidMount() {
     this.props.requestMyAgencies();
+    this.props.requestMyClients();
   }
 
   getCompanyTitle() {
     const { activeCompanyToken } = this.props;
     try {
-      const companyTokenData = jwtDecode(activeCompanyToken);
-      console.log("got!", companyTokenData)
-      return (
-        <h1 className="company-name">{ companyTokenData.agency.name }</h1>
-      )
+      if(activeCompanyToken){
+        const companyTokenData = jwtDecode(activeCompanyToken);
+        let title = '';
+        if(companyTokenData.type === 'agencyUser'){
+          title = companyTokenData.agencyData.name;
+        } else if(companyTokenData.type === 'clientUser') {
+          title = companyTokenData.clientData.name;
+        }
+        return (
+          <h1 className="company-name">{ title }</h1>
+        )
+      }
     } catch (e) {
-      console.log(e)
       return (
         <div>
-
+          Something went wrong
         </div>
       );
     }
@@ -51,7 +58,9 @@ class Topbar extends Component {
       logout,
       closeAll,
       myAgencies = { data: [], loading: true, error: false },
+      myClients = { data: [], loading: true, error: false },
       requestAgencyLogin,
+      requestClientLogin,
       userToken,
     } = this.props;
     const userTokenData = jwtDecode(userToken);
@@ -82,7 +91,7 @@ class Topbar extends Component {
           </div>
 
           <ul className="isoRight">
-            {userTokenData.agencyCount > 0 &&
+            {myAgencies.data.length > 0 &&
               <li
                 onClick={() => this.setState({ selectedItem: "agency" })}
                 className="isoAgency"
@@ -91,12 +100,13 @@ class Topbar extends Component {
                   requestAgencyLogin={requestAgencyLogin} />
               </li>
             }
-            {userTokenData.clientCompanyCount > 0 &&
+            {myClients.data.length > 0 &&
               <li
                 onClick={() => this.setState({ selectedItem: "company" })}
                 className="isoCompany"
               >
-                <TopbarCompany myCompanies={[]} />
+                <TopbarClient myClients={myClients}
+                  requestClientLogin={requestClientLogin} />
               </li>
             }
             {userTokenData && userTokenData.userData &&
@@ -122,5 +132,13 @@ export default connect(
     ...state.User,
     ...state.Auth
   }),
-  { toggleCollapsed, logout, closeAll, requestMyAgencies, requestAgencyLogin }
+  { 
+    toggleCollapsed, 
+    logout, 
+    closeAll, 
+    requestMyAgencies, 
+    requestMyClients, 
+    requestAgencyLogin, 
+    requestClientLogin,
+  }
 )(Topbar);

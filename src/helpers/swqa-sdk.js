@@ -82,6 +82,10 @@ class SWQA {
     return this.api.send('POST', 'auth/signinAgency', payload);
   }
 
+  clientLogin = (payload) => {
+    return this.api.send('POST', 'auth/signinClient', payload);
+  }
+
 }
 
 export default SWQA;

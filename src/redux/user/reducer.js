@@ -34,6 +34,24 @@ export default function userReducer(state = initState, action) {
           error: true
         }
       };
+    case actions.RECEIVE_MY_CLIENTS:
+      return { 
+        ...state, 
+        myClients: {
+          data: action.payload, 
+          loading: false, 
+          error: false
+        }
+      };
+    case actions.ERROR_MY_CLIENTS:
+      return { 
+        ...state, 
+        myClients: {
+          data: [], 
+          loading: false, 
+          error: true
+        }
+      };
     case actions.SUCCESS_ACCOUNT_LOGIN:
       return { 
         ...state,
