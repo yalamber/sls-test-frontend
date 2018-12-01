@@ -4,7 +4,7 @@ import LayoutWrapper from "../../../components/utility/layoutWrapper.js";
 import PageHeader from "../../../components/utility/pageHeader";
 import basicStyle from "../../../settings/basicStyle";
 import Box from "../../../components/utility/box";
-import { getAgencies, deleteAgency } from "../../../helpers/http-api-client";
+import { deleteAgency } from "../../../helpers/http-api-client";
 import ActionButtons from "./partials/ActionButtons";
 import TestManagerActionButtons from "./TestManager/partials/ActionButtons";
 
@@ -67,26 +67,6 @@ class List extends Component {
   componentDidMount() {
     this.props.actions.agenciesListDidMount();
   }
-
-  // async fetchData() {
-  //   try{
-  //     this.setState({ loading: true });
-  //     let agencies = await getAgencies({
-  //       paginationOptions: this.state.paginationOptions
-  //     });
-  //     this.setState({
-  //       loading: false,
-  //       data: agencies.data.rows,
-  //       paginationOptions: {
-  //         ...this.state.paginationOptions,
-  //         total: agencies.data.count
-  //       }
-  //     });
-  //   } catch(e) {
-  //     message.error("Something went wrong.");
-  //     this.setState({ loading: false });
-  //   }
-  // }
 
   onTablePaginationChange(page, pageSize) {
     this.setState(

@@ -12,7 +12,6 @@ import * as companyTestManagerActions from "./actions";
 // import SWQAClient from "../../helpers/apiClient";
 // import notification from '../../components/notification';
 import {
-  COMPANIES_LIST_DID_MOUNT,
   COMPANIES_TEST_MANAGER_LIST_DID_MOUNT,
   COMPANIES_TEST_MANAGER_LIST_FETCH
 } from "../../../redux/constants";

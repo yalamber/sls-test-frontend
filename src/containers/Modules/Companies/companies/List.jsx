@@ -18,8 +18,7 @@ import {
   TableClickable as Table
 } from "../../crud.style";
 import {
-  deleteCompany,
-  getCompanies
+  deleteCompany
 } from "../../../../helpers/http-api-client";
 import { getDefaultPaginationOptions } from '../../../../util/default-objects';
 

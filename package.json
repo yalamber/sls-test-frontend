@@ -11,6 +11,7 @@
     "history": "^4.6.3",
     "is-url": "^1.2.4",
     "jwt-decode": "^2.2.0",
+    "key-mirror": "^1.0.1",
     "nprogress": "^0.2.0",
     "postcss-inline-rtl": "^0.9.8",
     "proper-url-join": "^1.2.0",
