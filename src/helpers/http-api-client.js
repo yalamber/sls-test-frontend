@@ -274,6 +274,9 @@ export const getCompanyMembersByTeamId = function(teamId) {
 };
 
 export const getCompanyUsers = function(companyId, option = {}) {
+  if (isNaN(companyId)) {
+    throw Error(`invalid companyId passed ${companyId}`);
+  }
   return _getWithLimitOffset(`client/${companyId}/user`, option);
 };
 
