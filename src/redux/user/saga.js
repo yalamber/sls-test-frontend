@@ -1,6 +1,7 @@
 import { get } from 'lodash';
 import { all, call, put, takeEvery, takeLatest, fork } from "redux-saga/effects";
-import { setCompanyToken, getCompanyToken } from '../../helpers/utility';
+import jwtDecode from 'jwt-decode';
+import { setCompanyToken, getCompanyToken, clearCompanyToken } from '../../helpers/utility';
 import actions from './actions';
 import SWQAClient from "../../helpers/apiClient";
 import notification from '../../components/notification';
@@ -33,6 +34,7 @@ export function* requestAgencyLogin() {
           type: actions.SUCCESS_ACCOUNT_LOGIN,
           payload: data,
           token: data.token,
+          activeCompanyTokenData: jwtDecode(data.token),
           history
         });
       } else {
@@ -78,6 +80,7 @@ export function* requestClientLogin() {
           type: actions.SUCCESS_ACCOUNT_LOGIN,
           payload: data,
           token: data.token,
+          activeCompanyTokenData: jwtDecode(data.token),
           history
         });
       } else {
@@ -115,9 +118,16 @@ export function* checkActiveAccount() {
       yield put({
         type: actions.SUCCESS_ACCOUNT_LOGIN,
         payload: { token },
-        token
+        token,
+        activeCompanyTokenData: jwtDecode(token),
       });
     }
+  });
+}
+
+export function* switchSystemAdmin() {
+  yield takeEvery(actions.SWITCH_SYSTEM_ADMIN, function* () {
+    clearCompanyToken();
   });
 }
 
@@ -136,5 +146,6 @@ export default function* rootSaga() {
     //common
     fork(successAccountLogin),
     fork(checkActiveAccount),
+    fork(switchSystemAdmin),
   ]);
 }

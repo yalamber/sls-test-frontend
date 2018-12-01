@@ -31,11 +31,17 @@ const TopbarWrapper = styled.div`
             : "0px 15px !important"};
       }
     }
-    .company-name {
-      margin-left: 10px;
-      margin-bottom: 0;
-      font-size: 18px;
-
+    .title-holder {
+      display: flex;
+      justify-content: flex-start;
+      h1 {
+        margin-left: 10px;
+        margin-bottom: 0;
+        font-size: 18px;
+      }
+      a.switch-link {
+        margin-left: 10px;
+      }
     }
     .isoLeft {
       display: flex;

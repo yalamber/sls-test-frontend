@@ -1,6 +1,7 @@
 import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import { get } from 'lodash';
+import jwtDecode from "jwt-decode";
 import { setUserToken, clearUserToken, getUserToken, clearCompanyToken } from '../../helpers/utility';
 import actions from './actions';
 import SWQAClient from "../../helpers/apiClient";
@@ -16,6 +17,7 @@ export function* loginRequest() {
           type: actions.LOGIN_SUCCESS,
           payload: result,
           token: result.token,
+          userTokenData: jwtDecode(result.token),
           history
         });
       } else {
@@ -56,14 +58,20 @@ export function* logout() {
 
 export function* checkAuthorization() {
   yield takeEvery(actions.CHECK_AUTHORIZATION, function* () {
-    const token = getUserToken();
-    if (token) {
-      yield put({
-        type: actions.LOGIN_SUCCESS,
-        payload: { token },
-        token,
-        profile: 'Profile'
-      });
+    try {
+      const token = getUserToken();
+      if (token) {
+        yield put({
+          type: actions.LOGIN_SUCCESS,
+          payload: { token },
+          token,
+          userTokenData: jwtDecode(token),
+        });
+      } else {
+        yield put({ type: actions.LOGOUT });
+      }
+    } catch (e) {
+      yield put({ type: actions.LOGIN_ERROR });
     }
   });
 }

@@ -14,6 +14,8 @@ const actions = {
   ERROR_CLIENT_LOGIN: 'ERROR_CLIENT_LOGIN',
   //same action for both in success
   SUCCESS_ACCOUNT_LOGIN: 'SUCCESS_ACCOUNT_LOGIN',
+  //system admin
+  SWITCH_SYSTEM_ADMIN: 'SWITCH_SYSTEM_ADMIN',
 
   checkActiveAccount: () => ({ 
     type: actions.CHECK_ACTIVE_ACCOUNT 
@@ -47,5 +49,9 @@ const actions = {
     type: actions.SUCCESS_ACCOUNT_LOGIN,
     payload
   }),
+  //switch to system admin
+  switchSystemAdmin: () => ({
+    type: actions.SWITCH_SYSTEM_ADMIN
+  })
 };
 export default actions;

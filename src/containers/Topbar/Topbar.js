@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Layout } from "antd";
-import jwtDecode from "jwt-decode";
 import appActions from "../../redux/app/actions";
 import authAction from '../../redux/auth/actions';
 import userAction from '../../redux/user/actions';
@@ -11,42 +10,62 @@ import TopbarAgency from "./topbarAgency";
 import TopbarWrapper from "./topbar.style";
 import themes from "../../settings/themes";
 import { themeConfig } from "../../settings";
+import { get, isEmpty } from "lodash";
 
 const { Header } = Layout;
 const { toggleCollapsed, closeAll } = appActions;
 const { logout } = authAction;
-const { requestMyAgencies, requestAgencyLogin, requestMyClients, requestClientLogin } = userAction;
+const { 
+  requestMyAgencies, 
+  requestAgencyLogin, 
+  requestMyClients, 
+  requestClientLogin, 
+  switchSystemAdmin 
+} = userAction;
 const customizedTheme = themes[themeConfig.theme];
 
 class Topbar extends Component {
-  state = {
-    userTokenData: {}
-  };
 
   componentDidMount() {
     this.props.requestMyAgencies();
     this.props.requestMyClients();
   }
 
+  systemAdminSwitch() { 
+    if(get(this.props, 'userTokenData.systemRole.key', false) !== 'system-admin'){
+      return false;
+    }
+    return (
+      <a className="switch-link" onClick={() => {
+        this.props.switchSystemAdmin();
+      }}>[ Switch to System Admin ]</a>
+    )
+  }
+
   getCompanyTitle() {
-    const { activeCompanyToken } = this.props;
+    const { activeCompanyTokenData, activeSystemAdmin } = this.props;
     try {
-      if(activeCompanyToken){
-        const companyTokenData = jwtDecode(activeCompanyToken);
+      if(!isEmpty(activeCompanyTokenData)){
         let title = '';
-        if(companyTokenData.type === 'agencyUser'){
-          title = companyTokenData.agencyData.name;
-        } else if(companyTokenData.type === 'clientUser') {
-          title = companyTokenData.clientData.name;
+        if(activeCompanyTokenData.type === 'agencyUser'){
+          title = activeCompanyTokenData.agencyData.name;
+        } else if(activeCompanyTokenData.type === 'clientUser') {
+          title = activeCompanyTokenData.clientData.name;
         }
         return (
-          <h1 className="company-name">{ title }</h1>
+          <div className="title-holder">
+            <h1>{ title }</h1>
+            { !activeSystemAdmin && this.systemAdminSwitch()}
+          </div>
         )
       }
     } catch (e) {
+      console.log(e);
       return (
         <div>
-          Something went wrong
+          Something went wrong, <a onClick={() => {
+
+          }}>Retry</a>
         </div>
       );
     }
@@ -61,9 +80,8 @@ class Topbar extends Component {
       myClients = { data: [], loading: true, error: false },
       requestAgencyLogin,
       requestClientLogin,
-      userToken,
+      userTokenData,
     } = this.props;
-    const userTokenData = jwtDecode(userToken);
     const collapsed = this.props.collapsed && !this.props.openDrawer;
     const styling = {
       background: customizedTheme.backgroundColor,
@@ -140,5 +158,6 @@ export default connect(
     requestMyClients, 
     requestAgencyLogin, 
     requestClientLogin,
+    switchSystemAdmin
   }
 )(Topbar);
