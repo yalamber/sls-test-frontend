@@ -74,7 +74,7 @@ class List extends Component {
       },
       () => {
         const { paginationOptions } = this.state;
-        this.props.actions.agenciesListFetch(paginationOptions);
+        this.props.actions.agenciesListFetch({ paginationOptions });
       }
     );
   }

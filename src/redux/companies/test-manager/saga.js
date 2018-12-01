@@ -32,7 +32,7 @@ export function* companiesListTestManagerFetchFork() {
   yield takeLatest(COMPANIES_TEST_MANAGER_LIST_FETCH, function*({ payload }) {
     try {
       const data = yield call(getCompany, payload);
-      yield put(companyActions.companiesListSuccess(data.data));
+      yield put(companyActions.companiesListSuccess(data));
       yield put(companyActions.companiesListDone());
     } catch (e) {
       console.log(e);

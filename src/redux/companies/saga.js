@@ -17,7 +17,7 @@ export function* companiesListFetchFork() {
   yield takeLatest(COMPANIES_LIST_FETCH, function* ({ payload }) {
     try {
       const data = yield call(getCompany, payload);
-      yield put(actions.companiesListSuccess(data.data));
+      yield put(actions.companiesListSuccess(data));
       yield put(actions.companiesListDone());
     } catch (e) {
       console.log(e);
