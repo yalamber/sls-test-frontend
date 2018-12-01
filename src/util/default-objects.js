@@ -1,3 +1,5 @@
+export const getDefaultPageSize = () => 5;
+
 export const getDefaultPaginationOptions = () =>
   Object.assign(
     {},
@@ -5,7 +7,7 @@ export const getDefaultPaginationOptions = () =>
       paginationOptions: {
         defaultCurrent: 1,
         current: 1,
-        pageSize: 5,
+        pageSize: getDefaultPageSize(),
         total: 1
       }
     }

@@ -1,13 +1,13 @@
 import Auth from './auth/reducer';
 import App from './app/reducer';
-import Agency from './agency/reducer';
+import Agencies from './agencies/reducer';
 import User from './user/reducer';
 import Companies from './companies/reducer';
 
 export default {
   Auth,
   App,
-  Agency,
+  Agencies,
   User,
   Companies
 };

@@ -7,8 +7,9 @@ import {
   COMPANIES_LIST_DONE
 } from "../constants";
 
-const initState = { error: null, loading: false, count: 5, rows: [] };
-const ROW_COUNT = initState.count;
+import { getDefaultPageSize } from '../../util/default-objects';
+const ROW_COUNT = getDefaultPageSize();
+const initState = { error: null, loading: false, count: ROW_COUNT, rows: [] };
 
 export default function companiesReducer(state = initState, action) {
   switch (action.type) {
