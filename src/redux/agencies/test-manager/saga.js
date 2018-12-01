@@ -30,7 +30,7 @@ export function* agenciesListTestManagerFetchFork() {
   yield takeLatest(AGENCIES_TEST_MANAGER_LIST_FETCH, function*({ payload }) {
     try {
       const data = yield call(getAgency, payload);
-      yield put(agencyActions.agenciesListSuccess(data.data));
+      yield put(agencyActions.agenciesListSuccess(data));
       yield put(agencyActions.agenciesListDone());
     } catch (e) {
       console.log(e);

@@ -17,7 +17,7 @@ export function* agenciesListFetchFork() {
   yield takeLatest(AGENCIES_LIST_FETCH, function* ({ payload }) {
     try {
       const data = yield call(getAgency, payload);
-      yield put(actions.agenciesListSuccess(data.data));
+      yield put(actions.agenciesListSuccess(data));
       yield put(actions.agenciesListDone());
     } catch (e) {
       console.log(e);
