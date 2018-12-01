@@ -5,7 +5,7 @@ import appActions from "../../redux/app/actions";
 import authAction from '../../redux/auth/actions';
 import userAction from '../../redux/user/actions';
 import TopbarUser from "./topbarUser";
-import TopbarClient from "./topbarClient";
+// import TopbarClient from "./topbarClient";
 import TopbarAgency from "./topbarAgency";
 import TopbarWrapper from "./topbar.style";
 import themes from "../../settings/themes";
@@ -124,8 +124,8 @@ class Topbar extends Component {
                 onClick={() => this.setState({ selectedItem: "company" })}
                 className="isoCompany"
               >
-                <TopbarClient myClients={myClients}
-                  requestClientLogin={requestClientLogin} />
+                {/*<TopbarClient myClients={myClients}
+                  requestClientLogin={requestClientLogin} />*/}
               </li>
             }
             {userTokenData && userTokenData.userData &&
@@ -151,13 +151,13 @@ export default connect(
     ...state.User,
     ...state.Auth
   }),
-  { 
-    toggleCollapsed, 
-    logout, 
-    closeAll, 
-    requestMyAgencies, 
-    requestMyClients, 
-    requestAgencyLogin, 
+  {
+    toggleCollapsed,
+    logout,
+    closeAll,
+    requestMyAgencies,
+    requestMyClients,
+    requestAgencyLogin,
     requestClientLogin,
     switchSystemAdmin
   }

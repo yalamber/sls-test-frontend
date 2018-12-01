@@ -5,7 +5,6 @@ import { Row, Col } from "antd";
 import { ActionWrapper } from "../../crud.style";
 import { Tooltip, Icon } from "antd";
 import { withRouter } from "react-router-dom";
-import actions from "../../../../redux/agency/actions";
 
 const ActionButtons = function ActionButtons(props) {
   const { iconStyle } = styles;
@@ -26,8 +25,6 @@ const ActionButtons = function ActionButtons(props) {
                   ...row
                 }
               });
-
-              // onPress.bind(this, `/dashboard/agency/teams/team-members`, actions.FORM_DATA_SELECTED_TEAM_OF_AGENCY, row)}
             }}
             style={iconStyle}
           >
@@ -45,7 +42,6 @@ const ActionButtons = function ActionButtons(props) {
                   ...row
                 }
               });
-              // { /*onPress.bind(this, `/dashboard/agency/teams`, actions.FORM_DATA_SELECTED_AGENCY, row) */ }
             }}
             style={iconStyle}
           >
@@ -63,7 +59,6 @@ const ActionButtons = function ActionButtons(props) {
                   ...row
                 }
               });
-              // { /*onPress.bind(this, `/dashboard/agency/teams`, actions.FORM_DATA_SELECTED_AGENCY, row) */ }
             }}
             style={iconStyle}
           >

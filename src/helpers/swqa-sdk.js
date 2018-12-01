@@ -4,7 +4,7 @@ import isUrl from 'is-url';
 import joinUrl from 'proper-url-join';
 
 class APIRequest {
-  
+
   constructor(baseURL, httpsAgent, httpAgent, token) {
     if (!isUrl(baseURL)) throw new Error('The base URL provided is not valid');
     this.baseURL = baseURL;
@@ -63,7 +63,7 @@ class SWQA {
       options.token
     );
   }
-  
+
   //auth
   signIn = (userCred) => {
     return this.api.send('POST', 'auth/signin', userCred);

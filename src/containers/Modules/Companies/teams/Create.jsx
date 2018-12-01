@@ -10,7 +10,7 @@ import { TitleWrapper, ComponentTitle } from "../../crud.style";
 
 import Box from "../../../../components/utility/box";
 import TeamForm from "./partials/TeamForm";
-import { addTeam } from "../../../../helpers/http-api-client";
+import { addCompanyTeam } from "../../../../helpers/http-api-client";
 
 class Create extends Component {
   constructor() {
@@ -24,7 +24,7 @@ class Create extends Component {
   handleSubmit(formData, resetForm) {
     const { clientId } = this.props.location.state.row;
     this.setState({ loading: true });
-    addTeam({ ...formData, clientId })
+    addCompanyTeam({ ...formData, clientId })
       .then(res => {
         resetForm();
         message.success("Successfully Saved.");

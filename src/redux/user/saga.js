@@ -21,7 +21,7 @@ export function* requestMyAgencies() {
 }
 
 export function* errorMyAgencies() {
-  yield takeEvery(actions.ERROR_MY_AGENCIES, function* () { });
+  yield takeEvery(actions.ERROR_MY_AGENCIES, function*() {});
 }
 
 export function* requestAgencyLogin() {
@@ -29,7 +29,7 @@ export function* requestAgencyLogin() {
     try {
       const { history, agencyData } = payload;
       const data = yield call(SWQAClient.agencyLogin, agencyData);
-      if (get(data, 'token', false)) {
+      if (get(data, "token", false)) {
         yield put({
           type: actions.SUCCESS_ACCOUNT_LOGIN,
           payload: data,
@@ -38,18 +38,18 @@ export function* requestAgencyLogin() {
           history
         });
       } else {
-        notification('error', 'login failed');
+        notification("error", "login failed");
         yield put({ type: actions.ERROR_AGENCY_LOGIN });
       }
     } catch (e) {
-      notification('error', 'Agency login failed');
+      notification("error", "Agency login failed");
       yield put({ type: actions.ERROR_AGENCY_LOGIN });
     }
   });
 }
 
 export function* errorAgencyLogin() {
-  yield takeEvery(actions.ERROR_AGENCY_LOGIN, function* () { });
+  yield takeEvery(actions.ERROR_AGENCY_LOGIN, function*() {});
 }
 
 //client
@@ -67,7 +67,7 @@ export function* requestMyClients() {
 }
 
 export function* errorMyClients() {
-  yield takeEvery(actions.ERROR_MY_CLIENTS, function* () { });
+  yield takeEvery(actions.ERROR_MY_CLIENTS, function*() {});
 }
 
 export function* requestClientLogin() {
@@ -75,7 +75,7 @@ export function* requestClientLogin() {
     try {
       const { history, clientData } = payload;
       const data = yield call(SWQAClient.clientLogin, clientData);
-      if (get(data, 'token', false)) {
+      if (get(data, "token", false)) {
         yield put({
           type: actions.SUCCESS_ACCOUNT_LOGIN,
           payload: data,
@@ -84,27 +84,30 @@ export function* requestClientLogin() {
           history
         });
       } else {
-        notification('error', 'login failed');
+        notification("error", "login failed");
         yield put({ type: actions.ERROR_CLIENT_LOGIN });
       }
     } catch (e) {
-      notification('error', 'Client login failed');
+      notification("error", "Client login failed");
       yield put({ type: actions.ERROR_ClIENT_LOGIN });
     }
   });
 }
 
 export function* errorClientLogin() {
-  yield takeEvery(actions.ERROR_CLIENT_LOGIN, function* () { });
+  yield takeEvery(actions.ERROR_CLIENT_LOGIN, function*() {});
 }
 
 export function* successAccountLogin() {
-  yield takeEvery(actions.SUCCESS_ACCOUNT_LOGIN, function* ({ payload, history }) {
+  yield takeEvery(actions.SUCCESS_ACCOUNT_LOGIN, function*({
+    payload,
+    history
+  }) {
     if (payload) {
       const { token } = payload;
       yield setCompanyToken(token);
       if (history) {
-        history.push('/dashboard');
+        history.push("/dashboard");
         history.go(0);
       }
     }
@@ -112,7 +115,7 @@ export function* successAccountLogin() {
 }
 
 export function* checkActiveAccount() {
-  yield takeEvery(actions.CHECK_ACTIVE_ACCOUNT, function* () {
+  yield takeEvery(actions.CHECK_ACTIVE_ACCOUNT, function*() {
     const token = getCompanyToken();
     if (token) {
       yield put({

@@ -33,13 +33,13 @@ class TopbarAgency extends Component {
             <div key={index}>
               <a className="isoDropdownLink" onClick={() => {
                 requestAgencyLogin({
-                  history, 
-                  agencyData: { 
-                    agencyId: myAgency.agency.agencyId 
+                  history,
+                  agencyData: {
+                    agencyId: myAgency.agency.agencyId
                   }
                 });
               }}>
-                {myAgency.agency.name} 
+                {myAgency.agency.name}
                 <br />
                 <span className="smallText">
                   &nbsp; {myAgency.role.title}
@@ -66,7 +66,7 @@ class TopbarAgency extends Component {
           <i
             className="ion-grid"
           /> &nbsp;
-          Agencies 
+          Agencies
         </div>
       </Popover>
     );

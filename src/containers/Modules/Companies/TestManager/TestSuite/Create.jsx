@@ -9,7 +9,7 @@ import { TitleWrapper, ComponentTitle } from "../../../crud.style";
 import Box from "../../../../../components/utility/box";
 import TestSuiteForm from "./partials/TestSuiteForm";
 import { addSuite } from "../../../../../helpers/http-api-client";
-import { getClientTeam, getCompany } from "../../../../../helpers/http-api-client";
+import { getCompanyTeam, getCompany } from "../../../../../helpers/http-api-client";
 import Errors from "../../../../Errors";
 import { scrollToTop } from '../../../../../util/dom-util';
 
@@ -31,7 +31,7 @@ export default class extends Component {
     getCompany(this.props.match.params.companyId).then(res => {
       this.setState({ company: res.data });
     });
-    getClientTeam(this.props.match.params.teamId).then(res => {
+    getCompanyTeam(this.props.match.params.teamId).then(res => {
       this.setState({ team: res.data });
     });
   }
