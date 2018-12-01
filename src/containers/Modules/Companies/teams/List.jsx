@@ -11,7 +11,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../../crud.style';
-import {deleteTeam, getCompanies, getCompanyTeams} from "../../../../helpers/http-api-client";
+import {deleteCompanyTeam, getCompanies, getCompanyTeams} from "../../../../helpers/http-api-client";
 
 const Option = Select.Option;
 export default class extends Component {
@@ -115,7 +115,7 @@ export default class extends Component {
   }
 
   handleDelete(row) {
-    deleteTeam(row.clientTeamId).then(res => {
+    deleteCompanyTeam(row.clientTeamId).then(res => {
       message.success('Successfully Deleted.');
       this.fetchData(this.state.selectedCompany);
     })

@@ -12,7 +12,7 @@ import {
 
 import Box from '../../../../components/utility/box';
 import TeamForm from "./partials/TeamForm";
-import {updateTeam, getClientTeam} from "../../../../helpers/http-api-client";
+import {updateCompanyTeam, getCompanyTeam} from "../../../../helpers/http-api-client";
 
 class Create extends Component {
 
@@ -27,7 +27,7 @@ class Create extends Component {
 
   handleSubmit(formData, resetForm) {
     this.setState({loading: true});
-    updateTeam(formData, this.props.match.params.id).then(res => {
+    updateCompanyTeam(this.props.match.params.id, formData).then(res => {
       resetForm();
       this.setState({loading: true});
       message.success('Successfully Saved.');
@@ -37,7 +37,7 @@ class Create extends Component {
 
   componentDidMount() {
     this.setState({loading: true});
-    getClientTeam(this.props.match.params.id).then(res => {
+    getCompanyTeam(this.props.match.params.id).then(res => {
       this.setState({team: res.data, loading: false})
     })
   }
