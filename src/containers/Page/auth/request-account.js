@@ -10,13 +10,6 @@ class RequestAccount extends Component {
   state = {
     redirectToReferrer: false
   };
-
-  componentDidMount(){
-    const token = getUserToken();
-    if (token) {
-       this.props.history.push('/dashboard');
-    }
-  }
   
   componentWillReceiveProps(nextProps) {
     if (
@@ -44,7 +37,7 @@ class RequestAccount extends Component {
            
             <div className="isoSignInForm isoCenterComponent">
                 Please email at pat@ixod.com for account access.
-                <Link to="/signin">
+                <Link to="/">
                     <IntlMessages id="page.signInTitle" />
                 </Link>
             </div>
