@@ -1,85 +1,90 @@
 const systemAdminOptions = [
   {
-    key: "company/list",
+    key: "companies",
     label: "sidebar.company",
     leftIcon: "ion-grid"
   },
   {
-    key: "agency/list",
+    key: "agencies",
     label: "sidebar.agency",
     leftIcon: "ion-grid"
   },
   {
-    key: "roles/list",
+    key: "roles",
     label: "sidebar.roles",
     leftIcon: "ion-eye"
+  },
+  {
+    key: "users",
+    label: "sidebar.systemUsers",
+    leftIcon: "ion-person"
   },
 ];
 
 const agencyOptions = [
   {
-    key: "my-agency/teams",
+    key: "teams",
     label: "sidebar.teams",
     leftIcon: "ion-ios-people",
-    role: ['agency-admin', 'agency-user']
+    roles: ['agency-admin', 'agency-user']
   },
   {
-    key: "my-agency/test-queue",
+    key: "test-queue",
     label: "sidebar.testQueue",
     leftIcon: "ion-cloud",
-    role: ['agency-admin', 'agency-user']
+    roles: ['agency-admin', 'agency-user']
   },
   {
-    key: "my-agency/assigned-tests",
+    key: "assigned-tests",
     label: "sidebar.assignedTests",
     leftIcon: "ion-ios-paper",
-    role: ['agency-admin', 'agency-user']
+    roles: ['agency-admin', 'agency-user']
   },
   {
-    key: "my-agency/completed-tests",
+    key: "completed-tests",
     label: "sidebar.completedTests",
     leftIcon: "ion-checkmark",
-    role: ['agency-admin', 'agency-user']
+    roles: ['agency-admin', 'agency-user']
   },
   {
-    key: "my-agency/users",
+    key: "users",
     label: "sidebar.users",
     leftIcon: "ion-person",
-    role: ['agency-admin']
+    roles: ['agency-admin']
   },
 ];
 
 const clientOptions = [
   {
-    key: "my-company/teams",
+    key: "teams",
     label: "sidebar.teams",
     leftIcon: "ion-ios-people"
   },
   {
-    key: "my-company/test-suites",
+    key: "test-suites",
     label: "sidebar.testSuite",
     leftIcon: "ion-ios-photos"
   },
   {
-    key: "my-company/test-cases",
+    key: "test-cases",
     label: "sidebar.testCases",
     leftIcon: "ion-ios-flask"
   },
   {
-    key: "my-company/test-queue",
+    key: "test-queue",
     label: "sidebar.testQueue",
     leftIcon: "ion-cloud"
   },
   {
-    key: "my-company/test-run",
+    key: "test-run",
     label: "sidebar.testRun",
     leftIcon: "ion-checkmark"
   },
   {
-    key: "my-company/users",
+    key: "users",
     label: "sidebar.users",
     leftIcon: "ion-person",
-    role: ['agency-admin']
+    roles: ['client-admin']
   },
 ];
 

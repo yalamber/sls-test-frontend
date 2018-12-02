@@ -1,28 +1,9 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
-import systemAdminRoutes from './Routes/SystemAdminRoutes';
-import testingProviderRoutes from './Routes/TestingProvidersRoutes';
-import companyRoutes from './Routes/CompanyRoutes';
-import dashboardRoutes from './Routes/DashboardRoutes';
-import testManagerRoutes from './Routes/TestManagerRoutes';
-import testQueueRoutes from './Routes/TestQueuesRoutes';
-import agencyRoutes from './Routes/AgencyRoutes';
-import rolesRoutes from './Routes/RolesRoutes';
-
-const routes = [
-  ...systemAdminRoutes,
-  ...companyRoutes,
-  ...testingProviderRoutes,
-  ...dashboardRoutes,
-  ...testManagerRoutes,
-  ...testQueueRoutes,
-  ...agencyRoutes,
-  ...rolesRoutes
-];
 
 class AppRouter extends Component {
   render() {
-    const {url, style} = this.props;
+    const {url, style, routes} = this.props;
     return (
       <div style={style}>
         {routes.map(singleRoute => {

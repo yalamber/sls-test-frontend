@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import asyncComponent from './helpers/AsyncFunc';
 import App from './containers/App/App';
 
-const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
+const RestrictedRoute = ({Component, isLoggedIn, ...rest }) => (
   <Route
     {...rest}
     render={props =>
@@ -15,7 +15,7 @@ const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
       ) : (
         <Redirect
           to={{
-            pathname: '/signin',
+            pathname: '/',
             state: { from: props.location }
           }}
         />
@@ -23,6 +23,25 @@ const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
     }
   />
 );
+
+const AppWrappedRoute = ({isLoggedIn, appType,  ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      isLoggedIn ? (
+        <App appType={appType} {...props} />
+      ) : (
+        <Redirect
+          to={{
+            pathname: '/',
+            state: { from: props.location }
+          }}
+        />
+      )
+    }
+  />
+);
+
 const PublicRoutes = ({ history, isLoggedIn }) => {
   return (
     <ConnectedRouter history={history}>
@@ -37,10 +56,11 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
           path={'/request-account'}
           component={asyncComponent(() => import('./containers/Page/auth/request-account'))}
         />
-        <RestrictedRoute path="/admin" component={App} isLoggedIn={isLoggedIn} />
-        <RestrictedRoute path="/my-agency" component={App} isLoggedIn={isLoggedIn} />
-        <RestrictedRoute path="/my-client" component={App} isLoggedIn={isLoggedIn} />
-        <RestrictedRoute path="/my" component={App} isLoggedIn={isLoggedIn} />
+        <AppWrappedRoute appType="system" path="/admin" isLoggedIn={isLoggedIn} />
+        <AppWrappedRoute appType="agency" path="/my-agency" isLoggedIn={isLoggedIn} />
+        <AppWrappedRoute appType="client" path="/my-client" isLoggedIn={isLoggedIn} />
+        <AppWrappedRoute appType="freelancer" path="/freelancer" isLoggedIn={isLoggedIn} />
+        <RestrictedRoute path="/settings" isLoggedIn={isLoggedIn} />
         <Route path="*" component={asyncComponent(() => import('./containers/Page/common/404'))}/>
       </Switch>
     </ConnectedRouter>

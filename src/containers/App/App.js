@@ -15,15 +15,36 @@ import { themeConfig } from '../../settings';
 import AppHolder from './commonStyle';
 import './global.css';
 
+import systemRoutes from './Routes/SystemRoutes';
+import companyRoutes from './Routes/CompanyRoutes';
+import agencyRoutes from './Routes/AgencyRoutes';
+import freelancerRoutes from './Routes/FreelancerRoutes';
+
 const { Content, Footer } = Layout;
 const { logout } = authAction;
 const { toggleAll } = appActions;
 
 export class App extends Component {
+
   render() {
     const { url } = this.props.match;
-    const { height } = this.props;
+    const { height, appType } = this.props;
     const appHeight = window.innerHeight;
+    let routes = [];
+    switch(appType) {
+      case 'system':
+        routes = systemRoutes;
+        break;
+      case 'client':
+        routes = companyRoutes;
+        break; 
+      case 'agency':
+        routes = agencyRoutes;
+        break;
+      case 'freelancer':
+        routes = freelancerRoutes;
+        break; 
+    }
     return (
       <ThemeProvider theme={themes[themeConfig.theme]}>
         <AppHolder>
@@ -56,7 +77,7 @@ export class App extends Component {
                     position: 'relative'
                   }}
                 >
-                  <AppRouter url={url} />
+                  <AppRouter url={url} routes={routes} />
                 </Content>
                 <Footer
                   style={{

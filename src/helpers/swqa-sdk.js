@@ -35,19 +35,18 @@ class APIRequest {
       method,
       data: body,
       headers
-    })
-      .then((response) => {
-        if (response.status >= 400) { // check for 4XX, 5XX, wtv
-          return Promise.reject({
-            status: response.status,
-            message: response.statusText
-          });
-        }
-        if (response.status >= 200 && response.status <= 202) {
-          return response.data;
-        }
-        return {};
-      });
+    }).then((response) => {
+      if (response.status >= 400) { // check for 4XX, 5XX, wtv
+        return Promise.reject({
+          status: response.status,
+          message: response.statusText
+        });
+      }
+      if (response.status >= 200 && response.status <= 202) {
+        return response.data;
+      }
+      return {};
+    });
   }
 }
 
@@ -86,6 +85,18 @@ class SWQA {
 
   clientLogin = (payload) => {
     return this.api.send('POST', 'auth/signinClient', payload);
+  }
+
+  addRole = (options) => {
+    return this.api.send('PUT', 'role', options);
+  }
+
+  getRoles = (options) => {
+    return this.api.send('GET', 'role', options);
+  }
+
+  editRole = (roleID, options) => {
+    return this.api.send('PUT', `role/${roleID}`, options);
   }
 
 }
