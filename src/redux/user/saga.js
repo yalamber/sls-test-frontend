@@ -108,7 +108,7 @@ export function* successAccountLogin() {
       yield setCompanyToken(token);
       if (history) {
         history.push("/dashboard");
-        history.go(0);
+        //history.go(0);
       }
     }
   });

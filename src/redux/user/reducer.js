@@ -59,6 +59,7 @@ export default function userReducer(state = initState, action) {
         ...state,
         activeCompanyToken: action.token,
         activeCompanyTokenData: action.activeCompanyTokenData,
+        activeSystemAdmin: false
       };
     case actions.SWITCH_SYSTEM_ADMIN:
       return { 

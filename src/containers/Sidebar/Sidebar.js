@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import clone from 'clone';
 import { Link } from 'react-router-dom';
 import { Layout } from 'antd';
+import { get, isEmpty } from 'lodash';
 import options from './options';
 import Scrollbars from '../../components/utility/customScrollBar.js';
 import Menu from '../../components/uielements/menu';
@@ -65,12 +66,14 @@ class Sidebar extends Component {
     }
     changeOpenKeys(nextOpenKeys);
   }
+
   getAncestorKeys = key => {
     const map = {
       sub3: ['sub2']
     };
     return map[key] || [];
   };
+
   getMenuItem = ({ singleOption, submenuStyle, submenuColor }) => {
     const { key, label, leftIcon, children } = singleOption;
     const url = stripTrailingSlash(this.props.url);
@@ -117,24 +120,8 @@ class Sidebar extends Component {
     );
   };
 
-  /** 
-    * Authorize menu on the bases of user role
-    * 'sytemUser', 'clientUser', 'clientTeamUser', 'providerTeamUser', 'agencyUser'
-    **/
-  isAuthorizedMenu = (key) => {
-
-    if (!this.userData) return;
-
-    var userRole = this.userData.systemUser ? this.userData.systemUser.role.type : {};
-    if ('systemAdmin' === key && userRole !== 'sytemUser') return false;
-    if ('company' === key && this.userData.clientCompanyCount === 0) return false;
-    if ('agency' === key && this.userData.agencyCount === 0) return false;
-
-    return true;
-  }
-
   render() {
-    const { app, toggleOpenDrawer, height } = this.props;
+    const { app, toggleOpenDrawer, height, user } = this.props;
     const collapsed = clone(app.collapsed) && !clone(app.openDrawer);
     const { openDrawer } = app;
 
@@ -162,6 +149,21 @@ class Sidebar extends Component {
     const submenuColor = {
       color: customizedTheme.textColor
     };
+    //get active options
+    let activeOptions = [];
+    let activeCompanyTokenData = get(user, 'activeCompanyTokenData', false);
+    //get activeCompany token data
+    if(!isEmpty(activeCompanyTokenData)) {
+      if(activeCompanyTokenData.type === 'agencyUser') {
+        activeOptions = options.agencyOptions;
+      } else if(activeCompanyTokenData.type === 'clientUser') {
+        activeOptions = options.clientOptions;
+      }
+    } else if(user.activeSystemAdmin) {
+      activeOptions = options.systemAdminOptions;
+    } else {
+      //logout();
+    }
     return (
       <SidebarWrapper>
         <Sider
@@ -184,10 +186,9 @@ class Sidebar extends Component {
               openKeys={collapsed ? [] : app.openKeys}
               selectedKeys={app.current}
               onOpenChange={this.onOpenChange}
-            >
-              {options.map(singleOption =>
-                this.isAuthorizedMenu(singleOption.key) ?
-                  this.getMenuItem({ submenuStyle, submenuColor, singleOption }) : null
+            > 
+              {activeOptions.map(singleOption =>
+                this.getMenuItem({ submenuStyle, submenuColor, singleOption })
               )}
             </Menu>
           </Scrollbars>
@@ -200,7 +201,9 @@ class Sidebar extends Component {
 export default connect(
   state => ({
     app: state.App,
-    height: state.App.height
+    height: state.App.height,
+    user: state.User,
+    auth: state.auth
   }),
   { toggleOpenDrawer, changeOpenKeys, changeCurrent, toggleCollapsed }
 )(Sidebar);
