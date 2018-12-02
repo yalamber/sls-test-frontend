@@ -2,22 +2,24 @@ import axios from 'axios';
 import _ from "lodash";
 import isUrl from 'is-url';
 import joinUrl from 'proper-url-join';
+//TODO: make compatible with redux store
 
 class APIRequest {
 
-  constructor(baseURL, httpsAgent, httpAgent, token) {
+  constructor(baseURL, httpsAgent, httpAgent, getToken) {
     if (!isUrl(baseURL)) throw new Error('The base URL provided is not valid');
     this.baseURL = baseURL;
     this.httpsAgent = httpsAgent;
     this.httpAgent = httpAgent;
-    this.token = token;
+    this.getToken = getToken;
   }
 
   send(method, url, data = {}) {
     let callURL = joinUrl(this.baseURL, url, { trailingSlash: true });
     const headers = {};
-    if (this.token) {
-      headers['Authorization'] = `Bearer ${this.token}`;
+    let token = this.getToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
     }
     let body = '';
     if (method === 'POST') {
@@ -55,12 +57,12 @@ class SWQA {
   constructor(options) {
     this.options = options;
     this.baseURL = options.baseURL;
-
+    
     this.api = new APIRequest(
       options.baseURL,
       options.httpsAgent,
       options.httpAgent,
-      options.token
+      options.getToken
     );
   }
 

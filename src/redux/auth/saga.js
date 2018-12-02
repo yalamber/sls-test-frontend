@@ -2,8 +2,13 @@ import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import { get } from 'lodash';
 import jwtDecode from "jwt-decode";
-import { setUserToken, clearUserToken, getUserToken, clearCompanyToken } from '../../helpers/utility';
-import { signIn } from '../../helpers/http-api-client';
+import { 
+  setUserToken, 
+  clearUserToken, 
+  getUserToken, 
+  clearCompanyToken 
+} from '../../helpers/utility';
+import SWQAClient from '../../helpers/apiClient';
 import actions from './actions';
 import notification from '../../components/notification';
 
@@ -11,7 +16,7 @@ export function* loginRequest() {
   yield takeEvery('LOGIN_REQUEST', function* ({ payload }) {
     const { history, userInfo } = payload;
     try {
-      const result = yield call(signIn, userInfo);
+      const result = yield call(SWQAClient.signIn, userInfo);
       if (get(result, 'token', false)) {
         yield put({
           type: actions.LOGIN_SUCCESS,
@@ -37,8 +42,8 @@ export function* loginSuccess() {
     if (payload) {
       const { token } = payload;
       yield setUserToken(token);
-      if (history) {
-        history.push('/dashboard');
+      if (history && history.push) {
+        history.push('/');
       }
     }
   });
@@ -65,7 +70,7 @@ export function* checkAuthorization() {
           type: actions.LOGIN_SUCCESS,
           payload: { token },
           token,
-          userTokenData: jwtDecode(token),
+          userTokenData: jwtDecode(token)
         });
       } else {
         yield put({ type: actions.LOGOUT });

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
 import { connect } from 'react-redux';
 
-import App from './containers/App/App';
 import asyncComponent from './helpers/AsyncFunc';
+import App from './containers/App/App';
 
 const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
   <Route
@@ -26,34 +26,29 @@ const RestrictedRoute = ({ component: Component, isLoggedIn, ...rest }) => (
 const PublicRoutes = ({ history, isLoggedIn }) => {
   return (
     <ConnectedRouter history={history}>
-      <div>
+      <Switch>
         <Route
           exact
-          path={'/'}
-          component={asyncComponent(() => import('./containers/Page/auth'))}
-        />
-        <Route
-          exact
-          path={'/signin'}
-          component={asyncComponent(() => import('./containers/Page/auth'))}
+          path={"/"}
+          component={asyncComponent(() => import("./containers/Page/auth"))}
         />
         <Route
           exact
           path={'/request-account'}
-          component={asyncComponent(() => import('./containers/Page/auth/request-account.js'))}
+          component={asyncComponent(() => import('./containers/Page/auth/request-account'))}
         />
-        <RestrictedRoute
-          path="/dashboard"
-          component={App}
-          isLoggedIn={isLoggedIn}
-        />
-      </div>
+        <RestrictedRoute path="/admin" component={App} isLoggedIn={isLoggedIn} />
+        <RestrictedRoute path="/my-agency" component={App} isLoggedIn={isLoggedIn} />
+        <RestrictedRoute path="/my-client" component={App} isLoggedIn={isLoggedIn} />
+        <RestrictedRoute path="/my" component={App} isLoggedIn={isLoggedIn} />
+        <Route path="*" component={asyncComponent(() => import('./containers/Page/common/404'))}/>
+      </Switch>
     </ConnectedRouter>
   );
 };
 
 export default connect(state => {
   return ({
-    isLoggedIn: state.Auth.idToken !== null
+    isLoggedIn: state.Auth.userToken !== null
   });
 })(PublicRoutes);

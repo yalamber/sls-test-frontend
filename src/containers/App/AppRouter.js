@@ -1,5 +1,6 @@
-import React, {Component} from "react";
-import {Route} from "react-router-dom";
+import React, { Component } from "react";
+import { Route } from "react-router-dom";
+import systemAdminRoutes from './Routes/SystemAdminRoutes';
 import testingProviderRoutes from './Routes/TestingProvidersRoutes';
 import companyRoutes from './Routes/CompanyRoutes';
 import dashboardRoutes from './Routes/DashboardRoutes';
@@ -9,6 +10,7 @@ import agencyRoutes from './Routes/AgencyRoutes';
 import rolesRoutes from './Routes/RolesRoutes';
 
 const routes = [
+  ...systemAdminRoutes,
   ...companyRoutes,
   ...testingProviderRoutes,
   ...dashboardRoutes,

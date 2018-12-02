@@ -17,8 +17,9 @@ const actions = {
   //system admin
   SWITCH_SYSTEM_ADMIN: 'SWITCH_SYSTEM_ADMIN',
 
-  checkActiveAccount: () => ({ 
-    type: actions.CHECK_ACTIVE_ACCOUNT 
+  checkActiveAccount: (payload) => ({ 
+    type: actions.CHECK_ACTIVE_ACCOUNT,
+    payload
   }),
   //agencies actions
   requestMyAgencies: () => ({

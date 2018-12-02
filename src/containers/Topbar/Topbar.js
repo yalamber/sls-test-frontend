@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Layout } from "antd";
+import { Layout, Spin } from "antd";
 import appActions from "../../redux/app/actions";
 import authAction from '../../redux/auth/actions';
 import userAction from '../../redux/user/actions';
@@ -15,12 +15,12 @@ import { get, isEmpty } from "lodash";
 const { Header } = Layout;
 const { toggleCollapsed, closeAll } = appActions;
 const { logout } = authAction;
-const { 
-  requestMyAgencies, 
-  requestAgencyLogin, 
-  requestMyClients, 
-  requestClientLogin, 
-  switchSystemAdmin 
+const {
+  requestMyAgencies,
+  requestAgencyLogin,
+  requestMyClients,
+  requestClientLogin,
+  switchSystemAdmin
 } = userAction;
 const customizedTheme = themes[themeConfig.theme];
 
@@ -31,7 +31,7 @@ class Topbar extends Component {
     this.props.requestMyClients();
   }
 
-  systemAdminSwitch() { 
+  systemAdminSwitch() {
     return (
       <a className="switch-link" onClick={() => {
         this.props.switchSystemAdmin();
@@ -43,21 +43,21 @@ class Topbar extends Component {
     try {
       const { activeCompanyTokenData, activeSystemAdmin, userTokenData } = this.props;
       let title = '';
-      if(!isEmpty(activeCompanyTokenData)){
-        if(activeCompanyTokenData.type === 'agencyUser'){
+      if (!isEmpty(activeCompanyTokenData)) {
+        if (activeCompanyTokenData.type === 'agencyUser') {
           title = activeCompanyTokenData.agencyData.name;
-        } else if(activeCompanyTokenData.type === 'clientUser') {
+        } else if (activeCompanyTokenData.type === 'clientUser') {
           title = activeCompanyTokenData.clientData.name;
         }
       } else {
-        if(get(userTokenData, 'systemRole.key', false) === 'system-admin'){
+        if (get(userTokenData, 'systemRole.key', false) === 'system-admin') {
           title = "System Administration"
         }
       }
       return (
         <div className="title-holder">
-          <h1>{ title }</h1>
-          { !activeSystemAdmin && this.systemAdminSwitch()}
+          <h1>{title}</h1>
+          {!activeSystemAdmin && this.systemAdminSwitch()}
         </div>
       )
     } catch (e) {
@@ -110,6 +110,7 @@ class Topbar extends Component {
           </div>
 
           <ul className="isoRight">
+            {(myAgencies.loading || myClients.loading) && <li><Spin /></li>}
             {myAgencies.data.length > 0 &&
               <li
                 onClick={() => this.setState({ selectedItem: "agency" })}

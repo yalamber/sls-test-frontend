@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import authAction from '../../../redux/auth/actions';
+import { isEmpty, get } from 'lodash';
+
+import authActions from '../../../redux/auth/actions';
 import IntlMessages from '../../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 import LoginForm from './partials/loginForm';
-import { getUserToken } from '../../../helpers/utility';
 
-const { login } = authAction;
+const { login } = authActions;
 
 class SignIn extends Component {
 
@@ -18,11 +19,31 @@ class SignIn extends Component {
     };  
     this.handleLogin = this.handleLogin.bind(this);
   }
-  
-  componentDidMount(){
-    const token = getUserToken();
-    if (token) {
-       this.props.history.push('/dashboard');
+
+  componentDidMount() {
+    const { 
+      isLoggedIn, 
+      activeSystemAdmin, 
+      history, 
+      activeCompanyTokenData 
+    } = this.props;
+
+    if(isLoggedIn) {
+      if(activeSystemAdmin) {
+        return history.push('/admin');
+      }
+      if(!isEmpty(activeCompanyTokenData)) {
+        if(activeCompanyTokenData.type === 'agencyUser'){
+          return history.push("/my-agency");  
+        }
+        if(activeCompanyTokenData.type === 'clientUser'){
+          return history.push("/my-client");  
+        }
+        if(activeCompanyTokenData.type === 'freelanceUser'){
+          return history.push("/my");  
+        }
+      }
+      history.push("/");
     }
   }
 
@@ -38,11 +59,11 @@ class SignIn extends Component {
   handleLogin(values) {
     const { login, history } = this.props;
     login({ history, userInfo : values});
-    //this.props.history.push('/dashboard');
   }
   
   render() {
-    const from = { pathname: '/dashboard' };
+    const { loginProcessing } = this.props;
+    const from = { pathname: '/' };
     const { redirectToReferrer } = this.state;
 
     if (redirectToReferrer) {
@@ -53,10 +74,10 @@ class SignIn extends Component {
         <div className="isoLoginContentWrapper">
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
-              <IntlMessages id="page.signInTitle" />
+              <h1><IntlMessages id="page.signInTitle" /></h1>
             </div>
             <div className="isoSignInForm">
-              <LoginForm submit={this.handleLogin}/>
+              <LoginForm submit={this.handleLogin} loginProcessing={loginProcessing} />
             </div>
           </div>
         </div>
@@ -67,7 +88,10 @@ class SignIn extends Component {
 
 export default connect(
   state => ({
-    isLoggedIn: state.Auth.userToken !== null ? true : false
+    isLoggedIn: state.Auth.userToken !== null ? true : false,
+    activeCompanyTokenData: state.User.activeCompanyTokenData,
+    activeSystemAdmin: state.User.activeSystemAdmin,
+    loginProcessing: state.Auth.loginProcessing,
   }),
   { login }
 )(SignIn);

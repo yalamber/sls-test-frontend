@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Spin } from 'antd';
 import { withRouter } from 'react-router-dom';
 import Popover from '../../components/uielements/popover';
 import TopbarDropdownWrapper from './topbarDropdown.style';
@@ -26,13 +25,11 @@ class TopbarClient extends Component {
     const { myClients, requestClientLogin, history } = this.props;
     return (
       <TopbarDropdownWrapper className="isoUserDropdown">
-        { myClients.loading && <Spin />}
         { myClients.error && <div className="error-msg">Could not load Clients</div>}
         {
           myClients.data.map((myClient, index) => (
             <div key={index}>
               <a className="isoDropdownLink" onClick={() => {
-                console.log(myClient);
                 requestClientLogin({
                   history, 
                   clientData: { 

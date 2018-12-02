@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-import {Form, Input, Checkbox} from 'antd';
+import {Form, Input, Checkbox, Spin} from 'antd';
 import {withRouter, Link} from 'react-router-dom'
 import Button from '../../../../components/uielements/button';
 import IntlMessages from '../../../../components/utility/intlMessages';
 import {loginValidation} from '../../../../Validations/loginValidation';
 
-
 const FormItem = Form.Item;
-
 
 class LoginForm extends Component {
   constructor() {
@@ -16,19 +14,20 @@ class LoginForm extends Component {
       userCred: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-    //this.resetForm = this.resetForm.bind(this);
   }
+
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        //this.props.submit(values, this.resetForm);
         this.props.submit(values);
       }
     });
   }
+
   render() {
-    const {getFieldDecorator} = this.props.form;
+    const { form, loginProcessing } = this.props;
+    const { getFieldDecorator } = form;
     return (
       <div>
         <Form onSubmit={this.handleSubmit} className="login-form">
@@ -47,6 +46,7 @@ class LoginForm extends Component {
                   <Checkbox>
                     <IntlMessages id="page.signInRememberMe" />
                   </Checkbox>
+                  { loginProcessing && <Spin /> }
                   <Button type="primary"  htmlType="submit">
                     <IntlMessages id="page.signInButton" />
                   </Button>

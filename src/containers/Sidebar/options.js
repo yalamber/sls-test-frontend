@@ -1,16 +1,16 @@
 const systemAdminOptions = [
   {
-    key: "admin/company/list",
+    key: "company/list",
     label: "sidebar.company",
     leftIcon: "ion-grid"
   },
   {
-    key: "admin/agency/list",
+    key: "agency/list",
     label: "sidebar.agency",
     leftIcon: "ion-grid"
   },
   {
-    key: "admin/roles/list",
+    key: "roles/list",
     label: "sidebar.roles",
     leftIcon: "ion-eye"
   },

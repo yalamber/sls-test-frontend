@@ -4,8 +4,9 @@ const actions = {
   LOGOUT: 'LOGOUT',
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   LOGIN_ERROR: 'LOGIN_ERROR',
-  checkAuthorization: () => ({ 
-    type: actions.CHECK_AUTHORIZATION 
+  checkAuthorization: (payload) => ({ 
+    type: actions.CHECK_AUTHORIZATION,
+    payload
   }),
   login: payload => ({
     type: actions.LOGIN_REQUEST,

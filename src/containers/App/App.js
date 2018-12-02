@@ -18,6 +18,7 @@ import './global.css';
 const { Content, Footer } = Layout;
 const { logout } = authAction;
 const { toggleAll } = appActions;
+
 export class App extends Component {
   render() {
     const { url } = this.props.match;

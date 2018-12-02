@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Spin } from 'antd';
 import { withRouter } from 'react-router-dom';
 import Popover from '../../components/uielements/popover';
 import TopbarDropdownWrapper from './topbarDropdown.style';
@@ -26,7 +25,6 @@ class TopbarAgency extends Component {
     const { myAgencies, requestAgencyLogin, history } = this.props;
     return (
       <TopbarDropdownWrapper className="isoUserDropdown">
-        { myAgencies.loading && <Spin />}
         { myAgencies.error && <div className="error-msg">Could not load Agencies</div>}
         {
           myAgencies.data.map((myAgency, index) => (

@@ -101,14 +101,23 @@ export function* errorClientLogin() {
 export function* successAccountLogin() {
   yield takeEvery(actions.SUCCESS_ACCOUNT_LOGIN, function*({
     payload,
-    history
+    history,
+    activeCompanyTokenData
   }) {
     if (payload) {
       const { token } = payload;
       yield setCompanyToken(token);
       if (history) {
-        history.push("/dashboard");
-        //history.go(0);
+        if(activeCompanyTokenData.type === 'agencyUser'){
+          return history.push("/my-agency");  
+        }
+        if(activeCompanyTokenData.type === 'clientUser'){
+          return history.push("/my-client");  
+        }
+        if(activeCompanyTokenData.type === 'freelanceUser'){
+          return history.push("/my");  
+        }
+        history.push("/");
       }
     }
   });
