@@ -142,13 +142,15 @@ export function* checkActiveAccount() {
 }
 
 export function* switchSystemAdmin() {
-  yield takeEvery(actions.SWITCH_SYSTEM_ADMIN, function* (payload) {
-    console.log(payload);
-    clearCompanyToken();
-    /*if (history && history.push) {
-      console.log(history);
-      history.push("/admin");
-    }*/
+  yield takeEvery(actions.SWITCH_SYSTEM_ADMIN, function* ({ payload }) {
+    if(payload) {  
+      let { history = false } = payload;
+      clearCompanyToken();
+      if (history && history.push) {
+        console.log(history);
+        history.push("/admin");
+      }
+    }
   });
 }
 
