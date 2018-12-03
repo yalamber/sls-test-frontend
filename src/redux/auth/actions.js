@@ -8,7 +8,7 @@ const actions = {
     type: actions.CHECK_AUTHORIZATION,
     payload
   }),
-  login: payload => ({
+  login: (payload) => ({
     type: actions.LOGIN_REQUEST,
     payload
   }),

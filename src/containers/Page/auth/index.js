@@ -23,27 +23,23 @@ class SignIn extends Component {
   componentDidMount() {
     const { 
       isLoggedIn, 
-      activeSystemAdmin, 
+      activeAppType, 
       history, 
-      activeCompanyTokenData 
+      activeCompanyTokenData
     } = this.props;
-
+    console.log(isLoggedIn);
     if(isLoggedIn) {
-      if(activeSystemAdmin) {
-        return history.push('/admin');
+      switch(activeAppType) {
+        case 'system':
+          return history.push('/admin');
+        case 'client':
+          return history.push("/my-agency");
+        case 'agency':
+          return history.push("/my-agency");
+        case 'freelancer':
+          return history.push("/my");
       }
-      if(!isEmpty(activeCompanyTokenData)) {
-        if(activeCompanyTokenData.type === 'agencyUser'){
-          return history.push("/my-agency");  
-        }
-        if(activeCompanyTokenData.type === 'clientUser'){
-          return history.push("/my-client");  
-        }
-        if(activeCompanyTokenData.type === 'freelanceUser'){
-          return history.push("/my");  
-        }
-      }
-      history.push("/");
+      history.push('/my');
     }
   }
 
@@ -90,7 +86,7 @@ export default connect(
   state => ({
     isLoggedIn: state.Auth.userToken !== null ? true : false,
     activeCompanyTokenData: state.User.activeCompanyTokenData,
-    activeSystemAdmin: state.User.activeSystemAdmin,
+    activeAppType: state.User.activeAppType,
     loginProcessing: state.Auth.loginProcessing,
   }),
   { login }

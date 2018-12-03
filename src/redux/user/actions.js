@@ -51,8 +51,9 @@ const actions = {
     payload
   }),
   //switch to system admin
-  switchSystemAdmin: () => ({
-    type: actions.SWITCH_SYSTEM_ADMIN
+  switchSystemAdmin: (payload) => ({
+    type: actions.SWITCH_SYSTEM_ADMIN,
+    payload
   })
 };
 export default actions;

@@ -1,16 +1,17 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Layout, Spin } from "antd";
-import appActions from "../../redux/app/actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Layout, Spin } from 'antd';
+import { withRouter } from 'react-router-dom';
+import appActions from '../../redux/app/actions';
 import authAction from '../../redux/auth/actions';
 import userAction from '../../redux/user/actions';
-import TopbarUser from "./topbarUser";
-import TopbarClient from "./topbarClient";
-import TopbarAgency from "./topbarAgency";
-import TopbarWrapper from "./topbar.style";
-import themes from "../../settings/themes";
-import { themeConfig } from "../../settings";
-import { get, isEmpty } from "lodash";
+import TopbarUser from './topbarUser';
+import TopbarClient from './topbarClient';
+import TopbarAgency from './topbarAgency';
+import TopbarWrapper from './topbar.style';
+import themes from '../../settings/themes';
+import { themeConfig } from '../../settings';
+import { get, isEmpty } from 'lodash';
 
 const { Header } = Layout;
 const { toggleCollapsed, closeAll } = appActions;
@@ -32,16 +33,19 @@ class Topbar extends Component {
   }
 
   systemAdminSwitch() {
+    const {history} = this.props;
     return (
       <a className="switch-link" onClick={() => {
-        this.props.switchSystemAdmin();
+        this.props.switchSystemAdmin({
+          history
+        });
       }}>[ Switch to System Admin ]</a>
     )
   }
 
   getTopBarTitle() {
     try {
-      const { activeCompanyTokenData, activeSystemAdmin, userTokenData } = this.props;
+      const { activeCompanyTokenData, activeAppType, userTokenData } = this.props;
       let title = '';
       if (!isEmpty(activeCompanyTokenData)) {
         if (activeCompanyTokenData.type === 'agencyUser') {
@@ -57,7 +61,7 @@ class Topbar extends Component {
       return (
         <div className="title-holder">
           <h1>{title}</h1>
-          {!activeSystemAdmin && this.systemAdminSwitch()}
+          {activeAppType !== 'system' && this.systemAdminSwitch()}
         </div>
       )
     } catch (e) {
@@ -162,4 +166,4 @@ export default connect(
     requestClientLogin,
     switchSystemAdmin
   }
-)(Topbar);
+)(withRouter(Topbar));

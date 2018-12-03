@@ -151,18 +151,19 @@ class Sidebar extends Component {
     };
     //get active options
     let activeOptions = [];
-    let activeCompanyTokenData = get(user, 'activeCompanyTokenData', false);
-    //get activeCompany token data
-    if(!isEmpty(activeCompanyTokenData)) {
-      if(activeCompanyTokenData.type === 'agencyUser') {
+    switch(user.activeAppType) {
+      case 'system':
+        activeOptions = options.systemAdminOptions;
+      break;
+      case 'agency':
         activeOptions = options.agencyOptions;
-      } else if(activeCompanyTokenData.type === 'clientUser') {
+      break;
+      case 'client':
         activeOptions = options.clientOptions;
-      }
-    } else if(user.activeSystemAdmin) {
-      activeOptions = options.systemAdminOptions;
-    } else {
-      //logout();
+      break;
+      case 'freelancer':
+        activeOptions = options.agencyOptions;
+      break;
     }
     return (
       <SidebarWrapper>

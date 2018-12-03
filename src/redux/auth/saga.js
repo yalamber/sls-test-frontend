@@ -30,7 +30,6 @@ export function* loginRequest() {
         yield put({ type: actions.LOGIN_ERROR });
       }
     } catch (e) {
-      console.log(e);
       notification('error', 'login failed');
       yield put({ type: actions.LOGIN_ERROR });
     }
@@ -38,12 +37,13 @@ export function* loginRequest() {
 }
 
 export function* loginSuccess() {
-  yield takeEvery(actions.LOGIN_SUCCESS, function* ({ payload, history }) {
+  yield takeEvery(actions.LOGIN_SUCCESS, function* ({payload, history}) {
     if (payload) {
       const { token } = payload;
       yield setUserToken(token);
       if (history && history.push) {
-        history.push('/');
+        //TODO redirect to proper location
+        history.push('/admin');
       }
     }
   });

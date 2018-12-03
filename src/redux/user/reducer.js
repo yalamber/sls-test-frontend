@@ -10,10 +10,10 @@ const initState = {
     loading: true,
     error: false,
     data: []
-  }, 
+  },
   activeCompanyToken: null,
   activeCompanyTokenData: {},
-  activeSystemAdmin: false,
+  activeAppType: 'system',
 };
 
 export default function userReducer(state = initState, action) {
@@ -55,18 +55,24 @@ export default function userReducer(state = initState, action) {
         },
       };
     case actions.SUCCESS_ACCOUNT_LOGIN:
+      let activeAppType = 'system';
+      if(action.activeCompanyTokenData.type === 'clientUser') {
+        activeAppType = 'client';
+      } else if(action.activeCompanyTokenData.type === 'agencyUser') {
+        activeAppType = 'agency';
+      }
       return {
         ...state,
         activeCompanyToken: action.token,
         activeCompanyTokenData: action.activeCompanyTokenData,
-        activeSystemAdmin: false
+        activeAppType: activeAppType
       };
     case actions.SWITCH_SYSTEM_ADMIN:
       return { 
         ...state,
         activeCompanyToken: '',
         activeCompanyTokenData: {},
-        activeSystemAdmin: true
+        activeAppType: 'system'
       };  
     default:
       return state;
