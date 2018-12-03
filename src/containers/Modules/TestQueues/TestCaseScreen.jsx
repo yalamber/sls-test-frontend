@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Row, Col, Select, Spin, Checckbox, Radio, Divider } from 'antd';
-import LayoutWrapper from '@validations/utility/layoutWrapper.js';
+import LayoutWrapper from '@components/utility/layoutWrapper';
 import basicStyle from '@settings/basicStyle';
-import Box from '@validations/utility/box';
+import Box from '@components/utility/box';
 import TestCaseWrapper from './partials/TestCase.style';
 import Description from './partials/Description';
 import StatusAndUpdate from './partials/StatusAndUpdate';
@@ -12,7 +12,7 @@ import {
     TitleWrapper,
     ComponentTitle,
     TableClickable as Table
-} from '../crud.style';
+} from '@utils/crud.style';
 // import {getCompanies, getTeams} from "@helpers/http-api-client";
 // import {getSuites} from "@helpers/http-api-client";
 

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Row, Col, message, Spin } from "antd";
-import LayoutWrapper from "@components/utility/layoutWrapper.js";
+import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import PageHeader from "@components/utility/pageHeader";
 

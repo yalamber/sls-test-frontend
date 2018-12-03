@@ -8,9 +8,10 @@ module.exports = {
         alias: {
           ...webpackConfig.resolve.alias,
           "@root": path.resolve(__dirname, 'src'),
-          "@app": path.resolve(__dirname, 'src/App'),
+          "@image": path.resolve(__dirname, 'src/image'),
+          "@app": path.resolve(__dirname, 'src/Apps'),
           "@page": path.resolve(__dirname, 'src/containers/Page'),
-          "@redux": path.resolve(__dirname, '/src/redux'),
+          "@redux": path.resolve(__dirname, 'src/redux'),
           "@components": path.resolve(__dirname, 'src/components'),
           "@constants": path.resolve(__dirname, 'src/constants'),
           "@settings": path.resolve(__dirname, 'src/settings'),

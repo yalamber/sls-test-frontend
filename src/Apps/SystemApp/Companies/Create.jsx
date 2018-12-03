@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Row, Col, Spin, Icon, message } from "antd";
-import LayoutWrapper from "@components/utility/layoutWrapper.js";
+import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";

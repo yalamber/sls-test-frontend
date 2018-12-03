@@ -1,23 +1,20 @@
-import React, {Component} from 'react';
-import {Row, Col, Icon, Select, Tooltip} from 'antd';
-import LayoutWrapper from '@validations/utility/layoutWrapper.js';
+import React, { Component } from 'react';
+import { Row, Col, Icon, Select, Tooltip, message } from 'antd';
+import LayoutWrapper from '@components/utility/layoutWrapper';
 import basicStyle from '@settings/basicStyle';
-import Box from '@validations/utility/box';
+import Box from '@components/utility/box';
 import ActionButtons from "./partials/ActionButtons";
-
 import {
   ActionBtn,
   TitleWrapper,
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from '../crud.style';
+} from '@utils/crud.style';
 import {deleteDashboard, getDashboards} from "@helpers/http-api-client";
 import {getCompanies} from "@helpers/http-api-client";
-import {message} from "antd/lib/index";
 
 const Option = Select.Option;
-
 
 export default class extends Component {
   constructor() {

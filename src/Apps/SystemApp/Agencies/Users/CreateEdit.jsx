@@ -3,7 +3,7 @@ import { Row, Col, Spin, message } from "antd";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
 
-import LayoutWrapper from "@components/utility/layoutWrapper.js";
+import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
 import { getErrorDataFromApiResponseError } from "@utils/response-message";

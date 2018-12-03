@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Row, Col, Spin } from "antd";
-import LayoutWrapper from "@components/utility/layoutWrapper.js";
+import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import ContentHolder from "@components/utility/contentHolder";
 import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
-import Box from "@utils/components/utility/box";
-import TeamForm from "./partials/TeamForm";
+import Box from "@components/utility/box";
 import { createAgencyTeam } from "@helpers/http-api-client";
+import TeamForm from "./partials/TeamForm";
 
 export default class extends Component {
   constructor() {

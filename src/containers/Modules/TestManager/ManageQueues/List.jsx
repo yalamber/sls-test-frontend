@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Row, Col, Select, Spin, Button, Checkbox} from 'antd';
-import LayoutWrapper from '@components/utility/layoutWrapper.js';
+import LayoutWrapper from '@components/utility/layoutWrapper';
 import basicStyle from '@settings/basicStyle';
 import Box from '@components/utility/box';
 

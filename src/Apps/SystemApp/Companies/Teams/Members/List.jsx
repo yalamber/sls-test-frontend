@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, Spin, message } from "antd";
-import LayoutWrapper from "@components/utility/layoutWrapper.js";
+import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
-import UsersActionButtons from "../../users/partials/ActionButtons";
+import UsersActionButtons from "@app/SystemApp/Companies/Users/partials/ActionButtons";
 import {
   ActionBtn,
   TitleWrapper,

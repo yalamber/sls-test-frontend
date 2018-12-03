@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { Row, Col, Icon, message, Spin } from 'antd';
-import LayoutWrapper from '@components/utility/layoutWrapper.js';
+import LayoutWrapper from '@components/utility/layoutWrapper';
 import PageHeader from '@components/utility/pageHeader';
 import basicStyle from '@settings/basicStyle';
 import Box from '@components/utility/box';

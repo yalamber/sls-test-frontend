@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import CommonFilter from "@validations/CommonFilter";
-import LayoutWrapper from "@validations/utility/layoutWrapper";
+import LayoutWrapper from "@components/utilitylayoutWrapper";
 import {
   TableClickable as Table,
   TitleWrapper,
   ComponentTitle
 } from "../crud.style";
 import { Row, Col, Radio, Select } from "antd";
-import Box from "@validations/utility/box";
+import Box from "@components/utility/box";
 import basicStyle from "@settings/basicStyle";
 
 import { getCompanies, getCompanyTeams } from "@helpers/http-api-client";

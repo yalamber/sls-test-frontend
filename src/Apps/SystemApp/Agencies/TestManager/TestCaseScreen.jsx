@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Select, Spin, Checckbox, Radio, Divider } from 'antd';
-import LayoutWrapper from '@components/utility/layoutWrapper.js';
+import LayoutWrapper from '@components/utility/layoutWrapper';
 import basicStyle from '@settings/basicStyle';
 import Box from '@components/utility/box';
 import TestCaseWrapper from './partials/TestCase.style';

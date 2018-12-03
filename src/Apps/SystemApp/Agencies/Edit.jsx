@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { Row, Col, Spin, message } from "antd";
-import LayoutWrapper from "@components/utility/layoutWrapper.js";
+import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
 import { getErrorDataFromApiResponseError } from "@utils/response-message";
-
-import Box from "@validations/utility/box";
+import Box from "@components/utility/box";
 import AgencyEditForm from "./partials/AgencyEditForm";
 import { updateAgency, getAgency } from "@helpers/http-api-client";
 

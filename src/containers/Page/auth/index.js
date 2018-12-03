@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { isEmpty, get } from 'lodash';
-
 import authActions from '@redux/auth/actions';
-import IntlMessages from '@validations/utility/intlMessages';
+import IntlMessages from '@components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 import LoginForm from './partials/loginForm';
 

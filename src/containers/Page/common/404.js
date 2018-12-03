@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import Image from '../../../image/rob.png';
-import IntlMessages from '@validations/utility/intlMessages';
+import Image from '@image/rob.png';
+import IntlMessages from '@components/utility/intlMessages';
 import FourZeroFourStyleWrapper from './404.style';
 
 export default class extends Component {

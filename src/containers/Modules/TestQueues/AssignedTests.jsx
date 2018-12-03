@@ -1,16 +1,14 @@
 import React, {Component} from 'react';
 import {Row, Col, Select, Spin, Checkbox, Radio} from 'antd';
-import LayoutWrapper from '@validations/utility/layoutWrapper.js';
+import LayoutWrapper from '@components/utility/layoutWrapper';
 import basicStyle from '@settings/basicStyle';
-import Box from '@validations/utility/box';
-
+import Box from '@components/utility/box';
 import {
   TitleWrapper,
   ComponentTitle,
   TableClickable as Table
-} from '../crud.style';
-import {getCompanies, getCompanyTeams} from "@helpers/http-api-client";
-import {getCompanySuites} from "@helpers/http-api-client";
+} from '@utils/crud.style';
+import {getCompanies, getCompanyTeams, getCompanySuites} from "@helpers/http-api-client";
 
 const Option = Select.Option;
 const RadioGroup = Radio.Group;

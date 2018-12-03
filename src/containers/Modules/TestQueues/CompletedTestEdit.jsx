@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import LayoutWrapper from "@validations/utility/layoutWrapper";
+import LayoutWrapper from "@components/utilitylayoutWrapper";
 import { Row, Col, Form, Input, Spin } from "antd";
 import { withRouter } from "react-router-dom";
-import Box from "@validations/utility/box";
+import Box from "@components/utility/box";
 import Button from "@validations/uielements/button";
 import basicStyle from "@settings/basicStyle";
 import TestQueueEditForm from "./partials/TestQueueEditForm";

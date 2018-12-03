@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, message, Spin } from "antd";
 import { withRouter } from "react-router-dom";
-import LayoutWrapper from "@components/utility/layoutWrapper.js";
+import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
 import {

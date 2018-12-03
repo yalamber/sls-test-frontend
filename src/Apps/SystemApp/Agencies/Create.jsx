@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Row, Col, Spin, message } from "antd";
-import LayoutWrapper from "@components/utility/layoutWrapper.js";
+import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
 import { getErrorDataFromApiResponseError } from '@utils/response-message';
