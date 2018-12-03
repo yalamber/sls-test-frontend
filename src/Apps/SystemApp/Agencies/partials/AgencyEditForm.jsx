@@ -3,7 +3,7 @@ import { Form, Select, Row, Col, Input, Icon } from "antd";
 import { withRouter } from "react-router-dom";
 import Button from "@components/uielements/button";
 import { agencyValidation } from "@validations/agencyValidation.js";
-import Errors from "@util/Errors";
+import Errors from "@utils/Errors";
 import { userStatus } from "@constants/userStatus";
 import AgencyFormWrapper from "./agency.style.js";
 

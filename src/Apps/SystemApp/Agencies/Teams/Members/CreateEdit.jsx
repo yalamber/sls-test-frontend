@@ -6,8 +6,8 @@ import { message } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper.js";
 import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
-import { getErrorDataFromApiResponseError } from "@util/response-message";
-import { TitleWrapper, ComponentTitle } from "@util/crud.style";
+import { getErrorDataFromApiResponseError } from "@utils/response-message";
+import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import MemberForm from "./partials/MemberForm";
 import {

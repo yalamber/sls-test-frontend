@@ -3,7 +3,7 @@ import { Form, Select, Row, Col, Input, Radio, Icon } from "antd";
 import { withRouter } from "react-router-dom";
 import Button from "@components/uielements/button";
 import { userValidation } from "@validations/usersValidation";
-import { ActionWrapper } from "@util/crud.style";
+import { ActionWrapper } from "@utils/crud.style";
 import Card from "@components/uielements/styles/card.style";
 import {
   getCompany,
@@ -11,7 +11,7 @@ import {
   getRoles
 } from "@helpers/http-api-client";
 import { userStatus } from "@constants/userStatus";
-import Errors from "@util/Errors";
+import Errors from "@utils/Errors";
 
 const FormItem = Form.Item;
 const Option = Select.Option;

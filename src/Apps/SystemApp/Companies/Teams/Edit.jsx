@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Row, Col, message, Spin} from 'antd';
 import {withRouter} from 'react-router-dom'
-import LayoutWrapper from '@components/utility/layoutWrapper.js';
+import LayoutWrapper from '@components/utility/layoutWrapper';
 import basicStyle from '@settings/basicStyle';
 import ContentHolder from '@components/utility/contentHolder';
 
@@ -10,9 +10,9 @@ import {
   ComponentTitle,
 } from '@utils/crud.style';
 
-import Box from '@componentsx';
-import TeamForm from "./partials/TeamForm";
+import Box from "@components/utility/box";
 import {updateCompanyTeam, getCompanyTeam} from "@helpers/http-api-client";
+import TeamForm from "./partials/TeamForm";
 
 class Create extends Component {
 

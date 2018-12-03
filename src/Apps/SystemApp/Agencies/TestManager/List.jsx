@@ -9,7 +9,7 @@ import ActionButtons from "./partials/ActionButtons";
 
 import * as agenciesTestManagerListActions from "@redux/agencies/test-manager/actions";
 import * as agenciesListActions from "@redux/agencies/actions";
-import { getDefaultPaginationOptions } from "@util/default-objects";
+import { getDefaultPaginationOptions } from "@utils/default-objects";
 import {
   ActionBtn,
   TitleWrapper,

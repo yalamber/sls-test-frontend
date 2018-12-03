@@ -1,7 +1,7 @@
 import React from "react";
 import { Tooltip } from "antd";
 import { withRouter } from "react-router-dom";
-import { ActionWrapper } from "@util/crud.style";
+import { ActionWrapper } from "@utils/crud.style";
 const ActionButtons = props => {
   return (
     <ActionWrapper>

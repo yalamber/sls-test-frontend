@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col, message, Spin } from "antd";
 import { withRouter } from "react-router-dom";
-import LayoutWrapper from "@components/utility/layoutWrapper.js";
+import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import ContentHolder from "@components/utility/contentHolder";
 import { getErrorMessageFromApiResponseError } from "@utils/response-message";
