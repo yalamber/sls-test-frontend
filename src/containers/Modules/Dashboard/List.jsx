@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Row, Col, Icon, Select, Tooltip} from 'antd';
-import LayoutWrapper from '../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../settings/basicStyle';
-import Box from '../../../components/utility/box';
+import LayoutWrapper from '@validations/utility/layoutWrapper.js';
+import basicStyle from '@settings/basicStyle';
+import Box from '@validations/utility/box';
 import ActionButtons from "./partials/ActionButtons";
 
 import {
@@ -12,8 +12,8 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '../crud.style';
-import {deleteDashboard, getDashboards} from "../../../helpers/http-api-client";
-import {getCompanies} from "../../../helpers/http-api-client";
+import {deleteDashboard, getDashboards} from "@helpers/http-api-client";
+import {getCompanies} from "@helpers/http-api-client";
 import {message} from "antd/lib/index";
 
 const Option = Select.Option;

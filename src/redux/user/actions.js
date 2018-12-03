@@ -16,6 +16,7 @@ const actions = {
   SUCCESS_ACCOUNT_LOGIN: 'SUCCESS_ACCOUNT_LOGIN',
   //system admin
   SWITCH_SYSTEM_ADMIN: 'SWITCH_SYSTEM_ADMIN',
+  REQUEST_APP_SWITCH: 'REQUEST_APP_SWITCH',
 
   checkActiveAccount: (payload) => ({ 
     type: actions.CHECK_ACTIVE_ACCOUNT,

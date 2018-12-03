@@ -54,6 +54,11 @@ export default function userReducer(state = initState, action) {
           error: true
         },
       };
+    case actions.REQUEST_APP_SWITCH:
+      return {
+        ...state,
+        appSwitching: true,
+      };
     case actions.SUCCESS_ACCOUNT_LOGIN:
       let activeAppType = 'system';
       if(action.activeCompanyTokenData.type === 'clientUser') {
@@ -65,14 +70,16 @@ export default function userReducer(state = initState, action) {
         ...state,
         activeCompanyToken: action.token,
         activeCompanyTokenData: action.activeCompanyTokenData,
-        activeAppType: activeAppType
+        activeAppType: activeAppType,
+        appSwitching: false,
       };
     case actions.SWITCH_SYSTEM_ADMIN:
       return { 
         ...state,
         activeCompanyToken: '',
         activeCompanyTokenData: {},
-        activeAppType: 'system'
+        activeAppType: 'system',
+        appSwitching: false,
       };  
     default:
       return state;

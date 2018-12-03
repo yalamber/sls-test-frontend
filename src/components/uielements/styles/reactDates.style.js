@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { palette } from 'styled-theme';
-import WithDirection from '../../../settings/withDirection';
+import WithDirection from '@settings/withDirection';
 
 const ReactDatesStyleWrapper = styled.div`
   display: flex;

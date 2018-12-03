@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import LayoutWrapper from "../../../components/utility/layoutWrapper";
+import LayoutWrapper from "@validations/utility/layoutWrapper";
 import { Row, Col, Form, Input, Spin } from "antd";
 import { withRouter } from "react-router-dom";
-import Box from "../../../components/utility/box";
-import Button from "../../../components/uielements/button";
-import basicStyle from "../../../settings/basicStyle";
+import Box from "@validations/utility/box";
+import Button from "@validations/uielements/button";
+import basicStyle from "@settings/basicStyle";
 import TestQueueEditForm from "./partials/TestQueueEditForm";
 import Errors from "../../../containers/Errors";
 

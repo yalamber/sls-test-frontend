@@ -1,9 +1,9 @@
 import React from "react";
-import Popconfirms from '../../../../components/feedback/popconfirm';
+import Popconfirms from '@components/feedback/popconfirm';
 
 import {
   ActionWrapper,
-} from '../../crud.style';
+} from '@utils/crud.style';
 import {Tooltip, Popover} from "antd";
 import {withRouter} from "react-router-dom";
 

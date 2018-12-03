@@ -1,11 +1,11 @@
 // import { get } from 'lodash';
-import { all, call, put, takeEvery, takeLatest, fork } from "redux-saga/effects";
+import { all, call, put, takeEvery, takeLatest, fork } from 'redux-saga/effects';
+// import SWQAClient from '@helpers/apiClient';
+// import notification from '@components/notification';
+import { COMPANIES_LIST_DID_MOUNT, COMPANIES_LIST_FETCH } from '@redux/constants';
+import { getCompany } from '@helpers/http-api-client';
+import { getDefaultPaginationOptions } from '@utils/default-objects';
 import * as actions from './actions';
-// import SWQAClient from "../../helpers/apiClient";
-// import notification from '../../components/notification';
-import { COMPANIES_LIST_DID_MOUNT, COMPANIES_LIST_FETCH } from '../../redux/constants';
-import { getCompany } from '../../helpers/http-api-client';
-import { getDefaultPaginationOptions } from '../../util/default-objects';
 
 export function* companiesListDidMountFork() {
   yield takeLatest(COMPANIES_LIST_DID_MOUNT, function* ({ payload }) {

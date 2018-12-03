@@ -27,6 +27,9 @@ export function* errorMyAgencies() {
 export function* requestAgencyLogin() {
   yield takeLatest(actions.REQUEST_AGENCY_LOGIN, function* ({ payload }) {
     try {
+      yield put({
+        type: actions.REQUEST_APP_SWITCH
+      });
       const { history, agencyData } = payload;
       const data = yield call(SWQAClient.agencyLogin, agencyData);
       if (get(data, "token", false)) {
@@ -73,6 +76,9 @@ export function* errorMyClients() {
 export function* requestClientLogin() {
   yield takeLatest(actions.REQUEST_CLIENT_LOGIN, function* ({ payload }) {
     try {
+      yield put({
+        type: actions.REQUEST_APP_SWITCH
+      });
       const { history, clientData } = payload;
       const data = yield call(SWQAClient.clientLogin, clientData);
       if (get(data, "token", false)) {

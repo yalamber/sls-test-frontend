@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {Divider, Input, Radio} from 'antd';
-import Form from '../../../../../components/uielements/form';
-import Button from '../../../../../components/uielements/button';
+import Form from '@components/uielements/form';
+import Button from '@components/uielements/button';
 import {Icon, Row, Col} from 'antd';
 import {
   ActionWrapper,
-} from '../../../crud.style';
-import {companyValidation} from "../../../../../Validations/companyValidation";
-import {userValidation} from "../../../../../Validations/usersValidation";
-import {generatePassword} from "../../../../../helpers/utility";
-import Card from "../../../../../components/uielements/styles/card.style";
+} from '@utils/crud.style';
+import {companyValidation} from "@validations/companyValidation";
+import {userValidation} from "@validations/usersValidation";
+import {generatePassword} from "@helpers/utility";
+import Card from "@components/uielements/styles/card.style";
 
 const FormItem = Form.Item;
 const TextArea = Input.TextArea;

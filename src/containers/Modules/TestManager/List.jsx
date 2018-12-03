@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Row, Col, Icon, message, Spin} from 'antd';
-import LayoutWrapper from '../../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../../settings/basicStyle';
-import Box from '../../../../components/utility/box';
+import LayoutWrapper from '@components/utility/layoutWrapper.js';
+import basicStyle from '@settings/basicStyle';
+import Box from '@components/utility/box';
 import ActionButtons from "./partials/ActionButtons";
 
 import {
@@ -11,8 +11,8 @@ import {
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from '../../crud.style';
-import {deleteCompany, getCompanies} from "../../../../helpers/http-api-client";
+} from '@utils/crud.style';
+import {deleteCompany, getCompanies} from "@helpers/http-api-client";
 
 export default class extends Component {
   constructor(props) {

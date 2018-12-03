@@ -1,10 +1,10 @@
 import React from "react";
 import {withRouter} from 'react-router-dom'
-import Popconfirms from '../../../../../components/feedback/popconfirm';
+import Popconfirms from '@components/feedback/popconfirm';
 
 import {
   ActionWrapper,
-} from '../../../crud.style';
+} from '@utils/crud.style';
 import {Tooltip} from "antd";
 
 const ActionButtons = (props) => {

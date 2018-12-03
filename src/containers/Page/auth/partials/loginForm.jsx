@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Form, Input, Checkbox, Spin} from 'antd';
 import {withRouter, Link} from 'react-router-dom'
-import Button from '../../../../components/uielements/button';
-import IntlMessages from '../../../../components/utility/intlMessages';
-import {loginValidation} from '../../../../Validations/loginValidation';
+import Button from '@components/uielements/button';
+import IntlMessages from '@components/utility/intlMessages';
+import {loginValidation} from '@validations/loginValidation';
 
 const FormItem = Form.Item;
 

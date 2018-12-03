@@ -1,4 +1,4 @@
-import asyncComponent from '../../../helpers/AsyncFunc';
+import asyncComponent from '@helpers/AsyncFunc';
 
 export default [
   {
@@ -7,171 +7,159 @@ export default [
   },
   {
     path: 'agencies',
-    component: asyncComponent(() => import('../../Modules/Agency/List'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/List'))
   },
   {
     path: 'agency/create',
-    component: asyncComponent(() => import('../../Modules/Agency/Create'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/Create'))
   },
   {
     path: 'agency/edit/:id',
-    component: asyncComponent(() => import('../../Modules/Agency/Edit'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/Edit'))
   },
   {
     path: 'agency/users/:agencyId',
-    component: asyncComponent(() => import('../../Modules/Agency/users/List'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/Users/List'))
   },
   {
     path: 'agency/teams/:agencyId',
-    component: asyncComponent(() => import('../../Modules/Agency/Teams/List'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/Teams/List'))
   },
   {
     path: 'agency/teams/:teamId/members',
-    component: asyncComponent(() => import('../../Modules/Agency/Teams/members/List'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/Teams/Members/List'))
   },
   {
     path: 'agency/teams/:agencyId/edit',
-    component: asyncComponent(() => import('../../Modules/Agency/Teams/Edit'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/Teams/Edit'))
   },
   {
     path: 'agency/team/:agencyId/create',
-    component: asyncComponent(() => import('../../Modules/Agency/Teams/Create'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/Teams/Create'))
   },
   {
     path: 'agency/user/create/:agencyId',
-    component: asyncComponent(() => import('../../Modules/Agency/users/CreateOrEdit'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/Users/CreateEdit'))
   },
   {
     path: 'agency/user/:agencyId/edit/:userId',
-    component: asyncComponent(() => import('../../Modules/Companies/users/CreateOrEdit'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/users/CreateEdit'))
   },
   {
     path: 'agency/teams/:teamId/member/add',
     exact: true,
-    component: asyncComponent(() => import('../../Modules/Agency/Teams/members/MemberCreateEdit'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/Teams/Members/CreateEdit'))
   },
   {
     path: 'agency/test-manager',
-    component: asyncComponent(() =>
-      import('../../Modules/Agency/TestManager/List')
-    )
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/TestManager/List'))
   },
   {
     path: 'agency/test-manager/test-case',
-    component: asyncComponent(() =>
-      import('../../Modules/Agency/TestManager/TestCaseScreen')
-    )
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/TestManager/TestCaseScreen'))
   },
   {
     path: 'agency/test-manager/:agencyId/available-tests',
-    component: asyncComponent(() =>
-      import('../../Modules/Agency/TestManager/TestQueues/AvailableTests')
-    )
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/TestManager/TestQueues/AvailableTests'))
   },
   {
     path: 'agency/test-manager/:agencyId/assigned-tests',
-    component: asyncComponent(() =>
-      import('../../Modules/Agency/TestManager/TestQueues/AssignedTests')
-    )
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Agencies/TestManager/TestQueues/AssignedTests'))
   },
   //company list
   {
     path: 'companies',
-    component: asyncComponent(() => import('../../Modules/Companies/companies/List'))
-  },
-  {
-    path: 'company/teams/:companyId',
-    component: asyncComponent(() => import('../../Modules/Companies/companies/CompanyTeams'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/List'))
   },
   {
     path: 'company/create',
-    component: asyncComponent(() => import('../../Modules/Companies/companies/Create'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/Create'))
   },
   {
-    path: 'company/edit/:id',
-    component: asyncComponent(() => import('../../Modules/Companies/companies/Edit'))
+    path: 'company/edit/:companyId',
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/Edit'))
   },
   {
-    path: 'company/teams',
-    component: asyncComponent(() => import('../../Modules/Companies/teams/List'))
+    path: 'company/teams/:companyId',
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/Teams/List'))
   },
   {
-    path: 'company/team/:id/create',
-    component: asyncComponent(() => import('../../Modules/Companies/teams/Create'))
+    path: 'company/team/:companyId/create',
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/Teams/Create'))
   },
   {
-    path: 'company/teams/edit/:id',
-    component: asyncComponent(() => import('../../Modules/Companies/teams/Edit'))
+    path: 'company/teams/edit/:teamId',
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/Teams/Edit'))
   },
   {
     path: 'company/teams/:teamId/members',
-    component: asyncComponent(() => import('../../Modules/Companies/teams/members/List'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/Teams/Members/List'))
   },
   {
     path: 'company/user/create/:companyId',
     exact: true,
-    component: asyncComponent(() => import('../../Modules/Companies/users/CreateOrEdit'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/Users/CreateEdit'))
   },
   {
     path: 'company/teams/:teamId/member/add',
     exact: true,
-    component: asyncComponent(() => import('../../Modules/Companies/teams/members/MemberCreateEdit'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/Teams/Members/CreateEdit'))
   },
   {
     path: 'company/user/:companyId/edit/:userId',
-    component: asyncComponent(() => import('../../Modules/Companies/users/CreateOrEdit'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/Users/CreateEdit'))
   },
   {
     path: 'company/users/:companyId',
-    component: asyncComponent(() => import('../../Modules/Companies/users/List'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/Users/List'))
   },
 
   /* test manager */
   {
     path: 'company/test-manager',
-    component: asyncComponent(() => import('../../Modules/Companies/TestManager/List'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/TestManager/List'))
   },
 
   /* test manager -> Test Case */
   {
     path: 'company/:companyId/test-manager/test-case/list',
-    component: asyncComponent(() => import('../../Modules/Companies/TestManager/TestCases/List'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/TestManager/TestCases/List'))
   },
   {
     path: 'company/:companyId/test-manager/test-case/create/:suiteId',
-    component: asyncComponent(() => import('../../Modules/Companies/TestManager/TestCases/Create'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/TestManager/TestCases/Create'))
   },
 
   /* test manager -> Test Suite */
   {
     path: 'company/:companyId/test-manager/suite/create/:teamId',
-    component: asyncComponent(() => import('../../Modules/Companies/TestManager/TestSuite/Create'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/TestManager/TestSuite/Create'))
   },
   {
     path: 'company/:companyId/test-manager/',
-    component: asyncComponent(() => import('../../Modules/Companies/TestManager/TestSuite/List'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/TestManager/TestSuite/List'))
   },
 
   /* test manager -> Test Run */
   {
     path: 'company/:companyId/test-manager/test-run',
-    component: asyncComponent(() => import('../../Modules/Companies/TestManager/TestRun/List'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/TestManager/TestRun/List'))
   },
   {
     path: 'company/:companyId/test-manager/test-run/create',
-    component: asyncComponent(() => import('../../Modules/Companies/TestManager/TestRun/Create'))
+    component: asyncComponent(() => import('../../../Apps/SystemApp/Companies/TestManager/TestRun/Create'))
   },
   //Roles
   {
     path: "roles",
-    component: asyncComponent(() => import("../../Modules/Roles/List.jsx"))
+    component: asyncComponent(() => import("../../../Apps/SystemApp/Roles/List.jsx"))
   },
   {
     path: "role/create",
-    component: asyncComponent(() => import("../../Modules/Roles/CreateOrEdit.jsx"))
+    component: asyncComponent(() => import("../../../Apps/SystemApp/Roles/CreateEdit.jsx"))
   },
   {
     path: "role/edit",
-    component: asyncComponent(() => import("../../Modules/Roles/CreateOrEdit.jsx"))
+    component: asyncComponent(() => import("../../../Apps/SystemApp/Roles/CreateEdit.jsx"))
   }
 ];

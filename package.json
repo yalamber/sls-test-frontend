@@ -12,6 +12,7 @@
     "is-url": "^1.2.4",
     "jwt-decode": "^2.2.0",
     "key-mirror": "^1.0.1",
+    "module-alias": "^2.1.0",
     "nprogress": "^0.2.0",
     "postcss-inline-rtl": "^0.9.8",
     "proper-url-join": "^1.2.0",
@@ -55,5 +56,17 @@
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject",
     "deploy-dev": "npm run build && aws s3 sync build/ s3://btc-dev-incbizco"
+  },
+  "_moduleAliases": {
+    "@root"       : ".",
+    "@app"        : "src/App",
+    "@page"       : "src/containers/Page",
+    "@redux"      : "src/redux",
+    "@components" : "src/components",
+    "@constants"  : "src/constants",
+    "@settings"   : "src/settings",
+    "@helpers"    : "src/helpers",
+    "@utils"      : "src/util",
+    "@validations": "src/validations"
   }
 }

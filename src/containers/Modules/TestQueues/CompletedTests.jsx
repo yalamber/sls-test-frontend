@@ -1,18 +1,18 @@
 import React, { Component } from "react";
-import CommonFilter from "../../../components/CommonFilter";
-import LayoutWrapper from "../../../components/utility/layoutWrapper";
+import CommonFilter from "@validations/CommonFilter";
+import LayoutWrapper from "@validations/utility/layoutWrapper";
 import {
   TableClickable as Table,
   TitleWrapper,
   ComponentTitle
 } from "../crud.style";
 import { Row, Col, Radio, Select } from "antd";
-import Box from "../../../components/utility/box";
-import basicStyle from "../../../settings/basicStyle";
+import Box from "@validations/utility/box";
+import basicStyle from "@settings/basicStyle";
 
-import { getCompanies, getCompanyTeams } from "../../../helpers/http-api-client";
-import { getSuites } from "../../../helpers/http-api-client";
-import CommonActionButton from "../../../components/CommonActionButton";
+import { getCompanies, getCompanyTeams } from "@helpers/http-api-client";
+import { getSuites } from "@helpers/http-api-client";
+import CommonActionButton from "@validations/CommonActionButton";
 
 const RadioGroup = Radio.Group;
 const { Option } = Select;

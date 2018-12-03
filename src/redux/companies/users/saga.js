@@ -12,9 +12,9 @@ import * as companyUsersActions from "./actions";
 import {
   COMPANIES_USERS_LIST_DID_MOUNT,
   COMPANIES_USERS_LIST_FETCH
-} from "../../../redux/constants";
-import { getCompany, getCompanyUsers } from "../../../helpers/http-api-client";
-import { getDefaultPaginationOptions } from "../../../util/default-objects";
+} from "@redux/constants";
+import { getCompany, getCompanyUsers } from "@helpers/http-api-client";
+import { getDefaultPaginationOptions } from "@utils/default-objects";
 
 export function* companiesUsersListDidMountFork() {
   yield takeLatest(COMPANIES_USERS_LIST_DID_MOUNT, function*({ payload }) {

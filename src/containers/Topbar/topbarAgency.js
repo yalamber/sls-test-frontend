@@ -36,6 +36,7 @@ class TopbarAgency extends Component {
                     agencyId: myAgency.agency.agencyId
                   }
                 });
+                this.hide();
               }}>
                 {myAgency.agency.name}
                 <br />

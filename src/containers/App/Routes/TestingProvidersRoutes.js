@@ -1,4 +1,4 @@
-import asyncComponent from "../../../helpers/AsyncFunc";
+import asyncComponent from "@helpers/AsyncFunc";
 
 export default [
   // {

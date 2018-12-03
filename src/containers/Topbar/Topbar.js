@@ -45,7 +45,10 @@ class Topbar extends Component {
 
   getTopBarTitle() {
     try {
-      const { activeCompanyTokenData, activeAppType, userTokenData } = this.props;
+      const { activeCompanyTokenData, activeAppType, userTokenData, appSwitching } = this.props;
+      if(appSwitching) {
+        return <Spin />;
+      }
       let title = '';
       if (!isEmpty(activeCompanyTokenData)) {
         if (activeCompanyTokenData.type === 'agencyUser') {

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import DashApp from './dashApp';
 import registerServiceWorker from './registerServiceWorker';
 import 'antd/dist/antd.css';
+require('module-alias/register');
 
 ReactDOM.render(<DashApp />, document.getElementById('root'));
 

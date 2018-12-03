@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import IntlMessages from '../../../components/utility/intlMessages';
+import IntlMessages from '@validations/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
-import {getUserToken} from '../../../helpers/utility';
+import {getUserToken} from '@helpers/utility';
 
 
 class RequestAccount extends Component {

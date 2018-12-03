@@ -1,18 +1,18 @@
 import React, {Component} from 'react';
 import {Row, Col, message} from 'antd';
 import {withRouter} from 'react-router-dom'
-import LayoutWrapper from '../../../components/utility/layoutWrapper.js';
-import basicStyle from '../../../settings/basicStyle';
-import ContentHolder from '../../../components/utility/contentHolder';
+import LayoutWrapper from '@validations/utility/layoutWrapper.js';
+import basicStyle from '@settings/basicStyle';
+import ContentHolder from '@validations/utility/contentHolder';
 
 import {
   TitleWrapper,
   ComponentTitle,
 } from '../crud.style';
 
-import Box from '../../../components/utility/box';
+import Box from '@validations/utility/box';
 import DashboardForm from "./partials/DashboardForm";
-import {getDashboard, updateDashboard} from "../../../helpers/http-api-client";
+import {getDashboard, updateDashboard} from "@helpers/http-api-client";
 
 class Create extends Component {
 

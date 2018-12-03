@@ -14,9 +14,9 @@ import * as companyTestManagerActions from "./actions";
 import {
   COMPANIES_TEST_MANAGER_LIST_DID_MOUNT,
   COMPANIES_TEST_MANAGER_LIST_FETCH
-} from "../../../redux/constants";
-import { getCompany } from "../../../helpers/http-api-client";
-import { getDefaultPaginationOptions } from "../../../util/default-objects";
+} from "@redux/constants";
+import { getCompany } from "@helpers/http-api-client";
+import { getDefaultPaginationOptions } from "@utils/default-objects";
 
 export function* companiesListTestManagerDidMountFork() {
   yield takeLatest(COMPANIES_TEST_MANAGER_LIST_DID_MOUNT, function*({

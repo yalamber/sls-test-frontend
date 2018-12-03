@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { palette, font } from 'styled-theme';
-import WithDirection from '../../../settings/withDirection';
+import WithDirection from '@settings/withDirection';
 
 const QuillEditor = styled.div`
   .ql-editor {

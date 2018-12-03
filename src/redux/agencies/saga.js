@@ -1,11 +1,11 @@
 // import { get } from 'lodash';
 import { all, call, put, takeEvery, takeLatest, fork } from "redux-saga/effects";
+// import SWQAClient from "@helpers/apiClient";
+// import notification from '@components/notification';
+import { AGENCIES_LIST_DID_MOUNT, AGENCIES_LIST_FETCH } from '@redux/constants';
+import { getAgency } from '@helpers/http-api-client';
+import { getDefaultPaginationOptions } from '@utils/default-objects';
 import * as actions from './actions';
-// import SWQAClient from "../../helpers/apiClient";
-// import notification from '../../components/notification';
-import { AGENCIES_LIST_DID_MOUNT, AGENCIES_LIST_FETCH } from '../../redux/constants';
-import { getAgency } from '../../helpers/http-api-client';
-import { getDefaultPaginationOptions } from '../../util/default-objects';
 
 export function* agenciesListDidMountFork() {
   yield takeLatest(AGENCIES_LIST_DID_MOUNT, function* ({ payload }) {

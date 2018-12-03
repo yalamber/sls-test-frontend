@@ -12,9 +12,9 @@ import * as agencyTestManagerActions from "./actions";
 import {
   AGENCIES_TEST_MANAGER_LIST_DID_MOUNT,
   AGENCIES_TEST_MANAGER_LIST_FETCH
-} from "../../../redux/constants";
-import { getAgency } from "../../../helpers/http-api-client";
-import { getDefaultPaginationOptions } from "../../../util/default-objects";
+} from "@redux/constants";
+import { getAgency } from "@helpers/http-api-client";
+import { getDefaultPaginationOptions } from "@utils/default-objects";
 
 export function* agenciesListTestManagerDidMountFork() {
   yield takeLatest(AGENCIES_TEST_MANAGER_LIST_DID_MOUNT, function*({

@@ -1,13 +1,13 @@
-import actions from "./actions";
+import actions from './actions';
 import {
   COMPANIES_LIST_DID_MOUNT,
   COMPANIES_LIST_FETCH,
   COMPANIES_LIST_SUCCESS,
   COMPANIES_LIST_ERROR,
   COMPANIES_LIST_DONE
-} from "../constants";
+} from '../constants';
 
-import { getDefaultPageSize } from '../../util/default-objects';
+import { getDefaultPageSize } from '@utils/default-objects';
 const ROW_COUNT = getDefaultPageSize();
 const initState = { error: null, loading: false, count: ROW_COUNT, rows: [] };
 

@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {Form, Select, Row, Col, Input} from 'antd';
 import {withRouter} from 'react-router-dom'
-import Button from '../../../../components/uielements/button';
+import Button from '@components/uielements/button';
 import {
   ActionWrapper,
-} from '../../crud.style';
-import {getCompanies, getCompanyTeams} from "../../../../helpers/http-api-client";
-import {dashboardValidation} from "../../../../Validations/dashboardValidation";
+} from '@utils/crud.style';
+import {getCompanies, getCompanyTeams} from "@helpers/http-api-client";
+import {dashboardValidation} from "@validations/dashboardValidation";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
