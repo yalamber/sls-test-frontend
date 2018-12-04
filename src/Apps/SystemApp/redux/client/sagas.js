@@ -12,7 +12,7 @@ export function* requestClientList() {
         limit: payload.pageSize
       });
       yield put(actions.receiveClients({
-        data,
+        clientListData: data,
         paginationOptions: {
           current: payload.page
         }

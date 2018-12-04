@@ -50,7 +50,7 @@ class ClientList extends Component {
           row={row}
           history={this.props.history} 
           delete={this.handleDelete} 
-          setCurrentClient={this.props.setCurrentClient} />
+          setCurrentClient={props.setCurrentClient} />
       },
       {
         title: <IntlMessages id="actions"/>,
@@ -59,7 +59,7 @@ class ClientList extends Component {
           row={row} 
           history={this.props.history} 
           delete={this.handleDelete} 
-          setCurrentClient={this.props.setCurrentClient} />
+          setCurrentClient={props.setCurrentClient} />
       }
     ];
   }
@@ -85,6 +85,7 @@ class ClientList extends Component {
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { list, history } = this.props;
+    console.log(list);
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -97,8 +98,7 @@ class ClientList extends Component {
                     type="primary"
                     onClick={() => {
                       history.push("client/create");
-                    }}
-                  >
+                    }}>
                     <Icon type="plus" />
                     <IntlMessages id="client.add"/>
                   </ActionBtn>

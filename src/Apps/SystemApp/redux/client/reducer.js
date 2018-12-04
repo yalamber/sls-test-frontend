@@ -80,7 +80,7 @@ export default function clientReducer(state = initState, action) {
     case actions.SET_CURRENT_CLIENT:
       return {
         ...state,
-        currentClient: actions.client
+        currentClient: action.client
       };
     case actions.RECEIVE_CLIENT_USER_LIST:
       let {
