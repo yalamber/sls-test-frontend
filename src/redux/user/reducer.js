@@ -1,12 +1,15 @@
+import { get } from 'lodash';
 import actions from './actions';
 
 const initState = {
   myAgencies: {
+    count: 0,
     loading: true,
     error: false,
     data: []
   },
   myClients: {
+    count: 0,
     loading: true,
     error: false,
     data: []
@@ -22,7 +25,8 @@ export default function userReducer(state = initState, action) {
       return {
         ...state,
         myAgencies: {
-          data: action.payload && action.payload.length ? action.payload : [],
+          count: get(action, 'payload.count', []),
+          data: get(action, 'payload.rows', []),
           loading: false,
           error: false
         },
@@ -40,7 +44,8 @@ export default function userReducer(state = initState, action) {
       return {
         ...state,
         myClients: {
-          data: action.payload && action.payload.length ? action.payload : [],
+          count: get(action, 'payload.count', []),
+          data: get(action, 'payload.rows', []),
           loading: false,
           error: false
         },

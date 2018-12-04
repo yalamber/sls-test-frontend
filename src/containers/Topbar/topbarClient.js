@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import Popover from '../../components/uielements/popover';
+import { Badge } from 'antd';
+import IntlMessages from '@components/utility/intlMessages';
+import Popover from '@components/uielements/popover';
 import TopbarDropdownWrapper from './topbarDropdown.style';
 
 class TopbarClient extends Component {
@@ -21,8 +23,7 @@ class TopbarClient extends Component {
     this.setState({ visible: !this.state.visible });
   }
 
-  dropdownContent() {
-    const { myClients, requestClientLogin, history } = this.props;
+  dropdownContent( myClients, requestClientLogin, history ) {
     return (
       <TopbarDropdownWrapper className="isoUserDropdown">
         { myClients.error && <div className="error-msg">Could not load Clients</div>}
@@ -36,6 +37,7 @@ class TopbarClient extends Component {
                     clientId: myClient.client.clientId 
                   }
                 });
+                this.hide();
               }}>
                 {myClient.client.name} 
                 <br />
@@ -51,20 +53,18 @@ class TopbarClient extends Component {
   }
 
   render() {
+    const { myClients, requestClientLogin, history } = this.props;
     return (
       <Popover
-        content={this.dropdownContent()}
+        content={this.dropdownContent(myClients, requestClientLogin, history)}
         trigger="click"
         visible={this.state.visible}
         onVisibleChange={this.handleVisibleChange}
         arrowPointAtCenter={true}
-        placement="bottomLeft"
-      >
+        placement="bottomLeft">
         <div className="isoIconWrapper">
-          <i
-            className="ion-grid"
-          /> &nbsp;
-          Client 
+          <i className="ion-grid"/>
+          &nbsp; <IntlMessages id="client" />
         </div>
       </Popover>
     );

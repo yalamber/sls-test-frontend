@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 import clone from 'clone';
 import { Link } from 'react-router-dom';
 import { Layout } from 'antd';
-import { get, isEmpty } from 'lodash';
-import options from './options';
-import Scrollbars from '../../components/utility/customScrollBar.js';
-import Menu from '../../components/uielements/menu';
-import IntlMessages from '../../components/utility/intlMessages';
+
+import Scrollbars from '@components/utility/customScrollBar.js';
+import Menu from '@components/uielements/menu';
+import IntlMessages from '@components/utility/intlMessages';
+import appActions from '@redux/app/actions';
+import Logo from '@components/utility/logo';
+import themes from '@settings/themes';
+import { themeConfig } from '@settings';
+import { getUserTokenData } from '@helpers/utility';
 import SidebarWrapper from './sidebar.style';
-import appActions from '../../redux/app/actions';
-import Logo from '../../components/utility/logo';
-import themes from '../../settings/themes';
-import { themeConfig } from '../../settings';
-import { getUserTokenData } from '../../helpers/utility';
+import options from './options';
 
 const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Popover from '../../components/uielements/popover';
-import IntlMessages from '../../components/utility/intlMessages';
+import Popover from '@components/uielements/popover';
+import IntlMessages from '@components/utility/intlMessages';
 import TopbarDropdownWrapper from './topbarDropdown.style';
 
 class TopbarUser extends Component {

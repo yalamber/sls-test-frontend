@@ -12,7 +12,7 @@ export function* requestMyAgencies() {
     try {
       // do api call
       const data = yield call(SWQAClient.getMyAgencies);
-      yield put(actions.receiveMyAgencies(data.rows));
+      yield put(actions.receiveMyAgencies(data));
     } catch (e) {
       console.log(e);
       yield put({ type: actions.ERROR_MY_AGENCIES });
@@ -61,7 +61,7 @@ export function* requestMyClients() {
     try {
       // do api call
       const data = yield call(SWQAClient.getMyClients);
-      yield put(actions.receiveMyClients(data.rows));
+      yield put(actions.receiveMyClients(data));
     } catch (e) {
       console.log(e);
       yield put({ type: actions.ERROR_MY_CLIENTS });

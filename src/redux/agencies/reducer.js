@@ -6,7 +6,6 @@ import {
   AGENCIES_LIST_DONE
 } from "../constants";
 import { getDefaultPageSize } from '@utils/default-objects';
-import actions from "./actions";
 
 const ROW_COUNT = getDefaultPageSize();
 const initState = { error: null, loading: false, count: ROW_COUNT, rows: [] };

@@ -2,7 +2,6 @@ let path = require('path');
 module.exports = {
   webpack: {
     configure: (webpackConfig, { env, paths }) => { 
-
       webpackConfig.resolve = {
         ...webpackConfig.resolve,
         alias: {
@@ -12,6 +11,7 @@ module.exports = {
           "@app": path.resolve(__dirname, 'src/Apps'),
           "@page": path.resolve(__dirname, 'src/containers/Page'),
           "@redux": path.resolve(__dirname, 'src/redux'),
+          "@containers": path.resolve(__dirname, 'src/containers'),
           "@components": path.resolve(__dirname, 'src/components'),
           "@constants": path.resolve(__dirname, 'src/constants'),
           "@settings": path.resolve(__dirname, 'src/settings'),
@@ -20,7 +20,6 @@ module.exports = {
           "@validations": path.resolve(__dirname, 'src/validations')
         }
       };
-      console.log(webpackConfig);
       return webpackConfig; 
     },
   }

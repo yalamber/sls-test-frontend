@@ -4,21 +4,20 @@ import { Layout } from 'antd';
 import { Debounce } from 'react-throttle';
 import WindowResizeListener from 'react-window-size-listener';
 import { ThemeProvider } from 'styled-components';
-import authAction from '../../redux/auth/actions';
-import appActions from '../../redux/app/actions';
-import Sidebar from '../Sidebar/Sidebar';
-import Topbar from '../Topbar/Topbar';
+
+import authAction from '@redux/auth/actions';
+import appActions from '@redux/app/actions';
+import Sidebar from '@containers/Sidebar/Sidebar';
+import Topbar from '@containers/Topbar/Topbar';
+import { siteConfig, themeConfig } from '@settings';
+import themes from '@settings/themes';
 import AppRouter from './AppRouter';
-import { siteConfig } from '../../settings';
-import themes from '../../settings/themes';
-import { themeConfig } from '../../settings';
+import systemRoutes from '@app/SystemApp/router';
+import clientRoutes from '@app/ClientApp/router';
+import agencyRoutes from '@app/AgencyApp/router';
+import freelancerRoutes from '@app/FreelancerApp/router';
 import AppHolder from './commonStyle';
 import './global.css';
-
-import systemRoutes from './Routes/SystemRoutes';
-import companyRoutes from './Routes/CompanyRoutes';
-import agencyRoutes from './Routes/AgencyRoutes';
-import freelancerRoutes from './Routes/FreelancerRoutes';
 
 const { Content, Footer } = Layout;
 const { logout } = authAction;
@@ -36,7 +35,7 @@ export class App extends Component {
         routes = systemRoutes;
         break;
       case 'client':
-        routes = companyRoutes;
+        routes = clientRoutes;
         break; 
       case 'agency':
         routes = agencyRoutes;

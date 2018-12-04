@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Layout, Spin } from 'antd';
+import { Layout } from 'antd';
 import { withRouter } from 'react-router-dom';
-import appActions from '../../redux/app/actions';
-import authAction from '../../redux/auth/actions';
-import userAction from '../../redux/user/actions';
-import TopbarUser from './topbarUser';
-import TopbarClient from './topbarClient';
-import TopbarAgency from './topbarAgency';
-import TopbarWrapper from './topbar.style';
-import themes from '../../settings/themes';
-import { themeConfig } from '../../settings';
 import { get, isEmpty } from 'lodash';
+
+import appActions from '@redux/app/actions';
+import authAction from '@redux/auth/actions';
+import userAction from '@redux/user/actions';
+import IntlMessages from '@components/utility/intlMessages';
+import Loader from '@components/utility/loader';
+import TopbarUser from './TopbarUser';
+import TopbarClient from './TopbarClient';
+import TopbarAgency from './TopbarAgency';
+import TopbarWrapper from './topbar.style';
+import { themeConfig } from '@settings';
+import themes from '@settings/themes';
 
 const { Header } = Layout;
 const { toggleCollapsed, closeAll } = appActions;
@@ -39,7 +42,7 @@ class Topbar extends Component {
         this.props.switchSystemAdmin({
           history
         });
-      }}>[ Switch to System Admin ]</a>
+      }}><IntlMessages id="topbar.switchSystemAdmin" /></a>
     )
   }
 
@@ -47,7 +50,7 @@ class Topbar extends Component {
     try {
       const { activeCompanyTokenData, activeAppType, userTokenData, appSwitching } = this.props;
       if(appSwitching) {
-        return <Spin />;
+        return <Loader />;
       }
       let title = '';
       if (!isEmpty(activeCompanyTokenData)) {
@@ -58,7 +61,7 @@ class Topbar extends Component {
         }
       } else {
         if (get(userTokenData, 'systemRole.key', false) === 'system-admin') {
-          title = "System Administration"
+          title = <IntlMessages id="topbar.systemAdministration" />
         }
       }
       return (
@@ -117,7 +120,7 @@ class Topbar extends Component {
           </div>
 
           <ul className="isoRight">
-            {(myAgencies.loading || myClients.loading) && <li><Spin /></li>}
+            {(myAgencies.loading || myClients.loading) && <li><Loader /></li>}
             {myAgencies.data.length > 0 &&
               <li
                 onClick={() => this.setState({ selectedItem: "agency" })}
