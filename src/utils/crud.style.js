@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import {palette} from 'styled-theme';
 import Buttons from '@components/uielements/button';
 
-
 const StatusTag = styled.span`
   padding: 0 5px;
   height: 20px;

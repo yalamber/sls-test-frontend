@@ -15,7 +15,7 @@ import {
 import clientActions from '@app/SystemApp/redux/client/actions';
 import ActionButtons from "./partials/ActionButtons";
 import TestManagerActionButtons from './partials/TestManagerActionButtons';
-const { requestClients, deleteClient, setCurrentClient } = clientActions;
+const { requestClients, deleteClient } = clientActions;
 
 class ClientList extends Component {
   constructor(props) {
@@ -85,7 +85,6 @@ class ClientList extends Component {
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { list, history } = this.props;
-    console.log(list);
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -106,10 +105,12 @@ class ClientList extends Component {
               </TitleWrapper>
               <Spin spinning={list.loading}>
                 <Table
+                  locale={{ emptyText: "No Clients" }}
                   pagination={{
                     ...list.paginationOptions,
                     onChange: this.onTablePaginationChange
                   }}
+                  bordered
                   rowKey="clientId"
                   columns={this.columns}
                   dataSource={list.rows}
@@ -136,7 +137,6 @@ export default connect(
   }),
   {
     requestClients,
-    setCurrentClient,
     deleteClient
   }
 )(ClientList);

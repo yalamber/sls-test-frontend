@@ -14,7 +14,9 @@ const initState = {
     }
   },
   currentClient: {
-    clientData: {},
+    clientData: { 
+      name: ''
+    },
     teamList: {
       loading: true,
       error: null,
@@ -52,7 +54,7 @@ export default function clientReducer(state = initState, action) {
       }
     case actions.RECEIVE_CLIENT_LIST:
       let {
-        payload: { clientListData = { rows: [], count: 0 }, clientListPaginationOptions = { current: 1 } }
+        payload: { clientListData = { rows: [], count: 0, paginationOptions: { current: 1 } } }
       } = action;
       return {
         ...state,
@@ -64,7 +66,7 @@ export default function clientReducer(state = initState, action) {
           paginationOptions: {
             ...state.list.paginationOptions,
             total: clientListData.count,
-            current: clientListPaginationOptions.current
+            current: clientListData.paginationOptions.current
           }
         },
       };
@@ -77,14 +79,28 @@ export default function clientReducer(state = initState, action) {
           error: true
         },
       };
-    case actions.SET_CURRENT_CLIENT:
+    case actions.RECEIVE_CURRENT_CLIENT:
       return {
         ...state,
-        currentClient: action.client
+        currentClient: {
+          ...state.currentClient,
+          clientData: action.clientData
+        }
+      };
+    case actions.REQUEST_CLIENT_USER_LIST: 
+      return  {
+        ...state,
+        currentClient: {
+          ...state.currentClient,
+          userList: {
+            ...state.currentClient.userList,
+            loading: true
+          }
+        }
       };
     case actions.RECEIVE_CLIENT_USER_LIST:
       let {
-        payload: { clientUserListData = { rows: [], count: 0 }, clientUserListPaginationOptions = { current: 1 } }
+        payload: { userListData = { rows: [], count: 0, paginationOptions: { current: 1 }} }
       } = action;
       return {
         ...state,
@@ -92,13 +108,13 @@ export default function clientReducer(state = initState, action) {
           ...state.currentClient,
           userList: {
             ...state.currentClient.userList,
-            rows: clientUserListData.rows,
+            rows: userListData.rows,
             loading: false,
             error: null,
             paginationOptions: {
               ...state.list.paginationOptions,
-              total: clientUserListData.count,
-              current: clientUserListPaginationOptions.current
+              total: userListData.count,
+              current: userListData.paginationOptions.current
             }
           }
         }

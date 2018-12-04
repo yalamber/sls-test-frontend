@@ -92,6 +92,15 @@ class SWQA {
     return this.api.send('GET', 'client', options);
   }
 
+  getClient = (clientId) => {
+    return this.api.send('GET', `client/${clientId}`);
+  }
+  // client users
+  getClientUsers = (clientId, options) => {
+    return this.api.send('GET', `client/${clientId}/user`, options);
+  }
+
+  //roles
   addRole = (options) => {
     return this.api.send('PUT', 'role', options);
   }
@@ -100,8 +109,8 @@ class SWQA {
     return this.api.send('GET', 'role', options);
   }
 
-  editRole = (roleID, options) => {
-    return this.api.send('PUT', `role/${roleID}`, options);
+  editRole = (roleId, options) => {
+    return this.api.send('PUT', `role/${roleId}`, options);
   }
 
 }

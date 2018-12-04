@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Row, Col, Icon, Spin } from "antd";
-import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
 import {
@@ -15,11 +13,11 @@ import {
 } from "@utils/crud.style";
 import clientActions from '@app/SystemApp/redux/client/actions';
 import ActionButtons from "./partials/ActionButtons";
-const { requestClientUsers } = clientActions;
+const { requestClientUsers, requestCurrentClient } = clientActions;
 
 class List extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
@@ -28,34 +26,30 @@ class List extends Component {
         key: "name"
       },
       {
-        title: "Rating",
-        dataIndex: "rating",
-        key: "rating"
-      },
-      {
         title: "Status",
         dataIndex: "user.status",
         key: "status"
       },
       {
+        className: 'column-actions',
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons row={row} />
+        render: row => <ActionButtons 
+          row={row}
+          cilentId={props.match.params.clientId}
+          history={this.props.history} />
       }
     ];
   }
 
   componentDidMount() {
-    console.log(this.props);
-    let clientId = get(this.props, 'currentClient.clientData.clientId', false);
-    if(clientId) {
-      this.onTablePaginationChange(clientId, 1, 5);
-    }    
+    const { match } = this.props;
+    this.props.requestCurrentClient(match.params.clientId);
+    this.onTablePaginationChange(match.params.clientId, 1, 5);    
   }
 
   onTablePaginationChange(clientId, page, pageSize) {
-    this.props.requestClientUsers({
-      clientId,
+    this.props.requestClientUsers(clientId, {
       page,
       pageSize
     });
@@ -63,12 +57,9 @@ class List extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentClient, history, match } = this.props;
+    const { currentClient = { clientData: { name: '' } }, history, match } = this.props;
     return (
       <LayoutWrapper>
-        <PageHeader>
-          Company -> {currentClient.clientData.name} -> Users
-        </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -76,22 +67,18 @@ class List extends Component {
                 <ComponentTitle>
                   <ActionBtn
                     type="secondary"
-                    onClick={() => this.props.history.goBack()}
+                    onClick={() => history.goBack()}
                   >
                     <Icon type="left" /> Go Back
                   </ActionBtn>
+                  &nbsp; Company - {currentClient.clientData.name} - Users
                 </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push(
-                        `/client/user/create/${
-                          this.state.client.clientId
-                        }`
-                      );
-                    }}
-                  >
+                      history.push(`/admin/client/${match.params.clientId}/user/create/`);
+                    }}>
                     <Icon type="plus" />
                     Add new User
                   </ActionBtn>
@@ -100,17 +87,16 @@ class List extends Component {
               <Spin spinning={currentClient.userList.loading}>
                 <Table
                   locale={{ emptyText: "No users in client" }}
-                  size="middle"
-                  bordered
                   pagination={{
                     ...currentClient.userList.paginationOptions,
                     onChange: this.onTablePaginationChange
                   }}
+                  bordered
                   columns={this.columns}
                   onRow={row => ({
                     onDoubleClick: () => {
                       history.push({
-                        pathname: `/client/${match.params.clientId}/user/${row.userId}/edit`,
+                        pathname: `/admin/client/${match.params.clientId}/user/${row.userId}/edit`,
                         state: {
                           ...row
                         }
@@ -134,6 +120,7 @@ export default connect(
     ...state.Client
   }),
   {
+    requestCurrentClient,
     requestClientUsers
   }
 )(List);

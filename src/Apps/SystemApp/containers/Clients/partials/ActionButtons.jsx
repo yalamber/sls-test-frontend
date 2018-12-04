@@ -2,7 +2,7 @@ import React from "react";
 import { Tooltip, Button } from "antd";
 import { ActionWrapper } from "@utils/crud.style";
 
-const ActionButtons = ({ history, row, setCurrentClient }) => {
+const ActionButtons = ({ history, row }) => {
   return (
     <ActionWrapper>
       <Tooltip title="Users">
@@ -10,8 +10,6 @@ const ActionButtons = ({ history, row, setCurrentClient }) => {
           shape="circle" 
           icon="user" 
           onClick={() => {
-            //set current Client
-            setCurrentClient(row);
             history.push(`client/${row.clientId}/users`);
           }} 
         />
@@ -21,7 +19,6 @@ const ActionButtons = ({ history, row, setCurrentClient }) => {
           shape="circle" 
           icon="team"
           onClick={() => {
-            setCurrentClient(row);
             history.push(`client/${row.clientId}/teams`);
           }} 
         />
@@ -31,7 +28,6 @@ const ActionButtons = ({ history, row, setCurrentClient }) => {
           shape="circle" 
           icon="edit"
           onClick={() => {
-            setCurrentClient(row);
             history.push(`client/${row.clientId}/edit`);
           }} 
         />
@@ -41,7 +37,6 @@ const ActionButtons = ({ history, row, setCurrentClient }) => {
           shape="circle" 
           icon="info"
           onClick={() => {
-            setCurrentClient(row);
             history.push(`client/${row.clientId}/details`)
           }} 
         />
