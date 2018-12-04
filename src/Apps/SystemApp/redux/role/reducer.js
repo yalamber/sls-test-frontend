@@ -17,7 +17,7 @@ const initState = {
 
 export default function roleReducer(state = initState, action) {
   switch (action.type) {
-    case actions.REQUEST_ROLES_LIST: 
+    case actions.REQUEST_ROLE_LIST: 
       return  {
         ...state,
         list: {
@@ -25,7 +25,7 @@ export default function roleReducer(state = initState, action) {
           loading: true
         }
       }
-    case actions.RECEIVE_ROLES_LIST:
+    case actions.RECEIVE_ROLE_LIST:
       const {
         payload: { data = { rows: [], count: 0 }, paginationMeta = { current: 1 } }
       } = action;
@@ -43,7 +43,7 @@ export default function roleReducer(state = initState, action) {
           }
         },
       };
-    case actions.ERROR_ROLES_LIST:
+    case actions.ERROR_ROLE_LIST:
       return {
         ...state,
         list: {

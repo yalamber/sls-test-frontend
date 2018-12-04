@@ -1,3 +1,3 @@
-import roleReducer from './role/reducer';
+import Roles from './role/reducer';
 
-export default { roleReducer };
+export default { Roles };
