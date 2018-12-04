@@ -68,10 +68,6 @@ const AppHolder = styled.div`
       padding: 10px 20px;
     }
   }
-
-  button {
-    border-radius: 0;
-  }
 `;
 
 export default AppHolder;

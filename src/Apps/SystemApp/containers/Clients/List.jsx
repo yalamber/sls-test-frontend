@@ -15,46 +15,53 @@ import {
 import clientActions from '@app/SystemApp/redux/client/actions';
 import ActionButtons from "./partials/ActionButtons";
 import TestManagerActionButtons from './partials/TestManagerActionButtons';
-const { requestClients, deleteClient } = clientActions;
-
-const columns = [
-  {
-    title: <IntlMessages id="client.name"/>,
-    dataIndex: "name",
-    key: "name"
-  },
-  {
-    title: <IntlMessages id="client.owner"/>,
-    dataIndex: "owner.username",
-    key: "client_owner"
-  },
-  {
-    title: <IntlMessages id="client.owner.email"/>,
-    dataIndex: "owner.contactInformation.emailAddress",
-    key: "client_owner_email"
-  },
-  {
-    title: <IntlMessages id="client.location"/>,
-    dataIndex: "location",
-    key: "location"
-  },
-  {
-    title: <IntlMessages id="client.testManagerActions"/>,
-    key: "testManagerActions",
-    render: row => <TestManagerActionButtons row={row} />
-  },
-  {
-    title: <IntlMessages id="actions"/>,
-    key: "actions",
-    render: row => <ActionButtons row={row} delete={this.handleDelete} />
-  }
-];
+const { requestClients, deleteClient, setCurrentClient } = clientActions;
 
 class ClientList extends Component {
   constructor(props) {
     super(props);
     this.handleDelete = this.handleDelete.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
+    this.columns = [
+      {
+        title: <IntlMessages id="client.name"/>,
+        dataIndex: "name",
+        key: "name"
+      },
+      {
+        title: <IntlMessages id="client.owner"/>,
+        dataIndex: "owner.username",
+        key: "client_owner"
+      },
+      {
+        title: <IntlMessages id="client.owner.email"/>,
+        dataIndex: "owner.contactInformation.emailAddress",
+        key: "client_owner_email"
+      },
+      {
+        title: <IntlMessages id="client.location"/>,
+        dataIndex: "location",
+        key: "location"
+      },
+      {
+        title: <IntlMessages id="client.testManagerActions"/>,
+        key: "testManagerActions",
+        render: row => <TestManagerActionButtons 
+          row={row}
+          history={this.props.history} 
+          delete={this.handleDelete} 
+          setCurrentClient={this.props.setCurrentClient} />
+      },
+      {
+        title: <IntlMessages id="actions"/>,
+        key: "actions",
+        render: row => <ActionButtons 
+          row={row} 
+          history={this.props.history} 
+          delete={this.handleDelete} 
+          setCurrentClient={this.props.setCurrentClient} />
+      }
+    ];
   }
 
   componentDidMount() {
@@ -77,6 +84,7 @@ class ClientList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
+    const { list, history } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -88,7 +96,7 @@ class ClientList extends Component {
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push("client/create");
+                      history.push("client/create");
                     }}
                   >
                     <Icon type="plus" />
@@ -96,18 +104,18 @@ class ClientList extends Component {
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Spin spinning={this.props.list.loading}>
+              <Spin spinning={list.loading}>
                 <Table
                   pagination={{
-                    ...this.props.list.paginationOptions,
+                    ...list.paginationOptions,
                     onChange: this.onTablePaginationChange
                   }}
                   rowKey="clientId"
-                  columns={columns}
-                  dataSource={this.props.list.rows}
+                  columns={this.columns}
+                  dataSource={list.rows}
                   onRow={row => ({
                     onDoubleClick: () => {
-                      this.props.history.push(`client/${row.clientId}/details`);
+                      history.push(`client/${row.clientId}/details`);
                     }
                   })}
                 />
@@ -128,6 +136,7 @@ export default connect(
   }),
   {
     requestClients,
+    setCurrentClient,
     deleteClient
   }
 )(ClientList);

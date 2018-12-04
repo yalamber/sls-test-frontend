@@ -13,7 +13,7 @@ export function* requestClientList() {
       });
       yield put(actions.receiveClients({
         data,
-        paginationMeta: {
+        paginationOptions: {
           current: payload.page
         }
       }));

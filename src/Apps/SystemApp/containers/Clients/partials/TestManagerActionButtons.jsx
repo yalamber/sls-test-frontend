@@ -1,34 +1,58 @@
 import React from "react";
-import {withRouter} from 'react-router-dom';
-import {Tooltip} from "antd";
+import { Tooltip, Button } from "antd";
+
 import {
   ActionWrapper,
 } from '@utils/crud.style';
 
-const ActionButtons = (props) => {
+const ActionButtons = ({ history, row, setCurrentClient }) => {
   return (
     <ActionWrapper>
       <Tooltip title="Test Suites">
-        <a onClick={() => props.history.push(`${props.row.clientId}/test-manager/test-suite`)}>
-          <i className="ion-ios-photos"/>
-        </a>
+        <Button 
+          shape="circle" 
+          icon="folder" 
+          onClick={() => {
+            //set current Client
+            setCurrentClient(row);
+            history.push(`client/${row.clientId}/test-manager/test-suite`)
+          }} 
+        />
       </Tooltip>
       <Tooltip title="Test Cases">
-        <a onClick={() => props.history.push(`client/${props.row.clientId}/test-manager/test-case`)}>
-          <i className="ion-ios-flask"/>
-        </a>
+        <Button 
+          shape="circle" 
+          icon="experiment" 
+          onClick={() => {
+            //set current Client
+            setCurrentClient(row);
+            history.push(`client/${row.clientId}/test-manager/test-case`)
+          }} 
+        />
       </Tooltip>
       <Tooltip title="Test Run">
-        <a onClick={() => props.history.push(`client/${props.row.clientId}/test-manager/test-run`)}>
-          <i className="ion-ios-paperplane"/>
-        </a>
+        <Button 
+          shape="circle" 
+          icon="reconciliation" 
+          onClick={() => {
+            //set current Client
+            setCurrentClient(row);
+            history.push(`client/${row.clientId}/test-manager/test-run`);
+          }} 
+        />
       </Tooltip>
       <Tooltip title="Test Queue">
-        <a onClick={() => props.history.push(`client/${props.row.clientId}/test-manager/test-queue`)}>
-          <i className="ion-ios-cloud"/>
-        </a>
+        <Button 
+          shape="circle" 
+          icon="cloud" 
+          onClick={() => {
+            //set current Client
+            setCurrentClient(row);
+            history.push(`client/${row.clientId}/test-manager/test-queue`);
+          }} 
+        />
       </Tooltip>
     </ActionWrapper>
   );
 };
-export default withRouter(ActionButtons);
+export default ActionButtons;

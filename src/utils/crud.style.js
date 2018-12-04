@@ -101,29 +101,10 @@ const ActionWrapper = styled.div`
   display: flex;
   align-content: center;
 
-  a {
+  button {
     margin-right: 12px;
     &:last-child {
       margin-right: 0;
-    }
-
-    i {
-      font-size: 18px;
-      color: ${palette('primary', 0)};
-
-      &:hover {
-        color: ${palette('primary', 4)};
-      }
-    }
-
-    &.deleteBtn {
-      i {
-        color: ${palette('error', 0)};
-
-        &:hover {
-          color: ${palette('error', 2)};
-        }
-      }
     }
   }
 `;

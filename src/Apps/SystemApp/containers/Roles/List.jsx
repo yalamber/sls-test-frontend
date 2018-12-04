@@ -16,39 +16,38 @@ import roleActions from '@app/SystemApp/redux/role/actions';
 import ActionButtons from "./partials/ActionButtons";
 const { requestRoles, deleteRole } = roleActions;
 
-const columns = [
-  {
-    title: 'Title',
-    dataIndex: 'title',
-    key: 'title',
-  },
-  {
-    title: 'Key',
-    dataIndex: 'key',
-    key: 'key',
-  },
-  {
-    title: 'Description',
-    dataIndex: 'description',
-    key: 'description',
-  },
-  {
-    title: 'Type',
-    dataIndex: 'type',
-    key: 'type',
-  },
-  {
-    title: 'Actions',
-    key: 'actions',
-    render: (row) => <ActionButtons row={row} delete={this.handleDelete} />
-  }
-];
-
 class RolesList extends Component {
   constructor(props) {
     super(props);
     this.handleDelete = this.handleDelete.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
+    this.columns = [
+      {
+        title: 'Title',
+        dataIndex: 'title',
+        key: 'title',
+      },
+      {
+        title: 'Key',
+        dataIndex: 'key',
+        key: 'key',
+      },
+      {
+        title: 'Description',
+        dataIndex: 'description',
+        key: 'description',
+      },
+      {
+        title: 'Type',
+        dataIndex: 'type',
+        key: 'type',
+      },
+      {
+        title: 'Actions',
+        key: 'actions',
+        render: (row) => <ActionButtons row={row} deleteRole={this.handleDelete} />
+      }
+    ];
   }
 
   componentDidMount() {
@@ -71,6 +70,7 @@ class RolesList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
+    const { history, list } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -80,25 +80,25 @@ class RolesList extends Component {
                 <ComponentTitle>Roles</ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
-                    this.props.history.push('role/create')
+                    history.push('role/create')
                   }}>
                     <Icon type="plus" />
                     Add Role
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Spin spinning={this.props.list.loading}>
+              <Spin spinning={list.loading}>
                 <Table
                   pagination={{
-                    ...this.props.list.paginationOptions,
+                    ...list.paginationOptions,
                     onChange: this.onTablePaginationChange
                   }}
                   rowKey="roleId"
-                  columns={columns}
-                  dataSource={this.props.list.rows}
+                  columns={this.columns}
+                  dataSource={list.rows}
                   onRow={row => ({
                     onDoubleClick: () => {
-                      this.props.history.push(`details/${row.roleId}`);
+                      history.push(`details/${row.roleId}`);
                     }
                   })}
                 />

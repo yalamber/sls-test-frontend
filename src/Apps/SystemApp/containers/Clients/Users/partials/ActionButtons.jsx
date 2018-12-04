@@ -4,7 +4,6 @@ import { ActionWrapper } from "@utils/crud.style";
 import { Tooltip } from "antd";
 
 function ActionButtons(props) {
-  //const { clientId } = props.match.params;
   const { row, match: { params: { clientId } } } = props;
   return (
     <ActionWrapper>

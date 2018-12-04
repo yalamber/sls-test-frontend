@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Row, Col, Icon, Spin, message } from "antd";
+import { Row, Col, Icon, Spin } from "antd";
+import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
-import UsersActionButtons from "./partials/ActionButtons";
-import * as companiesUsersListActions from "@redux/companies/users/actions";
 import {
   ActionBtn,
   TitleWrapper,
@@ -15,83 +13,61 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from "@utils/crud.style";
-import {
-  getCompany,
-  getCompanyUsers,
-  deleteCompanyUser
-} from "@helpers/http-api-client";
-import { getDefaultPaginationOptions } from "@utils/default-objects";
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "user.username",
-    key: "name"
-  },
-  {
-    title: "Rating",
-    dataIndex: "rating",
-    key: "rating"
-  },
-  {
-    title: "Status",
-    dataIndex: "user.status",
-    key: "status"
-  },
-  {
-    title: "Actions",
-    key: "actions",
-    render: row => <UsersActionButtons row={row} />
-  }
-];
+import clientActions from '@app/SystemApp/redux/client/actions';
+import ActionButtons from "./partials/ActionButtons";
+const { requestClientUsers } = clientActions;
 
 class List extends Component {
   constructor() {
     super();
-    this.state = {
-      client: {},
-      paginationOptions: getDefaultPaginationOptions().paginationOptions
-    };
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
+    this.columns = [
+      {
+        title: "Name",
+        dataIndex: "user.username",
+        key: "name"
+      },
+      {
+        title: "Rating",
+        dataIndex: "rating",
+        key: "rating"
+      },
+      {
+        title: "Status",
+        dataIndex: "user.status",
+        key: "status"
+      },
+      {
+        title: "Actions",
+        key: "actions",
+        render: row => <ActionButtons row={row} />
+      }
+    ];
   }
 
   componentDidMount() {
-    const { clientId } = this.props.match.params;
-    this.props.actions.companiesUsersListDidMount({ clientId });
+    console.log(this.props);
+    let clientId = get(this.props, 'currentClient.clientData.clientId', false);
+    if(clientId) {
+      this.onTablePaginationChange(clientId, 1, 5);
+    }    
   }
 
-  onTablePaginationChange(page, pageSize) {
-    const { clientId } = this.props.match.params;
-    this.setState(
-      {
-        paginationOptions: {
-          ...this.state.paginationOptions,
-          current: page,
-          pageSize
-        }
-      },
-      () => {
-        const { paginationOptions } = this.state;
-        this.props.actions.companiesUsersListFetch({
-          paginationOptions,
-          clientId
-        });
-      }
-    );
-  }
-
-  getPaginationOptions() {
-    const { count } = this.props.CompanyUsers;
-    return { ...this.state.paginationOptions, total: count };
+  onTablePaginationChange(clientId, page, pageSize) {
+    this.props.requestClientUsers({
+      clientId,
+      page,
+      pageSize
+    });
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { rows, loading } = this.props.CompanyUsers;
-
+    const { currentClient, history, match } = this.props;
     return (
       <LayoutWrapper>
         <PageHeader>
-          Company -> {this.state.client.name} -> Users List
+          Company -> {currentClient.clientData.name} -> Users
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -121,29 +97,27 @@ class List extends Component {
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Spin spinning={loading}>
+              <Spin spinning={currentClient.userList.loading}>
                 <Table
                   locale={{ emptyText: "No users in client" }}
                   size="middle"
                   bordered
                   pagination={{
-                    ...this.getPaginationOptions(),
+                    ...currentClient.userList.paginationOptions,
                     onChange: this.onTablePaginationChange
                   }}
-                  columns={columns}
+                  columns={this.columns}
                   onRow={row => ({
                     onDoubleClick: () => {
-                      this.props.history.push({
-                        pathname: `/dashboard/client/user/${
-                          this.props.match.params.clientId
-                        }/edit/${row.userId}`,
+                      history.push({
+                        pathname: `/client/${match.params.clientId}/user/${row.userId}/edit`,
                         state: {
                           ...row
                         }
                       });
                     }
                   })}
-                  dataSource={rows}
+                  dataSource={currentClient.userList.rows}
                   rowKey="userId"
                 />
               </Spin>
@@ -155,20 +129,11 @@ class List extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    Companies: state.Companies,
-    CompanyUsers: state.CompanyUsers
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    actions: { ...bindActionCreators(companiesUsersListActions, dispatch) }
-  };
-};
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  state => ({
+    ...state.Client
+  }),
+  {
+    requestClientUsers
+  }
 )(List);

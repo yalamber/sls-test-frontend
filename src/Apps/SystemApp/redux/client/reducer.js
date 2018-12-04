@@ -13,7 +13,31 @@ const initState = {
       total: 0
     }
   },
-  currentClient: {}
+  currentClient: {
+    clientData: {},
+    teamList: {
+      loading: true,
+      error: null,
+      rows: [],
+      paginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: ROLE_PAGE_SIZE_DEFAULT,
+        total: 0
+      }
+    },
+    userList: {
+      loading: true,
+      error: null,
+      rows: [],
+      paginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: ROLE_PAGE_SIZE_DEFAULT,
+        total: 0
+      }
+    }
+  },
 };
 
 export default function clientReducer(state = initState, action) {
@@ -27,20 +51,20 @@ export default function clientReducer(state = initState, action) {
         }
       }
     case actions.RECEIVE_CLIENT_LIST:
-      const {
-        payload: { data = { rows: [], count: 0 }, paginationMeta = { current: 1 } }
+      let {
+        payload: { clientListData = { rows: [], count: 0 }, clientListPaginationOptions = { current: 1 } }
       } = action;
       return {
         ...state,
         list: {
           ...state.list,
-          rows: data.rows,
+          rows: clientListData.rows,
           loading: false,
           error: null,
           paginationOptions: {
             ...state.list.paginationOptions,
-            total: data.count,
-            current: paginationMeta.current
+            total: clientListData.count,
+            current: clientListPaginationOptions.current
           }
         },
       };
@@ -52,6 +76,32 @@ export default function clientReducer(state = initState, action) {
           loading: false,
           error: true
         },
+      };
+    case actions.SET_CURRENT_CLIENT:
+      return {
+        ...state,
+        currentClient: actions.client
+      };
+    case actions.RECEIVE_CLIENT_USER_LIST:
+      let {
+        payload: { clientUserListData = { rows: [], count: 0 }, clientUserListPaginationOptions = { current: 1 } }
+      } = action;
+      return {
+        ...state,
+        currentClient: {
+          ...state.currentClient,
+          userList: {
+            ...state.currentClient.userList,
+            rows: clientUserListData.rows,
+            loading: false,
+            error: null,
+            paginationOptions: {
+              ...state.list.paginationOptions,
+              total: clientUserListData.count,
+              current: clientUserListPaginationOptions.current
+            }
+          }
+        }
       };
     default:
       return state;

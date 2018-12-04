@@ -13,7 +13,7 @@ export function* requestRoleList() {
       });
       yield put(actions.receiveRoles({
         data,
-        paginationMeta: {
+        paginationOptions: {
           current: payload.page
         }
       }));

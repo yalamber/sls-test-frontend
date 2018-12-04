@@ -1,33 +1,52 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
-import { Tooltip } from "antd";
-
+import { Tooltip, Button } from "antd";
 import { ActionWrapper } from "@utils/crud.style";
 
-const ActionButtons = props => {
+const ActionButtons = ({ history, row, setCurrentClient }) => {
   return (
     <ActionWrapper>
       <Tooltip title="Users">
-        <a onClick={() => props.history.push(`client/${props.row.clientId}/users`)}>
-          <i className="ion-ios-person" />
-        </a>
+        <Button 
+          shape="circle" 
+          icon="user" 
+          onClick={() => {
+            //set current Client
+            setCurrentClient(row);
+            history.push(`client/${row.clientId}/users`);
+          }} 
+        />
       </Tooltip>
       <Tooltip title="Teams">
-        <a onClick={() => props.history.push(`client/${props.row.clientId}/teams`)}>
-          <i className="ion-ios-people" />
-        </a>
+        <Button 
+          shape="circle" 
+          icon="team"
+          onClick={() => {
+            setCurrentClient(row);
+            history.push(`client/${row.clientId}/teams`);
+          }} 
+        />
       </Tooltip>
       <Tooltip title="Edit">
-        <a onClick={() => props.history.push(`client/${props.row.clientId}/edit`)}>
-          <i className="ion-android-create" />
-        </a>
+        <Button 
+          shape="circle" 
+          icon="edit"
+          onClick={() => {
+            setCurrentClient(row);
+            history.push(`client/${row.clientId}/edit`);
+          }} 
+        />
       </Tooltip>
       <Tooltip title="Details">
-        <a onClick={() => props.history.push(`client/${props.row.clientId}/details`)}>
-          <i className="ion-information-circled" />
-        </a>
+        <Button  
+          shape="circle" 
+          icon="info"
+          onClick={() => {
+            setCurrentClient(row);
+            history.push(`client/${row.clientId}/details`)
+          }} 
+        />
       </Tooltip>
     </ActionWrapper>
   );
 };
-export default withRouter(ActionButtons);
+export default ActionButtons;

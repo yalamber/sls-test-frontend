@@ -1,21 +1,22 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import { Button } from 'antd';
 import Popconfirms from "@components/feedback/popconfirm";
 
 import { ActionWrapper } from "@utils/crud.style";
 import { Tooltip } from "antd";
 
-const ActionButtons = props => {
+const ActionButtons = ({history, row, deleteRole}) => {
   return (
     <ActionWrapper>
       <Tooltip placement="topLeft" title="Edit Record">
-        <a
-          onClick={() =>
-            props.history.push({ pathname: `edit` }, { ...props.row })
-          }
-        >
-          <i className="ion-android-create" />
-        </a>
+        <Button 
+          shape="circle" 
+          icon="edit"
+          onClick={() => {
+            history.push({ pathname: `edit` }, { ...row })
+          }} 
+        />
       </Tooltip>
       <Tooltip placement="topLeft" title="Delete record">
         <Popconfirms
@@ -23,11 +24,12 @@ const ActionButtons = props => {
           okText="Yes"
           cancelText="No"
           placement="topRight"
-          onConfirm={() => props.delete(props.row)}
+          onConfirm={() => deleteRole(row)}
         >
-          <a className="deleteBtn">
-            <i className="ion-android-delete" />
-          </a>
+          <Button 
+            shape="circle" 
+            icon="delete"
+          />
         </Popconfirms>
       </Tooltip>
     </ActionWrapper>
