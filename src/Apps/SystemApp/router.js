@@ -89,6 +89,7 @@ const routes = [
     exact: true,
     component: asyncComponent(() => import('./containers/Clients/Users/CreateEdit'))
   },
+  //TODO: edit
   //client teams
   {
     path: 'client/:clientId/teams',
