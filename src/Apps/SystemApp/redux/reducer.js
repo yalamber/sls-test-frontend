@@ -1,3 +1,7 @@
-import Roles from './role/reducer';
+import Role from './role/reducer';
+import Client from './client/reducer';
 
-export default { Roles };
+export default { 
+  Role, 
+  Client 
+};

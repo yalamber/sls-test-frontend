@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
+import { Row, Col, Icon, Spin } from 'antd';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Row, Col, Icon, message, Spin } from 'antd';
-import IntlMessages from '@components/utility/intlMessages';
 import LayoutWrapper from '@components/utility/layoutWrapper';
+import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from '@settings/basicStyle';
 import Box from '@components/utility/box';
-import * as companiesListActions from '@redux/companies/actions';
 import {
   ActionBtn,
   TitleWrapper,
@@ -14,91 +12,71 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '@utils/crud.style';
-import {
-  deleteCompany
-} from '@helpers/http-api-client';
-import { getDefaultPaginationOptions } from '@utils/default-objects';
-
+import clientActions from '@app/SystemApp/redux/client/actions';
+import ActionButtons from "./partials/ActionButtons";
 import TestManagerActionButtons from './partials/TestManagerActionButtons';
-import ActionButtons from './partials/ActionButtons';
+const { requestClients, deleteClient } = clientActions;
 
-class List extends Component {
+const columns = [
+  {
+    title: <IntlMessages id="client.name"/>,
+    dataIndex: "name",
+    key: "name"
+  },
+  {
+    title: <IntlMessages id="client.owner"/>,
+    dataIndex: "owner.username",
+    key: "client_owner"
+  },
+  {
+    title: <IntlMessages id="client.owner.email"/>,
+    dataIndex: "owner.contactInformation.emailAddress",
+    key: "client_owner_email"
+  },
+  {
+    title: <IntlMessages id="client.location"/>,
+    dataIndex: "location",
+    key: "location"
+  },
+  {
+    title: <IntlMessages id="client.testManagerActions"/>,
+    key: "testManagerActions",
+    render: row => <TestManagerActionButtons row={row} />
+  },
+  {
+    title: <IntlMessages id="actions"/>,
+    key: "actions",
+    render: row => <ActionButtons row={row} delete={this.handleDelete} />
+  }
+];
+
+class ClientList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      columns: [
-        {
-          title: <IntlMessages id="client.name"/>,
-          dataIndex: "name",
-          key: "name"
-        },
-        {
-          title: <IntlMessages id="client.owner"/>,
-          dataIndex: "owner.username",
-          key: "client_owner"
-        },
-        {
-          title: <IntlMessages id="client.owner.email"/>,
-          dataIndex: "owner.contactInformation.emailAddress",
-          key: "client_owner_email"
-        },
-        {
-          title: <IntlMessages id="client.location"/>,
-          dataIndex: "location",
-          key: "location"
-        },
-        {
-          title: <IntlMessages id="client.testManagerActions"/>,
-          key: "testManagerActions",
-          render: row => <TestManagerActionButtons row={row} />
-        },
-        {
-          title: <IntlMessages id="actions"/>,
-          key: "actions",
-          render: row => <ActionButtons row={row} delete={this.handleDelete} />
-        }
-      ],
-      paginationOptions: getDefaultPaginationOptions().paginationOptions
-    };
     this.handleDelete = this.handleDelete.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
   }
 
   componentDidMount() {
-    this.props.actions.companiesListDidMount();
-  }
-
-  onTablePaginationChange(page, pageSize) {
-    this.setState(
-      {
-        paginationOptions: {
-          ...this.state.paginationOptions,
-          current: page,
-          pageSize
-        }
-      }, () => {
-        const { paginationOptions } = this.state;
-        this.props.actions.companiesListFetch({ paginationOptions });
-      }
-    );
-  }
-
-  handleDelete(row) {
-    deleteCompany(row.clientId).then(res => {
-      message.success("Successfully Deleted.");
-      // this.fetchData();
+    this.props.requestClients({
+      page: 1,
+      pageSize: 5
     });
   }
 
-  getPaginationOptions() {
-    const { count } = this.props.Companies;
-    return { ...this.state.paginationOptions, total: count };
+  onTablePaginationChange(page, pageSize) {
+    this.props.requestClients({
+      page,
+      pageSize
+    });
+  }
+
+  handleDelete(row) {
+    this.props.deleteClient(row.clientId);
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { rows, loading } = this.props.Companies;
-
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -110,7 +88,7 @@ class List extends Component {
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push("company/create");
+                      this.props.history.push("client/create");
                     }}
                   >
                     <Icon type="plus" />
@@ -118,24 +96,24 @@ class List extends Component {
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Spin spinning={loading}>
+              <Spin spinning={this.props.list.loading}>
                 <Table
                   pagination={{
-                    ...this.getPaginationOptions(),
+                    ...this.props.list.paginationOptions,
                     onChange: this.onTablePaginationChange
                   }}
                   rowKey="clientId"
-                  columns={this.state.columns}
-                  dataSource={rows}
+                  columns={columns}
+                  dataSource={this.props.list.rows}
                   onRow={row => ({
                     onDoubleClick: () => {
-                      // this.props.history.push('details/' + row.clientId)
-                      // this.props.history.push(`details/${row.clientId}`);
+                      this.props.history.push(`client/${row.clientId}/details`);
                     }
                   })}
                 />
               </Spin>
             </Box>
+
           </Col>
         </Row>
       </LayoutWrapper>
@@ -143,14 +121,13 @@ class List extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    ...state
-  };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    actions: bindActionCreators(companiesListActions, dispatch)
+
+export default connect(
+  state => ({
+    ...state.Client
+  }),
+  {
+    requestClients,
+    deleteClient
   }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+)(ClientList);

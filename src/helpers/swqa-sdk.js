@@ -87,6 +87,11 @@ class SWQA {
     return this.api.send('POST', 'auth/signinClient', payload);
   }
 
+  //clients
+  getClients = (options) => {
+    return this.api.send('GET', 'client', options);
+  }
+
   addRole = (options) => {
     return this.api.send('PUT', 'role', options);
   }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Icon, Spin } from 'antd';
 import { connect } from 'react-redux';
+//import IntlMessages from '@components/utility/intlMessages';
 import LayoutWrapper from '@components/utility/layoutWrapper';
 import basicStyle from '@settings/basicStyle';
 import Box from '@components/utility/box';
@@ -114,7 +115,7 @@ class RolesList extends Component {
 
 export default connect(
   state => ({
-    ...state.Roles
+    ...state.Role
   }),
   {
     requestRoles,
