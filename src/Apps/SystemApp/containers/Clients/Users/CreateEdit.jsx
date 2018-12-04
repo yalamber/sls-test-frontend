@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import { Row, Col, Spin } from "antd";
+import { Row, Col, Spin, Message } from "antd";
 import { withRouter } from "react-router-dom";
+import _ from "lodash";
+
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
 import { getErrorDataFromApiResponseError } from "@utils/response-message";
 import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
-import _ from "lodash";
 import Box from "@components/utility/box";
 import UserForm from "./partials/UserForm";
-import { message } from "antd/lib/index";
 import {
   getCompany,
   addUser,
