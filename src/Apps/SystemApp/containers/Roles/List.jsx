@@ -11,7 +11,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '@utils/crud.style';
-import roleActions from '@redux/role/actions';
+import roleActions from '@app/SystemApp/redux/role/actions';
 import ActionButtons from "./partials/ActionButtons";
 const { requestRoles, deleteRole } = roleActions;
 

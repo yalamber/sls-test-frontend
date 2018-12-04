@@ -6,7 +6,12 @@ import agenciesSagas from './agencies/saga';
 import companiesTestManagerSagas from './companies/test-manager/saga';
 import agenciesTestManagerSagas from './agencies/test-manager/saga';
 import companiesUsersSagas from './companies/users/saga';
-import rolesSagas from './role/saga';
+//app sagas
+import systemAppSagas from '@app/SystemApp/redux/sagas';
+import clientAppSagas from '@app/ClientApp/redux/sagas';
+import agencyAppSagas from '@app/AgencyApp/redux/sagas';
+import freelancerAppSagas from '@app/FreelancerApp/redux/sagas';
+
 
 export default function* rootSaga(getState) {
   yield all([
@@ -17,6 +22,10 @@ export default function* rootSaga(getState) {
     companiesTestManagerSagas(),
     agenciesTestManagerSagas(),
     companiesUsersSagas(),
-    rolesSagas()
+    //app sagas
+    systemAppSagas(),
+    clientAppSagas(),
+    agencyAppSagas(),
+    freelancerAppSagas()
   ]);
 }
