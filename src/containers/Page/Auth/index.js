@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import authAction from '@redux/auth/actions';
-import IntlMessages from '@components/utility/intlMessages';
-import { getUserToken } from '@helpers/utility';
+import authActions from '@redux/auth/actions';
+import IntlMessages from '@validations/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 import LoginForm from './partials/loginForm';
 
-const { login } = authAction;
+const { login } = authActions;
 
 class SignIn extends Component {
 
@@ -18,11 +17,26 @@ class SignIn extends Component {
     };  
     this.handleLogin = this.handleLogin.bind(this);
   }
-  
-  componentDidMount(){
-    const token = getUserToken();
-    if (token) {
-       this.props.history.push('/dashboard');
+
+  componentDidMount() {
+    const { 
+      isLoggedIn, 
+      activeAppType, 
+      history
+    } = this.props;
+
+    if(isLoggedIn) {
+      switch(activeAppType) {
+        case 'system':
+          return history.push('/admin');
+        case 'client':
+          return history.push("/my-agency");
+        case 'agency':
+          return history.push("/my-agency");
+        case 'freelancer':
+          return history.push("/my");
+      }
+      history.push('/my');
     }
   }
 
@@ -41,7 +55,8 @@ class SignIn extends Component {
   }
   
   render() {
-    const from = { pathname: '/dashboard' };
+    const { loginProcessing } = this.props;
+    const from = { pathname: '/' };
     const { redirectToReferrer } = this.state;
 
     if (redirectToReferrer) {
@@ -52,10 +67,10 @@ class SignIn extends Component {
         <div className="isoLoginContentWrapper">
           <div className="isoLoginContent">
             <div className="isoLogoWrapper">
-              <IntlMessages id="page.signInTitle" />
+              <h1><IntlMessages id="page.signInTitle" /></h1>
             </div>
             <div className="isoSignInForm">
-              <LoginForm submit={this.handleLogin}/>
+              <LoginForm submit={this.handleLogin} loginProcessing={loginProcessing} />
             </div>
           </div>
         </div>
@@ -66,7 +81,10 @@ class SignIn extends Component {
 
 export default connect(
   state => ({
-    isLoggedIn: state.Auth.userToken !== null ? true : false
+    isLoggedIn: state.Auth.userToken !== null ? true : false,
+    activeCompanyTokenData: state.User.activeCompanyTokenData,
+    activeAppType: state.User.activeAppType,
+    loginProcessing: state.Auth.loginProcessing,
   }),
   { login }
 )(SignIn);

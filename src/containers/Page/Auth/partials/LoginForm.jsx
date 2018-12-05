@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Form, Input, Checkbox} from 'antd';
+import {Form, Input, Checkbox, Spin} from 'antd';
 import {withRouter, Link} from 'react-router-dom'
 import Button from '@components/uielements/button';
 import IntlMessages from '@components/utility/intlMessages';
@@ -15,6 +15,7 @@ class LoginForm extends Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -23,8 +24,10 @@ class LoginForm extends Component {
       }
     });
   }
+
   render() {
-    const {getFieldDecorator} = this.props.form;
+    const { form, loginProcessing } = this.props;
+    const { getFieldDecorator } = form;
     return (
       <div>
         <Form onSubmit={this.handleSubmit} className="login-form">
@@ -43,6 +46,7 @@ class LoginForm extends Component {
                   <Checkbox>
                     <IntlMessages id="page.signInRememberMe" />
                   </Checkbox>
+                  { loginProcessing && <Spin /> }
                   <Button type="primary"  htmlType="submit">
                     <IntlMessages id="page.signInButton" />
                   </Button>
