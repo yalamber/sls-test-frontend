@@ -9,12 +9,12 @@ import authAction from '@redux/auth/actions';
 import userAction from '@redux/user/actions';
 import IntlMessages from '@components/utility/intlMessages';
 import Loader from '@components/utility/loader';
-import TopbarUser from './topbarUser';
-import TopbarClient from './topbarClient';
-import TopbarAgency from './topbarAgency';
-import TopbarWrapper from './topbar.style';
 import { themeConfig } from '@settings';
 import themes from '@settings/themes';
+import TopbarUser from './TopbarUser';
+import TopbarClient from './TopbarClient';
+import TopbarAgency from './TopbarAgency';
+import TopbarWrapper from './topbar.style';
 
 const { Header } = Layout;
 const { toggleCollapsed, closeAll } = appActions;

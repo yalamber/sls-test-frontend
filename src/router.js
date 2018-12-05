@@ -49,19 +49,19 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
         <Route
           exact
           path={"/"}
-          component={asyncComponent(() => import("./containers/Page/auth"))}
+          component={asyncComponent(() => import("./containers/Page/Auth"))}
         />
         <Route
           exact
           path={'/request-account'}
-          component={asyncComponent(() => import('./containers/Page/auth/request-account'))}
+          component={asyncComponent(() => import('./containers/Page/Auth/RequestAccount'))}
         />
         <AppWrappedRoute appType="system" path="/admin" isLoggedIn={isLoggedIn} />
         <AppWrappedRoute appType="agency" path="/my-agency" isLoggedIn={isLoggedIn} />
         <AppWrappedRoute appType="client" path="/my-client" isLoggedIn={isLoggedIn} />
         <AppWrappedRoute appType="freelancer" path="/freelancer" isLoggedIn={isLoggedIn} />
         <RestrictedRoute path="/settings" isLoggedIn={isLoggedIn} />
-        <Route path="*" component={asyncComponent(() => import('./containers/Page/common/404'))}/>
+        <Route path="*" component={asyncComponent(() => import('./containers/Page/Common/404'))}/>
       </Switch>
     </ConnectedRouter>
   );

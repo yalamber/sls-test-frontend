@@ -3,7 +3,7 @@ import asyncComponent from '@helpers/AsyncFunc';
 const routes = [
   {
     path: '',
-    component: asyncComponent( () => import('@page/dashboard'))
+    component: asyncComponent( () => import('@page/Dashboard'))
   },
   {
     path: 'agencies',
