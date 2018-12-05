@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import authActions from '@redux/auth/actions';
 import IntlMessages from '@components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
-import LoginForm from './partials/loginForm';
+import LoginForm from './partials/LoginForm';
 
 const { login } = authActions;
 
