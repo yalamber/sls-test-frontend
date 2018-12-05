@@ -1,8 +1,7 @@
 import SWQA from './swqa-sdk';
 import { getUserToken, getCompanyToken } from './utility';
 
-let baseURL = "https://usqxdzop5m.execute-api.us-east-1.amazonaws.com/dev/";
-baseURL = "http://localhost:8080/";
+let baseURL = process.env.REACT_APP_API_BASE_URL;
 
 let SWQAClient = new SWQA({
   baseURL,
