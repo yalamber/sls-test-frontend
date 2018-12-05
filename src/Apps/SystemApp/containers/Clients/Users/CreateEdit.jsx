@@ -70,6 +70,8 @@ class Create extends Component {
                 <UserForm
                   relId={match.params.clientId}
                   userType="clientUser"
+                  history={history}
+                  handleSubmit={this.handleSubmit}
                   roles={clientUserRoles.rows}
                 />
               </Spin>

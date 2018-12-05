@@ -14,9 +14,9 @@ const RadioGroup = Radio.Group;
 const InputGroup = Input.Group;
 
 const margin = {
-  margin: "5px 5px 0px 0"
+  margin: "5px 5px 0px 0",
+  justifyContent: "space-between"
 };
-
 //Responsive span
 const formResSpan = {
   xl: { span: 12 },
@@ -28,16 +28,11 @@ class UserForm extends Component {
   constructor() {
     super();
     this.state = {
-      passwordType: false,
-      isIMInput1Hidden: true,
-      isIMInput2Hidden: true,
-      selected: []
+      passwordType: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.generatePassword = this.generatePassword.bind(this);
     this.resetForm = this.resetForm.bind(this);
-    this.onIMSelectChange1 = this.onIMSelectChange1.bind(this);
-    this.onIMSelectChange2 = this.onIMSelectChange2.bind(this);
   }
 
   handleSubmit(e) {
@@ -84,35 +79,27 @@ class UserForm extends Component {
     return { rules: [{ min: 6 }] };
   }
 
-  renderIMSelect({ name, onChange = () => {} }) {
+  getIMServiceSelector(name) {
     const { getFieldDecorator } = this.props.form;
-
-    return (
-      <FormItem style={margin} label="Services">
-        {getFieldDecorator(name, {
-          rules: userValidation.genericRequiredRule
-        })(
-          <Select style={{ width: 120 }} onChange={onChange}>
-            <Option value="skype">Skype</Option>
-            <Option value="whatsapp">WhatsApp Messenger</Option>
-            <Option value="facebook">Facebook Messenger</Option>
-            <Option value="viber">Viber</Option>
-            <Option value="wechat">WeChat</Option>
-            <Option value="bbm">BBM</Option>
-            <Option value="telgram">Telegram</Option>
-            <Option value="line">LINE</Option>
-            <Option value="zalo">Zalo</Option>
-          </Select>
-        )}
-      </FormItem>
+    return getFieldDecorator(name, {
+      initialValue: '',
+    })(
+      <Select style={{ width: 120 }}>
+        <Option value="skype">Skype</Option>
+        <Option value="whatsapp">WhatsApp Messenger</Option>
+        <Option value="facebook">Facebook Messenger</Option>
+        <Option value="viber">Viber</Option>
+        <Option value="wechat">WeChat</Option>
+        <Option value="bbm">BBM</Option>
+        <Option value="telgram">Telegram</Option>
+        <Option value="line">LINE</Option>
+        <Option value="zalo">Zalo</Option>
+      </Select>
     );
   }
 
-  renderIMinput({ name, isHidden = true }) {
+  renderIMinput({ name }) {
     const { getFieldDecorator } = this.props.form;
-    if (isHidden === true) {
-      return <div />;
-    }
     return (
       <FormItem style={margin} label="Instant Messaging:">
         {getFieldDecorator(name)(<Input style={{ width: 120 }} />)}
@@ -158,13 +145,13 @@ class UserForm extends Component {
   }
 
   render() {
+    const { history, form } = this.props;
+    const { getFieldDecorator } = form;
     const statusOptions = userStatus.map(status => (
       <Option key={status.id} value={status.id}>
         {status.name}
       </Option>
     ));
-    const { getFieldDecorator } = this.props.form;
-    
     return (
       <div>
         <Form onSubmit={this.handleSubmit} id="clientForm">
@@ -237,34 +224,20 @@ class UserForm extends Component {
                         rules: userValidation.client
                       })(<Input placeholder="Enter SMS Phone" />)}
                     </FormItem>
-                    <Row>
-                      <Col span={12}>
-                        {this.renderIMSelect({
-                          name: 'instantMessengerInfos[0]["service"]',
-                          onChange: this.onIMSelectChange1
-                        })}
-                      </Col>
-                      <Col span={12}>
-                        {this.renderIMinput({
-                          isHidden: this.state.isIMInput1Hidden,
-                          name: 'instantMessengerInfos[0]["messengerId"]'
-                        })}
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12}>
-                        {this.renderIMSelect({
-                          name: 'instantMessengerInfos[1]["service"]',
-                          onChange: this.onIMSelectChange2
-                        })}
-                      </Col>
-                      <Col span={12}>
-                        {this.renderIMinput({
-                          isHidden: this.state.isIMInput2Hidden,
-                          name: 'instantMessengerInfos[1]["messengerId"]'
-                        })}
-                      </Col>
-                    </Row>
+                    <FormItem style={margin} label="Instant Messaging: ">
+                      {getFieldDecorator('instantMessengerInfos[0]["messengerId"]', {
+                        rules: [{ required: true, message: 'Please input your phone number!' }],
+                      })(
+                        <Input addonBefore={this.getIMServiceSelector('instantMessengerInfos[0]["service"]')} style={{ width: '100%' }} />
+                      )}
+                    </FormItem>
+                    <FormItem>
+                      {getFieldDecorator('instantMessengerInfos[1]["messengerId"]', {
+                        rules: [{ required: true, message: 'Please input your phone number!' }],
+                      })(
+                        <Input addonBefore={this.getIMServiceSelector('instantMessengerInfos[1]["service"]')} style={{ width: '100%' }} />
+                      )}
+                    </FormItem>
                   </Col>
                 </Row>
               </Card>
@@ -297,10 +270,11 @@ class UserForm extends Component {
               type="primary"
               style={margin}
               icon="left"
-              onClick={() => this.props.history.goBack()}
+              onClick={() => history.goBack()}
             >
               Cancel
             </Button>
+
             <Button
               id="btnSubmit"
               type="primary"
