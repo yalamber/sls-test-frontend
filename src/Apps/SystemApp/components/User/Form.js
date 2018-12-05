@@ -1,17 +1,11 @@
 import React, { Component } from "react";
 import { Form, Select, Row, Col, Input, Radio, Icon } from "antd";
-import { withRouter } from "react-router-dom";
 import Button from "@components/uielements/button";
+import { generateRandomPassword } from '@helpers/utility';
 import { userValidation } from "@validations/usersValidation";
 import { ActionWrapper } from "@utils/crud.style";
 import Card from "@components/uielements/styles/card.style";
-import {
-  getCompany,
-  getAgency,
-  getRoles
-} from "@helpers/http-api-client";
 import { userStatus } from "@constants/userStatus";
-import Errors from "@utils/Errors";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -34,56 +28,16 @@ class UserForm extends Component {
   constructor() {
     super();
     this.state = {
-      status: userStatus,
-      roles: [],
       passwordType: false,
       isIMInput1Hidden: true,
       isIMInput2Hidden: true,
       selected: []
     };
-    this.fetchData = this.fetchData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.generatePassword = this.generatePassword.bind(this);
     this.resetForm = this.resetForm.bind(this);
     this.onIMSelectChange1 = this.onIMSelectChange1.bind(this);
     this.onIMSelectChange2 = this.onIMSelectChange2.bind(this);
-  }
-
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  async fetchData() {
-    //get company teams and roles
-    try {
-      let roles = await getRoles({
-        query: {
-          type: this.props.userType
-        },
-        paginationOptions: {
-          defaultCurrent: 1,
-          current: 1,
-          pageSize: 20,
-          total: 1
-        }
-      });
-      switch (this.props.userType) {
-        case "clientUser":
-          let company = await getCompany(this.props.relId);
-          this.setState({
-            roles: roles.data.rows,
-            company: company.data
-          });
-          break;
-        case "agencyUser":
-          let agency = await getAgency(this.props.relId);
-          this.setState({
-            roles: roles.data.rows,
-            agency: agency.data
-          });
-          break;
-      }
-    } catch (e) {}
   }
 
   handleSubmit(e) {
@@ -100,23 +54,12 @@ class UserForm extends Component {
     this.props.form.resetFields();
   }
 
-  generateRandom() {
-    let length = 8,
-      charset =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-      retVal = "";
-    for (let i = 0, n = charset.length; i < length; ++i) {
-      retVal += charset.charAt(Math.floor(Math.random() * n));
-    }
-    return retVal;
-  }
-
   generatePassword(e) {
     this.setState({ passwordType: !this.state.passwordType });
     let password = "";
     if (e.target.value) {
       this.props.form.setFieldsValue({
-        password: this.generateRandom()
+        password: generateRandomPassword()
       });
     } else {
       this.props.form.setFieldsValue({
@@ -138,7 +81,6 @@ class UserForm extends Component {
         rules: userValidation.password
       };
     }
-
     return { rules: [{ min: 6 }] };
   }
 
@@ -179,54 +121,50 @@ class UserForm extends Component {
   }
 
   renderRoleColumn() {
-    const roleOptions = this.state.roles.map(role => (
+    const roleOptions = this.props.roles.map(role => (
       <Option key={role.roleId} value={role.roleId}>
         {role.title}
       </Option>
     ));
     const { getFieldDecorator } = this.props.form;
-    if (this.props.formType === "create") {
-      return (
-        <Col {...formResSpan}>
-          <Card title="Role">
-            <FormItem style={margin} label="Select Role">
-              <InputGroup size="large">
-                <Col span={22}>
-                  {getFieldDecorator("role", {
-                    rules: userValidation.role
-                  })(
-                    <Select
-                      showSearch
-                      filterOption={(input, option) =>
-                        option.props.children
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
-                      placeholder="Please choose role"
-                      style={{ width: "100%" }}
-                    >
-                      {roleOptions}
-                    </Select>
-                  )}
-                </Col>
-              </InputGroup>
-            </FormItem>
-          </Card>
-        </Col>
-      );
-    } else {
-      return <div />;
-    }
+    return (
+      <Col {...formResSpan}>
+        <Card title="Role">
+          <FormItem style={margin} label="Select Role">
+            <InputGroup size="large">
+              <Col span={22}>
+                {getFieldDecorator("role", {
+                  rules: userValidation.role
+                })(
+                  <Select
+                    showSearch
+                    filterOption={(input, option) =>
+                      option.props.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
+                    placeholder="Please choose role"
+                    style={{ width: "100%" }}
+                  >
+                    {roleOptions}
+                  </Select>
+                )}
+              </Col>
+            </InputGroup>
+          </FormItem>
+        </Card>
+      </Col>
+    );
   }
 
   render() {
-    const statusOptions = this.state.status.map(status => (
+    const statusOptions = userStatus.map(status => (
       <Option key={status.id} value={status.id}>
         {status.name}
       </Option>
     ));
     const { getFieldDecorator } = this.props.form;
-
+    
     return (
       <div>
         <Form onSubmit={this.handleSubmit} id="clientForm">
@@ -351,11 +289,7 @@ class UserForm extends Component {
           </Row>
           <Row style={margin}>
             <Col span={24}>
-              {this.props.errors.details.length ? (
-                <Errors errors={this.props.errors} />
-              ) : (
-                ""
-              )}
+            
             </Col>
           </Row>
           <ActionWrapper style={margin}>
@@ -435,4 +369,4 @@ const mapPropsToFields = props => {
   };
 };
 const form = Form.create({ mapPropsToFields })(UserForm);
-export default withRouter(form);
+export default form;

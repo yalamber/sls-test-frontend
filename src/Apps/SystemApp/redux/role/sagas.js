@@ -7,10 +7,14 @@ export function* requestRoleList() {
   yield takeLatest(actions.REQUEST_ROLE_LIST, function* ({ payload }) {
     try {
       let offset = payload.pageSize * (payload.page - 1);
-      const data = yield call(SWQAClient.getRoles, {
+      const params = {
         offset,
-        limit: payload.pageSize
-      });
+        limit: payload.pageSize,
+      };
+      if(payload.type) {
+        params.type = payload.type;
+      }
+      const data = yield call(SWQAClient.getRoles, params);
       yield put(actions.receiveRoles({
         data,
         paginationOptions: {

@@ -99,6 +99,10 @@ class SWQA {
   getClientUsers = (clientId, options) => {
     return this.api.send('GET', `client/${clientId}/user`, options);
   }
+  //users
+  getUser = (userId) => {
+    return this.api.send('GET', `user/${userId}`);
+  }
 
   //roles
   addRole = (options) => {

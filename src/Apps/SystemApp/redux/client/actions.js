@@ -12,7 +12,15 @@ const actions = {
   REQUEST_CLIENT_USER_LIST: 'REQUEST_CLIENT_USER_LIST',
   RECEIVE_CLIENT_USER_LIST: 'RECEIVE_CLIENT_USER_LIST',
   ERROR_CLIENT_USER_LIST: 'ERROR_CLIENT_USER_LIST',
-  //action creators
+  //client USER
+  REQUEST_CURRENT_CLIENT_USER: 'REQUEST_CURRENT_CLIENT_USER',
+  RECEIVE_CURRENT_CLIENT_USER: 'RECEIVE_CURRENT_CLIENT_USER',
+  ERROR_CURRENT_CLIENT_USER: 'ERROR_CURRENT_CLIENT_USER',
+  //client user roles
+  REQUEST_CLIENT_USER_ROLES: 'REQUEST_CLIENT_USER_ROLES',
+  RECEIVE_CLIENT_USER_ROLES: 'RECEIVE_CLIENT_USER_ROLES',
+  ERROR_CLIENT_USER_ROLES: 'ERROR_CLIENT_USER_ROLES',
+  //current client creators
   requestCurrentClient: (clientId) => ({
     type: actions.REQUEST_CURRENT_CLIENT,
     clientId
@@ -21,6 +29,7 @@ const actions = {
     type: actions.RECEIVE_CURRENT_CLIENT,
     clientData
   }),
+  //clients list
   requestClients: (payload) => ({
     type: actions.REQUEST_CLIENT_LIST,
     payload
@@ -29,10 +38,12 @@ const actions = {
     type: actions.RECEIVE_CLIENT_LIST,
     payload
   }),
+  //delete client
   deleteClient: (clientId) => ( {
     type: actions.REQUEST_DELETE_CLIENT,
     clientId
   }),
+  //client users list
   requestClientUsers: (clientId, options) => ({
     type: actions.REQUEST_CLIENT_USER_LIST,
     clientId,
@@ -41,7 +52,24 @@ const actions = {
   receiveClientUsers: (payload) => ({
     type: actions.RECEIVE_CLIENT_USER_LIST,
     payload
-  })
+  }),
+  //current client user
+  requestCurrentClientUser: (userId) => ({
+    type: actions.REQUEST_CURRENT_CLIENT_USER,
+    userId
+  }),
+  receiveCurrentClientUser: (userData) => ({
+    type: actions.RECEIVE_CURRENT_CLIENT_USER,
+    userData
+  }),
+  //client roles
+  requestClientUserRoles: () => ({
+    type: actions.REQUEST_CLIENT_USER_ROLES
+  }),
+  receiveClientUserRoles: (roles = []) => ({
+    type: actions.RECEIVE_CLIENT_USER_ROLES,
+    roles
+  }),
 };
 
 export default actions;

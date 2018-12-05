@@ -10,7 +10,7 @@ import { getErrorDataFromApiResponseError } from "@utils/response-message";
 import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
 import { getAgency, addAgencyUser, addUserToAgency, editUser } from "@helpers/http-api-client";
 import Box from "@components/utility/box";
-import UserForm from "../../Clients/Users/partials/UserForm";
+import UserForm from "@app/SystemApp/components/User/Form";
 
 class Create extends Component {
   constructor() {
