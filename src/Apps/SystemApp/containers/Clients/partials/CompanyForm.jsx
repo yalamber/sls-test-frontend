@@ -7,9 +7,9 @@ import Button from '@components/uielements/button';
 import {
   ActionWrapper,
 } from '@utils/crud.style';
-import {companyValidation} from "@validations/companyValidation";
-import {userValidation} from "@validations/usersValidation";
-import {generatePassword} from "@helpers/utility";
+import { companyValidation } from "@validations/companyValidation";
+import { userValidation } from "@validations/usersValidation";
+import { generateRandomPassword } from "@helpers/utility";
 import Card from "@components/uielements/styles/card.style";
 
 const FormItem = Form.Item;
@@ -31,7 +31,7 @@ class CompanyForm extends Component {
     this.setState({passwordType: !this.state.passwordType});
     if (e.target.value) {
       this.props.form.setFieldsValue({
-        user: {password: generatePassword()}
+        user: {password: generateRandomPassword()}
       });
     } else {
       this.props.form.setFieldsValue({

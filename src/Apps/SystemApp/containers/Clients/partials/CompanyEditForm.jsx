@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
+import {Icon, Row, Col, Input } from 'antd';
 import { withRouter } from 'react-router-dom';
-import { Input } from 'antd';
 import Form from '@components/uielements/form';
 import Button from '@components/uielements/button';
-import {Icon, Row, Col} from 'antd';
+import { generateRandomPassword } from '@helpers/utility';
 import {
   ActionWrapper,
 } from '@utils/crud.style';
 import {companyValidation} from "@validations/companyValidation";
-import {generatePassword} from "@helpers/utility";
 
 const FormItem = Form.Item;
 
@@ -27,7 +26,7 @@ class CompanyForm extends Component {
     this.setState({passwordType: !this.state.passwordType});
     if (e.target.value) {
       this.props.form.setFieldsValue({
-        user: {password: generatePassword()}
+        user: {password: generateRandomPassword()}
       });
     } else {
       this.props.form.setFieldsValue({

@@ -109,7 +109,7 @@ export function timeDifference(givenTime) {
   return getTime();
 }
 
-export function generatePassword() {
+export function generateRandomPassword() {
   let length = 8,
     charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
     retVal = "";
