@@ -76,11 +76,19 @@ export function* errorClientUserList() {
   });
 }
 
-//request current client user
+//request clear current client user
+export function* requestClearCurrentClientUser() {
+  yield takeLatest(actions.REQUEST_CLEAR_CURRENT_CLIENT_USER, function* () {
+    yield put({
+      type: actions.CLEAR_CURRENT_CLIENT_USER
+    });
+  });
+}
+
 export function* requestCurrentClientUser() {
-  yield takeLatest(actions.REQUEST_CURRENT_CLIENT_USER, function* ({ userId }) {
+  yield takeLatest(actions.REQUEST_CURRENT_CLIENT_USER, function* ({ clientId, userId }) {
     try {
-      const data = yield call(SWQAClient.getUser, userId);
+      const data = yield call(SWQAClient.getClientUser, clientId, userId);
       yield put(actions.receiveCurrentClientUser(data));
     } catch (e) {
       yield put({ type: actions.ERROR_CURRENT_CLIENT_USER, error: e });
@@ -88,6 +96,26 @@ export function* requestCurrentClientUser() {
   });
 }
 
+//creat client user
+export function* requestCreateClientUser() {
+  yield takeLatest(actions.REQUEST_CREATE_CLIENT_USER, function* ({ clientId, userData, history }) {
+    try {
+      console.log('here in saga land');
+      console.log(clientId, userData);
+      const data = yield call(SWQAClient.createUser, userData);
+
+      /*const membership = yield call(SWQAClient.addClientUser, clientId, {
+        status: userData.status,
+        roleId: userData.roleId,
+        userId: userData.userId
+      });*/
+
+    } catch (e) {
+      console.log(e);
+      yield put({ type: actions.ERROR_CREATE_CLIENT_USER, error: e });
+    }
+  });
+}
 //error current client
 export function* errorCurrentClientUser() {
   yield takeEvery(actions.ERROR_CURRENT_CLIENT_USER, function*({ error }) {
@@ -119,7 +147,6 @@ export function* errorClientRoles() {
 }
 
 
-
 export default function* rootSaga() {
   yield all([
     fork(requestClientList),
@@ -136,5 +163,10 @@ export default function* rootSaga() {
 
     fork(requestClientRoles),
     fork(errorClientRoles),
+
+    fork(requestClearCurrentClientUser),
+
+    fork(requestCreateClientUser),
+
   ]);
 }

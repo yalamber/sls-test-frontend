@@ -95,7 +95,7 @@ const routes = [
     component: asyncComponent(() => import('./containers/Clients/Users/CreateEdit'))
   },
   {
-    path: 'client/:clientId/user/:userId/detail',
+    path: 'client/:clientId/user/:userId/details',
     exact: true,
     component: asyncComponent(() => import('./containers/Clients/Users/Detail'))
   },

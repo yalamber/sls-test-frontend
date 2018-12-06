@@ -36,7 +36,7 @@ class List extends Component {
         key: "actions",
         render: row => <ActionButtons 
           row={row}
-          cilentId={props.match.params.clientId}
+          clientId={props.match.params.clientId}
           history={this.props.history} />
       }
     ];
