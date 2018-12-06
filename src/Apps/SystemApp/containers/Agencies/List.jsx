@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { Row, Col, Icon, Spin, message } from "antd";
+import { Icon, message } from "antd";
+import IntlMessages from "@components/utility/intlMessages";
 import { connect } from "react-redux";
-import { bindActionCreators } from 'redux';
-import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
-import basicStyle from "@settings/basicStyle";
-import Box from "@components/utility/box";
+import { bindActionCreators } from "redux";
+// import PageHeader from "@components/utility/pageHeader";
+import TableListing from "@commons/table/tableListing";
 import { deleteAgency } from "@helpers/http-api-client";
 import ActionButtons from "./partials/ActionButtons";
 import TestManagerActionButtons from "./TestManager/partials/ActionButtons";
@@ -13,8 +12,7 @@ import {
   ActionBtn,
   TitleWrapper,
   ButtonHolders,
-  ComponentTitle,
-  TableClickable as Table
+  ComponentTitle
 } from "@utils/crud.style";
 import * as agenciesListActions from "@redux/agencies/actions";
 import { getDefaultPaginationOptions } from "@utils/default-objects";
@@ -22,38 +20,45 @@ import { getDefaultPaginationOptions } from "@utils/default-objects";
 class List extends Component {
   constructor(props) {
     super(props);
+    this.columns = [
+      {
+        title: "Agency Name",
+        dataIndex: "name",
+        key: "name",
+        sorter: true
+      },
+      {
+        title: "Agency Admin",
+        dataIndex: "owner.username",
+        key: "owner.username",
+        sorter: true
+      },
+      {
+        title: "Location",
+        dataIndex: "location",
+        key: "location",
+        sorter: true
+      },
+      {
+        title: <IntlMessages id="client.testManagerActions"/>,
+        key: "testManagerActions",
+        render: row => <TestManagerActionButtons
+          row={row}
+          history={this.props.history}
+          delete={this.handleDelete}
+          setCurrentAgency={props.setCurrentAgency} />
+      },
+      {
+        title: <IntlMessages id="actions"/>,
+        key: "actions",
+        render: row => <ActionButtons
+          row={row}
+          history={this.props.history}
+          delete={this.handleDelete}
+          setCurrentAgency={props.setCurrentAgency} />
+      }
+    ];
     this.state = {
-      columns: [
-        {
-          title: "Agency Name",
-          dataIndex: "name",
-          key: "name",
-          sorter: true
-        },
-        {
-          title: "Agency Admin",
-          dataIndex: "owner.username",
-          key: "owner.username",
-          sorter: true
-        },
-        {
-          title: "Location",
-          dataIndex: "location",
-          key: "location",
-          sorter: true
-        },
-        {
-          title: "Test Manager Actions",
-          key: "testManagerActions",
-          render: row => <TestManagerActionButtons row={row} />
-        },
-        {
-          title: "Actions",
-          key: "actions",
-          render: row => <ActionButtons row={row} delete={this.handleDelete} />
-        }
-      ],
-      data: [],
       paginationOptions: getDefaultPaginationOptions().paginationOptions
     };
     // this.fetchData = this.fetchData.bind(this);
@@ -73,7 +78,8 @@ class List extends Component {
           current: page,
           pageSize
         }
-      }, () => {
+      },
+      () => {
         const { paginationOptions } = this.state;
         this.props.actions.agenciesListFetch({ paginationOptions });
       }
@@ -93,65 +99,63 @@ class List extends Component {
   }
 
   render() {
-    const { rowStyle, colStyle, gutter } = basicStyle;
-    const { rows, loading } = this.props.Agencies;
+    const { history, Agencies: { loading, rows }  } = this.props;
 
-    return (
-      <LayoutWrapper>
-        <PageHeader>
-           Agencies
-        </PageHeader>
+    const params = {
+      history,
+      loading: loading,
+      components: {
+        TitleWrapperWithContents: () => (
+          <TitleWrapper>
+            <ComponentTitle>
+              <IntlMessages id="agencies" />
+            </ComponentTitle>
+            <ButtonHolders>
+              <ActionBtn
+                type="primary"
+                onClick={() => {
+                  history.push("agency/create");
+                }}
+              >
+                <Icon type="plus" />
+                <IntlMessages id="agency.add" />
+              </ActionBtn>
+            </ButtonHolders>
+          </TitleWrapper>
+        )
+      },
+      tableOptions: {
+        pagination: {
+          ...this.getPaginationOptions(),
+          onChange: this.onTablePaginationChange
+        },
+        rowKey: "agencyId",
+        columns: this.columns,
+        dataSource: rows,
+        onRow: row => ({
+          onDoubleClick: () => {
+            history.push(`client/${row.agencyId}/details`);
+          }
+        })
+      }
+    };
 
-        <Row style={rowStyle} gutter={gutter} justify="start">
-          <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>
-              <TitleWrapper>
-                <ComponentTitle />
-                <ButtonHolders>
-                  <ActionBtn
-                    type="primary"
-                    onClick={() => {
-                      this.props.history.push("/dashboard/agency/create");
-                    }}
-                  >
-                    + Create Agency
-                  </ActionBtn>
-                </ButtonHolders>
-              </TitleWrapper>
-              <Spin spinning={loading}>
-                <Table
-                  pagination={{
-                    ...this.getPaginationOptions(),
-                    onChange: this.onTablePaginationChange
-                  }}
-                  rowKey="agencyId"
-                  columns={this.state.columns}
-                  dataSource={rows}
-                  onRow={row => ({
-                    onDoubleClick: () => {
-                      // this.props.history.push('details/' + row.clientId)
-                      //this.props.history.push(`details/${row.clientId}`);
-                    }
-                  })}
-                />
-              </Spin>
-            </Box>
-          </Col>
-        </Row>
-      </LayoutWrapper>
-    );
+    return <TableListing {...params} />;
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     ...state
   };
 };
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     actions: bindActionCreators(agenciesListActions, dispatch)
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(List);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(List);

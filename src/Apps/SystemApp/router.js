@@ -14,15 +14,15 @@ const routes = [
     component: asyncComponent(() => import('./containers/Agencies/Create'))
   },
   {
-    path: 'agency/edit/:id',
+    path: 'agency/:id/edit',
     component: asyncComponent(() => import('./containers/Agencies/Edit'))
   },
   {
-    path: 'agency/Users/:agencyId',
+    path: 'agency/:agencyId/Users',
     component: asyncComponent(() => import('./containers/Agencies/Users/List'))
   },
   {
-    path: 'agency/teams/:agencyId',
+    path: 'agency/:agencyId/teams',
     component: asyncComponent(() => import('./containers/Agencies/Teams/List'))
   },
   {
@@ -167,15 +167,15 @@ const routes = [
   //Users
   {
     path: "users",
-    component: asyncComponent(() => import("./containers/Users/List.jsx"))
+    component: asyncComponent(() => import("./containers/SystemUsers/List.jsx"))
   },
   {
     path: "user/create",
-    component: asyncComponent(() => import("./containers/Users/CreateEdit.jsx"))
+    component: asyncComponent(() => import("./containers/SystemUsers/CreateEdit.jsx"))
   },
   {
     path: "user/:userId/edit",
-    component: asyncComponent(() => import("./containers/Users/CreateEdit.jsx"))
+    component: asyncComponent(() => import("./containers/SystemUsers/CreateEdit.jsx"))
   }
 ];
 
