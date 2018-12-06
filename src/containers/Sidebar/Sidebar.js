@@ -121,12 +121,12 @@ class Sidebar extends Component {
   };
 
   render() {
-    const { app, toggleOpenDrawer, height, user } = this.props;
+    const { app, toggleOpenDrawer, height, my } = this.props;
     const collapsed = clone(app.collapsed) && !clone(app.openDrawer);
     const { openDrawer } = app;
 
     const mode = collapsed === true ? 'vertical' : 'inline';
-    const onMouseEnter = event => {
+    const onMouseEnter = () => {
       if (openDrawer === false) {
         toggleOpenDrawer();
       }
@@ -151,7 +151,7 @@ class Sidebar extends Component {
     };
     //get active options
     let activeOptions = [];
-    switch(user.activeAppType) {
+    switch(my.activeAppType) {
       case 'system':
         activeOptions = options.systemAdminOptions;
       break;
@@ -203,7 +203,7 @@ export default connect(
   state => ({
     app: state.App,
     height: state.App.height,
-    user: state.User,
+    my: state.My,
     auth: state.auth
   }),
   { toggleOpenDrawer, changeOpenKeys, changeCurrent, toggleCollapsed }

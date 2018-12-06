@@ -1,6 +1,6 @@
 import { all } from 'redux-saga/effects';
 import authSagas from './auth/saga';
-import userSagas from './user/saga';
+import mySagas from './my/saga';
 import companiesSagas from './companies/saga';
 import agenciesSagas from './agencies/saga';
 import companiesTestManagerSagas from './companies/test-manager/saga';
@@ -16,7 +16,7 @@ import freelancerAppSagas from '@app/FreelancerApp/redux/sagas';
 export default function* rootSaga(getState) {
   yield all([
     authSagas(),
-    userSagas(),
+    mySagas(),
     companiesSagas(),
     agenciesSagas(),
     companiesTestManagerSagas(),

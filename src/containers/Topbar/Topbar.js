@@ -3,20 +3,25 @@ import { connect } from 'react-redux';
 import { Layout } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { get, isEmpty } from 'lodash';
-
-import appActions from '@redux/app/actions';
-import authAction from '@redux/auth/actions';
-import userAction from '@redux/user/actions';
+//ui
 import IntlMessages from '@components/utility/intlMessages';
 import Loader from '@components/utility/loader';
+//actions
+import appActions from '@redux/app/actions';
+import authAction from '@redux/auth/actions';
+import myAction from '@redux/my/actions';
+//settings
 import { themeConfig } from '@settings';
 import themes from '@settings/themes';
+//components
 import TopbarUser from './TopbarUser';
 import TopbarClient from './TopbarClient';
 import TopbarAgency from './TopbarAgency';
 import TopbarWrapper from './topbar.style';
 
 const { Header } = Layout;
+const customizedTheme = themes[themeConfig.theme];
+
 const { toggleCollapsed, closeAll } = appActions;
 const { logout } = authAction;
 const {
@@ -25,8 +30,7 @@ const {
   requestMyClients,
   requestClientLogin,
   switchSystemAdmin
-} = userAction;
-const customizedTheme = themes[themeConfig.theme];
+} = myAction;
 
 class Topbar extends Component {
 
@@ -159,7 +163,7 @@ class Topbar extends Component {
 export default connect(
   state => ({
     ...state.App,
-    ...state.User,
+    ...state.My,
     ...state.Auth
   }),
   {
