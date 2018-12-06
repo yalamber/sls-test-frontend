@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Icon, Spin } from 'antd';
 import { connect } from 'react-redux';
-//import IntlMessages from '@components/utility/intlMessages';
+import IntlMessages from '@components/utility/intlMessages';
 import LayoutWrapper from '@components/utility/layoutWrapper';
 import basicStyle from '@settings/basicStyle';
 import Box from '@components/utility/box';
@@ -12,9 +12,10 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '@utils/crud.style';
-import userActions from '@app/SystemApp/redux/user/actions';
+import systemUserActions from '@app/SystemApp/redux/systemUser/actions';
 import ActionButtons from "./partials/ActionButtons";
-const { requestSystemUsers, deleteSystemUser } = userActions;
+
+const { requestSystemUsers, deleteSystemUser } = systemUserActions;
 
 class UsersList extends Component {
   constructor(props) {
@@ -69,7 +70,7 @@ class UsersList extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>System Users</ComponentTitle>
+                <ComponentTitle><IntlMessages id="system.users" /></ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn type="primary" onClick={() => {
                     history.push('user/create')
