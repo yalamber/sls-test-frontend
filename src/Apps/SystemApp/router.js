@@ -89,7 +89,16 @@ const routes = [
     exact: true,
     component: asyncComponent(() => import('./containers/Clients/Users/CreateEdit'))
   },
-  //TODO: edit
+  {
+    path: 'client/:clientId/user/:userId/edit',
+    exact: true,
+    component: asyncComponent(() => import('./containers/Clients/Users/CreateEdit'))
+  },
+  {
+    path: 'client/:clientId/user/:userId/detail',
+    exact: true,
+    component: asyncComponent(() => import('./containers/Clients/Users/Detail'))
+  },
   //client teams
   {
     path: 'client/:clientId/teams',
@@ -100,21 +109,17 @@ const routes = [
     component: asyncComponent(() => import('./containers/Clients/Teams/Create'))
   },
   {
-    path: 'client/teams/edit/:teamId',
+    path: 'client/:clientId/team/:teamId/edit',
     component: asyncComponent(() => import('./containers/Clients/Teams/Edit'))
   },
   {
-    path: 'client/teams/:teamId/members',
+    path: 'client/:clientId/team/:teamId/members',
     component: asyncComponent(() => import('./containers/Clients/Teams/Members/List'))
   },
   {
-    path: 'client/teams/:teamId/member/add',
+    path: 'client/:clientId/team/:teamId/member/add',
     exact: true,
     component: asyncComponent(() => import('./containers/Clients/Teams/Members/CreateEdit'))
-  },
-  {
-    path: 'client/user/:clientId/edit/:userId',
-    component: asyncComponent(() => import('./containers/Clients/Users/CreateEdit'))
   },
 
   /* test manager */
@@ -156,8 +161,21 @@ const routes = [
     component: asyncComponent(() => import("./containers/Roles/CreateEdit.jsx"))
   },
   {
-    path: "role/edit",
+    path: "role/:roleId/edit",
     component: asyncComponent(() => import("./containers/Roles/CreateEdit.jsx"))
+  },
+  //Users
+  {
+    path: "users",
+    component: asyncComponent(() => import("./containers/Users/List.jsx"))
+  },
+  {
+    path: "user/create",
+    component: asyncComponent(() => import("./containers/Users/CreateEdit.jsx"))
+  },
+  {
+    path: "user/:userId/edit",
+    component: asyncComponent(() => import("./containers/Users/CreateEdit.jsx"))
   }
 ];
 

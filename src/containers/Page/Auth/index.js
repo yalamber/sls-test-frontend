@@ -82,8 +82,8 @@ class SignIn extends Component {
 export default connect(
   state => ({
     isLoggedIn: state.Auth.userToken !== null ? true : false,
-    activeCompanyTokenData: state.User.activeCompanyTokenData,
-    activeAppType: state.User.activeAppType,
+    activeCompanyTokenData: state.My.activeCompanyTokenData,
+    activeAppType: state.My.activeAppType,
     loginProcessing: state.Auth.loginProcessing,
   }),
   { login }

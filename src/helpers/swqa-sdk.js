@@ -99,22 +99,48 @@ class SWQA {
   getClientUsers = (clientId, options) => {
     return this.api.send('GET', `client/${clientId}/user`, options);
   }
+
+  addClientUser = (clientId, payload) => {
+    return this.api.send('POST', `client/${clientId}/user`, payload);
+  }
+
   //users
+  createUser = (payload) => {
+    return this.api.send('POST', `user`, payload);
+  }
+
   getUser = (userId) => {
     return this.api.send('GET', `user/${userId}`);
   }
 
+  getUsers = (options) => {
+    return this.api.send('GET', `user`, options);
+  }
+
+  updateUser = (userId, userData) => {
+    return this.api.send('PUT', `user/${userId}`, userData);
+  }
+
   //roles
-  addRole = (options) => {
-    return this.api.send('PUT', 'role', options);
+  createRole = (roleData) => {
+    return this.api.send('POST', 'role', roleData);
   }
 
   getRoles = (options) => {
     return this.api.send('GET', 'role', options);
   }
 
-  editRole = (roleId, options) => {
+  updateRole = (roleId, options) => {
     return this.api.send('PUT', `role/${roleId}`, options);
+  }
+  
+  deleteRole = (roleId) => {
+    return this.api.send('DELETE', `role/${roleId}`);
+  }
+
+  //system users
+  getSystemUsers = (options) => {
+    return this.api.send('GET', `system/user`, options);
   }
 
 }
