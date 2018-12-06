@@ -15,7 +15,6 @@ const InputGroup = Input.Group;
 
 const margin = {
   margin: "5px 5px 0px 0",
-  justifyContent: "space-between"
 };
 //Responsive span
 const formResSpan = {
@@ -82,9 +81,9 @@ class UserForm extends Component {
   getIMServiceSelector(name) {
     const { getFieldDecorator } = this.props.form;
     return getFieldDecorator(name, {
-      initialValue: '',
+
     })(
-      <Select style={{ width: 120 }}>
+      <Select style={{ width: 150 }} placeholder="Select IM service">
         <Option value="skype">Skype</Option>
         <Option value="whatsapp">WhatsApp Messenger</Option>
         <Option value="facebook">Facebook Messenger</Option>
@@ -95,15 +94,6 @@ class UserForm extends Component {
         <Option value="line">LINE</Option>
         <Option value="zalo">Zalo</Option>
       </Select>
-    );
-  }
-
-  renderIMinput({ name }) {
-    const { getFieldDecorator } = this.props.form;
-    return (
-      <FormItem style={margin} label="Instant Messaging:">
-        {getFieldDecorator(name)(<Input style={{ width: 120 }} />)}
-      </FormItem>
     );
   }
 
@@ -225,16 +215,12 @@ class UserForm extends Component {
                       })(<Input placeholder="Enter SMS Phone" />)}
                     </FormItem>
                     <FormItem style={margin} label="Instant Messaging: ">
-                      {getFieldDecorator('instantMessengerInfos[0]["messengerId"]', {
-                        rules: [{ required: true, message: 'Please input your phone number!' }],
-                      })(
+                      {getFieldDecorator('instantMessengerInfos[0]["messengerId"]')(
                         <Input addonBefore={this.getIMServiceSelector('instantMessengerInfos[0]["service"]')} style={{ width: '100%' }} />
                       )}
                     </FormItem>
-                    <FormItem>
-                      {getFieldDecorator('instantMessengerInfos[1]["messengerId"]', {
-                        rules: [{ required: true, message: 'Please input your phone number!' }],
-                      })(
+                    <FormItem style={margin}>
+                      {getFieldDecorator('instantMessengerInfos[1]["messengerId"]')(
                         <Input addonBefore={this.getIMServiceSelector('instantMessengerInfos[1]["service"]')} style={{ width: '100%' }} />
                       )}
                     </FormItem>
@@ -265,10 +251,9 @@ class UserForm extends Component {
             
             </Col>
           </Row>
-          <ActionWrapper style={margin}>
+          <ActionWrapper style={{margin: "5px 0 0", justifyContent: 'space-between'}}>
             <Button
               type="primary"
-              style={margin}
               icon="left"
               onClick={() => history.goBack()}
             >
@@ -278,7 +263,6 @@ class UserForm extends Component {
             <Button
               id="btnSubmit"
               type="primary"
-              style={margin}
               htmlType="submit"
               className=""
               icon="save"
