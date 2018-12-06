@@ -12,7 +12,7 @@ const actions = {
   REQUEST_CLIENT_USER_LIST: 'REQUEST_CLIENT_USER_LIST',
   RECEIVE_CLIENT_USER_LIST: 'RECEIVE_CLIENT_USER_LIST',
   ERROR_CLIENT_USER_LIST: 'ERROR_CLIENT_USER_LIST',
-  //client USER
+  //client current USER
   REQUEST_CLEAR_CURRENT_CLIENT_USER: 'REQUEST_CLEAR_CURRENT_CLIENT_USER',
   CLEAR_CURRENT_CLIENT_USER: 'CLEAR_CURRENT_CLIENT_USER',
   REQUEST_CURRENT_CLIENT_USER: 'REQUEST_CURRENT_CLIENT_USER',
@@ -26,6 +26,11 @@ const actions = {
   REQUEST_CLIENT_USER_ROLES: 'REQUEST_CLIENT_USER_ROLES',
   RECEIVE_CLIENT_USER_ROLES: 'RECEIVE_CLIENT_USER_ROLES',
   ERROR_CLIENT_USER_ROLES: 'ERROR_CLIENT_USER_ROLES',
+  //CLIENT TEAM ACTIONS
+  REQUEST_CLIENT_TEAM_LIST: 'REQUEST_CLIENT_TEAM_LIST',
+  RECEIVE_CLIENT_TEAM_LIST: 'RECEIVE_CLIENT_TEAM_LIST',
+  ERROR_CLIENT_TEAM_LIST: 'ERROR_CLIENT_TEAM_LIST',
+  
   //current client creators
   requestCurrentClient: (clientId) => ({
     type: actions.REQUEST_CURRENT_CLIENT,
@@ -95,6 +100,16 @@ const actions = {
   receiveClientUserRoles: (roles = []) => ({
     type: actions.RECEIVE_CLIENT_USER_ROLES,
     roles
+  }),
+  //teams
+  requestClientTeams: (clientId, options) => ({
+    type: actions.REQUEST_CLIENT_TEAM_LIST,
+    clientId,
+    options
+  }),
+  receiveClientTeams: (payload) => ({
+    type: actions.RECEIVE_CLIENT_TEAM_LIST,
+    payload
   }),
 };
 

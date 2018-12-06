@@ -1,6 +1,6 @@
 import actions from './actions';
 const ROLE_PAGE_SIZE_DEFAULT = 5;
-
+//TODO separate current client, client users and teams reducers
 const initState = {
   list: {
     loading: true,
@@ -205,6 +205,73 @@ export default function clientReducer(state = initState, action) {
           ...state.clientUserRoles,
           error: action.error,
           loading: false,
+        }
+      };
+    //create client user
+    case actions.REQUEST_CREATE_CLIENT_USER:
+      return {
+        ...state,
+        currentClientUser: initState.currentClientUser
+      };
+    case actions.RECEIVE_CREATE_CLIENT_USER:
+      return {
+        ...state,
+        currentClientUser: {
+          loading: false, 
+          error: null,
+          data: action.membership
+        }
+      };  
+    case actions.ERROR_CREATE_CLIENT_USER:
+      return {
+        ...state,
+        currentClientUser: {
+          ...state.currentClientUser,
+          error: action.error,
+          loading: false,
+        }
+      };
+    
+    //client Team list
+    case actions.REQUEST_CLIENT_TEAM_LIST:
+      return  {
+        ...state,
+        currentClient: {
+          ...state.currentClient,
+          teamList: initState.currentClient.teamList,
+        }
+      };
+    case actions.RECEIVE_CLIENT_TEAM_LIST:
+      let {
+        payload: { teamListData = { rows: [], count: 0, paginationOptions: { current: 1 }} }
+      } = action;
+      return {
+        ...state,
+        currentClient: {
+          ...state.currentClient,
+          teamList: {
+            ...state.currentClient.teamList,
+            rows: teamListData.rows,
+            loading: false,
+            error: null,
+            paginationOptions: {
+              ...state.list.paginationOptions,
+              total: teamListData.count,
+              current: teamListData.paginationOptions.current
+            }
+          }
+        }
+      };
+    case actions.ERROR_CLIENT_TEAM_LIST:
+      return {
+        ...state,
+        currentClient: {
+          ...state.currentClient,
+          teamList: {
+            ...state.currentClient.teamList,
+            loading: false,
+            error: action.error,
+          }
         }
       };
     default:

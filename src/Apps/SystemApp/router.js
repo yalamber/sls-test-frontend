@@ -113,6 +113,10 @@ const routes = [
     component: asyncComponent(() => import('./containers/Clients/Teams/Edit'))
   },
   {
+    path: 'client/:clientId/team/:teamId/details',
+    component: asyncComponent(() => import('./containers/Clients/Teams/Edit'))
+  },
+  {
     path: 'client/:clientId/team/:teamId/members',
     component: asyncComponent(() => import('./containers/Clients/Teams/Members/List'))
   },

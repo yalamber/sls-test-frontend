@@ -109,6 +109,30 @@ class SWQA {
     return this.api.send('GET', `client/${clientId}/user/${userId}`);
   }
 
+  // client teams
+  addClientTeam = (clientId, payload) => {
+    payload.clientId = clientId;
+    return this.api.send('POST', `client-team`, payload);
+  }
+
+  getClientTeams = (clientId, options) => {
+    options.clientId = clientId;
+    return this.api.send('GET', `client-team`, options);
+  }
+
+  getClientTeam = (clientId, teamId) => {
+    return this.api.send('GET', `client-team/${teamId}`);
+  }
+
+  //client team members
+  addClientTeamMember = (teamId, payload) => {
+    return this.api.send('POST', `client-team/${teamId}/member`, payload);
+  }
+
+  getClientTeamMembers = (teamId, options) => {
+    return this.api.send('GET', `client-team/${teamId}/member`, options);
+  }
+
 
   //users
   createUser = (payload) => {

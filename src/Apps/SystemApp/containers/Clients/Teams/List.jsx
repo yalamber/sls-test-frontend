@@ -1,175 +1,118 @@
-import React, {Component} from 'react';
-import {Row, Col, Icon, message, Spin, Select} from 'antd';
-import LayoutWrapper from '@components/utility/layoutWrapper';
-import basicStyle from '@settings/basicStyle';
-import Box from '@components/utility/box';
-import ActionButtons from "./partials/ActionButtons";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Row, Col, Icon, Spin } from "antd";
+import LayoutWrapper from "@components/utility/layoutWrapper";
+import basicStyle from "@settings/basicStyle";
+import Box from "@components/utility/box";
 import {
   ActionBtn,
   TitleWrapper,
   ButtonHolders,
   ComponentTitle,
   TableClickable as Table
-} from '@utils/crud.style';
-import {deleteCompanyTeam, getCompanies, getCompanyTeams} from "@helpers/http-api-client";
+} from "@utils/crud.style";
+import clientActions from '@app/SystemApp/redux/client/actions';
+import ActionButtons from "./partials/ActionButtons";
+const { requestClientTeams, requestCurrentClient } = clientActions;
 
-const Option = Select.Option;
-export default class extends Component {
+class List extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      columns: [
-        {
-          title: 'Company',
-          dataIndex: 'client.name',
-          key: 'clientId',
-        },
-        {
-          title: 'Name',
-          dataIndex: 'name',
-          key: 'name',
-        },
-        {
-          title: 'Team Admin',
-          dataIndex: 'client.admin.username',
-          key: 'team_admin',
-        },
-
-        {
-          title: 'Rating',
-          dataIndex: 'rating',
-          key: 'rating',
-        },
-        {
-          title: 'Actions',
-          key: 'actions',
-          render: (row) => <ActionButtons row={row} delete={this.handleDelete}/>
-        }
-      ],
-      dataSource: [],
-      companies: [],
-      companiesPaginationOptions: {
-        defaultCurrent: 1,
-        current: 1,
-        pageSize: 5,
-        total: 1
-      },
-      selectedCompany: null,
-      loading: false,
-    };
-    this.fetchData = this.fetchData.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
-    this.handleCompanyChange = this.handleCompanyChange.bind(this);
-  }
-
-  handleCompanyChange(companyId) {
-    this.setState({selectedCompany: companyId});
-    this.fetchData(companyId);
+    this.columns = [
+      {
+        title: "Name",
+        dataIndex: "name",
+        key: "name"
+      },
+      {
+        className: 'column-actions',
+        title: "Actions",
+        key: "actions",
+        render: row => <ActionButtons 
+          row={row}
+          clientId={props.match.params.clientId}
+          history={this.props.history} />
+      }
+    ];
   }
 
   componentDidMount() {
-    getCompanies({
-      companies: this.state.companiesPaginationOptions
-    }).then(res => {
-      this.setState({companies: res.data.rows})
-    });
-    this.fetchData();
+    const { match } = this.props;
+    this.props.requestCurrentClient(match.params.clientId);
+    this.onTablePaginationChange(match.params.clientId)(1, 5);    
   }
 
-  fetchData(companyId = null) {
-    this.setState({loading: true});
-    getCompanyTeams({ query: {companyId}}).then(res => {
-      this.setState({dataSource: res.data.rows, loading: false})
-    })
-  }
-
-  onTablePaginationChange(page, pageSize) {
-    this.setState(
-      {
-        loading: true,
-        companiesPaginationOptions: {
-          ...this.state.companiesPaginationOptions,
-          current: page,
-          pageSize
-        }
-      },
-      () => {
-        getCompanies({
-          paginationOptions: this.state.companiesPaginationOptions
-        })
-          .then(companies => {
-            this.setState({
-              companies: companies.data.rows,
-              companiesPaginationOptions: {
-                ...this.state.companiesPaginationOptions,
-                total: companies.data.count
-              }
-            });
-          })
-          .catch(companies => {
-            this.setState({ companies: [] });
-          });
-      }
-    );
-  }
-
-  handleDelete(row) {
-    deleteCompanyTeam(row.clientTeamId).then(res => {
-      message.success('Successfully Deleted.');
-      this.fetchData(this.state.selectedCompany);
-    })
+  onTablePaginationChange(clientId) {
+    return (page, pageSize) => {  
+      this.props.requestClientTeams(clientId, {
+        page,
+        pageSize
+      });
+    }
   }
 
   render() {
-    const margin = {
-      margin: '5px 5px 10px 0'
-    };
-    const {rowStyle, colStyle, gutter} = basicStyle;
-    const companiesOptions = this.state.companies.map(company => <Option
-      key={company.clientId}>{company.name}</Option>);
+    const { rowStyle, colStyle, gutter } = basicStyle;
+    const { currentClient = { clientData: { name: '' } }, history, match } = this.props;
     return (
-
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Companies List</ComponentTitle>
-
+                <ComponentTitle>
+                  <ActionBtn
+                    type="secondary"
+                    onClick={() => history.goBack()}
+                  >
+                    <Icon type="left" /> Go Back
+                  </ActionBtn>
+                  &nbsp; Company - {currentClient.clientData.name} - Teams
+                </ComponentTitle>
                 <ButtonHolders>
-                  <ActionBtn type="primary" onClick={() => {
-                    console.log(this.props.history.push('teams/create'))
-                  }}>
-                    <Icon type="plus"/>
-                    Add Team
+                  <ActionBtn
+                    type="primary"
+                    onClick={() => {
+                      history.push(`/admin/client/${match.params.clientId}/team/create/`);
+                    }}>
+                    <Icon type="plus" />
+                    Add new Team
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
-              <Row>
-                <Col md={6} sm={24} xs={24}>
-                  <Select showSearch placeholder="Please Choose Company Name" style={{...margin, width: '100%'}}
-                          onChange={this.handleCompanyChange}>
-                    {companiesOptions}
-                  </Select>
-                </Col>
-              </Row>
-              <Spin spinning={this.state.loading}>
+              <Spin spinning={currentClient.teamList.loading}>
                 <Table
-                  pagination={true}
-                  columns={this.state.columns}
-                  dataSource={this.state.dataSource}
-                  onRowDoubleClick={(row) => {
-                    this.props.history.push('/dashboard/company/users/' + row.clientId + '/' + row.clientTeamId)
+                  locale={{ emptyText: "No Teams in client" }}
+                  pagination={{
+                    ...currentClient.teamList.paginationOptions,
+                    onChange: this.onTablePaginationChange(match.params.clientId)
                   }}
+                  bordered
+                  columns={this.columns}
+                  onRow={row => ({
+                    onDoubleClick: () => {
+                      history.push(`/admin/client/${match.params.clientId}/team/${row.clientTeamId}/details`);
+                    }
+                  })}
+                  dataSource={currentClient.teamList.rows}
                   rowKey="clientTeamId"
                 />
               </Spin>
             </Box>
-
           </Col>
         </Row>
       </LayoutWrapper>
     );
   }
 }
+
+export default connect(
+  state => ({
+    ...state.Client
+  }),
+  {
+    requestCurrentClient,
+    requestClientTeams
+  }
+)(List);

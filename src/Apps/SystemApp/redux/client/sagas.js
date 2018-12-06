@@ -126,7 +126,6 @@ export function* receiveCreateClientUser() {
   });
 }
 
-
 //error current client
 export function* errorCurrentClientUser() {
   yield takeEvery(actions.ERROR_CURRENT_CLIENT_USER, function*({ error }) {
@@ -157,6 +156,35 @@ export function* errorClientRoles() {
   });
 }
 
+//request client team list 
+export function* requestClientTeamList() {
+  yield takeLatest(actions.REQUEST_CLIENT_TEAM_LIST, function* ({ clientId, options }) {
+    try {
+      let offset = options.pageSize * (options.page - 1);
+      const data = yield call(SWQAClient.getClientTeams, clientId, {
+        offset,
+        limit: options.pageSize
+      });
+      data.paginationOptions = {
+        current: options.page
+      };
+      yield put(actions.receiveClientTeams({
+        teamListData: data
+      }));
+    } catch (e) {
+      console.log(e);
+      yield put({ type: actions.ERROR_CLIENT_TEAM_LIST, error: e });
+    }
+  });
+}
+
+//error client team list
+export function* errorClientTeamList() {
+  yield takeEvery(actions.ERROR_CLIENT_TEAM_LIST, function*() {
+
+  });
+}
+
 
 export default function* rootSaga() {
   yield all([
@@ -178,5 +206,8 @@ export default function* rootSaga() {
     fork(requestCreateClientUser),
     fork(receiveCreateClientUser),
 
+    fork(requestClientTeamList),
+    fork(errorClientTeamList),
+    
   ]);
 }

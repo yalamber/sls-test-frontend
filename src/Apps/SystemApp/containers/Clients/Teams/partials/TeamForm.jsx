@@ -22,9 +22,7 @@ class TeamForm extends Component {
   }
 
   componentDidMount() {
-    getCompanies().then(res => {
-      this.setState({companies: res.data.rows})
-    })
+    
   }
 
   handleSubmit(e) {
@@ -39,7 +37,6 @@ class TeamForm extends Component {
   resetForm() {
     this.props.history.goBack();
   }
-
 
   render() {
     const margin = {

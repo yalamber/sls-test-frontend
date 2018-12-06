@@ -1,16 +1,17 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Row, Col, message, Spin } from "antd";
-import { withRouter } from "react-router-dom";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import ContentHolder from "@components/utility/contentHolder";
 import { getErrorMessageFromApiResponseError } from "@utils/response-message";
-
 import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
-
 import Box from "@components/utility/box";
-import TeamForm from "./partials/TeamForm";
 import { addCompanyTeam } from "@helpers/http-api-client";
+import clientActions from '@app/SystemApp/redux/client/actions';
+import TeamForm from "./partials/TeamForm";
+
+const { requestCurrentClient } = clientActions;
 
 class Create extends Component {
   constructor() {
@@ -19,6 +20,11 @@ class Create extends Component {
       loading: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    const { match } = this.props;
+    this.props.requestCurrentClient(match.params.clientId);
   }
 
   handleSubmit(formData, resetForm) {
@@ -40,8 +46,7 @@ class Create extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { name } = this.props.location.state.row;
-    const companyName = name;
+    const { currentClient = { clientData: { name: '' } }, history, match } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -49,7 +54,7 @@ class Create extends Component {
             <Box>
               <Spin spinning={this.state.loading}>
                 <TitleWrapper>
-                  <ComponentTitle>Create Team for {companyName}</ComponentTitle>
+                  <ComponentTitle>Create Team for  {currentClient.clientData.name} </ComponentTitle>
                 </TitleWrapper>
               </Spin>
               <TeamForm submit={this.handleSubmit} />
@@ -71,4 +76,11 @@ class Create extends Component {
   }
 }
 
-export default withRouter(Create);
+export default connect(
+  state => ({
+    ...state.Client
+  }),
+  {
+    requestCurrentClient
+  }
+)(Create);

@@ -1,54 +1,44 @@
 import React from "react";
-import Popconfirms from "@components/feedback/popconfirm";
+import { Button, Tooltip } from 'antd';
 import { ActionWrapper } from "@utils/crud.style";
-import { Tooltip } from "antd";
-import { withRouter } from "react-router-dom";
 
-const ActionButtons = props => {
+const ActionButtons = ({history, row}) => {
   return (
     <ActionWrapper>
       <Tooltip placement="topLeft" title="Show Members List">
-        <a
+        <Button
+          shape="circle"
+          icon="user" 
           onClick={() => {
-            props.history.push(
-              `/dashboard/company/teams/${props.row.clientTeamId}/members`
-            );
-          }}
-        >
-          <i className="ion-ios-person" />
-        </a>
+            history.push(`/admin/client/${row.clientId}/team/${row.clientTeamId}/members`);
+          }} />
       </Tooltip>
-      <Tooltip placement="topLeft" title="Show Test Suite">
-        <a
-          onClick={() =>
-            props.history.push({
-              pathname: `/dashboard/company/${props.row.clientId}/test-manager`,
-              state: {
-                clientTeamId: props.row.clientTeamId
-              }
-            })
-          }
-        >
-          <i className="ion-ios-photos" />
-        </a>
+      <Tooltip placement="topLeft" title="Test Suites">
+        <Button
+          shape="circle"
+          icon="folder" 
+          onClick={() => {
+            history.push(`client/${row.clientId}/test-manager/test-suite?teamId=${row.clientTeamId}`)
+          }} />
       </Tooltip>
       <Tooltip placement="topLeft" title="Edit Record">
-        <a
-          onClick={() =>
-            props.history.push(
-              "/dashboard/company/teams/edit/" + props.row.clientTeamId
-            )
-          }
-        >
-          <i className="ion-android-create" />
-        </a>
+        <Button
+          shape="circle"
+          icon="edit" 
+          onClick={() => {
+            history.push(`/admin/client/${row.clientId}/team/${row.clientTeamId}/edit`);
+          }} />
       </Tooltip>
       <Tooltip placement="topLeft" title="Show Team Info">
-        <a className="infoBtn" onClick={() => props.info(props.row)}>
-          <i className="ion-information-circled" />
-        </a>
+        <Button
+          shape="circle"
+          icon="info" 
+          onClick={() => {
+            history.push(`/admin/client/${row.clientId}/team/${row.clientTeamId}/details`);
+          }} />
       </Tooltip>
     </ActionWrapper>
   );
 };
-export default withRouter(ActionButtons);
+
+export default ActionButtons;
