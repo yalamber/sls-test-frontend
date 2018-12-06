@@ -5,7 +5,6 @@ export const getDefaultPaginationOptions = () =>
     {},
     {
       paginationOptions: {
-        defaultCurrent: 1,
         current: 1,
         pageSize: getDefaultPageSize(),
         total: 1

@@ -12,9 +12,9 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '@utils/crud.style';
-import userActions from '@app/SystemApp/redux/user/actions';
+import * as userActions from '@redux/companies/users/actions';
 import ActionButtons from "./partials/ActionButtons";
-const { requestSystemUsers, deleteSystemUser } = userActions;
+const { companiesUsersListFetch,  } = userActions;
 
 class UsersList extends Component {
   constructor(props) {
@@ -50,14 +50,14 @@ class UsersList extends Component {
   }
 
   onTablePaginationChange(page, pageSize) {
-    this.props.requestSystemUsers({
+    this.props.companiesUsersListFetch({
       page,
       pageSize
     });
   }
 
   handleDelete(row) {
-    this.props.deleteSystemUser(row.userId);
+    // this.props.deleteSystemUser(row.userId);
   }
 
   render() {
@@ -110,7 +110,7 @@ export default connect(
     ...state.SystemUser
   }),
   {
-    requestSystemUsers,
-    deleteSystemUser
+    companiesUsersListFetch,
+
   }
 )(UsersList);
