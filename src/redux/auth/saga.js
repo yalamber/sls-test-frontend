@@ -7,10 +7,10 @@ import {
   clearUserToken, 
   getUserToken, 
   clearCompanyToken 
-} from '../../helpers/utility';
-import SWQAClient from '../../helpers/apiClient';
+} from '@helpers/utility';
+import SWQAClient from '@helpers/apiClient';
+import notification from '@components/notification';
 import actions from './actions';
-import notification from '../../components/notification';
 
 export function* loginRequest() {
   yield takeEvery('LOGIN_REQUEST', function* ({ payload }) {

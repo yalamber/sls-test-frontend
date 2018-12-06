@@ -13,8 +13,8 @@ const {
   requestCurrentClient, 
   requestCurrentClientUser, 
   requestClientUserRoles,
-  requestClearCurrentClientUser, 
   requestCreateClientUser,
+  clearCurrentClientUser,
 } = clientActions;
 
 class CreateEdit extends Component {
@@ -29,7 +29,7 @@ class CreateEdit extends Component {
       requestCurrentClient, 
       requestCurrentClientUser,
       requestClientUserRoles,
-      requestClearCurrentClientUser
+      clearCurrentClientUser
     } = this.props;
     //get current client
     requestCurrentClient(match.params.clientId);
@@ -39,13 +39,13 @@ class CreateEdit extends Component {
     if(match.params.userId) {
       requestCurrentClientUser(match.params.clientId, match.params.userId);
     } else {
-      requestClearCurrentClientUser();
+      clearCurrentClientUser();
     }
   }
 
   async handleSubmit(mode, clientId, values, reset) {
     if(mode === 'edit') {
-
+      //this.props.requestUpdateClientUser(clientId, userId, values, this.props.history);
     } else {
       //create user and add to client
       this.props.requestCreateClientUser(clientId, values, this.props.history);
@@ -107,7 +107,7 @@ export default connect(
     requestClientUserRoles,
     requestCurrentClient,
     requestCurrentClientUser,
-    requestClearCurrentClientUser,
+    clearCurrentClientUser,
     requestCreateClientUser,
   }
 )(CreateEdit);

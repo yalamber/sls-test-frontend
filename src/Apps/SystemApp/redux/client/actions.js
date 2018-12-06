@@ -60,6 +60,11 @@ const actions = {
     payload
   }),
   //current client user
+  clearCurrentClientUser: () => {
+    return {
+      type: actions.CLEAR_CURRENT_CLIENT_USER
+    };
+  },
   requestClearCurrentClientUser: () => ({
     type: actions.REQUEST_CLEAR_CURRENT_CLIENT_USER
   }),
@@ -73,14 +78,15 @@ const actions = {
     userData
   }),
   //add client user
-  requestCreateClientUser: (clientId, userData) => ({
+  requestCreateClientUser: (clientId, userData, history) => ({
     type: actions.REQUEST_CREATE_CLIENT_USER,
     clientId,
-    userData
+    userData,
+    history
   }),
-  receiveCreateClientUser: (userData) => ({
+  receiveCreateClientUser: (membershipData) => ({
     type: actions.RECEIVE_CREATE_CLIENT_USER,
-    userData
+    membershipData
   }),
   //client roles
   requestClientUserRoles: () => ({

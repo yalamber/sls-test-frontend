@@ -269,7 +269,7 @@ class UserForm extends Component {
 const mapPropsToFields = props => {
   let { currentUser, role } = props;
   //testData TODO: remove this after test
-  role = {
+  /*role = {
     roleId: 2
   };
   currentUser = {
@@ -287,7 +287,7 @@ const mapPropsToFields = props => {
       {service: 'facebook', messengerId: 'yalu'},
       {service: 'facebook', messengerId: 'yalu2'},
     ]
-  };
+  };*/
   return {
     role: Form.createFormField({
       value: get(role, 'roleId')

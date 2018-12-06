@@ -1,4 +1,5 @@
 import { all, call, put, takeEvery, takeLatest, fork } from "redux-saga/effects";
+import { omit } from 'lodash';
 import actions from './actions';
 import SWQAClient from "@helpers/apiClient";
 
@@ -76,15 +77,6 @@ export function* errorClientUserList() {
   });
 }
 
-//request clear current client user
-export function* requestClearCurrentClientUser() {
-  yield takeLatest(actions.REQUEST_CLEAR_CURRENT_CLIENT_USER, function* () {
-    yield put({
-      type: actions.CLEAR_CURRENT_CLIENT_USER
-    });
-  });
-}
-
 export function* requestCurrentClientUser() {
   yield takeLatest(actions.REQUEST_CURRENT_CLIENT_USER, function* ({ clientId, userId }) {
     try {
@@ -100,22 +92,40 @@ export function* requestCurrentClientUser() {
 export function* requestCreateClientUser() {
   yield takeLatest(actions.REQUEST_CREATE_CLIENT_USER, function* ({ clientId, userData, history }) {
     try {
-      console.log('here in saga land');
-      console.log(clientId, userData);
-      let role = userData.role;
-      //const data = yield call(SWQAClient.createUser, userData);
-      /*const membership = yield call(SWQAClient.addClientUser, clientId, {
-        status: userData.status,
-        roleId: userData.roleId,
-        userId: userData.userId
-      });*/
-
+      let roleId = userData.role;
+      let status = userData.status;
+      userData = omit(userData, ['role', 'status']);
+      const data = yield call(SWQAClient.createUser, userData);
+      const membership = yield call(SWQAClient.addClientUser, clientId, {
+        status: status,
+        roleId: roleId,
+        userId: data.userId
+      });
+      yield put({
+        type: actions.RECEIVE_CREATE_CLIENT_USER,
+        membership,
+        history
+      });
     } catch (e) {
       console.log(e);
       yield put({ type: actions.ERROR_CREATE_CLIENT_USER, error: e });
     }
   });
 }
+
+
+export function* receiveCreateClientUser() {
+  yield takeEvery(actions.RECEIVE_CREATE_CLIENT_USER, function* ({membership, history}) {
+    console.log('here', membership, history);
+    if (membership) {
+      if (history && history.push) {
+        history.push(`/admin/client/${membership.clientId}/user/${membership.userId}/details`);
+      }
+    }
+  });
+}
+
+
 //error current client
 export function* errorCurrentClientUser() {
   yield takeEvery(actions.ERROR_CURRENT_CLIENT_USER, function*({ error }) {
@@ -164,9 +174,8 @@ export default function* rootSaga() {
     fork(requestClientRoles),
     fork(errorClientRoles),
 
-    fork(requestClearCurrentClientUser),
-
     fork(requestCreateClientUser),
+    fork(receiveCreateClientUser),
 
   ]);
 }
