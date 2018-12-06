@@ -7,7 +7,6 @@ const initState = {
     error: null,
     rows: [],
     paginationOptions: {
-      defaultCurrent: 1,
       current: 1,
       pageSize: ROLE_PAGE_SIZE_DEFAULT,
       total: 0
@@ -16,7 +15,7 @@ const initState = {
   currentClient: {
     loading: true,
     error: null,
-    clientData: { 
+    clientData: {
       name: ''
     },
     teamList: {
@@ -24,7 +23,6 @@ const initState = {
       error: null,
       rows: [],
       paginationOptions: {
-        defaultCurrent: 1,
         current: 1,
         pageSize: ROLE_PAGE_SIZE_DEFAULT,
         total: 0
@@ -35,7 +33,6 @@ const initState = {
       error: null,
       rows: [],
       paginationOptions: {
-        defaultCurrent: 1,
         current: 1,
         pageSize: ROLE_PAGE_SIZE_DEFAULT,
         total: 0
@@ -57,7 +54,7 @@ const initState = {
 export default function clientReducer(state = initState, action) {
   switch (action.type) {
     //client list
-    case actions.REQUEST_CLIENT_LIST: 
+    case actions.REQUEST_CLIENT_LIST:
       return  {
         ...state,
         list: initState.list
@@ -115,8 +112,8 @@ export default function clientReducer(state = initState, action) {
           error: action.error
         }
       };
-    //client user list 
-    case actions.REQUEST_CLIENT_USER_LIST: 
+    //client user list
+    case actions.REQUEST_CLIENT_USER_LIST:
       return  {
         ...state,
         currentClient: {
@@ -145,25 +142,25 @@ export default function clientReducer(state = initState, action) {
           }
         }
       };
-    case actions.ERROR_CLIENT_USER_LIST: 
+    case actions.ERROR_CLIENT_USER_LIST:
       return {
         ...state,
         currentClient: {
           ...state.currentClient,
           userList: {
             ...state.currentClient.userList,
-            loading: false, 
+            loading: false,
             error: action.error,
           }
         }
       };
     //current client
-    case actions.REQUEST_CURRENT_CLIENT_USER: 
+    case actions.REQUEST_CURRENT_CLIENT_USER:
       return  {
         ...state,
         currentClientUser: state.currentClientUser
       };
-    case actions.RECEIVE_CURRENT_CLIENT_USER: 
+    case actions.RECEIVE_CURRENT_CLIENT_USER:
       return  {
         ...state,
         currentClientUser: {
@@ -172,7 +169,7 @@ export default function clientReducer(state = initState, action) {
           userData: action.userData
         }
       };
-    case actions.ERROR_CURRENT_CLIENT_USER: 
+    case actions.ERROR_CURRENT_CLIENT_USER:
       return {
         ...state,
         currentClientUser: {
@@ -182,12 +179,12 @@ export default function clientReducer(state = initState, action) {
         }
       };
     //roles
-    case actions.REQUEST_CLIENT_USER_ROLES: 
+    case actions.REQUEST_CLIENT_USER_ROLES:
       return  {
         ...state,
-        clientUserRoles: initState.clientUserRoles 
+        clientUserRoles: initState.clientUserRoles
       };
-    case actions.RECEIVE_CLIENT_USER_ROLES: 
+    case actions.RECEIVE_CLIENT_USER_ROLES:
       return  {
         ...state,
         clientUserRoles: {
@@ -196,7 +193,7 @@ export default function clientReducer(state = initState, action) {
           rows: action.roles
         }
       };
-    case actions.ERROR_CLIENT_USER_ROLES: 
+    case actions.ERROR_CLIENT_USER_ROLES:
       return {
         ...state,
         clientUserRoles: {
