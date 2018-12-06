@@ -32,6 +32,7 @@ function TableListing(props) {
   return (
     <TableListingBase
       {...{
+        ...props,
         loading: props.loading,
         components: Object.assign({
           Table,
