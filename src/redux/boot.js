@@ -1,8 +1,8 @@
 import { store } from './store';
 import authActions from './auth/actions';
-import userActions from './user/actions';
+import myActions from './my/actions';
 export default () =>
   new Promise(() => {
     store.dispatch(authActions.checkAuthorization());    
-    store.dispatch(userActions.checkActiveAccount());
+    store.dispatch(myActions.checkActiveAccount());
   });

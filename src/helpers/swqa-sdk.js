@@ -138,6 +138,11 @@ class SWQA {
     return this.api.send('DELETE', `role/${roleId}`);
   }
 
+  //system users
+  getSystemUsers = (options) => {
+    return this.api.send('GET', `system/user`, options);
+  }
+
 }
 
 export default SWQA;

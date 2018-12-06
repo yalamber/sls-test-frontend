@@ -161,8 +161,21 @@ const routes = [
     component: asyncComponent(() => import("./containers/Roles/CreateEdit.jsx"))
   },
   {
-    path: "role/edit",
+    path: "role/:roleId/edit",
     component: asyncComponent(() => import("./containers/Roles/CreateEdit.jsx"))
+  },
+  //Users
+  {
+    path: "users",
+    component: asyncComponent(() => import("./containers/Users/List.jsx"))
+  },
+  {
+    path: "user/create",
+    component: asyncComponent(() => import("./containers/Users/CreateEdit.jsx"))
+  },
+  {
+    path: "user/:userId/edit",
+    component: asyncComponent(() => import("./containers/Users/CreateEdit.jsx"))
   }
 ];
 
