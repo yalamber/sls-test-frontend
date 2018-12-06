@@ -14,15 +14,15 @@ const routes = [
     component: asyncComponent(() => import('./containers/Agencies/Create'))
   },
   {
-    path: 'agency/edit/:id',
+    path: 'agency/:id/edit',
     component: asyncComponent(() => import('./containers/Agencies/Edit'))
   },
   {
-    path: 'agency/Users/:agencyId',
+    path: 'agency/:agencyId/Users',
     component: asyncComponent(() => import('./containers/Agencies/Users/List'))
   },
   {
-    path: 'agency/teams/:agencyId',
+    path: 'agency/:agencyId/teams',
     component: asyncComponent(() => import('./containers/Agencies/Teams/List'))
   },
   {
