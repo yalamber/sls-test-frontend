@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Form, Select, Row, Col, Input, Radio, Icon } from "antd";
+import { Form, Select, Row, Col, Input, Radio } from "antd";
 import Button from "@components/uielements/button";
 import { generateRandomPassword } from '@helpers/utility';
 import { userValidation } from "@validations/usersValidation";
-import { ActionWrapper } from "@utils/crud.style";
 import Card from "@components/uielements/styles/card.style";
 import { userStatus } from "@constants/userStatus";
 
@@ -62,13 +61,6 @@ class UserForm extends Component {
     }
   }
 
-  onIMSelectChange1() {
-    this.setState({ isIMInput1Hidden: false });
-  }
-  onIMSelectChange2() {
-    this.setState({ isIMInput2Hidden: false });
-  }
-
   getPasswordFieldDecoratorOption() {
     if (this.props.formType === "create") {
       return {
@@ -80,9 +72,7 @@ class UserForm extends Component {
 
   getIMServiceSelector(name) {
     const { getFieldDecorator } = this.props.form;
-    return getFieldDecorator(name, {
-
-    })(
+    return getFieldDecorator(name, {})(
       <Select style={{ width: 150 }} placeholder="Select IM service">
         <Option value="skype">Skype</Option>
         <Option value="whatsapp">WhatsApp Messenger</Option>
@@ -246,30 +236,29 @@ class UserForm extends Component {
               </Card>
             </Col>
           </Row>
-          <Row style={margin}>
+          <Row style={{marginTop: '10px'}}>
             <Col span={24}>
-            
+              <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <Button
+                  type="primary"
+                  icon="left"
+                  onClick={() => history.goBack()}
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  id="btnSubmit"
+                  type="primary"
+                  htmlType="submit"
+                  className=""
+                  icon="save"
+                >
+                  Submit
+                </Button>
+              </div>
             </Col>
           </Row>
-          <ActionWrapper style={{margin: "5px 0 0", justifyContent: 'space-between'}}>
-            <Button
-              type="primary"
-              icon="left"
-              onClick={() => history.goBack()}
-            >
-              Cancel
-            </Button>
-
-            <Button
-              id="btnSubmit"
-              type="primary"
-              htmlType="submit"
-              className=""
-              icon="save"
-            >
-              Submit
-            </Button>
-          </ActionWrapper>
         </Form>
       </div>
     );
