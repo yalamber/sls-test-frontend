@@ -11,7 +11,7 @@ function ActionButtons({ history, row, clientId}) {
           icon="edit" 
           onClick={() => {
             history.push({
-              pathname: `/client/${clientId}/user/${row.userId}/edit`,
+              pathname: `/admin/client/${clientId}/user/${row.userId}/edit`,
               state: {
                 ...row
               }
@@ -24,7 +24,7 @@ function ActionButtons({ history, row, clientId}) {
           icon="info" 
           onClick={() => {
             history.push({
-              pathname: `/client/${clientId}/user/${row.userId}/details`,
+              pathname: `/admin/client/${clientId}/user/${row.userId}/details`,
               state: {
                 ...row
               }

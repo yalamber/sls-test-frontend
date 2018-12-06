@@ -15,24 +15,15 @@ const {
 } = clientActions;
 
 class Detail extends Component {
-  constructor() {
-    super();
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
   componentDidMount() {
     const { 
       match, 
       requestCurrentClient, 
-      requestCurrentUser
+      requestCurrentClientUser
     } = this.props;
     //get current client
     requestCurrentClient(match.params.clientId);
-    requestCurrentUser(match.params.userId);
-  }
-
-  async handleSubmit(values, reset) {
-    
+    requestCurrentClientUser(match.params.userId);
   }
 
   render() {

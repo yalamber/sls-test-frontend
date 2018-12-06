@@ -14,7 +14,7 @@ const ActionButtons = ({history, row, deleteRole}) => {
           shape="circle" 
           icon="edit"
           onClick={() => {
-            history.push({ pathname: `edit` }, { ...row })
+            history.push(`role/${row.roleId}/edit`);
           }} 
         />
       </Tooltip>

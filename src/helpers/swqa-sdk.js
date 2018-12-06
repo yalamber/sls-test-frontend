@@ -95,14 +95,20 @@ class SWQA {
   getClient = (clientId) => {
     return this.api.send('GET', `client/${clientId}`);
   }
+
   // client users
+  addClientUser = (clientId, payload) => {
+    return this.api.send('POST', `client/${clientId}/user`, payload);
+  }
+
   getClientUsers = (clientId, options) => {
     return this.api.send('GET', `client/${clientId}/user`, options);
   }
 
-  addClientUser = (clientId, payload) => {
-    return this.api.send('POST', `client/${clientId}/user`, payload);
+  getClientUser = (clientId, userId) => {
+    return this.api.send('GET', `client/${clientId}/user/${userId}`);
   }
+
 
   //users
   createUser = (payload) => {

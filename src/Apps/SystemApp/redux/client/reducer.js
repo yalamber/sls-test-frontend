@@ -47,7 +47,7 @@ const initState = {
   currentClientUser: {
     loading: true,
     error: null,
-    userData: {}
+    data: {}
   }
 };
 
@@ -155,10 +155,15 @@ export default function clientReducer(state = initState, action) {
         }
       };
     //current client
-    case actions.REQUEST_CURRENT_CLIENT_USER:
+    case actions.CLEAR_CURRENT_CLIENT_USER: 
       return  {
         ...state,
-        currentClientUser: state.currentClientUser
+        currentClientUser: initState.currentClientUser
+      };
+    case actions.REQUEST_CURRENT_CLIENT_USER: 
+      return  {
+        ...state,
+        currentClientUser: initState.currentClientUser
       };
     case actions.RECEIVE_CURRENT_CLIENT_USER:
       return  {
@@ -166,7 +171,7 @@ export default function clientReducer(state = initState, action) {
         currentClientUser: {
           error: null,
           loading: false,
-          userData: action.userData
+          data: action.userData
         }
       };
     case actions.ERROR_CURRENT_CLIENT_USER:

@@ -13,9 +13,15 @@ const actions = {
   RECEIVE_CLIENT_USER_LIST: 'RECEIVE_CLIENT_USER_LIST',
   ERROR_CLIENT_USER_LIST: 'ERROR_CLIENT_USER_LIST',
   //client USER
+  REQUEST_CLEAR_CURRENT_CLIENT_USER: 'REQUEST_CLEAR_CURRENT_CLIENT_USER',
+  CLEAR_CURRENT_CLIENT_USER: 'CLEAR_CURRENT_CLIENT_USER',
   REQUEST_CURRENT_CLIENT_USER: 'REQUEST_CURRENT_CLIENT_USER',
   RECEIVE_CURRENT_CLIENT_USER: 'RECEIVE_CURRENT_CLIENT_USER',
   ERROR_CURRENT_CLIENT_USER: 'ERROR_CURRENT_CLIENT_USER',
+  //add client user
+  REQUEST_CREATE_CLIENT_USER: 'REQUEST_CREATE_CLIENT_USER',
+  RECEIVE_CREATE_CLIENT_USER: 'RECEIVE_CREATE_CLIENT_USER',
+  ERROR_CREATE_CLIENT_USER: 'ERROR_CREATE_CLIENT_USER',
   //client user roles
   REQUEST_CLIENT_USER_ROLES: 'REQUEST_CLIENT_USER_ROLES',
   RECEIVE_CLIENT_USER_ROLES: 'RECEIVE_CLIENT_USER_ROLES',
@@ -54,12 +60,26 @@ const actions = {
     payload
   }),
   //current client user
-  requestCurrentClientUser: (userId) => ({
+  requestClearCurrentClientUser: () => ({
+    type: actions.REQUEST_CLEAR_CURRENT_CLIENT_USER
+  }),
+  requestCurrentClientUser: (clientId, userId) => ({
     type: actions.REQUEST_CURRENT_CLIENT_USER,
+    clientId,
     userId
   }),
   receiveCurrentClientUser: (userData) => ({
     type: actions.RECEIVE_CURRENT_CLIENT_USER,
+    userData
+  }),
+  //add client user
+  requestCreateClientUser: (clientId, userData) => ({
+    type: actions.REQUEST_CREATE_CLIENT_USER,
+    clientId,
+    userData
+  }),
+  receiveCreateClientUser: (userData) => ({
+    type: actions.RECEIVE_CREATE_CLIENT_USER,
     userData
   }),
   //client roles

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, Spin } from "antd";
 import { connect } from 'react-redux';
-import _ from "lodash";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
@@ -13,10 +12,12 @@ import UserForm from "@app/SystemApp/components/User/Form";
 const { 
   requestCurrentClient, 
   requestCurrentClientUser, 
-  requestClientUserRoles, 
+  requestClientUserRoles,
+  requestClearCurrentClientUser, 
+  requestCreateClientUser,
 } = clientActions;
 
-class Create extends Component {
+class CreateEdit extends Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,8 +27,9 @@ class Create extends Component {
     const { 
       match, 
       requestCurrentClient, 
-      requestCurrentUser,
-      requestClientUserRoles
+      requestCurrentClientUser,
+      requestClientUserRoles,
+      requestClearCurrentClientUser
     } = this.props;
     //get current client
     requestCurrentClient(match.params.clientId);
@@ -35,20 +37,31 @@ class Create extends Component {
     requestClientUserRoles();
     //get current user and set to edit if we have userId
     if(match.params.userId) {
-      requestCurrentUser(match.params.userId);
+      requestCurrentClientUser(match.params.clientId, match.params.userId);
+    } else {
+      requestClearCurrentClientUser();
     }
   }
 
-  async handleSubmit(values, reset) {
-    
+  async handleSubmit(mode, clientId, values, reset) {
+    if(mode === 'edit') {
+
+    } else {
+      //create user and add to client
+      this.props.requestCreateClientUser(clientId, values, this.props.history);
+    }
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { currentClient, clientUserRoles, currentClientUser, history, match } = this.props;
-
+    let mode = 'add';
+    if(match.params.userId) {
+      mode = 'edit';
+    }
     let loading = currentClient.loading || clientUserRoles.loading || !!(match.params.userId && currentClientUser.loading);
-    let title = 'Add User';
+    
+    let title = mode === 'edit'? 'Edit User' : 'Add User';
     return (
       <LayoutWrapper>
         <PageHeader>Client - {currentClient.clientData.name}</PageHeader>
@@ -70,8 +83,11 @@ class Create extends Component {
                 <UserForm
                   relId={match.params.clientId}
                   userType="clientUser"
+                  mode={mode}
+                  currentUser={currentClientUser.data.user}
+                  role={currentClientUser.data.role}
                   history={history}
-                  handleSubmit={this.handleSubmit}
+                  submit={this.handleSubmit}
                   roles={clientUserRoles.rows}
                 />
               </Spin>
@@ -91,5 +107,7 @@ export default connect(
     requestClientUserRoles,
     requestCurrentClient,
     requestCurrentClientUser,
+    requestClearCurrentClientUser,
+    requestCreateClientUser,
   }
-)(Create);
+)(CreateEdit);
