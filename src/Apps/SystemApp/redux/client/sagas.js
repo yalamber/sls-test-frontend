@@ -102,8 +102,8 @@ export function* requestCreateClientUser() {
     try {
       console.log('here in saga land');
       console.log(clientId, userData);
-      const data = yield call(SWQAClient.createUser, userData);
-
+      let role = userData.role;
+      //const data = yield call(SWQAClient.createUser, userData);
       /*const membership = yield call(SWQAClient.addClientUser, clientId, {
         status: userData.status,
         roleId: userData.roleId,

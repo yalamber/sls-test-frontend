@@ -46,19 +46,19 @@ class ClientList extends Component {
       {
         title: <IntlMessages id="client.testManagerActions"/>,
         key: "testManagerActions",
-        render: row => <TestManagerActionButtons
+        render: row => <TestManagerActionButtons 
           row={row}
-          history={this.props.history}
-          delete={this.handleDelete}
+          history={this.props.history} 
+          delete={this.handleDelete} 
           setCurrentClient={props.setCurrentClient} />
       },
       {
         title: <IntlMessages id="actions"/>,
         key: "actions",
-        render: row => <ActionButtons
-          row={row}
-          history={this.props.history}
-          delete={this.handleDelete}
+        render: row => <ActionButtons 
+          row={row} 
+          history={this.props.history} 
+          delete={this.handleDelete} 
           setCurrentClient={props.setCurrentClient} />
       }
     ];
