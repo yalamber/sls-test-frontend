@@ -53,6 +53,7 @@ export function* errorCurrentClient() {
 export function* requestClientUserList() {
   yield takeLatest(actions.REQUEST_CLIENT_USER_LIST, function* ({ clientId, options }) {
     try {
+      console.log(options);
       let offset = options.pageSize * (options.page - 1);
       const data = yield call(SWQAClient.getClientUsers, clientId, {
         offset,

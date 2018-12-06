@@ -26,8 +26,13 @@ class List extends Component {
         key: "name"
       },
       {
+        title: "Role",
+        dataIndex: "role.title",
+        key: "role"
+      },
+      {
         title: "Status",
-        dataIndex: "user.status",
+        dataIndex: "status",
         key: "status"
       },
       {
@@ -45,14 +50,16 @@ class List extends Component {
   componentDidMount() {
     const { match } = this.props;
     this.props.requestCurrentClient(match.params.clientId);
-    this.onTablePaginationChange(match.params.clientId, 1, 5);    
+    this.onTablePaginationChange(match.params.clientId)(1, 5);    
   }
 
-  onTablePaginationChange(clientId, page, pageSize) {
-    this.props.requestClientUsers(clientId, {
-      page,
-      pageSize
-    });
+  onTablePaginationChange(clientId) {
+    return (page, pageSize) => {  
+      this.props.requestClientUsers(clientId, {
+        page,
+        pageSize
+      });
+    }
   }
 
   render() {
@@ -89,7 +96,7 @@ class List extends Component {
                   locale={{ emptyText: "No users in client" }}
                   pagination={{
                     ...currentClient.userList.paginationOptions,
-                    onChange: this.onTablePaginationChange
+                    onChange: this.onTablePaginationChange(match.params.clientId)
                   }}
                   bordered
                   columns={this.columns}
