@@ -93,8 +93,7 @@ class CreateEdit extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          {this.state.client.name} 
-          - {this.state.team.name}
+          {this.state.client.name} - {this.state.team.name}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
