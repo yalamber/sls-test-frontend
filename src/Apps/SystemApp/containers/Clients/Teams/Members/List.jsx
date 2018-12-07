@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, Spin, message } from "antd";
+import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
-import UsersActionButtons from "@app/SystemApp/containers/Clients/Users/partials/ActionButtons";
+import ActionButtons from "./partials/ActionButtons";
 import {
   ActionBtn,
   TitleWrapper,
@@ -18,22 +19,16 @@ import {
   deleteCompanyTeamMember
 } from "@helpers/http-api-client";
 
-export default class extends Component {
-  constructor() {
-    super();
+class MemberList extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
       columns: [
         {
-          title: "Name",
+          title: "Username",
           dataIndex: "user.username",
           key: "name",
           sorter: (a, b) => a.name >= b.name
-        },
-        {
-          title: "Rating",
-          dataIndex: "rating",
-          key: "rating",
-          sorter: (a, b) => a.rating >= b.rating
         },
         {
           title: "Status",
@@ -45,16 +40,13 @@ export default class extends Component {
           title: "Actions",
           key: "actions",
           render: row => (
-            <UsersActionButtons
-              selectedTeam={this.state.selectedTeam}
+            <ActionButtons
               row={row}
-              info={this.handleInfo}
-            />
+              history={props.history} />
           )
         }
       ],
-      company: {},
-      companyTeam: {},
+      clientTeam: {},
       data: [],
       paginationOptions: {
         defaultCurrent: 1,
@@ -75,19 +67,21 @@ export default class extends Component {
   async fetchData() {
     this.setState({ loading: true });
     try {
-      let companyTeam = await getCompanyTeam(this.props.match.params.teamId);
+      let clientTeam = await getCompanyTeam(this.props.match.params.teamId);
       let users = await getCompanyTeamMembers(this.props.match.params.teamId, {
         paginationOptions: this.state.paginationOptions
-      });this.setState({
+      });
+      this.setState({
         loading: false,
-        companyTeam: companyTeam.data,
-        data: users.data.rows,
+        clientTeam: clientTeam,
+        data: get(users, 'rows', []),
         paginationOptions: {
           ...this.state.paginationOptions,
-          total: users.data.count
+          total: users.count
         }
       });
     } catch(e) {
+      console.log(e);
       message.error("Problem occured.");
       this.setState({ loading: false });
     }
@@ -108,10 +102,10 @@ export default class extends Component {
         });
         this.setState({
           loading: false,
-          data: users.data.rows,
+          data: get(users, 'rows', []),
           paginationOptions: {
             ...this.state.paginationOptions,
-            total: users.data.count
+            total: users.count
           }
         });
       } catch(e) {
@@ -121,17 +115,14 @@ export default class extends Component {
   }
 
   render() {
-    const margin = {
-      margin: "5px 5px 10px 0px"
-    };
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { teamId } = this.props.match.params;
+    const { match, history } = this.props;
+    const { teamId, clientId } = match.params;
     return (
       <LayoutWrapper>
         <PageHeader>
-          {
-            this.state.companyTeam && this.state.companyTeam.client && this.state.companyTeam.client.name
-          } -> {this.state.companyTeam && this.state.companyTeam.name } -> Members List
+          { this.state.clientTeam && this.state.clientTeam.client && this.state.clientTeam.client.name } -
+           {this.state.clientTeam && this.state.clientTeam.name } - Members List
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -140,18 +131,16 @@ export default class extends Component {
                 <ComponentTitle>
                   <ActionBtn
                     type="secondary"
-                    onClick={() => this.props.history.goBack()}
-                  >
-                    <Icon type="left" />Go Back
+                    onClick={() => history.goBack()}>
+                    <Icon type="left" /> Go Back
                   </ActionBtn>
                 </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      this.props.history.push(`/dashboard/company/teams/${teamId}/member/add`);
-                    }}
-                  >
+                      history.push(`/admin/client/team/${teamId}/member/add`);
+                    }}>
                     <Icon type="plus" />
                     Add team member
                   </ActionBtn>
@@ -159,7 +148,7 @@ export default class extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table
-                  locale={{ emptyText: "No users in company team" }}
+                  locale={{ emptyText: "No memebrs in client team" }}
                   size="middle"
                   bordered
                   pagination={{
@@ -167,18 +156,6 @@ export default class extends Component {
                     onChange: this.onTablePaginationChange
                   }}
                   columns={this.state.columns}
-                  onRow={row => ({
-                    onDoubleClick: () => {
-                      this.props.history.push({
-                        pathname: `/dashboard/company/user/${
-                          this.state.companyTeam.clientId
-                        }/edit/${row.userId}`,
-                        state: {
-                          ...row
-                        }
-                      });
-                    }
-                  })}
                   dataSource={this.state.data}
                   rowKey="userId"
                 />
@@ -190,3 +167,5 @@ export default class extends Component {
     );
   }
 }
+
+export default MemberList;

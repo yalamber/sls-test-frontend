@@ -1,38 +1,46 @@
 import React from "react";
+import Button from "@components/uielements/button";
 import Popconfirms from "@components/feedback/popconfirm";
 import { ActionWrapper } from "@utils/crud.style";
 import { Tooltip } from "antd";
-import { withRouter } from "react-router-dom";
 
-const ActionButtons = props => {
+const ActionButtons = ({ history, row, deleteMember }) => {
+  console.log(row);
   return (
     <ActionWrapper>
-      <Tooltip placement="topLeft" title="Show Members List">
-        <a
+      <Tooltip title="Edit Membership">
+        <Button
+          shape="circle"
+          icon="edit"
           onClick={() => {
-            props.history.push(`/dashboard/company/teams/${props.row.clientTeamId}/members`);
+            history.push(`/admin/client/team/${row.teamId}/member/${row.userId}/edit`);
           }}
-        >
-          <i className="ion-ios-person" />
-        </a>
+        />
       </Tooltip>
-      <Tooltip placement="topLeft" title="Edit Record">
-        <a
-          onClick={() =>
-            props.history.push(
-              "/dashboard/company/teams/edit/" + props.row.clientTeamId
-            )
-          }
-        >
-          <i className="ion-android-create" />
-        </a>
+      <Tooltip title="Membership Details">
+        <Button
+          shape="circle"
+          icon="info"
+          onClick={() =>{
+            history.push(`/admin/client/team/${row.teamId}/${row.userId}/details`)
+          }}
+        />
       </Tooltip>
-      <Tooltip placement="topLeft" title="Show Team Info">
-        <a className="infoBtn" onClick={() => props.info(props.row)}>
-          <i className="ion-information-circled" />
-        </a>
+      <Tooltip title="Delete">
+        <Popconfirms
+          title="Are you sure to delete memebr?"
+          okText="Yes"
+          cancelText="No"
+          placement="topRight"
+          onConfirm={() => deleteMember(row)}
+        >
+          <Button 
+            shape="circle" 
+            icon="delete"
+          />
+        </Popconfirms>
       </Tooltip>
     </ActionWrapper>
   );
 };
-export default withRouter(ActionButtons);
+export default ActionButtons;

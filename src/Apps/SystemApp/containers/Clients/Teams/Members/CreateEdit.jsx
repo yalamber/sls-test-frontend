@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Row, Col, Spin, message } from "antd";
-import { withRouter } from "react-router-dom";
 import _ from "lodash";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
@@ -16,11 +15,11 @@ import {
   getRoles
 } from "@helpers/http-api-client";
 
-class Create extends Component {
+class CreateEdit extends Component {
   constructor() {
     super();
     this.state = {
-      company: {},
+      client: {},
       team: {},
       users: [],
       roles: [],
@@ -44,13 +43,12 @@ class Create extends Component {
       let responseCompanyTeam = await getCompanyTeam(teamId);
       let responseUser = await getUser();
       let responseRoles = await this.getRolesByType();
-
       this.setState({
         loading: false,
-        team: responseCompanyTeam.data,
-        company: responseCompanyTeam.data.client,
-        roles: responseRoles.data.rows,
-        users: responseUser.data.rows
+        team: responseCompanyTeam,
+        client: responseCompanyTeam.client,
+        roles: responseRoles.rows,
+        users: responseUser.rows
       });
     } catch (e) {
       message.error("Problem occured.");
@@ -91,10 +89,12 @@ class Create extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
+    console.log(this.state);
     return (
       <LayoutWrapper>
         <PageHeader>
-          {this.state.company.name} -> {this.state.team.name}
+          {this.state.client.name} 
+          - {this.state.team.name}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -104,7 +104,7 @@ class Create extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <MemberForm
-                  relId={this.state.company.clientId}
+                  relId={this.state.client.clientId}
                   userType="clientUser"
                   submit={this.handleSubmit}
                   users={this.state.users}
@@ -120,4 +120,4 @@ class Create extends Component {
   }
 }
 
-export default withRouter(Create);
+export default CreateEdit;

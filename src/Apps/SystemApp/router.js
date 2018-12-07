@@ -113,21 +113,28 @@ const routes = [
     component: asyncComponent(() => import('./containers/Clients/Teams/Create'))
   },
   {
-    path: 'client/:clientId/team/:teamId/edit',
+    path: 'client/team/:teamId/edit',
     component: asyncComponent(() => import('./containers/Clients/Teams/Edit'))
   },
   {
-    path: 'client/:clientId/team/:teamId/details',
+    path: 'client/team/:teamId/details',
     component: asyncComponent(() => import('./containers/Clients/Teams/Edit'))
   },
   {
-    path: 'client/:clientId/team/:teamId/members',
+    path: 'client/team/:teamId/members',
     component: asyncComponent(() => import('./containers/Clients/Teams/Members/List'))
   },
   {
-    path: 'client/:clientId/team/:teamId/member/add',
-    exact: true,
+    path: 'client/team/:teamId/member/add',
     component: asyncComponent(() => import('./containers/Clients/Teams/Members/CreateEdit'))
+  },
+  {
+    path: 'client/team/:teamId/member/:userId/edit',
+    component: asyncComponent(() => import('./containers/Clients/Teams/Members/CreateEdit'))
+  },
+  {
+    path: 'client/team/:teamId/member/:userId/details',
+    component: asyncComponent(() => import('./containers/Clients/Teams/Members/Detail'))
   },
 
   /* test manager */
