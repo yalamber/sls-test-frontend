@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Select, Row, Col, Input, Radio, Icon } from "antd";
+import { Form, Select, Row, Col, Input } from "antd";
 import { withRouter } from "react-router-dom";
 import Button from "@components/uielements/button";
 import { userValidation } from "@validations/usersValidation";
@@ -15,8 +15,6 @@ import Errors from "@utils/Errors";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const TextArea = Input.TextArea;
-const RadioGroup = Radio.Group;
 const InputGroup = Input.Group;
 
 class MemberForm extends Component {

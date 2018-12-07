@@ -133,6 +133,51 @@ class SWQA {
     return this.api.send('GET', `client-team/${teamId}/member`, options);
   }
 
+  //agencies
+  getAgencies = (options) => {
+    return this.api.send('GET', 'agency', options);
+  }
+
+  getAgency = (agencyId) => {
+    return this.api.send('GET', `agency/${agencyId}`);
+  }
+
+  // agency users
+  addAgencyUser = (agencyId, payload) => {
+    return this.api.send('POST', `agency/${agencyId}/user`, payload);
+  }
+
+  getAgencyUsers = (agencyId, options) => {
+    return this.api.send('GET', `agency/${agencyId}/user`, options);
+  }
+
+  getAgencyUser = (agencyId, userId) => {
+    return this.api.send('GET', `agency/${agencyId}/user/${userId}`);
+  }
+
+  // agency teams
+  addAgencyTeam = (agencyId, payload) => {
+    payload.agencyId = agencyId;
+    return this.api.send('POST', `agency-team`, payload);
+  }
+
+  getAgencyTeams = (agencyId, options) => {
+    options.agencyId = agencyId;
+    return this.api.send('GET', `agency-team`, options);
+  }
+
+  getAgencyTeam = (teamId) => {
+    return this.api.send('GET', `agency-team/${teamId}`);
+  }
+
+  //agency team members
+  addAgencyTeamMember = (teamId, payload) => {
+    return this.api.send('POST', `agency-team/${teamId}/member`, payload);
+  }
+
+  getAgencyTeamMembers = (teamId, options) => {
+    return this.api.send('GET', `agency-team/${teamId}/member`, options);
+  }
 
   //users
   createUser = (payload) => {

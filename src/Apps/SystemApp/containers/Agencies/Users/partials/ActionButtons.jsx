@@ -1,36 +1,28 @@
 import React from "react";
-import Popconfirms from "@components/feedback/popconfirm";
-import { withRouter } from "react-router";
-
+import { Button, Tooltip } from 'antd';
 import { ActionWrapper } from "@utils/crud.style";
-import { Tooltip } from "antd";
 
-function ActionButtons(props) {
-  const { agencyId } = props.match.params;
-  const { row, selectedTeam } = props;
+function ActionButtons({ history, row, clientId}) {
   return (
     <ActionWrapper>
-      <Tooltip placement="topLeft" title="Edit Record">
-        <a
+      <Tooltip title="Edit">
+        <Button
+          shape="circle"
+          icon="edit" 
           onClick={() => {
-            props.history.push({
-              pathname: `/dashboard/agency/user/${agencyId}/edit/${row.userId}`,
-              state: {
-                ...row
-              }
-            });
-          }}
-        >
-          <i className="ion-android-create" />
-        </a>
+            history.push(`/admin/agency/${clientId}/user/${row.userId}/edit`);
+          }} />
       </Tooltip>
-      <Tooltip placement="topLeft" title="Show user info">
-        <a className="infoBtn" onClick={() => alert("user info here")}>
-          <i className="ion-information-circled" />
-        </a>
+      <Tooltip title="User details">
+        <Button
+          shape="circle"
+          icon="info" 
+          onClick={() => {
+            history.push(`/admin/agency/${clientId}/user/${row.userId}/details`);
+          }} />
       </Tooltip>
     </ActionWrapper>
   );
 }
 
-export default withRouter(ActionButtons);
+export default ActionButtons;

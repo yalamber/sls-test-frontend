@@ -1,27 +1,46 @@
 import React from "react";
-import { Tooltip } from "antd";
-import { withRouter } from "react-router-dom";
+import Button from "@components/uielements/button";
+import Popconfirms from "@components/feedback/popconfirm";
 import { ActionWrapper } from "@utils/crud.style";
-const ActionButtons = props => {
+import { Tooltip } from "antd";
+
+const ActionButtons = ({ history, row, deleteMember }) => {
+  console.log(row);
   return (
     <ActionWrapper>
-      <Tooltip placement="topLeft" title="Edit Record">
-        <a
-          onClick={() =>
-            props.history.push(
-              "/dashboard/agency/teams/edit/" + props.row.agencyTeamId
-            )
-          }
-        >
-          <i className="ion-android-create" />
-        </a>
+      <Tooltip title="Edit Membership">
+        <Button
+          shape="circle"
+          icon="edit"
+          onClick={() => {
+            history.push(`/admin/agency/team/${row.teamId}/member/${row.userId}/edit`);
+          }}
+        />
       </Tooltip>
-      <Tooltip placement="topLeft" title="Show Team Info">
-        <a className="infoBtn" onClick={() => props.info(props.row)}>
-          <i className="ion-information-circled" />
-        </a>
+      <Tooltip title="Membership Details">
+        <Button
+          shape="circle"
+          icon="info"
+          onClick={() =>{
+            history.push(`/admin/agency/team/${row.teamId}/member/${row.userId}/details`)
+          }}
+        />
+      </Tooltip>
+      <Tooltip title="Delete">
+        <Popconfirms
+          title="Are you sure to delete memebr?"
+          okText="Yes"
+          cancelText="No"
+          placement="topRight"
+          onConfirm={() => deleteMember(row)}
+        >
+          <Button 
+            shape="circle" 
+            icon="delete"
+          />
+        </Popconfirms>
       </Tooltip>
     </ActionWrapper>
   );
 };
-export default withRouter(ActionButtons);
+export default ActionButtons;

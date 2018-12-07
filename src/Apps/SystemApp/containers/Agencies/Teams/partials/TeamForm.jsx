@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
-import {Form, Row, Col, Input, message, Select} from 'antd';
+import {Form, Select, Row, Col, Input} from 'antd';
 import {withRouter} from 'react-router-dom'
 import Button from '@components/uielements/button';
 import {teamValidation} from '@validations/teamValidation';
 import {
   ActionWrapper,
 } from '@utils/crud.style';
-
-import {getCompanyUsers} from "@helpers/http-api-client";;
+import {getCompanies} from "@helpers/http-api-client";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,12 +15,14 @@ class TeamForm extends Component {
   constructor() {
     super();
     this.state = {
+      companies: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.resetForm = this.resetForm.bind(this);
   }
 
   componentDidMount() {
+    
   }
 
   handleSubmit(e) {
@@ -34,17 +35,14 @@ class TeamForm extends Component {
   }
 
   resetForm() {
-    message.success("Successfully Saved");
-    this.props.form.resetFields();
     this.props.history.goBack();
   }
-
 
   render() {
     const margin = {
       margin: '5px 5px 0px 0'
     };
-
+    const clientsOptions = this.state.companies.map(company => <Option key={company.clientId}>{company.name}</Option>);
     const {getFieldDecorator} = this.props.form;
     return (
       <div>
@@ -61,7 +59,6 @@ class TeamForm extends Component {
                 </Col>
               </Row>
             </Col>
-
           </Row>
           <ActionWrapper style={margin}>
             <Button type="primary" style={margin} icon="left" onClick={() => this.props.history.goBack()}>
@@ -82,9 +79,12 @@ const mapPropsToFields = (props) => {
     return;
   }
   return {
+    clientId: Form.createFormField({
+      value: props.team.clientId ? props.team.clientId.toString() : ''
+    }),
     name: Form.createFormField({
       value: props.team.name
-    }),
+    })
   };
 };
 const form = Form.create({mapPropsToFields})(TeamForm);

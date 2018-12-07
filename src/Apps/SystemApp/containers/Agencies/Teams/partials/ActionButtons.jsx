@@ -1,36 +1,44 @@
 import React from "react";
-import { Tooltip } from "antd";
-import { withRouter } from "react-router-dom";
+import { Button, Tooltip } from 'antd';
 import { ActionWrapper } from "@utils/crud.style";
 
-const ActionButtons = function ActionButtons(props) {
+const ActionButtons = ({history, row}) => {
   return (
     <ActionWrapper>
-      <Tooltip placement="topLeft" title="Show Members List">
-        <a
-          className="infoBtn"
-          onClick={() =>
-            props.history.push(
-              `/dashboard/agency/teams/${props.row.agencyTeamId}/members`
-            )
-          }
-        >
-          <i className="ion-ios-person" />
-        </a>
+      <Tooltip title="Show Members List">
+        <Button
+          shape="circle"
+          icon="user" 
+          onClick={() => {
+            history.push(`/admin/agency/team/${row.clientTeamId}/members`);
+          }} />
       </Tooltip>
-      <Tooltip placement="topLeft" title="Edit Record">
-        <a
-          onClick={() => props.history.push("teams/edit/" + props.row.agencyId)}
-        >
-          <i className="ion-android-create" />
-        </a>
+      <Tooltip title="Test Suites">
+        <Button
+          shape="circle"
+          icon="folder" 
+          onClick={() => {
+            history.push(`admin/test-manager/test-suite?teamId=${row.clientTeamId}`)
+          }} />
       </Tooltip>
-      <Tooltip placement="topLeft" title="Show Record">
-        <a onClick={() => alert("show info")}>
-          <i className="ion-information-circled" />
-        </a>
+      <Tooltip title="Edit Record">
+        <Button
+          shape="circle"
+          icon="edit" 
+          onClick={() => {
+            history.push(`/admin/agency/team/${row.clientTeamId}/edit`);
+          }} />
+      </Tooltip>
+      <Tooltip title="Show Team Info">
+        <Button
+          shape="circle"
+          icon="info" 
+          onClick={() => {
+            history.push(`/admin/agency/team/${row.clientTeamId}/details`);
+          }} />
       </Tooltip>
     </ActionWrapper>
   );
 };
-export default withRouter(ActionButtons);
+
+export default ActionButtons;

@@ -1,14 +1,19 @@
 import React, { Component } from "react";
-import { Row, Col, Spin } from "antd";
+import { connect } from "react-redux";
+import { Row, Col, message, Spin } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import ContentHolder from "@components/utility/contentHolder";
+import { getErrorMessageFromApiResponseError } from "@utils/response-message";
 import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
 import Box from "@components/utility/box";
-import { createAgencyTeam } from "@helpers/http-api-client";
+import { addCompanyTeam } from "@helpers/http-api-client";
+import clientActions from '@app/SystemApp/redux/agency/actions';
 import TeamForm from "./partials/TeamForm";
 
-export default class extends Component {
+const { requestCurrentAgency } = clientActions;
+
+class Create extends Component {
   constructor() {
     super();
     this.state = {
@@ -17,34 +22,42 @@ export default class extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    const { match } = this.props;
+    this.props.requestCurrentAgency(match.params.clientId);
+  }
+
   handleSubmit(formData, resetForm) {
+    const { clientId } = this.props.location.state.row;
     this.setState({ loading: true });
-    const { agencyId } = this.props.match.params;
-    createAgencyTeam({ ...formData, agencyId })
+    addCompanyTeam({ ...formData, clientId })
       .then(res => {
         resetForm();
+        message.success("Successfully Saved.");
+      })
+      .catch(error => {
+        message.error(getErrorMessageFromApiResponseError(error));
       })
       .finally(() => {
         this.setState({ loading: false });
       });
+    return true;
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { agencyId } = this.props.match.params;
-    const { name } = this.props.location.state;
-    const agencyName = name;
+    const { currentAgency = { clientData: { name: '' } }, history, match } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={12} sm={12} xs={24} style={colStyle}>
             <Box>
-              <TitleWrapper>
-                <ComponentTitle>Create new Team for {agencyName}</ComponentTitle>
-              </TitleWrapper>
               <Spin spinning={this.state.loading}>
-                <TeamForm submit={this.handleSubmit} />
+                <TitleWrapper>
+                  <ComponentTitle>Create Team for  {currentAgency.clientData.name} </ComponentTitle>
+                </TitleWrapper>
               </Spin>
+              <TeamForm submit={this.handleSubmit} />
             </Box>
           </Col>
           <Col md={12} sm={12} xs={24} style={colStyle}>
@@ -62,3 +75,12 @@ export default class extends Component {
     );
   }
 }
+
+export default connect(
+  state => ({
+    ...state.Agency
+  }),
+  {
+    requestCurrentAgency
+  }
+)(Create);

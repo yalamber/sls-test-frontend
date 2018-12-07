@@ -6,39 +6,39 @@ const ActionButtons = ({ history, row }) => {
   return (
     <ActionWrapper>
       <Tooltip title="Users">
-        <Button
-          shape="circle"
-          icon="user"
+        <Button 
+          shape="circle" 
+          icon="user" 
           onClick={() => {
-            history.push(`agency/${row.agencyId}/users`);
-          }}
+            history.push(`agency/${row.clientId}/users`);
+          }} 
         />
       </Tooltip>
       <Tooltip title="Teams">
-        <Button
-          shape="circle"
+        <Button 
+          shape="circle" 
           icon="team"
           onClick={() => {
-            history.push(`agency/${row.agencyId}/teams`);
-          }}
+            history.push(`agency/${row.clientId}/teams`);
+          }} 
         />
       </Tooltip>
       <Tooltip title="Edit">
-        <Button
-          shape="circle"
+        <Button 
+          shape="circle" 
           icon="edit"
           onClick={() => {
-            history.push(`agency/${row.agencyId}/edit`);
-          }}
+            history.push(`agency/${row.clientId}/edit`);
+          }} 
         />
       </Tooltip>
       <Tooltip title="Details">
-        <Button
-          shape="circle"
+        <Button  
+          shape="circle" 
           icon="info"
           onClick={() => {
             history.push(`agency/${row.clientId}/details`)
-          }}
+          }} 
         />
       </Tooltip>
     </ActionWrapper>

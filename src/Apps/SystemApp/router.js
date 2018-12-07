@@ -2,53 +2,78 @@ import asyncComponent from '@helpers/AsyncFunc';
 
 const routes = [
   {
-    path: '',
+    path: '/',
     component: asyncComponent( () => import('@page/Dashboard'))
   },
+  //agencies
   {
     path: 'agencies',
     component: asyncComponent(() => import('./containers/Agencies/List'))
   },
   {
     path: 'agency/create',
-    component: asyncComponent(() => import('./containers/Agencies/Create'))
+    component: asyncComponent(() => import('./containers/Agencies/CreateEdit'))
   },
   {
-    path: 'agency/:id/edit',
-    component: asyncComponent(() => import('./containers/Agencies/Edit'))
+    path: 'agency/:agencyId/edit',
+    component: asyncComponent(() => import('./containers/Agencies/CreateEdit'))
   },
   {
-    path: 'agency/:agencyId/Users',
+    path: 'agency/:agencyId/details',
+    component: asyncComponent(() => import('./containers/Agencies/Detail'))
+  },
+  //client users
+  {
+    path: 'agency/:agencyId/users',
     component: asyncComponent(() => import('./containers/Agencies/Users/List'))
   },
+  {
+    path: 'agency/:agencyId/user/create',
+    exact: true,
+    component: asyncComponent(() => import('./containers/Clients/Users/CreateEdit'))
+  },
+  {
+    path: 'agency/:agencyId/user/:userId/edit',
+    exact: true,
+    component: asyncComponent(() => import('./containers/Agencies/Users/CreateEdit'))
+  },
+  {
+    path: 'agency/:agencyId/user/:userId/details',
+    exact: true,
+    component: asyncComponent(() => import('./containers/Agencies/Users/Detail'))
+  },
+  //agency teams
   {
     path: 'agency/:agencyId/teams',
     component: asyncComponent(() => import('./containers/Agencies/Teams/List'))
   },
   {
-    path: 'agency/teams/:teamId/members',
-    component: asyncComponent(() => import('./containers/Agencies/Teams/Members/List'))
-  },
-  {
-    path: 'agency/teams/:agencyId/edit',
-    component: asyncComponent(() => import('./containers/Agencies/Teams/Edit'))
-  },
-  {
-    path: 'agency/team/:agencyId/create',
+    path: 'agency/:agencyId/team/create',
     component: asyncComponent(() => import('./containers/Agencies/Teams/Create'))
   },
   {
-    path: 'agency/user/create/:agencyId',
-    component: asyncComponent(() => import('./containers/Agencies/Users/CreateEdit'))
+    path: 'agency/team/:teamId/edit',
+    component: asyncComponent(() => import('./containers/Agencies/Teams/Edit'))
   },
   {
-    path: 'agency/user/:agencyId/edit/:userId',
-    component: asyncComponent(() => import('./containers/Clients/Users/CreateEdit'))
+    path: 'agency/team/:teamId/details',
+    component: asyncComponent(() => import('./containers/Clients/Teams/Edit'))
   },
   {
-    path: 'agency/teams/:teamId/member/add',
-    exact: true,
+    path: 'agency/team/:teamId/members',
+    component: asyncComponent(() => import('./containers/Agencies/Teams/Members/List'))
+  },
+  {
+    path: 'agency/team/:teamId/member/add',
     component: asyncComponent(() => import('./containers/Agencies/Teams/Members/CreateEdit'))
+  },
+  {
+    path: 'agency/team/:teamId/member/:userId/edit',
+    component: asyncComponent(() => import('./containers/Agencies/Teams/Members/CreateEdit'))
+  },
+  {
+    path: 'agency/team/:teamId/member/:userId/details',
+    component: asyncComponent(() => import('./containers/Agencies/Teams/Members/Detail'))
   },
   {
     path: 'agency/test-manager',
@@ -66,7 +91,7 @@ const routes = [
     path: 'agency/test-manager/:agencyId/assigned-tests',
     component: asyncComponent(() => import('./containers/Agencies/TestManager/TestQueues/AssignedTests'))
   },
-  //clients
+  //////////////////////clients//////////////////////////////////////////////////////////////////////////
   {
     path: 'clients',
     component: asyncComponent(() => import('./containers/Clients/List'))

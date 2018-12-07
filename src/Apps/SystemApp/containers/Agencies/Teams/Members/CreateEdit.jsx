@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { Row, Col, Spin } from "antd";
-import { withRouter } from "react-router-dom";
+import { Row, Col, Spin, message } from "antd";
 import _ from "lodash";
-import { message } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
@@ -12,16 +10,16 @@ import Box from "@components/utility/box";
 import MemberForm from "./partials/MemberForm";
 import {
   getUser,
-  getAgencyTeam,
-  addAgencyTeamMember,
+  getCompanyTeam,
+  addCompanyTeamMember,
   getRoles
 } from "@helpers/http-api-client";
 
-class Create extends Component {
+class CreateEdit extends Component {
   constructor() {
     super();
     this.state = {
-      agency: {},
+      client: {},
       team: {},
       users: [],
       roles: [],
@@ -42,16 +40,15 @@ class Create extends Component {
     const { teamId } = this.props.match.params;
     this.setState({ loading: true });
     try {
-      let responseAgencyTeam = await getAgencyTeam(teamId);
-      let responseUser = await getUser({ query: { limit: 99 } });
+      let responseCompanyTeam = await getCompanyTeam(teamId);
+      let responseUser = await getUser();
       let responseRoles = await this.getRolesByType();
-
       this.setState({
         loading: false,
-        team: responseAgencyTeam.data,
-        agency: responseAgencyTeam.data.agency,
-        roles: responseRoles.data.rows,
-        users: responseUser.data.rows
+        team: responseCompanyTeam,
+        client: responseCompanyTeam.client,
+        roles: responseRoles.rows,
+        users: responseUser.rows
       });
     } catch (e) {
       message.error("Problem occured.");
@@ -65,13 +62,13 @@ class Create extends Component {
       this.setState({ loading: true });
 
       const { status, userId, roleId } = formData;
-      let responseAgencyTeamMember = await addAgencyTeamMember({
+      let responseCompanyTeamMember = await addCompanyTeamMember({
         userId,
         teamId,
         status,
-        roleId
+        roleId,
       });
-      if (responseAgencyTeamMember.status === 200) {
+      if (responseCompanyTeamMember.status === 200) {
         message.success("Successfully Saved");
         resetForm();
         this.setState({ errors: { details: [] } });
@@ -85,17 +82,18 @@ class Create extends Component {
   }
 
   async getRolesByType(opts = {}) {
-    const { type = "agencyTeamUser" } = opts;
+    const { type = 'clientTeamUser' } = opts;
     const data = await getRoles({ query: { type } });
     return data;
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
+    console.log(this.state);
     return (
       <LayoutWrapper>
         <PageHeader>
-          Agency -> {this.state.agency.name} -> {this.state.team.name}
+          {this.state.client.name} - {this.state.team.name}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -105,8 +103,8 @@ class Create extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <MemberForm
-                  relId={this.state.agency.agencyId}
-                  userType="agencyUser"
+                  relId={this.state.client.clientId}
+                  userType="clientUser"
                   submit={this.handleSubmit}
                   users={this.state.users}
                   roles={this.state.roles}
@@ -121,4 +119,4 @@ class Create extends Component {
   }
 }
 
-export default withRouter(Create);
+export default CreateEdit;

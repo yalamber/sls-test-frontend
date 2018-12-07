@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Row, Col, Icon, Rate, Spin } from "antd";
+import { connect } from "react-redux";
+import { Row, Col, Icon, Spin } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
-import ActionButtons from "./partials/ActionButtons";
 import {
   ActionBtn,
   TitleWrapper,
@@ -11,146 +11,92 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from "@utils/crud.style";
-import {
-  getAgencyTeams
-  // deleteProviderTeam
-} from "@helpers/http-api-client";
+import clientActions from '@app/SystemApp/redux/agency/actions';
+import ActionButtons from "./partials/ActionButtons";
+const { requestAgencyTeams, requestCurrentAgency } = clientActions;
 
-class TeamsList extends Component {
+class List extends Component {
   constructor(props) {
     super(props);
-
-    const { location } = this.props;
-    const agencyIdfromLocation =
-      location && location.state && location.state.agencyId
-        ? location.state.agencyId + ""
-        : "";
-    const agencyName =
-      location && location.state && location.state.name
-        ? location.state.name + ""
-        : "";
-    const { agencyId } = this.props.match.params;
-    const defaultAgency = agencyId
-      ? agencyId
-      : agencyIdfromLocation
-        ? agencyIdfromLocation
-        : "";
-    this.state = {
-      selectedAgency: undefined,
-      agencyName,
-      columns: [
-        {
-          title: "Team Name",
-          dataIndex: "name",
-          key: "name"
-        },
-        {
-          title: "Team Admin",
-          dataIndex: "manager.username",
-          key: "teamAdmin"
-        },
-        {
-          title: "Rating",
-          dataIndex: "rating",
-          key: "rating",
-          render: value => <Rate defaultValue={value} disabled />
-        },
-        {
-          title: "Actions",
-          key: "actions",
-          render: row => <ActionButtons row={row} delete={this.handleDelete} />
-        }
-      ],
-      dataSource: [],
-      loading: false
-    };
-    this.handleDelete = this.handleDelete.bind(this);
-    this.fetchData = this.fetchData.bind(this);
+    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
+    this.columns = [
+      {
+        title: "Team Name",
+        dataIndex: "name",
+        key: "name"
+      },
+      {
+        className: 'column-actions',
+        title: "Actions",
+        key: "actions",
+        render: row => <ActionButtons 
+          row={row}
+          clientId={props.match.params.clientId}
+          history={this.props.history} />
+      }
+    ];
   }
 
   componentDidMount() {
-    this.fetchData();
+    const { match } = this.props;
+    this.props.requestCurrentAgency(match.params.clientId);
+    this.onTablePaginationChange(match.params.clientId)(1, 5);    
   }
 
-  fetchData() {
-    const { agencyId } = this.props.match.params;
-    this.setState({ loading: true }, () => {
-      getAgencyTeams({ query: { agencyId } })
-        .then(res => {
-          this.setState({
-            dataSource: res.rows,
-            loading: false
-          });
-        })
-        .finally(() => {
-          this.setState({ loading: false });
-        });
-    });
-  }
-
-  handleDelete(row) {
-    this.setState({ loading: true });
-    // deleteProviderTeam(row.providerTeamId)
-    //   .then(res => {
-    //     message.success("Successfully Deleted.");
-    //     this.fetchData();
-    //   })
-    //   .finally(() => {
-    //     this.setState({ loading: false });
-    //   });
+  onTablePaginationChange(clientId) {
+    return (page, pageSize) => {  
+      this.props.requestAgencyTeams(clientId, {
+        page,
+        pageSize
+      });
+    }
   }
 
   render() {
-    const margin = {
-      margin: "5px 5px 10px 0"
-    };
-
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { agencyId } = this.props.match.params;
-
+    const { currentAgency = { clientData: { name: '' } }, history, match } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
-              <Spin spinning={this.state.loading}>
-                <TitleWrapper>
-                  <ComponentTitle className="captialize-data">
-                    Agency -> {this.state.agencyName} - Team List
-                  </ComponentTitle>
-                  <ButtonHolders>
-                    <ActionBtn
-                      type="primary"
-                      onClick={() => {
-                        this.props.history.push(
-                          {
-                            pathname: `/dashboard/agency/team/${agencyId}/create`
-                          },
-                          {
-                            ...this.props.location.state
-                          }
-                        );
-                      }}
-                    >
-                      <Icon type="usergroup-add" />
-                      Create Team
-                    </ActionBtn>
-                  </ButtonHolders>
-                </TitleWrapper>
+              <TitleWrapper>
+                <ComponentTitle>
+                  <ActionBtn
+                    type="secondary"
+                    onClick={() => history.goBack()}
+                  >
+                    <Icon type="left" /> Go Back
+                  </ActionBtn>
+                  &nbsp; Company - {currentAgency.clientData.name} - Teams
+                </ComponentTitle>
+                <ButtonHolders>
+                  <ActionBtn
+                    type="primary"
+                    onClick={() => {
+                      history.push(`/admin/agency/${match.params.clientId}/team/create/`);
+                    }}>
+                    <Icon type="plus" />
+                    Add new Team
+                  </ActionBtn>
+                </ButtonHolders>
+              </TitleWrapper>
+              <Spin spinning={currentAgency.teamList.loading}>
                 <Table
-                  size="middle"
+                  locale={{ emptyText: "No Teams in client" }}
+                  pagination={{
+                    ...currentAgency.teamList.paginationOptions,
+                    onChange: this.onTablePaginationChange(match.params.clientId)
+                  }}
                   bordered
-                  pagination={true}
-                  columns={this.state.columns}
-                  dataSource={this.state.dataSource}
-                  rowKey="providerTeamId"
+                  columns={this.columns}
                   onRow={row => ({
                     onDoubleClick: () => {
-                      this.props.history.push(
-                        `/dashboard/agency/teams/${row.agencyTeamId}/members`
-                      );
+                      history.push(`/admin/agency/${match.params.clientId}/team/${row.clientTeamId}/details`);
                     }
                   })}
+                  dataSource={currentAgency.teamList.rows}
+                  rowKey="clientTeamId"
                 />
               </Spin>
             </Box>
@@ -161,4 +107,12 @@ class TeamsList extends Component {
   }
 }
 
-export default TeamsList;
+export default connect(
+  state => ({
+    ...state.Agency
+  }),
+  {
+    requestCurrentAgency,
+    requestAgencyTeams
+  }
+)(List);
