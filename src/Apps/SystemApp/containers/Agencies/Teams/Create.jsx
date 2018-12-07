@@ -8,10 +8,10 @@ import { getErrorMessageFromApiResponseError } from "@utils/response-message";
 import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import { addCompanyTeam } from "@helpers/http-api-client";
-import clientActions from '@app/SystemApp/redux/agency/actions';
+import agencyActions from '@app/SystemApp/redux/agency/actions';
 import TeamForm from "./partials/TeamForm";
 
-const { requestCurrentAgency } = clientActions;
+const { requestCurrentAgency } = agencyActions;
 
 class Create extends Component {
   constructor() {
@@ -24,13 +24,13 @@ class Create extends Component {
 
   componentDidMount() {
     const { match } = this.props;
-    this.props.requestCurrentAgency(match.params.clientId);
+    this.props.requestCurrentAgency(match.params.agencyId);
   }
 
   handleSubmit(formData, resetForm) {
-    const { clientId } = this.props.location.state.row;
+    const { agencyId } = this.props.location.state.row;
     this.setState({ loading: true });
-    addCompanyTeam({ ...formData, clientId })
+    addCompanyTeam({ ...formData, agencyId })
       .then(res => {
         resetForm();
         message.success("Successfully Saved.");
@@ -46,7 +46,7 @@ class Create extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentAgency = { clientData: { name: '' } }, history, match } = this.props;
+    const { currentAgency = { agencyData: { name: '' } }, history, match } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -54,7 +54,7 @@ class Create extends Component {
             <Box>
               <Spin spinning={this.state.loading}>
                 <TitleWrapper>
-                  <ComponentTitle>Create Team for  {currentAgency.clientData.name} </ComponentTitle>
+                  <ComponentTitle>Create Team for  {currentAgency.agencyData.name} </ComponentTitle>
                 </TitleWrapper>
               </Spin>
               <TeamForm submit={this.handleSubmit} />

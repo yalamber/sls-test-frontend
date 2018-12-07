@@ -104,13 +104,13 @@ class List extends Component {
                     ...this.getPaginationOptions(),
                     onChange: this.onTablePaginationChange
                   }}
-                  rowKey="clientId"
+                  rowKey="agencyId"
                   columns={this.state.columns}
                   dataSource={rows}
                   onRow={row => ({
                     onDoubleClick: () => {
-                      // this.props.history.push('details/' + row.clientId)
-                      this.props.history.push(`details/${row.clientId}`);
+                      // this.props.history.push('details/' + row.agencyId)
+                      this.props.history.push(`details/${row.agencyId}`);
                     }
                   })}
                 />

@@ -12,10 +12,10 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from '@utils/crud.style';
-import clientActions from '@app/SystemApp/redux/agency/actions';
+import agencyActions from '@app/SystemApp/redux/agency/actions';
 import ActionButtons from "./partials/ActionButtons";
 import TestManagerActionButtons from './partials/TestManagerActionButtons';
-const { requestAgencies, deleteAgency } = clientActions;
+const { requestAgencies, deleteAgency } = agencyActions;
 
 class AgencyList extends Component {
   constructor(props) {
@@ -24,27 +24,27 @@ class AgencyList extends Component {
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
-        title: <IntlMessages id="client.name"/>,
+        title: <IntlMessages id="agency.name"/>,
         dataIndex: "name",
         key: "name"
       },
       {
-        title: <IntlMessages id="client.owner"/>,
+        title: <IntlMessages id="agency.owner"/>,
         dataIndex: "owner.username",
-        key: "client_owner"
+        key: "agency_owner"
       },
       {
-        title: <IntlMessages id="client.owner.email"/>,
+        title: <IntlMessages id="agency.owner.email"/>,
         dataIndex: "owner.contactInformation.emailAddress",
-        key: "client_owner_email"
+        key: "agency_owner_email"
       },
       {
-        title: <IntlMessages id="client.location"/>,
+        title: <IntlMessages id="agency.location"/>,
         dataIndex: "location",
         key: "location"
       },
       {
-        title: <IntlMessages id="client.testManagerActions"/>,
+        title: <IntlMessages id="agency.testManagerActions"/>,
         key: "testManagerActions",
         render: row => <TestManagerActionButtons
           row={row}
@@ -79,19 +79,20 @@ class AgencyList extends Component {
   }
 
   handleDelete(row) {
-    this.props.deleteAgency(row.clientId);
+    this.props.deleteAgency(row.agencyId);
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { list, history } = this.props;
+    console.log(list);
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle><IntlMessages id="clients"/></ComponentTitle>
+                <ComponentTitle><IntlMessages id="agencies"/></ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"
@@ -99,7 +100,7 @@ class AgencyList extends Component {
                       history.push("agency/create");
                     }}>
                     <Icon type="plus" />
-                    <IntlMessages id="client.add"/>
+                    <IntlMessages id="agency.add"/>
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
@@ -111,12 +112,12 @@ class AgencyList extends Component {
                     onChange: this.onTablePaginationChange
                   }}
                   bordered
-                  rowKey="clientId"
+                  rowKey="agencyId"
                   columns={this.columns}
                   dataSource={list.rows}
                   onRow={row => ({
                     onDoubleClick: () => {
-                      history.push(`agency/${row.clientId}/details`);
+                      history.push(`agency/${row.agencyId}/details`);
                     }
                   })}
                 />

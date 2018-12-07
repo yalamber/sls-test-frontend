@@ -46,7 +46,7 @@ class MemberList extends Component {
           )
         }
       ],
-      clientTeam: {},
+      agencyTeam: {},
       data: [],
       paginationOptions: {
         defaultCurrent: 1,
@@ -67,13 +67,13 @@ class MemberList extends Component {
   async fetchData() {
     this.setState({ loading: true });
     try {
-      let clientTeam = await getCompanyTeam(this.props.match.params.teamId);
+      let agencyTeam = await getCompanyTeam(this.props.match.params.teamId);
       let users = await getCompanyTeamMembers(this.props.match.params.teamId, {
         paginationOptions: this.state.paginationOptions
       });
       this.setState({
         loading: false,
-        clientTeam: clientTeam,
+        agencyTeam: agencyTeam,
         data: get(users, 'rows', []),
         paginationOptions: {
           ...this.state.paginationOptions,
@@ -117,12 +117,12 @@ class MemberList extends Component {
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { match, history } = this.props;
-    const { teamId, clientId } = match.params;
+    const { teamId, agencyId } = match.params;
     return (
       <LayoutWrapper>
         <PageHeader>
-          { this.state.clientTeam && this.state.clientTeam.client && this.state.clientTeam.client.name } -
-           {this.state.clientTeam && this.state.clientTeam.name } - Members List
+          { this.state.agencyTeam && this.state.agencyTeam.agency && this.state.agencyTeam.agency.name } -
+           {this.state.agencyTeam && this.state.agencyTeam.name } - Members List
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -148,7 +148,7 @@ class MemberList extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table
-                  locale={{ emptyText: "No memebrs in client team" }}
+                  locale={{ emptyText: "No memebrs in agency team" }}
                   size="middle"
                   bordered
                   pagination={{

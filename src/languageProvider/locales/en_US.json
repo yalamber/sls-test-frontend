@@ -15,6 +15,11 @@
   "actions": "Actions",
 
   "agency.add": "Add Agency",
+  "agency.name": "Name",
+  "agency.location": "Location",
+  "agency.owner": "Owner",
+  "agency.owner.email": "Owner Email",
+  "agency.testManagerActions": "Test Manager Actions",
 
   "client.add": "Add Client",
   "client.name": "Name",

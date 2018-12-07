@@ -8,7 +8,7 @@ import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
-import clientActions from '@app/SystemApp/redux/agency/actions';
+import agencyActions from '@app/SystemApp/redux/agency/actions';
 import UserFormFields from "@app/SystemApp/components/User/FormFields";
 
 const { 
@@ -17,7 +17,7 @@ const {
   requestAgencyUserRoles,
   requestCreateAgencyUser,
   clearCurrentAgencyUser,
-} = clientActions;
+} = agencyActions;
 
 class CreateEdit extends Component {
   constructor(props) {
@@ -34,13 +34,13 @@ class CreateEdit extends Component {
       requestAgencyUserRoles,
       clearCurrentAgencyUser
     } = this.props;
-    //get current client
-    requestCurrentAgency(match.params.clientId);
-    //get client roles
+    //get current agency
+    requestCurrentAgency(match.params.agencyId);
+    //get agency roles
     requestAgencyUserRoles();
     //get current user and set to edit if we have userId
     if(match.params.userId) {
-      requestCurrentAgencyUser(match.params.clientId, match.params.userId);
+      requestCurrentAgencyUser(match.params.agencyId, match.params.userId);
     } else {
       clearCurrentAgencyUser();
     }
@@ -51,10 +51,10 @@ class CreateEdit extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if(this.mode === 'edit') {
-          //this.props.requestUpdateAgencyUser(this.props.match.clientId, userId, values, this.props.history);
+          //this.props.requestUpdateAgencyUser(this.props.match.agencyId, userId, values, this.props.history);
         } else {
-          //create user and add to client
-          this.props.requestCreateAgencyUser(this.props.match.clientId, values, this.props.history);
+          //create user and add to agency
+          this.props.requestCreateAgencyUser(this.props.match.agencyId, values, this.props.history);
         }
       }
     });
@@ -67,12 +67,12 @@ class CreateEdit extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentAgency, clientUserRoles, currentAgencyUser, history, match, form } = this.props;
-    let loading = currentAgency.loading || clientUserRoles.loading || !!(match.params.userId && currentAgencyUser.loading);
+    const { currentAgency, agencyUserRoles, currentAgencyUser, history, match, form } = this.props;
+    let loading = currentAgency.loading || agencyUserRoles.loading || !!(match.params.userId && currentAgencyUser.loading);
     let title = this.mode === 'edit'? 'Edit User' : 'Add User';
     return (
       <LayoutWrapper>
-        <PageHeader>Agency - {currentAgency.clientData.name}</PageHeader>
+        <PageHeader>Agency - {currentAgency.agencyData.name}</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>        
@@ -88,10 +88,10 @@ class CreateEdit extends Component {
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={loading}>
-                <Form onSubmit={this.handleSubmit} id="clientForm">
+                <Form onSubmit={this.handleSubmit} id="agencyForm">
                   <UserFormFields
                     form={form}
-                    roles={clientUserRoles.rows}
+                    roles={agencyUserRoles.rows}
                     showRoleSelector={true}
                   />
                   <Row style={{marginTop: '10px'}}>

@@ -19,7 +19,7 @@ class CreateEdit extends Component {
   constructor() {
     super();
     this.state = {
-      client: {},
+      agency: {},
       team: {},
       users: [],
       roles: [],
@@ -46,7 +46,7 @@ class CreateEdit extends Component {
       this.setState({
         loading: false,
         team: responseCompanyTeam,
-        client: responseCompanyTeam.client,
+        agency: responseCompanyTeam.agency,
         roles: responseRoles.rows,
         users: responseUser.rows
       });
@@ -82,7 +82,7 @@ class CreateEdit extends Component {
   }
 
   async getRolesByType(opts = {}) {
-    const { type = 'clientTeamUser' } = opts;
+    const { type = 'agencyTeamUser' } = opts;
     const data = await getRoles({ query: { type } });
     return data;
   }
@@ -93,7 +93,7 @@ class CreateEdit extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          {this.state.client.name} - {this.state.team.name}
+          {this.state.agency.name} - {this.state.team.name}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -103,8 +103,8 @@ class CreateEdit extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <MemberForm
-                  relId={this.state.client.clientId}
-                  userType="clientUser"
+                  relId={this.state.agency.agencyId}
+                  userType="agencyUser"
                   submit={this.handleSubmit}
                   users={this.state.users}
                   roles={this.state.roles}

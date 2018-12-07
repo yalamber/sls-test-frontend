@@ -3,7 +3,7 @@ import { omit } from 'lodash';
 import actions from './actions';
 import SWQAClient from "@helpers/apiClient";
 
-//request client saga
+//request agency saga
 export function* requestAgencyList() {
   yield takeLatest(actions.REQUEST_AGENCY_LIST, function* ({ payload }) {
     try {
@@ -16,25 +16,25 @@ export function* requestAgencyList() {
         current: payload.page
       };
       yield put(actions.receiveAgencies({
-        clientListData: data
+        agencyListData: data
       }));
     } catch (e) {
       yield put({ type: actions.ERROR_AGENCY_LIST, error: e });
     }
   });
 }
-//error client list saga
+//error agency list saga
 export function* errorAgencyList() {
   yield takeEvery(actions.ERROR_AGENCY_LIST, function*({ error }) {
     //TODO make log when error
   });
 }
 
-//request current client
+//request current agency
 export function* requestCurrentAgency() {
-  yield takeLatest(actions.REQUEST_CURRENT_AGENCY, function* ({ clientId }) {
+  yield takeLatest(actions.REQUEST_CURRENT_AGENCY, function* ({ agencyId }) {
     try {
-      const data = yield call(SWQAClient.getAgency, clientId);
+      const data = yield call(SWQAClient.getAgency, agencyId);
       yield put(actions.receiveCurrentAgency(data));
     } catch (e) {
       yield put({ type: actions.ERROR_CURRENT_AGENCY, error: e });
@@ -42,20 +42,20 @@ export function* requestCurrentAgency() {
   });
 }
 
-//error current client
+//error current agency
 export function* errorCurrentAgency() {
   yield takeEvery(actions.ERROR_CURRENT_AGENCY, function*({ error }) {
     //TODO make log when error
   });
 }
 
-//request client user list 
+//request agency user list 
 export function* requestAgencyUserList() {
-  yield takeLatest(actions.REQUEST_AGENCY_USER_LIST, function* ({ clientId, options }) {
+  yield takeLatest(actions.REQUEST_AGENCY_USER_LIST, function* ({ agencyId, options }) {
     try {
       console.log(options);
       let offset = options.pageSize * (options.page - 1);
-      const data = yield call(SWQAClient.getAgencyUsers, clientId, {
+      const data = yield call(SWQAClient.getAgencyUsers, agencyId, {
         offset,
         limit: options.pageSize
       });
@@ -71,7 +71,7 @@ export function* requestAgencyUserList() {
     }
   });
 }
-//error client user list
+//error agency user list
 export function* errorAgencyUserList() {
   yield takeEvery(actions.ERROR_AGENCY_USER_LIST, function*() {
 
@@ -79,9 +79,9 @@ export function* errorAgencyUserList() {
 }
 
 export function* requestCurrentAgencyUser() {
-  yield takeLatest(actions.REQUEST_CURRENT_AGENCY_USER, function* ({ clientId, userId }) {
+  yield takeLatest(actions.REQUEST_CURRENT_AGENCY_USER, function* ({ agencyId, userId }) {
     try {
-      const data = yield call(SWQAClient.getAgencyUser, clientId, userId);
+      const data = yield call(SWQAClient.getAgencyUser, agencyId, userId);
       yield put(actions.receiveCurrentAgencyUser(data));
     } catch (e) {
       yield put({ type: actions.ERROR_CURRENT_AGENCY_USER, error: e });
@@ -89,15 +89,15 @@ export function* requestCurrentAgencyUser() {
   });
 }
 
-//creat client user
+//creat agency user
 export function* requestCreateAgencyUser() {
-  yield takeLatest(actions.REQUEST_CREATE_AGENCY_USER, function* ({ clientId, userData, history }) {
+  yield takeLatest(actions.REQUEST_CREATE_AGENCY_USER, function* ({ agencyId, userData, history }) {
     try {
       let roleId = userData.role;
       let status = userData.status;
       userData = omit(userData, ['role', 'status']);
       const data = yield call(SWQAClient.createUser, userData);
-      const membership = yield call(SWQAClient.addAgencyUser, clientId, {
+      const membership = yield call(SWQAClient.addAgencyUser, agencyId, {
         status: status,
         roleId: roleId,
         userId: data.userId
@@ -120,27 +120,27 @@ export function* receiveCreateAgencyUser() {
     console.log('here', membership, history);
     if (membership) {
       if (history && history.push) {
-        history.push(`/admin/client/${membership.clientId}/user/${membership.userId}/details`);
+        history.push(`/admin/agency/${membership.agencyId}/user/${membership.userId}/details`);
       }
     }
   });
 }
 
-//error current client
+//error current agency
 export function* errorCurrentAgencyUser() {
   yield takeEvery(actions.ERROR_CURRENT_AGENCY_USER, function*({ error }) {
     //TODO make log when error
   });
 }
 
-//request client roles
+//request agency roles
 export function* requestAgencyRoles() {
   yield takeLatest(actions.REQUEST_AGENCY_USER_ROLES, function* ({ payload }) {
     try {
       const data = yield call(SWQAClient.getRoles, {
         offset: 0,
         limit: 10,
-        type: 'clientUser',
+        type: 'agencyUser',
       });
       yield put(actions.receiveAgencyUserRoles(data.rows));
     } catch (e) {
@@ -149,19 +149,19 @@ export function* requestAgencyRoles() {
   });
 }
 
-//error client roles list
+//error agency roles list
 export function* errorAgencyRoles() {
   yield takeEvery(actions.ERROR_AGENCY_USER_ROLES, function*() {
 
   });
 }
 
-//request client team list 
+//request agency team list 
 export function* requestAgencyTeamList() {
-  yield takeLatest(actions.REQUEST_AGENCY_TEAM_LIST, function* ({ clientId, options }) {
+  yield takeLatest(actions.REQUEST_AGENCY_TEAM_LIST, function* ({ agencyId, options }) {
     try {
       let offset = options.pageSize * (options.page - 1);
-      const data = yield call(SWQAClient.getAgencyTeams, clientId, {
+      const data = yield call(SWQAClient.getAgencyTeams, agencyId, {
         offset,
         limit: options.pageSize
       });
@@ -178,7 +178,7 @@ export function* requestAgencyTeamList() {
   });
 }
 
-//error client team list
+//error agency team list
 export function* errorAgencyTeamList() {
   yield takeEvery(actions.ERROR_AGENCY_TEAM_LIST, function*() {
 

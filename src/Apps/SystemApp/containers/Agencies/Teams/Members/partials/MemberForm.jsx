@@ -51,7 +51,7 @@ class MemberForm extends Component {
         }
       });
       switch (this.props.userType) {
-        case "clientUser":
+        case "agencyUser":
           let company = await getCompany(this.props.relId);
           this.setState({
             roles: roles.data.rows,
@@ -155,7 +155,7 @@ class MemberForm extends Component {
 
     return (
       <div>
-        <Form onSubmit={this.handleSubmit} id="clientForm">
+        <Form onSubmit={this.handleSubmit} id="agencyForm">
           <Row gutter={16}>
             <Col {...formResSpan}>
               <FormItem label="User Name" style={margin}>
@@ -266,10 +266,10 @@ const mapPropsToFields = props => {
   }
   //get role and set for edit
 
-  let clientId = props.relId;
+  let agencyId = props.relId;
   return {
     company: Form.createFormField({
-      value: clientId
+      value: agencyId
     }),
     /*role: Form.createFormField({
       value: role

@@ -7,12 +7,12 @@ import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
-import clientActions from '@app/SystemApp/redux/agency/actions';
+import agencyActions from '@app/SystemApp/redux/agency/actions';
 
 const { 
   requestCurrentAgency, 
   requestCurrentAgencyUser
-} = clientActions;
+} = agencyActions;
 
 class Detail extends Component {
   componentDidMount() {
@@ -21,8 +21,8 @@ class Detail extends Component {
       requestCurrentAgency, 
       requestCurrentAgencyUser
     } = this.props;
-    //get current client
-    requestCurrentAgency(match.params.clientId);
+    //get current agency
+    requestCurrentAgency(match.params.agencyId);
     requestCurrentAgencyUser(match.params.userId);
   }
 
@@ -34,7 +34,7 @@ class Detail extends Component {
     let title = 'User Details';
     return (
       <LayoutWrapper>
-        <PageHeader>Agency - {currentAgency.clientData.name}</PageHeader>
+        <PageHeader>Agency - {currentAgency.agencyData.name}</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>        

@@ -42,11 +42,11 @@ class TeamForm extends Component {
     const margin = {
       margin: '5px 5px 0px 0'
     };
-    const clientsOptions = this.state.companies.map(company => <Option key={company.clientId}>{company.name}</Option>);
+    const agenciesOptions = this.state.companies.map(company => <Option key={company.agencyId}>{company.name}</Option>);
     const {getFieldDecorator} = this.props.form;
     return (
       <div>
-        <Form onSubmit={this.handleSubmit} id="clientForm">
+        <Form onSubmit={this.handleSubmit} id="agencyForm">
           <Row gutter={16}>
             <Col span={24}>
               <Row>
@@ -79,8 +79,8 @@ const mapPropsToFields = (props) => {
     return;
   }
   return {
-    clientId: Form.createFormField({
-      value: props.team.clientId ? props.team.clientId.toString() : ''
+    agencyId: Form.createFormField({
+      value: props.team.agencyId ? props.team.agencyId.toString() : ''
     }),
     name: Form.createFormField({
       value: props.team.name

@@ -7,8 +7,8 @@ import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
-import clientActions from '@app/SystemApp/redux/agency/actions';
-import { clientValidation } from "@validations/clientValidation";
+import agencyActions from '@app/SystemApp/redux/agency/actions';
+import { agencyValidation } from "@validations/agencyValidation";
 import UserFormFields from "@app/SystemApp/components/User/FormFields";
 //TODO migrate to swqa sdk
 import { addCompany, editCompany } from "@helpers/http-api-client";
@@ -19,14 +19,14 @@ const {
   requestAgencyUserRoles,
   requestCreateAgencyUser,
   clearCurrentAgency,
-} = clientActions;
+} = agencyActions;
 
 class CreateEdit extends Component {
   constructor(props) {
     super(props);
     this.state = { loading: false };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.mode = props.match.params.clientId? 'edit': 'add';
+    this.mode = props.match.params.agencyId? 'edit': 'add';
   }
 
   componentDidMount() {
@@ -36,11 +36,11 @@ class CreateEdit extends Component {
       requestAgencyUserRoles,
       clearCurrentAgency,
     } = this.props;
-    //get client roles
+    //get agency roles
     requestAgencyUserRoles();
-    if(match.params.clientId) {
-      //get current client
-      requestCurrentAgency(match.params.clientId);
+    if(match.params.agencyId) {
+      //get current agency
+      requestCurrentAgency(match.params.agencyId);
     } else {
       clearCurrentAgency();
     }
@@ -54,12 +54,12 @@ class CreateEdit extends Component {
       if (!err) {
         if(this.mode === 'edit') {
           console.log(values);
-          editCompany(match.params.clientId, values.client)
+          editCompany(match.params.agencyId, values.agency)
           .then(res => {
             if (res) {
               this.setState({ loading: false });
               message.success("Successfully Saved");
-              history.push(`/admin/agency/${match.params.clientId}/details`);
+              history.push(`/admin/agency/${match.params.agencyId}/details`);
             }
           })
           .catch(error => {
@@ -79,7 +79,7 @@ class CreateEdit extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const {  clientUserRoles, history, form  } = this.props;
+    const {  agencyUserRoles, history, form  } = this.props;
     const margin = {
       margin: '0px 10px 10px 0px'
     };
@@ -105,13 +105,13 @@ class CreateEdit extends Component {
                   <Row>
                     <Col md={12} sm={24} xs={24}>
                       <FormItem hasFeedback label="Agency Name" style={margin}>
-                        {getFieldDecorator('client.name', {rules: clientValidation.name})(
+                        {getFieldDecorator('agency.name', {rules: agencyValidation.name})(
                           <Input placeholder="Enter Agency Name"/>)}
                       </FormItem>
                     </Col>
                     <Col md={12} sm={24} xs={24}>
                       <FormItem hasFeedback label="Agency Location" style={margin}>
-                        {getFieldDecorator('client.location', {rules: clientValidation.location})(
+                        {getFieldDecorator('agency.location', {rules: agencyValidation.location})(
                           <Input placeholder="Enter Agency Location"/>)}
                       </FormItem>
                     </Col>
@@ -121,7 +121,7 @@ class CreateEdit extends Component {
                       <Divider orientation="left">Agency Account Owner</Divider>
                       <UserFormFields
                       form={form}
-                      roles={clientUserRoles.rows}/>
+                      roles={agencyUserRoles.rows}/>
                     </div>
                   }
                   <Row style={{marginTop: '10px'}}>
@@ -161,11 +161,11 @@ class CreateEdit extends Component {
 const mapPropsToFields = (props) => {
   let { currentAgency } = props;
   return {
-    'client.name': Form.createFormField({
-      value: get(currentAgency, 'clientData.name')
+    'agency.name': Form.createFormField({
+      value: get(currentAgency, 'agencyData.name')
     }),
-    'client.location': Form.createFormField({
-      value: get(currentAgency, 'clientData.location')
+    'agency.location': Form.createFormField({
+      value: get(currentAgency, 'agencyData.location')
     })
   };
 };

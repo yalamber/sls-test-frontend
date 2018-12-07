@@ -10,7 +10,7 @@ const ActionButtons = ({ history, row }) => {
           shape="circle" 
           icon="user" 
           onClick={() => {
-            history.push(`agency/${row.clientId}/users`);
+            history.push(`agency/${row.agencyId}/users`);
           }} 
         />
       </Tooltip>
@@ -19,7 +19,7 @@ const ActionButtons = ({ history, row }) => {
           shape="circle" 
           icon="team"
           onClick={() => {
-            history.push(`agency/${row.clientId}/teams`);
+            history.push(`agency/${row.agencyId}/teams`);
           }} 
         />
       </Tooltip>
@@ -28,7 +28,7 @@ const ActionButtons = ({ history, row }) => {
           shape="circle" 
           icon="edit"
           onClick={() => {
-            history.push(`agency/${row.clientId}/edit`);
+            history.push(`agency/${row.agencyId}/edit`);
           }} 
         />
       </Tooltip>
@@ -37,7 +37,7 @@ const ActionButtons = ({ history, row }) => {
           shape="circle" 
           icon="info"
           onClick={() => {
-            history.push(`agency/${row.clientId}/details`)
+            history.push(`agency/${row.agencyId}/details`)
           }} 
         />
       </Tooltip>

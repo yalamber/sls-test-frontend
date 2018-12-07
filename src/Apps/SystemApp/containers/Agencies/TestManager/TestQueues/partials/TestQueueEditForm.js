@@ -99,10 +99,10 @@ class TestQueueEditForm extends Component {
       <Option key={status.key}>{status.value}</Option>
     ));
     const companyOptions = this.state.companies.map(company => (
-      <Option key={company.clientId}>{company.name}</Option>
+      <Option key={company.agencyId}>{company.name}</Option>
     ));
     const teamOptions = this.state.teams.map(team => (
-      <Option key={team.clientTeamId}>{team.name}</Option>
+      <Option key={team.agencyTeamId}>{team.name}</Option>
     ));
     const suiteOptions = this.state.suites.map(suite => (
       <Option key={suite.testSuiteId}>{suite.name}</Option>
@@ -132,7 +132,7 @@ class TestQueueEditForm extends Component {
     });
     return (
       <div>
-        <Form onSubmit={this.handleSubmit} id="clientForm">
+        <Form onSubmit={this.handleSubmit} id="agencyForm">
           <Row gutter={16}>
             <Col span={24}>
               <Row>

@@ -11,9 +11,9 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from "@utils/crud.style";
-import clientActions from '@app/SystemApp/redux/agency/actions';
+import agencyActions from '@app/SystemApp/redux/agency/actions';
 import ActionButtons from "./partials/ActionButtons";
-const { requestAgencyTeams, requestCurrentAgency } = clientActions;
+const { requestAgencyTeams, requestCurrentAgency } = agencyActions;
 
 class List extends Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class List extends Component {
         key: "actions",
         render: row => <ActionButtons 
           row={row}
-          clientId={props.match.params.clientId}
+          agencyId={props.match.params.agencyId}
           history={this.props.history} />
       }
     ];
@@ -39,13 +39,13 @@ class List extends Component {
 
   componentDidMount() {
     const { match } = this.props;
-    this.props.requestCurrentAgency(match.params.clientId);
-    this.onTablePaginationChange(match.params.clientId)(1, 5);    
+    this.props.requestCurrentAgency(match.params.agencyId);
+    this.onTablePaginationChange(match.params.agencyId)(1, 5);    
   }
 
-  onTablePaginationChange(clientId) {
+  onTablePaginationChange(agencyId) {
     return (page, pageSize) => {  
-      this.props.requestAgencyTeams(clientId, {
+      this.props.requestAgencyTeams(agencyId, {
         page,
         pageSize
       });
@@ -54,7 +54,7 @@ class List extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentAgency = { clientData: { name: '' } }, history, match } = this.props;
+    const { currentAgency = { agencyData: { name: '' } }, history, match } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -68,13 +68,13 @@ class List extends Component {
                   >
                     <Icon type="left" /> Go Back
                   </ActionBtn>
-                  &nbsp; Company - {currentAgency.clientData.name} - Teams
+                  &nbsp; Company - {currentAgency.agencyData.name} - Teams
                 </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      history.push(`/admin/agency/${match.params.clientId}/team/create/`);
+                      history.push(`/admin/agency/${match.params.agencyId}/team/create/`);
                     }}>
                     <Icon type="plus" />
                     Add new Team
@@ -83,20 +83,20 @@ class List extends Component {
               </TitleWrapper>
               <Spin spinning={currentAgency.teamList.loading}>
                 <Table
-                  locale={{ emptyText: "No Teams in client" }}
+                  locale={{ emptyText: "No Teams in agency" }}
                   pagination={{
                     ...currentAgency.teamList.paginationOptions,
-                    onChange: this.onTablePaginationChange(match.params.clientId)
+                    onChange: this.onTablePaginationChange(match.params.agencyId)
                   }}
                   bordered
                   columns={this.columns}
                   onRow={row => ({
                     onDoubleClick: () => {
-                      history.push(`/admin/agency/${match.params.clientId}/team/${row.clientTeamId}/details`);
+                      history.push(`/admin/agency/${match.params.agencyId}/team/${row.agencyTeamId}/details`);
                     }
                   })}
                   dataSource={currentAgency.teamList.rows}
-                  rowKey="clientTeamId"
+                  rowKey="agencyTeamId"
                 />
               </Spin>
             </Box>
