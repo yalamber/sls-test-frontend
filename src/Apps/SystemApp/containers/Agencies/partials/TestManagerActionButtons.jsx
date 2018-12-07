@@ -8,7 +8,7 @@ import {
 const ActionButtons = ({ history, row }) => {
   return (
     <ActionWrapper>
-      <Tooltip title="Test Suites">
+      <Tooltip title="Assigend Tests">
         <Button 
           shape="circle" 
           icon="folder" 
@@ -17,25 +17,7 @@ const ActionButtons = ({ history, row }) => {
           }} 
         />
       </Tooltip>
-      <Tooltip title="Test Cases">
-        <Button 
-          shape="circle" 
-          icon="experiment" 
-          onClick={() => {
-            history.push(`agency/${row.clientId}/test-manager/test-case`)
-          }} 
-        />
-      </Tooltip>
-      <Tooltip title="Test Run">
-        <Button 
-          shape="circle" 
-          icon="reconciliation" 
-          onClick={() => {
-            history.push(`agency/${row.clientId}/test-manager/test-run`);
-          }} 
-        />
-      </Tooltip>
-      <Tooltip title="Test Queue">
+      <Tooltip title="Completed Tests">
         <Button 
           shape="circle" 
           icon="cloud" 
