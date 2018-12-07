@@ -10,7 +10,7 @@ import { getErrorDataFromApiResponseError } from "@utils/response-message";
 import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
 import { getAgency, addAgencyUser, addUserToAgency, editUser } from "@helpers/http-api-client";
 import Box from "@components/utility/box";
-import UserForm from "@app/SystemApp/components/User/Form";
+import UserFormFields from "@app/SystemApp/components/User/FormFields";
 
 class Create extends Component {
   constructor() {
@@ -139,7 +139,7 @@ class Create extends Component {
             <Box>
               {this.renderFormTypeTitle()}
               <Spin spinning={this.state.loading}>
-                <UserForm
+                <UserFormFields
                   relId={this.state.agency.agencyId}
                   userType="agencyUser"
                   formType={this.getFormMode()}

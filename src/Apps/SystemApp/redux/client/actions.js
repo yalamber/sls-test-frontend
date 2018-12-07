@@ -8,12 +8,12 @@ const actions = {
   REQUEST_CURRENT_CLIENT: 'REQUEST_CURRENT_CLIENT',
   RECEIVE_CURRENT_CLIENT: 'RECEIVE_CURRENT_CLIENT',
   ERROR_CURRENT_CLIENT: 'ERROR_CURRENT_CLIENT',
+  CLEAR_CURRENT_CLIENT: 'CLEAR_CURRENT_CLIENT',
   //CLIENT USER ACTIONS
   REQUEST_CLIENT_USER_LIST: 'REQUEST_CLIENT_USER_LIST',
   RECEIVE_CLIENT_USER_LIST: 'RECEIVE_CLIENT_USER_LIST',
   ERROR_CLIENT_USER_LIST: 'ERROR_CLIENT_USER_LIST',
   //client current USER
-  REQUEST_CLEAR_CURRENT_CLIENT_USER: 'REQUEST_CLEAR_CURRENT_CLIENT_USER',
   CLEAR_CURRENT_CLIENT_USER: 'CLEAR_CURRENT_CLIENT_USER',
   REQUEST_CURRENT_CLIENT_USER: 'REQUEST_CURRENT_CLIENT_USER',
   RECEIVE_CURRENT_CLIENT_USER: 'RECEIVE_CURRENT_CLIENT_USER',
@@ -40,6 +40,12 @@ const actions = {
     type: actions.RECEIVE_CURRENT_CLIENT,
     clientData
   }),
+  //current client user
+  clearCurrentClient: () => {
+    return {
+      type: actions.CLEAR_CURRENT_CLIENT
+    };
+  },
   //clients list
   requestClients: (payload) => ({
     type: actions.REQUEST_CLIENT_LIST,
@@ -70,9 +76,6 @@ const actions = {
       type: actions.CLEAR_CURRENT_CLIENT_USER
     };
   },
-  requestClearCurrentClientUser: () => ({
-    type: actions.REQUEST_CLEAR_CURRENT_CLIENT_USER
-  }),
   requestCurrentClientUser: (clientId, userId) => ({
     type: actions.REQUEST_CURRENT_CLIENT_USER,
     clientId,

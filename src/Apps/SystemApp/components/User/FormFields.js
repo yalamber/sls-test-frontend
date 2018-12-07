@@ -1,7 +1,6 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 import { Form, Select, Row, Col, Input, Radio } from "antd";
-import { get } from 'lodash';
-import Button from "@components/uielements/button";
 import { generateRandomPassword } from '@helpers/utility';
 import { userValidation } from "@validations/usersValidation";
 import Card from "@components/uielements/styles/card.style";
@@ -23,29 +22,15 @@ const formResSpan = {
   md: { span: 24 },
   sm: { span: 24 }
 };
-class UserForm extends Component {
+
+
+class UserFormFields extends Component {
   constructor() {
     super();
     this.state = {
       passwordType: false
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.generatePassword = this.generatePassword.bind(this);
-    this.resetForm = this.resetForm.bind(this);
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        this.props.submit(this.props.mode, this.props.relId, values, this.resetForm);
-      }
-    });
-  }
-
-  resetForm() {
-    this.setState({ passwordType: false });
-    this.props.form.resetFields();
   }
 
   generatePassword(e) {
@@ -88,13 +73,12 @@ class UserForm extends Component {
     );
   }
 
-  renderRoleColumn() {
+  renderRoleColumn(getFieldDecorator) {
     const roleOptions = this.props.roles.map(role => (
       <Option key={role.roleId} value={role.roleId}>
         {role.title}
       </Option>
     ));
-    const { getFieldDecorator } = this.props.form;
     return (
       <Col {...formResSpan}>
         <Card title="Role">
@@ -125,17 +109,30 @@ class UserForm extends Component {
     );
   }
 
-  render() {
-    const { history, form } = this.props;
-    const { getFieldDecorator } = form;
+  renderStatusSelector(getFieldDecorator) {
     const statusOptions = userStatus.map(status => (
       <Option key={status.id} value={status.id}>
         {status.name}
       </Option>
     ));
     return (
+      <FormItem label="Status" style={margin}>
+        {getFieldDecorator("status", {
+          rules: userValidation.status
+        })(
+          <Select showSearch placeholder="Status">
+            {statusOptions}
+          </Select>
+        )}
+      </FormItem>
+    )
+  }
+
+  render() {
+    const { form } = this.props;
+    const { getFieldDecorator } = form;
+    return (
       <div>
-        <Form onSubmit={this.handleSubmit} id="clientForm">
           <Row gutter={16}>
             <Col {...formResSpan}>
               <FormItem label="User Name" style={margin}>
@@ -159,23 +156,15 @@ class UserForm extends Component {
                   <Radio value={true}>Generate Password</Radio>
                 </RadioGroup>
               </FormItem>
-              <Row>
-                <Col span={24}>
-                  <FormItem label="Status" style={margin}>
-                    {getFieldDecorator("status", {
-                      rules: userValidation.status
-                    })(
-                      <Select showSearch placeholder="Status">
-                        {statusOptions}
-                      </Select>
-                    )}
-                  </FormItem>
-                </Col>
-              </Row>
+              {this.props.showRoleSelector && this.renderStatusSelector(getFieldDecorator)}
             </Col>
-            {this.renderRoleColumn()}
+            {this.props.showRoleSelector && this.renderRoleColumn(getFieldDecorator)}
+            { !this.props.showRoleSelector && 
+              <Col {...formResSpan}>
+                {this.renderStatusSelector(getFieldDecorator)}
+              </Col>
+            }
           </Row>
-
           <Row gutter={16}>
             <Col span={24}>
               <Card title="Contact Information" style={{ marginTop: "20px" }}>
@@ -237,98 +226,15 @@ class UserForm extends Component {
               </Card>
             </Col>
           </Row>
-          <Row style={{marginTop: '10px'}}>
-            <Col span={24}>
-              <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <Button
-                  type="primary"
-                  icon="left"
-                  onClick={() => history.goBack()}
-                >
-                  Cancel
-                </Button>
-
-                <Button
-                  id="btnSubmit"
-                  type="primary"
-                  htmlType="submit"
-                  className=""
-                  icon="save"
-                >
-                  Submit
-                </Button>
-              </div>
-            </Col>
-          </Row>
-        </Form>
       </div>
     );
   }
 }
 
-const mapPropsToFields = props => {
-  let { currentUser, role } = props;
-  //testData TODO: remove this after test
-  /*role = {
-    roleId: 2
-  };
-  currentUser = {
-    status: 'active',
-    username: 'adadadadada',
-    resumeUrl: 'http://test.com',
-    contactInformation: {
-      emailAddress: 'teststs@sdsd.comsdsd',
-      postalAddress: 'testing ok ',
-      mobilePhone: '9843612873',
-      smsPhone: 'test2334',
-      linkedInUrl: 'testing ok',
-    },
-    instantMessengerInfos: [
-      {service: 'facebook', messengerId: 'yalu'},
-      {service: 'facebook', messengerId: 'yalu2'},
-    ]
-  };*/
-  return {
-    role: Form.createFormField({
-      value: get(role, 'roleId')
-    }),
-    status: Form.createFormField({
-      value: get(currentUser, 'status')
-    }),
-    username: Form.createFormField({
-      value: get(currentUser, 'username')
-    }),
-    resumeUrl: Form.createFormField({
-      value: get(currentUser, 'resumeUrl')
-    }),
-    'contactInformation.emailAddress': Form.createFormField({
-      value: get(currentUser, 'contactInformation.emailAddress')
-    }),
-    'contactInformation.postalAddress': Form.createFormField({
-      value: get(currentUser, 'contactInformation.postalAddress')
-    }),
-    'contactInformation.mobilePhone': Form.createFormField({
-      value: get(currentUser, 'contactInformation.mobilePhone')
-    }),
-    'contactInformation.smsPhone': Form.createFormField({
-      value: get(currentUser, 'contactInformation.smsPhone')
-    }),
-    'contactInformation.linkedInUrl': Form.createFormField({
-      value: get(currentUser, 'contactInformation.linkedInUrl')
-    }),
-    'instantMessengerInfos[0]["service"]': Form.createFormField({
-      value: get(currentUser, 'instantMessengerInfos[0]["service"]')
-    }),
-    'instantMessengerInfos[0]["messengerId"]': Form.createFormField({
-      value: get(currentUser, 'instantMessengerInfos[0]["messengerId"]')
-    }),
-    'instantMessengerInfos[1]["service"]': Form.createFormField({
-      value: get(currentUser, 'instantMessengerInfos[1]["service"]')
-    }),
-    'instantMessengerInfos[1]["messengerId"]': Form.createFormField({
-      value: get(currentUser, 'instantMessengerInfos[1]["messengerId"]')
-    }),
-  };
+UserFormFields.propTypes = {
+  form: PropTypes.object,
+  roles: PropTypes.array,
+  showRoleSelector: PropTypes.bool
 };
-const form = Form.create({ mapPropsToFields })(UserForm);
-export default form;
+
+export default UserFormFields;

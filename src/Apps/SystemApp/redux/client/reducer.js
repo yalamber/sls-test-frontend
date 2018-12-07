@@ -88,6 +88,11 @@ export default function clientReducer(state = initState, action) {
         },
       };
     //current client
+    case actions.CLEAR_CURRENT_CLIENT: 
+      return  {
+        ...state,
+        currentClient: initState.currentClient
+      };
     case actions.REQUEST_CURRENT_CLIENT:
       return {
         ...state,

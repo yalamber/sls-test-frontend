@@ -73,11 +73,15 @@ const routes = [
   },
   {
     path: 'client/create',
-    component: asyncComponent(() => import('./containers/Clients/Create'))
+    component: asyncComponent(() => import('./containers/Clients/CreateEdit'))
   },
   {
     path: 'client/:clientId/edit',
-    component: asyncComponent(() => import('./containers/Clients/Edit'))
+    component: asyncComponent(() => import('./containers/Clients/CreateEdit'))
+  },
+  {
+    path: 'client/:clientId/details',
+    component: asyncComponent(() => import('./containers/Clients/Detail'))
   },
   //client users
   {
