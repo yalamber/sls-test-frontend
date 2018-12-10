@@ -28,8 +28,8 @@ class SuiteList extends Component {
     super();
     this.state = {
       testSuites: [],
-      selectedTeamId: null,
-      loading: false,
+      selectedTeamId: undefined,
+      loading: true,
       error: null,
     };
     this.handleTeamChange = this.handleTeamChange.bind(this);
@@ -88,12 +88,11 @@ class SuiteList extends Component {
       let testSuites = await SWQAClient.getTestSuites(options);
       let updateState = {
         loading: false,
-        testSuites,
+        testSuites: testSuites.rows,
       };
       if(options.clientTeamId) {
         updateState.selectedTeamId = parseInt(options.clientTeamId); 
       }
-      console.log(updateState);
       this.setState(updateState);
     } catch(e) {
       this.setState({
@@ -150,33 +149,33 @@ class SuiteList extends Component {
                     <ActionBtn
                       type="primary"
                       disabled={!this.isTeamSelected()}
-                      onClick={() => history.push(`/admin/client/team/${this.selectedTeamId}/test-manager/test-suite/create`)}>
+                      onClick={() => history.push(`/admin/client/team/${this.state.selectedTeamId}/test-manager/test-suite/create`)}>
                       <Icon type="plus" />
                       Add New
                     </ActionBtn>
                   </Tooltip>
                 </ButtonHolders>
               </TitleWrapper>
-              <Row>
-                <Col md={6} sm={24} xs={24} style={margin}>
-                  <FormItem label="Team Name:">
-                    <Select
-                      showSearch
-                      placeholder="Please Choose Team"
-                      style={{ width: "100%" }}
-                      defaultValue={this.state.selectedTeamId}
-                      onChange={this.handleTeamChange}
-                      optionFilterProp="children"
-                      filterOption={(input, option) => {
-                        return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }}
-                    >
-                      {teamsOptions}
-                    </Select>
-                  </FormItem>
-                </Col>
-              </Row>
               <Spin spinning={this.state.loading}>
+                <Row>
+                  <Col md={6} sm={24} xs={24} style={margin}>
+                    <FormItem label="Team Name:">
+                      <Select
+                        showSearch
+                        placeholder="Please Choose Team"
+                        style={{ width: "100%" }}
+                        value={this.state.selectedTeamId}
+                        onChange={this.handleTeamChange}
+                        optionFilterProp="children"
+                        filterOption={(input, option) => {
+                          return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }}
+                      >
+                        {teamsOptions}
+                      </Select>
+                    </FormItem>
+                  </Col>
+                </Row>
                 <Table
                   locale={{ emptyText: "No Test Suites available" }}
                   size="middle"
