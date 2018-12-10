@@ -4,7 +4,7 @@ import { Form, Select, Row, Col, Input, Radio } from "antd";
 import { generateRandomPassword } from '@helpers/utility';
 import { userValidation } from "@validations/usersValidation";
 import Card from "@components/uielements/styles/card.style";
-import { userStatus } from "@constants/userStatus";
+import userStatus from "@constants/userStatus";
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -112,7 +112,7 @@ class UserFormFields extends Component {
   renderStatusSelector(getFieldDecorator) {
     const statusOptions = userStatus.map(status => (
       <Option key={status.id} value={status.id}>
-        {status.name}
+        {status.label}
       </Option>
     ));
     return (

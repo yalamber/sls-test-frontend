@@ -53,7 +53,6 @@ export function* errorCurrentAgency() {
 export function* requestAgencyUserList() {
   yield takeLatest(actions.REQUEST_AGENCY_USER_LIST, function* ({ agencyId, options }) {
     try {
-      console.log(options);
       let offset = options.pageSize * (options.page - 1);
       const data = yield call(SWQAClient.getAgencyUsers, agencyId, {
         offset,

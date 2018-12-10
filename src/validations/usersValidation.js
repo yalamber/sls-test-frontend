@@ -7,6 +7,7 @@ export const userValidation = {
     {required: true, message: "This field is required."},
     {whitespace: true, message: "Username must not have whitespace."}
   ],
+  userId: [required],
   password: [required, {min: 6}],
   email: [email, required],
   client: [required],

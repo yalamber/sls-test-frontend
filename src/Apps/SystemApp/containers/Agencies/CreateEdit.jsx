@@ -53,7 +53,6 @@ class CreateEdit extends Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if(this.mode === 'edit') {
-          console.log(values);
           editCompany(match.params.agencyId, values.agency)
           .then(res => {
             if (res) {

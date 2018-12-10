@@ -85,7 +85,6 @@ class AgencyList extends Component {
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { list, history } = this.props;
-    console.log(list);
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">

@@ -120,7 +120,7 @@ class SWQA {
     return this.api.send('GET', `client-team`, options);
   }
 
-  getClientTeam = (clientId, teamId) => {
+  getClientTeam = (teamId) => {
     return this.api.send('GET', `client-team/${teamId}`);
   }
 
@@ -131,6 +131,14 @@ class SWQA {
 
   getClientTeamMembers = (teamId, options) => {
     return this.api.send('GET', `client-team/${teamId}/member`, options);
+  }
+  
+  getClientTeamMembership = (teamId, userId) => {
+    return this.api.send('GET', `client-team/${teamId}/member/${userId}`);
+  }
+
+  editClientTeamMembership = (teamId, userId, payload) => {
+    return this.api.send('put', `client-team/${teamId}/member/${userId}`, payload);
   }
 
   //agencies
@@ -179,11 +187,23 @@ class SWQA {
     return this.api.send('GET', `agency-team/${teamId}/member`, options);
   }
 
+  getAgencyTeamMembership = (teamId, userId) => {
+    return this.api.send('GET', `agency-team/${teamId}/member/${userId}`);
+  }
+
+  editAgencyTeamMembership = (teamId, userId, payload) => {
+    return this.api.send('put', `agency-team/${teamId}/member/${userId}`, payload);
+  }
+
   //test manager 
+  addTestSuite = (suiteData) => {
+    return this.api.send('POST', `test/suite`, suiteData);
+  }
+  
   getTestSuites = (options) => {
     return this.api.send('GET', `test/suite`, options);
   }
-  
+
   //users
   createUser = (payload) => {
     return this.api.send('POST', `user`, payload);

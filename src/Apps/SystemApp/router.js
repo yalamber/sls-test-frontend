@@ -165,9 +165,9 @@ const routes = [
   },
   {
     path: 'client/team/:teamId/test-manager/test-suite/create',
-    component: asyncComponent(() => import('./containers/Clients/TestManager/TestSuite/Create'))
+    component: asyncComponent(() => import('./containers/Clients/TestManager/TestSuite/CreateEdit'))
   },
-
+  
   /* test manager -> Test Case */
   {
     path: 'client/:clientId/test-manager/test-case',

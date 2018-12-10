@@ -14,9 +14,9 @@ import {
   TableClickable as Table
 } from "@utils/crud.style";
 import {
-  getCompanyTeam,
-  getCompanyTeamMembers,
-  deleteCompanyTeamMember
+  getAgencyTeam,
+  getAgencyTeamMembers,
+  deleteAgencyTeamMember
 } from "@helpers/http-api-client";
 
 class MemberList extends Component {
@@ -67,8 +67,8 @@ class MemberList extends Component {
   async fetchData() {
     this.setState({ loading: true });
     try {
-      let agencyTeam = await getCompanyTeam(this.props.match.params.teamId);
-      let users = await getCompanyTeamMembers(this.props.match.params.teamId, {
+      let agencyTeam = await getAgencyTeam(this.props.match.params.teamId);
+      let users = await getAgencyTeamMembers(this.props.match.params.teamId, {
         paginationOptions: this.state.paginationOptions
       });
       this.setState({
@@ -97,7 +97,7 @@ class MemberList extends Component {
       }
     }, async () => {
       try{
-        let users = await getCompanyTeamMembers(this.props.match.params.teamId, {
+        let users = await getAgencyTeamMembers(this.props.match.params.teamId, {
           paginationOptions: this.state.paginationOptions
         });
         this.setState({

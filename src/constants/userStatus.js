@@ -1,22 +1,22 @@
-export const userStatus = [
+export default [
   {
     id: 'active',
-    name: "Active"
+    label: "Active"
   },
   {
     id: 'inactive',
-    name: "Inactive"
+    label: "Inactive"
   }/*,
   {
     id: 'suspended',
-    name: "Suspended"
+    label: "Suspended"
   },
   {
     id: 'blocked',
-    name: "Blocked"
+    label: "Blocked"
   },
   {
     id: 'under-review',
-    name: "Under Review"
+    label: "Under Review"
   },*/
 ];
