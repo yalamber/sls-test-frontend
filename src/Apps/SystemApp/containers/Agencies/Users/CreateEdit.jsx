@@ -9,7 +9,7 @@ import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
-import UserFormFields from "@app/SystemApp/components/User/FormFields";
+import UserFormFields from "@appComponents/User/FormFields";
 
 const { 
   requestCurrentAgency, 

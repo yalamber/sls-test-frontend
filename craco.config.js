@@ -9,6 +9,7 @@ module.exports = {
           "@root": path.resolve(__dirname, 'src'),
           "@image": path.resolve(__dirname, 'src/image'),
           "@app": path.resolve(__dirname, 'src/Apps'),
+          "@appComponents": path.resolve(__dirname, 'src/appComponents'),
           "@page": path.resolve(__dirname, 'src/containers/Page'),
           "@redux": path.resolve(__dirname, 'src/redux'),
           "@containers": path.resolve(__dirname, 'src/containers'),

@@ -9,7 +9,7 @@ import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
 import { agencyValidation } from "@validations/agencyValidation";
-import UserFormFields from "@app/SystemApp/components/User/FormFields";
+import UserFormFields from "@appComponents/User/FormFields";
 //TODO migrate to swqa sdk
 import { addCompany, editCompany } from "@helpers/http-api-client";
 

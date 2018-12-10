@@ -76,10 +76,6 @@ const routes = [
     component: asyncComponent(() => import('./containers/Agencies/Teams/Members/Detail'))
   },
   {
-    path: 'agency/test-manager',
-    component: asyncComponent(() => import('./containers/Agencies/TestManager/List'))
-  },
-  {
     path: 'agency/test-manager/test-case',
     component: asyncComponent(() => import('./containers/Agencies/TestManager/TestCaseScreen'))
   },
