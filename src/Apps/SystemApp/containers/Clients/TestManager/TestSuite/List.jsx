@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import qs from "qs";
 import { Row, Col, Icon, Select, Tooltip, Spin, Form } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
@@ -6,7 +8,6 @@ import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
 import ActionButtons from "./partials/ActionButtons";
 import Moment from "react-moment";
-
 import {
   ActionBtn,
   TitleWrapper,
@@ -14,157 +15,108 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from "@utils/crud.style";
-import {
-  getCompanies,
-  getCompanyTeams,
-  deleteSuite,
-  getCompanySuites
-} from "@helpers/http-api-client";
+import SWQAClient from '@helpers/apiClient';
+import clientActions from '@app/SystemApp/redux/client/actions';
 import { dateTime } from "@constants/dateFormat";
 
+const { requestCurrentClient, requestClientTeams } = clientActions;
 const Option = Select.Option;
 const FormItem = Form.Item;
 
-export default class extends Component {
+class SuiteList extends Component {
   constructor() {
     super();
     this.state = {
-      columns: [
-        {
-          title: "Title",
-          dataIndex: "name",
-          key: "title"
-        },
-        {
-          title: "Last Updated",
-          render: row => <Moment format={dateTime}>{row.updatedBy}</Moment>,
-          key: "lastUpdated"
-        },
-        {
-          title: "Team",
-          dataIndex: "clientTeam.name",
-          key: "team"
-        },
-        {
-          title: "Last Updated by",
-          dataIndex: "lastUpdatedBy",
-          key: "lastUpdatedBy"
-        },
-        {
-          title: "Actions",
-          key: "actions",
-          render: row => <ActionButtons row={row} />
-        }
-      ],
-      company: {},
-      dataSource: [],
-      teams: [],
-      selectedTeam: undefined,
-      loading: false
+      testSuites: [],
+      selectedTeamId: null,
+      loading: false,
+      error: null,
     };
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.isTeamSelected = this.isTeamSelected.bind(this);
-    // this.handleDelete = this.handleDelete.bind(this);
+    this.columns = [
+      {
+        title: "Title",
+        dataIndex: "name",
+        key: "title"
+      },
+      {
+        title: "Last Updated",
+        render: row => <Moment format={dateTime}>{row.updatedBy}</Moment>,
+        key: "lastUpdated"
+      },
+      {
+        title: "Team",
+        dataIndex: "clientTeam.name",
+        key: "team"
+      },
+      {
+        title: "Last Updated by",
+        dataIndex: "lastUpdatedBy",
+        key: "lastUpdatedBy"
+      },
+      {
+        title: "Actions",
+        key: "actions",
+        render: row => <ActionButtons row={row} />
+      }
+    ];
   }
 
   componentDidMount() {
-    const routerStateClientTeamId =
-      this.props.location.state && this.props.location.state.clientTeamId;
-    const { companyId } = this.props.match.params;
-    this.setState({ loading: true }, async () => {
-      try {
-        const responseTeams = await getCompanyTeams({
-          query: { clientId: companyId }
-        });
-
-        const {
-          data: { rows = [] }
-        } = responseTeams;
-
-        if (rows.length === 0) {
-          return this.setState({ loading: false });
-        }
-
-        const teams = rows,
-          selectedTeam = routerStateClientTeamId
-            ? routerStateClientTeamId
-            : rows[0].clientTeamId;
-
-        this.setState(
-          {
-            company: rows[0].client,
-            teams,
-            selectedTeam
-          },
-          async () => {
-            try {
-              const responseSuites = await this.setTeamDropdown();
-            } catch (errorInner) {
-              this.setState({ loading: false });
-            }
-          }
-        );
-      } catch (error) {
-        this.setState({ loading: false });
-      }
+    const { match, requestCurrentClient, requestClientTeams, location } = this.props;
+    let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
+    //TODO: check stat and params if same clientId already
+    requestCurrentClient(match.params.clientId);
+    requestClientTeams(match.params.clientId, {
+      page: 1,
+      pageSize: 50
     });
+    //get all test suites
+    let reqParams = {};
+    if(queryParams.teamId) {
+      reqParams.clientTeamId = queryParams.teamId;
+    } else {
+      reqParams.clientId = match.params.clientId;
+    }
+    this.fetchTestSuite(reqParams);
   }
 
-  async setTeamDropdown() {
-    return new Promise(async (resolve, reject) => {
-      const { teams, selectedTeam } = this.state;
-      try {
-        const responseCompanySuites = await getCompanySuites({
-          query: {
-            clientTeamId: selectedTeam /* clientId: this.state.selectedCompany */
-          }
-        });
-        if (
-          responseCompanySuites &&
-          responseCompanySuites.data &&
-          responseCompanySuites.data.rows &&
-          responseCompanySuites.data.rows.length
-        ) {
-          this.setState(
-            {
-              dataSource: responseCompanySuites.data.rows,
-              loading: false
-            },
-            () => {
-              return resolve(responseCompanySuites.data.rows);
-            }
-          );
-        } else {
-          this.setState({ loading: false, dataSource: [] }, () => {
-            return resolve([]);
-          });
-        }
-      } catch (err1) {
-        return reject(err1);
+  async fetchTestSuite(options) {
+    try {
+      this.setState({loading: true});
+      let testSuites = await SWQAClient.getTestSuites(options);
+      let updateState = {
+        loading: false,
+        testSuites,
+      };
+      if(options.clientTeamId) {
+        updateState.selectedTeamId = parseInt(options.clientTeamId); 
       }
-    });
+      console.log(updateState);
+      this.setState(updateState);
+    } catch(e) {
+      this.setState({
+        loading: false,
+        error: e,
+      });
+    }
   }
 
   handleTeamChange(teamId) {
-    if (!teamId || !this.state.teams.length) {
-      return this.setState({ selectedTeam: undefined, dataSource: [] });
-    }
-
-    this.setState(
-      { selectedTeam: teamId, dataSource: [], loading: true },
-      async () => {
-        try {
-          const { selectedCompany } = this.state;
-          const responseSuites = await this.setTeamDropdown();
-        } catch (e) {
-          this.setState({ loading: false });
-        }
-      }
-    );
+    let {history, match} = this.props;
+    this.setState({
+      selectedTeamId: teamId,
+    }, () => {
+      history.push(`/admin/client/${match.params.clientId}/test-manager/test-suite?teamId=${teamId}`);
+      this.fetchTestSuite({
+        clientTeamId: teamId
+      });
+    });
   }
 
   isTeamSelected() {
-    return !!this.state.selectedTeam;
+    return !!this.state.selectedTeamId;
   }
 
   render() {
@@ -173,51 +125,32 @@ export default class extends Component {
     };
     const { rowStyle, colStyle, gutter } = basicStyle;
 
-    const { teams = [] } = this.state;
-    const teamsOptions = teams.length ? (
-      teams.map(team => (
+    const { currentClient = { clientData: { name: '' }, teamList: { rows: [], count: 0 } }, history } = this.props;
+    const teamsOptions = (
+      currentClient.teamList.rows.map(team => (
         <Option key={team.clientTeamId} value={team.clientTeamId}>
           {team.name}
         </Option>
       ))
-    ) : (
-      <Option key={"dummy"} value={""}>
-        {""}
-      </Option>
     );
-
     return (
       <LayoutWrapper>
         <PageHeader>
-          {this.state.company ? this.state.company.name : ""} | Test Suite List
+          Client - {currentClient.clientData.name}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Test Suites </ComponentTitle>
+                <ComponentTitle>Test Suites</ComponentTitle>
                 <ButtonHolders>
                   <Tooltip
                     placement="topRight"
-                    title={
-                      !this.isTeamSelected()
-                        ? "Please select company and team."
-                        : ""
-                    }
-                  >
+                    title={!this.isTeamSelected()? "Please select Team.": ""}>
                     <ActionBtn
                       type="primary"
                       disabled={!this.isTeamSelected()}
-                      onClick={() => {
-                        this.props.history.push(
-                          `/dashboard/company/${
-                            this.props.match.params.companyId
-                          }/test-manager/suite/create/${
-                            this.state.selectedTeam
-                          }`
-                        );
-                      }}
-                    >
+                      onClick={() => history.push(`/admin/client/team/${this.selectedTeamId}/test-manager/test-suite/create`)}>
                       <Icon type="plus" />
                       Add New
                     </ActionBtn>
@@ -231,8 +164,12 @@ export default class extends Component {
                       showSearch
                       placeholder="Please Choose Team"
                       style={{ width: "100%" }}
+                      defaultValue={this.state.selectedTeamId}
                       onChange={this.handleTeamChange}
-                      value={this.state.selectedTeam}
+                      optionFilterProp="children"
+                      filterOption={(input, option) => {
+                        return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }}
                     >
                       {teamsOptions}
                     </Select>
@@ -241,11 +178,11 @@ export default class extends Component {
               </Row>
               <Spin spinning={this.state.loading}>
                 <Table
-                  locale={{ emptyText: "Please Select Company name" }}
+                  locale={{ emptyText: "No Test Suites available" }}
                   size="middle"
                   bordered
                   pagination={true}
-                  columns={this.state.columns}
+                  columns={this.columns}
                   dataSource={this.state.dataSource}
                   rowKey="testSuiteId"
                 />
@@ -257,3 +194,15 @@ export default class extends Component {
     );
   }
 }
+
+
+
+export default connect(
+  state => ({
+    ...state.Client
+  }),
+  {
+    requestCurrentClient,
+    requestClientTeams
+  }
+)(SuiteList);

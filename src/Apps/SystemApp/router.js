@@ -164,7 +164,7 @@ const routes = [
     component: asyncComponent(() => import('./containers/Clients/TestManager/TestSuite/List'))
   },
   {
-    path: 'client/:clientId/test-manager/test-suite/create/:teamId',
+    path: 'client/team/:teamId/test-manager/test-suite/create',
     component: asyncComponent(() => import('./containers/Clients/TestManager/TestSuite/Create'))
   },
 

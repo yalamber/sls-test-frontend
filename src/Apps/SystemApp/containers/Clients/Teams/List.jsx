@@ -38,8 +38,8 @@ class List extends Component {
   }
 
   componentDidMount() {
-    const { match } = this.props;
-    this.props.requestCurrentClient(match.params.clientId);
+    const { match, requestCurrentClient } = this.props;
+    requestCurrentClient(match.params.clientId);
     this.onTablePaginationChange(match.params.clientId)(1, 5);    
   }
 
@@ -68,7 +68,7 @@ class List extends Component {
                   >
                     <Icon type="left" /> Go Back
                   </ActionBtn>
-                  &nbsp; Company - {currentClient.clientData.name} - Teams
+                  &nbsp; Client - {currentClient.clientData.name} - Teams
                 </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn

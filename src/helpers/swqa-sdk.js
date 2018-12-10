@@ -179,6 +179,11 @@ class SWQA {
     return this.api.send('GET', `agency-team/${teamId}/member`, options);
   }
 
+  //test manager 
+  getTestSuites = (options) => {
+    return this.api.send('GET', `test/suite`, options);
+  }
+  
   //users
   createUser = (payload) => {
     return this.api.send('POST', `user`, payload);
