@@ -35,6 +35,7 @@ class SuiteList extends Component {
     };
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.isTeamSelected = this.isTeamSelected.bind(this);
+    this.deleteTestSuite = this.deleteTestSuite.bind(this);
     this.columns = [
       {
         title: "Title",
@@ -59,7 +60,7 @@ class SuiteList extends Component {
       {
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons row={row} />
+        render: row => <ActionButtons row={row} deleteTestSuite={this.deleteTestSuite} history={this.props.history} />
       }
     ];
   }
@@ -117,6 +118,10 @@ class SuiteList extends Component {
 
   isTeamSelected() {
     return !!this.state.selectedTeamId;
+  }
+
+  deleteTestSuite(row) {
+    
   }
 
   render() {
@@ -191,7 +196,7 @@ class SuiteList extends Component {
                   bordered
                   pagination={true}
                   columns={this.columns}
-                  dataSource={this.state.dataSource}
+                  dataSource={this.state.testSuites}
                   rowKey="testSuiteId"
                 />
               </Spin>

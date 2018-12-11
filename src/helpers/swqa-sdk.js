@@ -22,7 +22,7 @@ class APIRequest {
       headers['Authorization'] = `Bearer ${token}`;
     }
     let body = '';
-    if (method === 'POST') {
+    if (['POST', 'PUT'].indexOf(method) !== -1) {
       headers['Content-Type'] = 'application/json';
       body = data;
     } else if (Object.keys(data).length && data.constructor === Object) {
@@ -208,6 +208,18 @@ class SWQA {
   
   getTestSuites = (options) => {
     return this.api.send('GET', `test/suite`, options);
+  }
+
+  getTestSuite = (suiteId) => {
+    return this.api.send('GET', `test/suite/${suiteId}`);
+  }
+  
+  updateTestSuite = (suiteId, suiteData) => {
+    return this.api.send('PUT', `test/suite/${suiteId}`, suiteData);
+  }
+
+  deleteTestSuite = (suiteId) => {
+    return this.api.send('DELETE', `test/suite/${suiteId}`);
   }
 
   //users
