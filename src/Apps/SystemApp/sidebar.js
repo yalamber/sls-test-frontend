@@ -10,6 +10,11 @@ const systemAdminOptions = [
     leftIcon: "ion-grid"
   },
   {
+    key: "freelancers",
+    label: "freelancers",
+    leftIcon: "ion-person"
+  },
+  {
     key: "roles",
     label: "roles",
     leftIcon: "ion-eye"

@@ -20,8 +20,8 @@ const TextArea = Input.TextArea;
 const Option = Select.Option;
 
 class CreateEdit extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       clientTeam: null,
       error: null,
@@ -41,6 +41,7 @@ class CreateEdit extends Component {
     try{
       let { match } = this.props;
       let clientTeam = await SWQAClient.getClientTeam(match.params.teamId);
+      
       this.setState({
         clientTeam,
         loading: false,
@@ -61,7 +62,11 @@ class CreateEdit extends Component {
         try{
           let { history } = this.props;
           this.setState({ loading: true });
-          let testSuite = await SWQAClient.addTestSuite({ clientTeamId: this.props.match.params.teamId, ...values });
+          let testSuite = await SWQAClient.addTestSuite({ 
+            clientTeamId: this.props.match.params.teamId, 
+            ...values 
+          });
+          console.log(testSuite);
           message.success("Successfully Saved");
           history.push(`/admin/`);
 
@@ -174,7 +179,7 @@ class CreateEdit extends Component {
                       }}>
                       Cancel
                     </Button>
-                    <Button id="btnSubmit" type="primary" style={margin} htmlType="submit" className="" icon="save">
+                    <Button id="btnSubmit" type="primary" style={margin} htmlType="submit" icon="save">
                       Submit
                     </Button>
                   </ActionWrapper>
@@ -190,7 +195,6 @@ class CreateEdit extends Component {
 
 const mapPropsToFields = (props) => {
   //let { currentTestSuite } = props;
-  //testData TODO: remove this after test
   let currentTestSuite = {
     status: 'active',
   };

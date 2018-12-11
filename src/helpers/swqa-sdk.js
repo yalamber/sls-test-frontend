@@ -110,8 +110,7 @@ class SWQA {
   }
 
   // client teams
-  addClientTeam = (clientId, payload) => {
-    payload.clientId = clientId;
+  addClientTeam = (payload) => {
     return this.api.send('POST', `client-team`, payload);
   }
 
@@ -122,6 +121,10 @@ class SWQA {
 
   getClientTeam = (teamId) => {
     return this.api.send('GET', `client-team/${teamId}`);
+  }
+
+  updateClientTeam = (teamId, payload) => {
+    return this.api.send('PUT', `client-team/${teamId}`, payload);
   }
 
   //client team members
@@ -164,8 +167,7 @@ class SWQA {
   }
 
   // agency teams
-  addAgencyTeam = (agencyId, payload) => {
-    payload.agencyId = agencyId;
+  addAgencyTeam = (payload) => {
     return this.api.send('POST', `agency-team`, payload);
   }
 
@@ -176,6 +178,10 @@ class SWQA {
 
   getAgencyTeam = (teamId) => {
     return this.api.send('GET', `agency-team/${teamId}`);
+  }
+
+  updateAgencyTeam = (teamId, payload) => {
+    return this.api.send('PUT', `agency-team/${teamId}`, payload);
   }
 
   //agency team members

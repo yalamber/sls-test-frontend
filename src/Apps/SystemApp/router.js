@@ -2,7 +2,7 @@ import asyncComponent from '@helpers/AsyncFunc';
 
 const routes = [
   {
-    path: '/',
+    path: '',
     component: asyncComponent( () => import('@page/Dashboard'))
   },
   //agencies
@@ -30,7 +30,7 @@ const routes = [
   {
     path: 'agency/:agencyId/user/create',
     exact: true,
-    component: asyncComponent(() => import('./containers/Clients/Users/CreateEdit'))
+    component: asyncComponent(() => import('./containers/Agencies/Users/CreateEdit'))
   },
   {
     path: 'agency/:agencyId/user/:userId/edit',
@@ -49,15 +49,15 @@ const routes = [
   },
   {
     path: 'agency/:agencyId/team/create',
-    component: asyncComponent(() => import('./containers/Agencies/Teams/Create'))
+    component: asyncComponent(() => import('./containers/Agencies/Teams/CreateEdit'))
   },
   {
     path: 'agency/team/:teamId/edit',
-    component: asyncComponent(() => import('./containers/Agencies/Teams/Edit'))
+    component: asyncComponent(() => import('./containers/Agencies/Teams/CreateEdit'))
   },
   {
     path: 'agency/team/:teamId/details',
-    component: asyncComponent(() => import('./containers/Clients/Teams/Edit'))
+    component: asyncComponent(() => import('./containers/Agencies/Teams/CreateEdit'))
   },
   {
     path: 'agency/team/:teamId/members',
@@ -167,6 +167,10 @@ const routes = [
     path: 'client/team/:teamId/test-manager/test-suite/create',
     component: asyncComponent(() => import('./containers/Clients/TestManager/TestSuite/CreateEdit'))
   },
+  {
+    path: 'client/test-manager/test-suite/:suiteId/edit',
+    component: asyncComponent(() => import('./containers/Clients/TestManager/TestSuite/CreateEdit'))
+  },
   
   /* test manager -> Test Case */
   {
@@ -174,8 +178,12 @@ const routes = [
     component: asyncComponent(() => import('./containers/Clients/TestManager/TestCases/List'))
   },
   {
-    path: 'client/:clientId/test-manager/test-case/create/:suiteId',
-    component: asyncComponent(() => import('./containers/Clients/TestManager/TestCases/Create'))
+    path: 'client/test-manager/test-suite/:suiteId/test-case/create',
+    component: asyncComponent(() => import('./containers/Clients/TestManager/TestCases/CreateEdit'))
+  },
+  {
+    path: 'client/test-manager/test-case/:caseId/edit',
+    component: asyncComponent(() => import('./containers/Clients/TestManager/TestCases/CreateEdit'))
   },
 
   /* test manager -> Test Run */

@@ -1,4 +1,6 @@
 {
+  "back": "Back",
+
   "topbar.help": "Help",
   "topbar.logout": "Logout",
   "topbar.viewAll": "View All",
@@ -9,8 +11,15 @@
   "client": "Client",
   "clients": "Clients",
   "agencies": "Agencies",
+  "freelancer": "Freelancer",
+  "freelancers": "Freelancers",
+  "team": "Team",
+  "teams": "Teams",
   "roles": "Roles",
   "role": "Role",
+  "user": "User",
+  "users": "Users",
+  "user.add": "Add user",
   "system.users": "System Users",
   "actions": "Actions",
 

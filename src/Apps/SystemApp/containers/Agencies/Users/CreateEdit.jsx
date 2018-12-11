@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
+import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
@@ -72,7 +73,7 @@ class CreateEdit extends Component {
     let title = this.mode === 'edit'? 'Edit User' : 'Add User';
     return (
       <LayoutWrapper>
-        <PageHeader>Agency - {currentAgency.agencyData.name}</PageHeader>
+        <PageHeader><IntlMessages id="agency" /> - {currentAgency.agencyData.name}</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>        
@@ -82,7 +83,7 @@ class CreateEdit extends Component {
                     type="secondary"
                     onClick={() => history.goBack()}
                   >
-                    <Icon type="left" /> Go Back
+                    <Icon type="left" /> <IntlMessages id="back" />
                   </ActionBtn>
                   &nbsp; {title}
                 </ComponentTitle>

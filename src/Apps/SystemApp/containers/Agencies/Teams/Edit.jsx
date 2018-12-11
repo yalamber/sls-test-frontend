@@ -2,14 +2,13 @@ import React, {Component} from 'react';
 import {Row, Col, message, Spin} from 'antd';
 import {withRouter} from 'react-router-dom'
 import LayoutWrapper from '@components/utility/layoutWrapper';
+import PageHeader from "@components/utility/pageHeader";
 import basicStyle from '@settings/basicStyle';
 import ContentHolder from '@components/utility/contentHolder';
-
 import {
   TitleWrapper,
   ComponentTitle,
 } from '@utils/crud.style';
-
 import Box from "@components/utility/box";
 import {updateCompanyTeam, getCompanyTeam} from "@helpers/http-api-client";
 import TeamForm from "./partials/TeamForm";

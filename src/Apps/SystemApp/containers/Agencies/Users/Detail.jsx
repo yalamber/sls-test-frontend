@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import _ from "lodash";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
+import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
@@ -44,7 +45,7 @@ class Detail extends Component {
                     type="secondary"
                     onClick={() => history.goBack()}
                   >
-                    <Icon type="left" /> Go Back
+                    <Icon type="left" /> <IntlMessages id="back" />
                   </ActionBtn>
                   &nbsp; {title}
                 </ComponentTitle>

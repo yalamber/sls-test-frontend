@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Row, Col, Icon, Spin } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
+import PageHeader from "@components/utility/pageHeader";
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
+import IntlMessages from '@components/utility/intlMessages';
 import {
   ActionBtn,
   TitleWrapper,
@@ -67,6 +69,10 @@ class List extends Component {
     const { currentAgency = { agencyData: { name: '' } }, history, match } = this.props;
     return (
       <LayoutWrapper>
+        <PageHeader>
+          Agency - {currentAgency.agencyData.name}
+        </PageHeader>
+        
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -76,9 +82,9 @@ class List extends Component {
                     type="secondary"
                     onClick={() => history.goBack()}
                   >
-                    <Icon type="left" /> Go Back
+                    <Icon type="left" /> <IntlMessages id="back" />
                   </ActionBtn>
-                  &nbsp; Company - {currentAgency.agencyData.name} - Users
+                  &nbsp; <IntlMessages id="users" />
                 </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn
@@ -87,7 +93,7 @@ class List extends Component {
                       history.push(`/admin/agency/${match.params.agencyId}/user/create/`);
                     }}>
                     <Icon type="plus" />
-                    Add new User
+                    <IntlMessages id="user.add" />
                   </ActionBtn>
                 </ButtonHolders>
               </TitleWrapper>
