@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import { Row, Col, Spin, message, Form } from "antd";
+import { Row, Col, Icon, Spin, message, Form } from "antd";
 import { get } from "lodash";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
+import IntlMessages from "@components/utility/intlMessages";
 import basicStyle from "@settings/basicStyle";
 import Button from "@components/uielements/button";
 import { getErrorDataFromApiResponseError } from "@utils/response-message";
-import { ActionWrapper, TitleWrapper, ComponentTitle } from "@utils/crud.style";
+import { ActionWrapper, TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import MemberFormFields from "@appComponents/Team/MemberFormFields";
 import SWQAClient from '@helpers/apiClient';
@@ -116,17 +117,26 @@ class CreateEdit extends Component {
     const margin = {
       margin: "5px 5px 0px 0"
     };
+    const { history } = this.props;
 
     return (
       <LayoutWrapper>
         <PageHeader>
-          {get(this.state, 'team.client.name')} - {get(this.state, 'team.name')}
+          Client - { get(this.state, 'team.client.name', '') }
+          <br />
+          Team - { get(this.state, 'team.name', '') }
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>{this.mode === 'edit'? 'Edit': 'Add'} Team Member</ComponentTitle>
+                <ComponentTitle>
+                  <ActionBtn
+                    type="secondary"
+                    onClick={() => history.goBack()}>
+                    <Icon type="left" /> <IntlMessages id="back" />
+                  </ActionBtn> {this.mode === 'edit'? 'Edit': 'Add'} Team Member
+                </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Form onSubmit={this.handleSubmit} id="clientForm">
@@ -141,7 +151,7 @@ class CreateEdit extends Component {
                       type="primary"
                       style={margin}
                       icon="left"
-                      onClick={() => this.props.history.goBack()}
+                      onClick={() => history.goBack()}
                     >
                       Cancel
                     </Button>

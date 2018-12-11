@@ -1,28 +1,60 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, Spin } from "antd";
 import { connect } from 'react-redux';
-import _ from "lodash";
+import { get } from "lodash";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
+import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
+import SWQAClient from "@helpers/apiClient";
 
 class Detail extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      error: null,
+      membershipData: {},
+    };
+  }
+
   componentDidMount() {
-    const { 
-      match
-    } = this.props;
+    this.fetchData();
+  }
+
+  async fetchData() {
+    try {  
+      const { teamId, userId } = this.props.match.params;
+      this.setState({ loading: true });
+      let membershipData = await SWQAClient.getClientTeamMembership(teamId, userId);
+      this.setState({
+        membershipData,
+      });
+    } catch(e) {
+      this.setState({
+        error: e
+      });
+    } finally {
+      this.setState({
+        loading: false,
+      })
+    }
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { history } = this.props;
-
-    let title = 'Member Details';
     return (
       <LayoutWrapper>
-        <PageHeader></PageHeader>
+        <PageHeader>
+          Client - { get(this.state, 'membershipData.clientTeam.client.name', '') }
+          <br />
+          Team - { get(this.state, 'membershipData.clientTeam.name', '') }
+        </PageHeader>
+        
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>        
@@ -32,12 +64,12 @@ class Detail extends Component {
                     type="secondary"
                     onClick={() => history.goBack()}
                   >
-                    <Icon type="left" /> Go Back
+                    <Icon type="left" /> <IntlMessages id="back" />
                   </ActionBtn>
-                  &nbsp; {title}
+                  &nbsp; Member details
                 </ComponentTitle>
               </TitleWrapper>
-              <Spin spinning={false}>
+              <Spin spinning={this.state.loading}>
 
               </Spin>
             </Box>

@@ -5,7 +5,6 @@ import { ActionWrapper } from "@utils/crud.style";
 import { Tooltip } from "antd";
 
 const ActionButtons = ({ history, row, deleteMember }) => {
-  console.log(row);
   return (
     <ActionWrapper>
       <Tooltip title="Edit Membership">

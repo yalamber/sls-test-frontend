@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Row, Col, Icon, Spin } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
+import PageHeader from "@components/utility/pageHeader";
+import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
 import {
@@ -38,8 +40,8 @@ class List extends Component {
   }
 
   componentDidMount() {
-    const { match, requestCurrentClient } = this.props;
-    requestCurrentClient(match.params.clientId);
+    const { match } = this.props;
+    this.props.requestCurrentClient(match.params.clientId);
     this.onTablePaginationChange(match.params.clientId)(1, 5);    
   }
 
@@ -57,6 +59,9 @@ class List extends Component {
     const { currentClient = { clientData: { name: '' } }, history, match } = this.props;
     return (
       <LayoutWrapper>
+        <PageHeader>
+          Client - {currentClient.clientData.name}
+        </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -66,9 +71,8 @@ class List extends Component {
                     type="secondary"
                     onClick={() => history.goBack()}
                   >
-                    <Icon type="left" /> Go Back
-                  </ActionBtn>
-                  &nbsp; Client - {currentClient.clientData.name} - Teams
+                    <Icon type="left" /> <IntlMessages id="back" />
+                  </ActionBtn> Teams
                 </ComponentTitle>
                 <ButtonHolders>
                   <ActionBtn

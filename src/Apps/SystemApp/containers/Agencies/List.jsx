@@ -1,20 +1,11 @@
 import React, { Component } from 'react';
-import { Row, Col, Icon, Spin } from 'antd';
 import { connect } from 'react-redux';
-import LayoutWrapper from '@components/utility/layoutWrapper';
 import IntlMessages from '@components/utility/intlMessages';
-import basicStyle from '@settings/basicStyle';
-import Box from '@components/utility/box';
-import {
-  ActionBtn,
-  TitleWrapper,
-  ButtonHolders,
-  ComponentTitle,
-  TableClickable as Table
-} from '@utils/crud.style';
-import agencyActions from '@app/SystemApp/redux/agency/actions';
 import ActionButtons from "./partials/ActionButtons";
 import TestManagerActionButtons from './partials/TestManagerActionButtons';
+import CompanyList from '@appComponents/Company/List';
+import agencyActions from '@app/SystemApp/redux/agency/actions';
+
 const { requestAgencies, deleteAgency } = agencyActions;
 
 class AgencyList extends Component {
@@ -83,53 +74,14 @@ class AgencyList extends Component {
   }
 
   render() {
-    const { rowStyle, colStyle, gutter } = basicStyle;
-    const { list, history } = this.props;
     return (
-      <LayoutWrapper>
-        <Row style={rowStyle} gutter={gutter} justify="start">
-          <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>
-              <TitleWrapper>
-                <ComponentTitle><IntlMessages id="agencies"/></ComponentTitle>
-                <ButtonHolders>
-                  <ActionBtn
-                    type="primary"
-                    onClick={() => {
-                      history.push("agency/create");
-                    }}>
-                    <Icon type="plus" />
-                    <IntlMessages id="agency.add"/>
-                  </ActionBtn>
-                </ButtonHolders>
-              </TitleWrapper>
-              <Spin spinning={list.loading}>
-                <Table
-                  locale={{ emptyText: "No Agencies" }}
-                  pagination={{
-                    ...list.paginationOptions,
-                    onChange: this.onTablePaginationChange
-                  }}
-                  bordered
-                  rowKey="agencyId"
-                  columns={this.columns}
-                  dataSource={list.rows}
-                  onRow={row => ({
-                    onDoubleClick: () => {
-                      history.push(`agency/${row.agencyId}/details`);
-                    }
-                  })}
-                />
-              </Spin>
-            </Box>
-
-          </Col>
-        </Row>
-      </LayoutWrapper>
+      <CompanyList {...this.props} 
+        listType="agency"
+        onTablePaginationChange={this.onTablePaginationChange} 
+        columns={this.columns} />
     );
   }
 }
-
 
 export default connect(
   state => ({

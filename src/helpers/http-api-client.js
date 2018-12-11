@@ -192,22 +192,6 @@ export const getCompany = function(objOrCompanyId) {
 };
 
 //Teams
-// export const addTeam = function(team) {
-//   return _post("client-team", team);
-// };
-// export const updateTeam = function(team, id) {
-//   return _put("client-team/" + id, team);
-// };
-// export const deleteCompanyTeam = function(teamId) {
-//   return _deleteRecord("client-team/" + teamId);
-// };
-// export const getTeams = function(companyId) {
-//   return _get("client-team", { clientId: companyId });
-// };
-// export const getClientTeam = function(clientTeamId) {
-//   return _get("client-team/" + clientTeamId);
-// };
-
 /** Company Team **/
 export const addCompanyTeam = function(team) {
   return _post("client-team", team);
