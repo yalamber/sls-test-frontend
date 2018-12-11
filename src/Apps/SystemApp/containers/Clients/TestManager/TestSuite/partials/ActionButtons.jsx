@@ -8,6 +8,15 @@ import {
 export default function ActionButtons({history, row, deleteTestSuite}) {
   return (
     <ActionWrapper>
+      <Tooltip title="Test Cases">
+        <Button 
+          shape="circle" 
+          icon="experiment" 
+          onClick={() => {
+            history.push(`/admin/client/${row.clientTeam.client.clientId}/test-manager/test-case?suiteId=${row.testSuiteId}`)
+          }} 
+        />
+      </Tooltip>
       <Tooltip title="Edit Record">
         <Button
           shape="circle"
