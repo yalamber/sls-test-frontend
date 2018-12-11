@@ -4,6 +4,7 @@ import qs from "qs";
 import { Row, Col, Icon, Select, Tooltip, Spin, Form } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
+import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
 import ActionButtons from "./partials/ActionButtons";
@@ -141,7 +142,15 @@ class SuiteList extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Test Suites</ComponentTitle>
+                <ComponentTitle>
+                  <ActionBtn
+                    type="secondary"
+                    onClick={() => history.goBack()}
+                  >
+                    <Icon type="left" /> <IntlMessages id="back" />
+                  </ActionBtn>
+                  &nbsp; Test Suites
+                </ComponentTitle>
                 <ButtonHolders>
                   <Tooltip
                     placement="topRight"

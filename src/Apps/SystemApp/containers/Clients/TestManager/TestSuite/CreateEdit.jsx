@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Row, Col, message, Spin, Form, Button, Input, Select } from "antd";
+import { Row, Col, message, Spin, Form, Button, Input, Select, Icon } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import PageHeader from "@components/utility/pageHeader";
-import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
+import IntlMessages from '@components/utility/intlMessages';
+import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import Errors from "@utils/Errors";
 import { scrollToTop } from '@utils/dom-util';
@@ -41,7 +42,6 @@ class CreateEdit extends Component {
     try{
       let { match } = this.props;
       let clientTeam = await SWQAClient.getClientTeam(match.params.teamId);
-      
       this.setState({
         clientTeam,
         loading: false,
@@ -95,7 +95,8 @@ class CreateEdit extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { getFieldDecorator } = this.props.form;
+    const { form, history } = this.props;
+    const { getFieldDecorator } = form;
     const margin = {
       margin: '5px 5px 0px 0'
     };
@@ -104,13 +105,23 @@ class CreateEdit extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          {get(this.state, 'clientTeam.client.name')} | {get(this.state, 'clientTeam.name')}
+          Client - {get(this.state, 'clientTeam.client.name')} 
+          <br/>
+          Team - {get(this.state, 'clientTeam.name')}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Create Test Suite</ComponentTitle>
+                <ComponentTitle>
+                  <ActionBtn
+                    type="secondary"
+                    onClick={() => history.goBack()}
+                  >
+                    <Icon type="left" /> <IntlMessages id="back" />
+                  </ActionBtn>
+                  &nbsp; Create Test Suite
+                </ComponentTitle>
               </TitleWrapper>
               <Row gutter={24}>
                 <Col span={24}>
