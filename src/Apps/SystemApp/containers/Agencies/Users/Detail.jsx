@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Row, Col, Icon, Spin } from "antd";
 import { connect } from 'react-redux';
-import _ from "lodash";
+import { get } from "lodash";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
@@ -35,7 +35,7 @@ class Detail extends Component {
     let title = 'User Details';
     return (
       <LayoutWrapper>
-        <PageHeader>Agency - {currentAgency.agencyData.name}</PageHeader>
+        <PageHeader>Agency - {get(currentAgency, 'agencyData.name', '')}</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>        

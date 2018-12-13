@@ -7,7 +7,6 @@ import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
-import Errors from "@utils/Errors";
 import { scrollToTop } from '@utils/dom-util';
 import {
   ActionWrapper,
@@ -54,6 +53,7 @@ class CreateEdit extends Component {
         let clientTeam = await SWQAClient.getClientTeam(match.params.teamId);  
         this.setState({
           clientTeam,
+          client: clientTeam.client,
           loading: false,
           error: null,
         });
@@ -74,7 +74,7 @@ class CreateEdit extends Component {
         try{
           this.setState({ loading: true });
           if(this.mode === 'edit') {
-            let testSuite = await SWQAClient.updateTestSuite(match.params.suiteId, values);
+            await SWQAClient.updateTestSuite(match.params.suiteId, values);
             message.success("Successfully Updated");
           } else {
             let testSuite = await SWQAClient.addTestSuite({ 

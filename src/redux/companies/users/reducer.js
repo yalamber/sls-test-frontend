@@ -1,4 +1,3 @@
-import actions from "./actions";
 import {
   COMPANIES_USERS_LIST_DID_MOUNT,
   COMPANIES_USERS_LIST_FETCH,

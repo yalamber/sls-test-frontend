@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Badge } from 'antd';
 import IntlMessages from '@components/utility/intlMessages';
 import Popover from '@components/uielements/popover';
 import TopbarDropdownWrapper from './topbarDropdown.style';

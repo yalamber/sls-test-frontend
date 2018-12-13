@@ -27,6 +27,7 @@ class SignIn extends Component {
 
     if(isLoggedIn) {
       switch(activeAppType) {
+        default:
         case 'system':
           return history.push('/admin');
         case 'client':

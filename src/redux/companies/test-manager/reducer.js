@@ -1,4 +1,3 @@
-import actions from "./actions";
 import {
   COMPANIES_TEST_MANAGER_LIST_DID_MOUNT
 } from "../../constants";

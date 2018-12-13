@@ -152,6 +152,7 @@ class Sidebar extends Component {
     //get active options
     let activeOptions = [];
     switch(my.activeAppType) {
+      default:
       case 'system':
         activeOptions = options.systemAdminOptions;
       break;

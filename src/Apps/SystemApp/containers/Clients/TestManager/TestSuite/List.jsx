@@ -93,7 +93,7 @@ class SuiteList extends Component {
         testSuites: testSuites.rows,
       };
       if(options.clientTeamId) {
-        updateState.selectedTeamId = parseInt(options.clientTeamId); 
+        updateState.selectedTeamId = parseInt(options.clientTeamId, 10); 
       }
       this.setState(updateState);
     } catch(e) {

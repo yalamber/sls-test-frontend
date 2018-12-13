@@ -1,17 +1,30 @@
 import React from "react";
-import {Tooltip} from "antd";
+import {Tooltip, Button} from "antd";
 import Popconfirms from '@components/feedback/popconfirm';
 import {
   ActionWrapper,
 } from '@utils/crud.style';
 
-export default function ActionButtons(props) {
+export default function ActionButtons({row, delteItem, history}) {
   return (
     <ActionWrapper>
-      <Tooltip placement="topLeft" title="Edit Record">
-        <a onClick={() => alert("Edit Form")}>
-          <i className="ion-android-create"/>
-        </a>
+      <Tooltip title="Edit Record">
+        <Button 
+          shape="circle" 
+          icon="edit" 
+          onClick={() => {
+            history.push(`/admin/client/test-manager/test-case/${row.testCaseId}/edit`);
+          }} 
+        />
+      </Tooltip>
+      <Tooltip title="Details">
+        <Button 
+          shape="circle" 
+          icon="info" 
+          onClick={() => {
+            history.push(`/admin/client/test-manager/test-case/${row.testCaseId}/details`);
+          }} 
+        />
       </Tooltip>
       <Tooltip placement="topLeft" title="Delete Record">
         <Popconfirms
@@ -19,11 +32,11 @@ export default function ActionButtons(props) {
           okText="Yes"
           cancelText="No"
           placement="topRight"
-          onConfirm={() => props.delete(props.row)}
+          onConfirm={() => delteItem(row)}
         >
-          <a className="deleteBtn">
-            <i className="ion-android-delete"/>
-          </a>
+          <Button 
+            shape="circle" 
+            icon="delete" />
         </Popconfirms>
       </Tooltip>
     </ActionWrapper>

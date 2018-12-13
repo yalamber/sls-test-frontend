@@ -7,6 +7,6 @@ const options = {
   systemAdminOptions,
   clientOptions,
   agencyOptions,
-  freelancerOptions
+  freelancerOptions,
 }
 export default options;

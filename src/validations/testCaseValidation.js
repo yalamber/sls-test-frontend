@@ -1,7 +1,7 @@
 import {required} from './rules'
 
 export const testCaseValidation = {
-  company: [required],
+  client: [required],
   team: [required],
   suite: [required],
   status: [required],

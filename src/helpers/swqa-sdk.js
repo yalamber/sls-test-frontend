@@ -1,8 +1,6 @@
 import axios from 'axios';
-import _ from "lodash";
 import isUrl from 'is-url';
 import joinUrl from 'proper-url-join';
-//TODO: make compatible with redux store
 
 class APIRequest {
 
@@ -220,6 +218,27 @@ class SWQA {
 
   deleteTestSuite = (suiteId) => {
     return this.api.send('DELETE', `test/suite/${suiteId}`);
+  }
+
+  //test cases
+  addTestCase = (testCaseData) => {
+    return this.api.send('POST', `test/case`, testCaseData);
+  }
+
+  getTestCases = (options) => {
+    return this.api.send('GET', `test/case`, options);
+  }
+
+  getTestCase = (testCaseId) => {
+    return this.api.send('GET', `test/case/${testCaseId}`);
+  }
+
+  updateTestCase = (caseId, caseData) => {
+    return this.api.send('PUT', `test/case/${caseId}`, caseData);
+  }
+
+  deleteTestCase = (caseId) => {
+    return this.api.send('DELETE', `test/case/${caseId}`);
   }
 
   //users

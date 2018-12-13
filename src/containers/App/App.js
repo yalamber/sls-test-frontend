@@ -31,6 +31,7 @@ export class App extends Component {
     const appHeight = window.innerHeight;
     let routes = [];
     switch(appType) {
+      default:
       case 'system':
         routes = systemRoutes;
         break;
