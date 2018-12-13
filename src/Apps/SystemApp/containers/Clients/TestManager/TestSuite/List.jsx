@@ -43,6 +43,7 @@ class SuiteList extends Component {
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.isTeamSelected = this.isTeamSelected.bind(this);
     this.deleteTestSuite = this.deleteTestSuite.bind(this);
+    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: "Title",
@@ -93,6 +94,10 @@ class SuiteList extends Component {
       let updateState = {
         loading: false,
         testSuites: testSuites.rows,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          total: testSuites.count
+        }
       };
       if(options.clientTeamId) {
         updateState.selectedTeamId = parseInt(options.clientTeamId, 10); 
@@ -106,7 +111,7 @@ class SuiteList extends Component {
     }
   }
 
-  async onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange(page, pageSize) {
     this.setState({
       loading: true,
       paginationOptions: {
