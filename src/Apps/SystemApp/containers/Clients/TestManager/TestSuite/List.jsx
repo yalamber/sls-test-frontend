@@ -32,6 +32,12 @@ class SuiteList extends Component {
       selectedTeamId: undefined,
       loading: true,
       error: null,
+      paginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 10,
+        total: 1
+      },
     };
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.isTeamSelected = this.isTeamSelected.bind(this);
@@ -53,11 +59,6 @@ class SuiteList extends Component {
         key: "team"
       },
       {
-        title: "Last Updated by",
-        dataIndex: "lastUpdatedBy",
-        key: "lastUpdatedBy"
-      },
-      {
         title: "Actions",
         key: "actions",
         render: row => <ActionButtons row={row} deleteTestSuite={this.deleteTestSuite} history={this.props.history} />
@@ -68,7 +69,7 @@ class SuiteList extends Component {
   componentDidMount() {
     const { match, requestCurrentClient, requestClientTeams, location } = this.props;
     let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
-    //TODO: check stat and params if same clientId already
+    //TODO: check state and params if same clientId already
     requestCurrentClient(match.params.clientId);
     requestClientTeams(match.params.clientId, {
       page: 1,
@@ -102,6 +103,41 @@ class SuiteList extends Component {
         error: e,
       });
     }
+  }
+
+  async onTablePaginationChange(page, pageSize) {
+    this.setState({
+      loading: true,
+      paginationOptions: {
+        ...this.state.paginationOptions,
+        current: page,
+        pageSize
+      }
+    }, async () => {
+      try{
+        let offset = pageSize * (page - 1);
+        let params = {
+          limit: pageSize,
+          offset
+        };
+        if(this.state.selectedTeamId) {
+          params.clientTeamId = this.state.selectedTeamId;
+        } else {
+          params.clientId = this.props.match.params.clientId;
+        }
+        let testSuites = await SWQAClient.getTestSuites(params);
+        this.setState({
+          loading: false,
+          testSuites: get(testSuites, 'rows', []),
+          paginationOptions: {
+            ...this.state.paginationOptions,
+            total: testSuites.count
+          }
+        });
+      } catch(e) {
+        this.setState({ loading: false, dataSource: [] });
+      }
+    });
   }
 
   handleTeamChange(teamId) {
@@ -194,7 +230,10 @@ class SuiteList extends Component {
                   locale={{ emptyText: "No Test Suites available" }}
                   size="middle"
                   bordered
-                  pagination={true}
+                  pagination={{
+                    ...this.state.paginationOptions,
+                    onChange: this.onTablePaginationChange
+                  }}
                   columns={this.columns}
                   dataSource={this.state.testSuites}
                   rowKey="testSuiteId"

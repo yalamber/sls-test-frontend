@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import { get } from 'lodash';
 import qs from "qs";
 import { Row, Col, Icon, Select, Tooltip, Spin, Form } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
@@ -33,10 +34,17 @@ class TestCaseList extends Component {
       selectedSuiteId: undefined,
       loading: true,
       error: null,
+      paginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 10,
+        total: 1
+      },
     };
     this.handleSuiteChange = this.handleSuiteChange.bind(this);
     this.isSuiteSelected = this.isSuiteSelected.bind(this);
     this.deleteTestCase = this.deleteTestCase.bind(this);
+    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: "Title",
@@ -54,11 +62,6 @@ class TestCaseList extends Component {
         key: "case"
       },
       {
-        title: "Created by",
-        dataIndex: "createdByUserId",
-        key: "createdByUserId"
-      },
-      {
         title: "Actions",
         key: "actions",
         render: row => <ActionButtons row={row} delete={this.handleDelete} history={props.history} />
@@ -73,8 +76,8 @@ class TestCaseList extends Component {
     requestCurrentClient(match.params.clientId);
     //get all test cases
     let reqParams = {};
-    if(queryParams.caseId) {
-      reqParams.caseId = queryParams.caseId;
+    if(queryParams.suiteId) {
+      reqParams.suiteId = queryParams.suiteId;
     } else {
       reqParams.clientId = match.params.clientId;
     }
@@ -87,7 +90,6 @@ class TestCaseList extends Component {
       limit: 50,
       clientId: this.props.match.params.clientId
     });
-    console.log(testSuites);
     this.setState({
       testSuites: testSuites.rows
     });
@@ -96,10 +98,15 @@ class TestCaseList extends Component {
   async fetchTestCase(options) {
     try {
       this.setState({loading: true});
+      options.limit = this.state.paginationOptions.pageSize;
       let testCases = await SWQAClient.getTestCases(options);
       let updateState = {
         loading: false,
-        testCases: testCases.rows
+        testCases: testCases.rows,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          total: testCases.count
+        }
       };
       if(options.suiteId) {
         updateState.selectedSuiteId = parseInt(options.suiteId, 10); 
@@ -111,6 +118,43 @@ class TestCaseList extends Component {
         error: e,
       });
     }
+  }
+
+  onTablePaginationChange(page, pageSize) {
+    this.setState({
+      loading: true,
+      paginationOptions: {
+        ...this.state.paginationOptions,
+        current: page,
+        pageSize
+      }
+    }, async () => {
+      try{
+        let offset = pageSize * (page - 1);
+        let params = {
+          limit: pageSize,
+          offset
+        };
+        if(this.state.selectedSuiteId) {
+          params.suiteId = this.state.selectedSuiteId;
+        } else {
+          params.clientId = this.props.match.params.clientId;
+        }
+        let testRuns = await SWQAClient.getTestCases(params);
+        this.setState({
+          loading: false,
+          testRuns: get(testRuns, 'rows', []),
+          paginationOptions: {
+            ...this.state.paginationOptions,
+            total: testRuns.count
+          }
+        });
+      } catch(e) {
+        this.setState({ testRuns: [], error: e });
+      } finally {
+        this.setState({ loading: false });
+      }
+    });
   }
 
   handleSuiteChange(suiteId) {
@@ -203,7 +247,10 @@ class TestCaseList extends Component {
                   locale={{ emptyText: "No Test Cases available" }}
                   size="middle"
                   bordered
-                  pagination={true}
+                  pagination={{
+                    ...this.state.paginationOptions,
+                    onChange: this.onTablePaginationChange
+                  }}
                   columns={this.columns}
                   dataSource={this.state.testCases}
                   rowKey="testSuiteId"

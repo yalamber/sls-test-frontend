@@ -26,9 +26,10 @@ class MemberList extends Component {
       paginationOptions: {
         defaultCurrent: 1,
         current: 1,
-        pageSize: 1,
+        pageSize: 10,
         total: 1
       },
+      error: null,
       loading: false
     };
     //

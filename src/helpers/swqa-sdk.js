@@ -241,6 +241,11 @@ class SWQA {
     return this.api.send('DELETE', `test/case/${caseId}`);
   }
 
+  //Test runs
+  getTestRuns = (options) => {
+    return this.api.send('GET', `test/run`, options);
+  }
+
   //users
   createUser = (payload) => {
     return this.api.send('POST', `user`, payload);
