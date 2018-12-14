@@ -42,7 +42,8 @@ const AppWrappedRoute = ({isLoggedIn, appType,  ...rest }) => (
   />
 );
 
-const PublicRoutes = ({ history, isLoggedIn }) => {
+const PublicRoutes = ({ history, isLoggedIn, activeAppType }) => {
+  console.log(activeAppType);
   return (
     <ConnectedRouter history={history}>
       <Switch>
@@ -56,10 +57,18 @@ const PublicRoutes = ({ history, isLoggedIn }) => {
           path={'/request-account'}
           component={asyncComponent(() => import('./containers/Page/Auth/RequestAccount'))}
         />
-        <AppWrappedRoute appType="system" path="/admin" isLoggedIn={isLoggedIn} />
-        <AppWrappedRoute appType="agency" path="/my-agency" isLoggedIn={isLoggedIn} />
-        <AppWrappedRoute appType="client" path="/my-client" isLoggedIn={isLoggedIn} />
-        <AppWrappedRoute appType="freelancer" path="/freelancer" isLoggedIn={isLoggedIn} />
+        {activeAppType === 'system' &&
+          <AppWrappedRoute appType="system" path="/admin" isLoggedIn={isLoggedIn} />
+        }
+        {activeAppType === 'agency' &&
+          <AppWrappedRoute appType="agency" path="/my-agency" isLoggedIn={isLoggedIn} />
+        }
+        {activeAppType === 'client' &&
+          <AppWrappedRoute appType="client" path="/my-client" isLoggedIn={isLoggedIn} />
+        }
+        {activeAppType === 'freelancer' &&
+          <AppWrappedRoute appType="freelancer" path="/freelancer" isLoggedIn={isLoggedIn} />
+        }
         <RestrictedRoute path="/settings" isLoggedIn={isLoggedIn} />
         <Route path="*" component={asyncComponent(() => import('./containers/Page/Common/404'))}/>
       </Switch>

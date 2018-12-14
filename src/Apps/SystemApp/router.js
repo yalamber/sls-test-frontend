@@ -124,19 +124,19 @@ const routes = [
   /* test manager -> Test Case */
   {
     path: 'client/:clientId/test-manager/test-case',
-    component: asyncComponent(() => import('./containers/Clients/TestManager/TestCases/List'))
+    component: asyncComponent(() => import('./containers/Clients/TestManager/TestCase/List'))
   },
   {
     path: 'client/test-manager/test-suite/:suiteId/test-case/create',
-    component: asyncComponent(() => import('./containers/Clients/TestManager/TestCases/CreateEdit'))
+    component: asyncComponent(() => import('./containers/Clients/TestManager/TestCase/CreateEdit'))
   },
   {
     path: 'client/test-manager/test-case/:caseId/edit',
-    component: asyncComponent(() => import('./containers/Clients/TestManager/TestCases/CreateEdit'))
+    component: asyncComponent(() => import('./containers/Clients/TestManager/TestCase/CreateEdit'))
   },
   {
     path: 'client/test-manager/test-case/:caseId/details',
-    component: asyncComponent(() => import('./containers/Clients/TestManager/TestCases/Detail'))
+    component: asyncComponent(() => import('./containers/Clients/TestManager/TestCase/Detail'))
   },
 
   /* test manager -> Test Run */

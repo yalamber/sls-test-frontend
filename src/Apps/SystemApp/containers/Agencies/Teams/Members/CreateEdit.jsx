@@ -9,7 +9,7 @@ import Button from "@components/uielements/button";
 import { getErrorDataFromApiResponseError } from "@utils/response-message";
 import { ActionWrapper, TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
-import MemberFormFields from "@appComponents/Team/MemberFormFields";
+import MemberFormFields from "@appComponents/Team/partials/MemberFormFields";
 import SWQAClient from '@helpers/apiClient';
 
 class CreateEdit extends Component {

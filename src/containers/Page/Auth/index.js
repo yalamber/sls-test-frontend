@@ -27,17 +27,16 @@ class SignIn extends Component {
 
     if(isLoggedIn) {
       switch(activeAppType) {
-        default:
         case 'system':
           return history.push('/admin');
         case 'client':
-          return history.push("/my-agency");
+          return history.push("/my-client");
         case 'agency':
           return history.push("/my-agency");
+        default:
         case 'freelancer':
           return history.push("/my");
       }
-      history.push('/my');
     }
   }
 

@@ -113,7 +113,7 @@ export function* successAccountLogin() {
     if (payload) {
       const { token } = payload;
       yield setCompanyToken(token);
-      if (history) {
+      if (history && history.push) {
         if(activeCompanyTokenData.type === 'agencyUser'){
           return history.push("/my-agency");  
         }
