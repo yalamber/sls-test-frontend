@@ -4,13 +4,13 @@ import { Row, Col, Icon, Spin } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
+import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
 import Moment from "react-moment";
 import {
   ActionBtn,
   TitleWrapper,
-  ButtonHolders,
   ComponentTitle,
   TableClickable as Table
 } from "@utils/crud.style";
@@ -127,40 +127,32 @@ class TestRunList extends Component {
           }
         });
       } catch(e) {
-        this.setState({ loading: false, dataSource: [] });
+        this.setState({ loading: false, testRuns: [] });
       }
     });
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentClient } = this.props;
-    
+    const { currentClient, history } = this.props;
     return (
       <LayoutWrapper>
         <PageHeader>
-        Client - {get(currentClient, 'clientData.name', '')}
+          Client - {get(currentClient, 'clientData.name', '')}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle>Test Run</ComponentTitle>
-                <ButtonHolders>
+                <ComponentTitle>
                   <ActionBtn
-                    type="primary"
-                    onClick={() => {
-                      this.props.history.push(
-                        `/dashboard/company/${
-                          this.props.match.params.companyId
-                        }/test-manager/test-run/create/`
-                      );
-                    }}
+                    type="secondary"
+                    onClick={() => history.goBack()}
                   >
-                    <Icon type="plus" />
-                    Add New
+                    <Icon type="left" /> <IntlMessages id="back" />
                   </ActionBtn>
-                </ButtonHolders>
+                  &nbsp; Test Run
+                </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table

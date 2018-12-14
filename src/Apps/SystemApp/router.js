@@ -93,18 +93,13 @@ const routes = [
   },
   //agencies
   ...commonAgencyClientRoutes('agency'),
-  //agency test manager
   {
-    path: 'agency/test-manager/test-case',
-    component: asyncComponent(() => import('./containers/Agencies/TestManager/TestCaseScreen'))
+    path: 'agency/:agencyId/test-manager/completed-tests',
+    component: asyncComponent(() => import('./containers/Agencies/TestManager/CompletedTests'))
   },
   {
-    path: 'agency/test-manager/:agencyId/available-tests',
-    component: asyncComponent(() => import('./containers/Agencies/TestManager/TestQueues/AvailableTests'))
-  },
-  {
-    path: 'agency/test-manager/:agencyId/assigned-tests',
-    component: asyncComponent(() => import('./containers/Agencies/TestManager/TestQueues/AssignedTests'))
+    path: 'agency/:agencyId/test-manager/assigned-tests',
+    component: asyncComponent(() => import('./containers/Agencies/TestManager/AssignedTests'))
   },
   //clients
   ...commonAgencyClientRoutes('client'),
@@ -150,9 +145,15 @@ const routes = [
     component: asyncComponent(() => import('./containers/Clients/TestManager/TestRun/List'))
   },
   {
-    path: 'client/:clientId/test-manager/test-run/create',
-    component: asyncComponent(() => import('./containers/Clients/TestManager/TestRun/Create'))
+    path: 'client/test-manager/test-run/:runId/details',
+    component: asyncComponent(() => import('./containers/Clients/TestManager/TestRun/Detail'))
   },
+  /* test manager -> Test Queue */
+  {
+    path: 'client/:clientId/test-manager/test-queue',
+    component: asyncComponent(() => import('./containers/Clients/TestManager/TestQueue/List'))
+  },
+  
   //Roles
   {
     path: "roles",
