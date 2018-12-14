@@ -16,15 +16,14 @@ import {
 } from "@utils/crud.style";
 import SWQAClient from '@helpers/apiClient';
 import { dateTime } from "@constants/dateFormat";
-import clientActions from '@app/SystemApp/redux/client/actions';
+import agencyActions from '@app/SystemApp/redux/agency/actions';
 
-const { requestCurrentClient } = clientActions;
+const { requestCurrentAgency } = agencyActions;
 
-class TestQueueList extends Component {
+class AssignedTestList extends Component {
   constructor() {
     super();
     this.state = {
-      client: {},
       testQueues: [],
       loading: false,
       error: null,
@@ -62,10 +61,11 @@ class TestQueueList extends Component {
   }
 
   componentDidMount() {
-    const { match, requestCurrentClient } = this.props;
-    requestCurrentClient(match.params.clientId);
+    const { match, requestCurrentAgency } = this.props;
+    requestCurrentAgency(match.params.agencyId);
     this.fetchData({
-      clientId: match.params.clientId
+      agencyId: match.params.agencyId,
+      status: 'assigned'
     });
   }
 
@@ -106,7 +106,8 @@ class TestQueueList extends Component {
       try{
         let offset = pageSize * (page - 1);
         let testQueues = await SWQAClient.getTestQueues({
-          clientId: this.props.match.params.clientId,
+          agencyId: this.props.match.params.agencyId,
+          status: 'assigned',
           limit: pageSize,
           offset
         });
@@ -126,11 +127,11 @@ class TestQueueList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentClient, history } = this.props;
+    const { currentAgency, history } = this.props;
     return (
       <LayoutWrapper>
         <PageHeader>
-          Client - {get(currentClient, 'clientData.name', '')}
+          Agency - {get(currentAgency, 'agencyData.name', '')}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -143,12 +144,12 @@ class TestQueueList extends Component {
                   >
                     <Icon type="left" /> <IntlMessages id="back" />
                   </ActionBtn>
-                  &nbsp; Test Queue
+                  &nbsp; Assigned Tests
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table
-                  locale={{ emptyText: "No test run available" }}
+                  locale={{ emptyText: "No Tests available" }}
                   size="middle"
                   bordered
                   pagination={{
@@ -170,9 +171,9 @@ class TestQueueList extends Component {
 
 export default connect(
   state => ({
-    ...state.Client
+    ...state.Agency
   }),
   {
-    requestCurrentClient
+    requestCurrentAgency
   }
-)(TestQueueList);
+)(AssignedTestList);
