@@ -39,8 +39,8 @@ const TopbarWrapper = styled.div`
         margin-bottom: 0;
         font-size: 18px;
       }
-      a.switch-link {
-        margin-left: 10px;
+      button.switch-link {
+        margin: 15px;
       }
     }
     .isoLeft {

@@ -1,19 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Row, Col, Icon, Spin } from "antd";
-import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
-import IntlMessages from '@components/utility/intlMessages';
-import basicStyle from "@settings/basicStyle";
-import Box from "@components/utility/box";
-import {
-  ActionBtn,
-  TitleWrapper,
-  ButtonHolders,
-  ComponentTitle,
-  TableClickable as Table
-} from "@utils/crud.style";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
+import TeamList from '@appComponents/Team/List';
 import ActionButtons from "./partials/ActionButtons";
 const { requestAgencyTeams, requestCurrentAgency } = agencyActions;
 
@@ -55,58 +43,22 @@ class List extends Component {
   }
 
   render() {
-    const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentAgency = { agencyData: { name: '' } }, history, match } = this.props;
+    const { currentAgency = { agencyData: { name: '' }, teamList: [] }, match } = this.props;
     return (
-      <LayoutWrapper>
-        <PageHeader>
-          Agency - {currentAgency.agencyData.name}
-        </PageHeader>
-        <Row style={rowStyle} gutter={gutter} justify="start">
-          <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>
-              <TitleWrapper>
-                <ComponentTitle>
-                  <ActionBtn
-                    type="secondary"
-                    onClick={() => history.goBack()}
-                  >
-                    <Icon type="left" /> <IntlMessages id="back" />
-                  </ActionBtn> Teams
-                </ComponentTitle>
-                <ButtonHolders>
-                  <ActionBtn
-                    type="primary"
-                    onClick={() => {
-                      history.push(`/admin/agency/${match.params.agencyId}/team/create/`);
-                    }}>
-                    <Icon type="plus" />
-                    Add new Team
-                  </ActionBtn>
-                </ButtonHolders>
-              </TitleWrapper>
-              <Spin spinning={currentAgency.teamList.loading}>
-                <Table
-                  locale={{ emptyText: "No Teams in agency" }}
-                  pagination={{
-                    ...currentAgency.teamList.paginationOptions,
-                    onChange: this.onTablePaginationChange(match.params.agencyId)
-                  }}
-                  bordered
-                  columns={this.columns}
-                  onRow={row => ({
-                    onDoubleClick: () => {
-                      history.push(`/admin/agency/${match.params.agencyId}/team/${row.agencyTeamId}/details`);
-                    }
-                  })}
-                  dataSource={currentAgency.teamList.rows}
-                  rowKey="agencyTeamId"
-                />
-              </Spin>
-            </Box>
-          </Col>
-        </Row>
-      </LayoutWrapper>
+      <TeamList {...this.props} 
+        onTablePaginationChange={this.onTablePaginationChange} 
+        onTableRow={(row) => ({
+          onDoubleClick: () => {
+            this.props.history.push(`/admin/agency/${match.params.agencyId}/team/${row.agencyTeamId}/details`);
+          }
+        })}
+        loading={currentAgency.teamList.loading}
+        pageHeader={`Agency - ${currentAgency.agencyData.name}`}
+        columns={this.columns}
+        createLink={`/admin/agency/${match.params.agencyId}/team/create/`}
+        data={currentAgency.teamList.rows}
+        paginationOptions={currentAgency.teamList.paginationOptions}
+        rowKey="agencyTeamId" />
     );
   }
 }

@@ -4,7 +4,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import { connect } from 'react-redux';
 
 import asyncComponent from '@helpers/AsyncFunc';
-import App from '@containers/App/App';
+import App from '@containers/App';
 
 const RestrictedRoute = ({Component, isLoggedIn, ...rest }) => (
   <Route
@@ -43,7 +43,6 @@ const AppWrappedRoute = ({isLoggedIn, appType,  ...rest }) => (
 );
 
 const PublicRoutes = ({ history, isLoggedIn, activeAppType }) => {
-  console.log(activeAppType);
   return (
     <ConnectedRouter history={history}>
       <Switch>

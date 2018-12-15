@@ -153,7 +153,6 @@ export function* switchSystemAdmin() {
       let { history = false } = payload;
       clearCompanyToken();
       if (history && history.push) {
-        console.log(history);
         history.push("/admin");
       }
     }

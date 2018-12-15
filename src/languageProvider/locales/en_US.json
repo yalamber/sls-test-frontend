@@ -4,7 +4,7 @@
   "topbar.help": "Help",
   "topbar.logout": "Logout",
   "topbar.viewAll": "View All",
-  "topbar.switchSystemAdmin": "[Switch to System Administration]",
+  "topbar.switchSystemAdmin": "Switch to System Administration",
   "topbar.systemAdministration": "System Administration",
 
   "agency": "Agency",

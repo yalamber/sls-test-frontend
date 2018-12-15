@@ -1,23 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Row, Col, Icon, Spin } from "antd";
-import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
-import basicStyle from "@settings/basicStyle";
-import Box from "@components/utility/box";
-import IntlMessages from '@components/utility/intlMessages';
-import {
-  ActionBtn,
-  TitleWrapper,
-  ButtonHolders,
-  ComponentTitle,
-  TableClickable as Table
-} from "@utils/crud.style";
+import List from '@appComponents/Common/List';
 import clientActions from '@app/SystemApp/redux/client/actions';
 import ActionButtons from "./partials/ActionButtons";
 const { requestClientUsers, requestCurrentClient } = clientActions;
 
-class List extends Component {
+class UserList extends Component {
   constructor(props) {
     super(props);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
@@ -65,66 +53,24 @@ class List extends Component {
   }
 
   render() {
-    const { rowStyle, colStyle, gutter } = basicStyle;
     const { currentClient = { clientData: { name: '' } }, history, match } = this.props;
     return (
-      <LayoutWrapper>
-        <PageHeader>
-          Client - {currentClient.clientData.name}
-        </PageHeader>
-        
-        <Row style={rowStyle} gutter={gutter} justify="start">
-          <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>
-              <TitleWrapper>
-                <ComponentTitle>
-                  <ActionBtn
-                    type="secondary"
-                    onClick={() => history.goBack()}
-                  >
-                    <Icon type="left" /> <IntlMessages id="back" />
-                  </ActionBtn>
-                  &nbsp; <IntlMessages id="users" />
-                </ComponentTitle>
-                <ButtonHolders>
-                  <ActionBtn
-                    type="primary"
-                    onClick={() => {
-                      history.push(`/admin/client/${match.params.clientId}/user/create/`);
-                    }}>
-                    <Icon type="plus" />
-                    <IntlMessages id="user.add" />
-                  </ActionBtn>
-                </ButtonHolders>
-              </TitleWrapper>
-              <Spin spinning={currentClient.userList.loading}>
-                <Table
-                  locale={{ emptyText: "No users in client" }}
-                  pagination={{
-                    ...currentClient.userList.paginationOptions,
-                    onChange: this.onTablePaginationChange(match.params.clientId)
-                  }}
-                  bordered
-                  columns={this.columns}
-                  onRow={row => ({
-                    onDoubleClick: () => {
-                      history.push({
-                        pathname: `/admin/client/${match.params.clientId}/user/${row.userId}/edit`,
-                        state: {
-                          ...row
-                        }
-                      });
-                    }
-                  })}
-                  dataSource={currentClient.userList.rows}
-                  rowKey="userId"
-                />
-              </Spin>
-            </Box>
-          </Col>
-        </Row>
-      </LayoutWrapper>
-    );
+      <List {...this.props} 
+        pageHeader = {`Client - ${currentClient.clientData.name}`}
+        title = "Users"
+        onTablePaginationChange={this.onTablePaginationChange} 
+        onTableRow={(row) => ({
+          onDoubleClick: () => {
+            this.props.history.push(`/admin/client/${row.clientId}/details`);
+          }
+        })}
+        loading={currentClient.userList.loading}
+        columns={this.columns}
+        createLink={`/admin/client/${match.params.clientId}/user/create/`}
+        data={currentClient.userList.rows}
+        paginationOptions={currentClient.userList.paginationOptions}
+        rowKey="userId" />
+    )
   }
 }
 
@@ -136,4 +82,4 @@ export default connect(
     requestCurrentClient,
     requestClientUsers
   }
-)(List);
+)(UserList);

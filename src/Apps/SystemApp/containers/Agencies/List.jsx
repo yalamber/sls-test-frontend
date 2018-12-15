@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import IntlMessages from '@components/utility/intlMessages';
 import ActionButtons from "./partials/ActionButtons";
 import TestManagerActionButtons from './partials/TestManagerActionButtons';
-import CompanyList from '@appComponents/Company/List';
+import List from '@appComponents/Common/List';
 import agencyActions from '@app/SystemApp/redux/agency/actions';
 
 const { requestAgencies, deleteAgency } = agencyActions;
@@ -75,10 +75,20 @@ class AgencyList extends Component {
 
   render() {
     return (
-      <CompanyList {...this.props} 
-        listType="agency"
+      <List {...this.props} 
+        title = "Agencies"
         onTablePaginationChange={this.onTablePaginationChange} 
-        columns={this.columns} />
+        onTableRow={(row) => ({
+          onDoubleClick: () => {
+            this.props.history.push(`/admin/agency/${row.agencyId}/details`);
+          }
+        })}
+        loading={this.props.list.loading}
+        columns={this.columns}
+        createLink={`/admin/agency/create/`}
+        data={this.props.list.rows}
+        paginationOptions={this.props.list.paginationOptions}
+        rowKey="agencyId" />
     );
   }
 }

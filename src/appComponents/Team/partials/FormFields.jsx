@@ -3,7 +3,7 @@ import {Form, Row, Col, Input} from 'antd';
 import {teamValidation} from '@validations/teamValidation';
 const FormItem = Form.Item;
 
-function TeamFormFields({form}) {
+function TeamFormFields({ form }) {
   const margin = {
     margin: '5px 5px 0px 0'
   };
@@ -15,7 +15,9 @@ function TeamFormFields({form}) {
           <Row>
             <Col span={24}>
               <FormItem label="Team Name" style={margin}>
-                {getFieldDecorator('name', {rules: teamValidation.teamName})(
+                {getFieldDecorator('name', {
+                  rules: teamValidation.teamName
+                })(
                   <Input placeholder="Team Name"/>
                 )}
               </FormItem>

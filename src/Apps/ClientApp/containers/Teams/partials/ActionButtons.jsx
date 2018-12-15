@@ -10,7 +10,7 @@ const ActionButtons = ({history, row}) => {
           shape="circle"
           icon="user" 
           onClick={() => {
-            history.push(`/admin/client/team/${row.clientTeamId}/members`);
+            history.push(`/my-client/team/${row.clientTeamId}/members`);
           }} />
       </Tooltip>
       <Tooltip title="Test Suites">
@@ -18,7 +18,7 @@ const ActionButtons = ({history, row}) => {
           shape="circle"
           icon="folder" 
           onClick={() => {
-            history.push(`/admin/client/${row.clientId}/test-manager/test-suite?teamId=${row.clientTeamId}`)
+            history.push(`/my-client/test-manager/test-suite?teamId=${row.clientTeamId}`)
           }} />
       </Tooltip>
       <Tooltip title="Edit Record">
@@ -26,7 +26,7 @@ const ActionButtons = ({history, row}) => {
           shape="circle"
           icon="edit" 
           onClick={() => {
-            history.push(`/admin/client/team/${row.clientTeamId}/edit`);
+            history.push(`/my-client/team/${row.clientTeamId}/edit`);
           }} />
       </Tooltip>
       <Tooltip title="Show Team Info">
@@ -34,7 +34,7 @@ const ActionButtons = ({history, row}) => {
           shape="circle"
           icon="info" 
           onClick={() => {
-            history.push(`/admin/client/team/${row.clientTeamId}/details`);
+            history.push(`/my-client/team/${row.clientTeamId}/details`);
           }} />
       </Tooltip>
     </ActionWrapper>

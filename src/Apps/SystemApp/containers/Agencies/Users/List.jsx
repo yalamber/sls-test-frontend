@@ -1,23 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Row, Col, Icon, Spin } from "antd";
-import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
-import basicStyle from "@settings/basicStyle";
-import Box from "@components/utility/box";
-import IntlMessages from '@components/utility/intlMessages';
-import {
-  ActionBtn,
-  TitleWrapper,
-  ButtonHolders,
-  ComponentTitle,
-  TableClickable as Table
-} from "@utils/crud.style";
+import List from '@appComponents/Common/List';
 import agencyActions from '@app/SystemApp/redux/agency/actions';
 import ActionButtons from "./partials/ActionButtons";
 const { requestAgencyUsers, requestCurrentAgency } = agencyActions;
 
-class List extends Component {
+class UserList extends Component {
   constructor(props) {
     super(props);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
@@ -65,66 +53,24 @@ class List extends Component {
   }
 
   render() {
-    const { rowStyle, colStyle, gutter } = basicStyle;
     const { currentAgency = { agencyData: { name: '' } }, history, match } = this.props;
     return (
-      <LayoutWrapper>
-        <PageHeader>
-          Agency - {currentAgency.agencyData.name}
-        </PageHeader>
-        
-        <Row style={rowStyle} gutter={gutter} justify="start">
-          <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>
-              <TitleWrapper>
-                <ComponentTitle>
-                  <ActionBtn
-                    type="secondary"
-                    onClick={() => history.goBack()}
-                  >
-                    <Icon type="left" /> <IntlMessages id="back" />
-                  </ActionBtn>
-                  &nbsp; <IntlMessages id="users" />
-                </ComponentTitle>
-                <ButtonHolders>
-                  <ActionBtn
-                    type="primary"
-                    onClick={() => {
-                      history.push(`/admin/agency/${match.params.agencyId}/user/create/`);
-                    }}>
-                    <Icon type="plus" />
-                    <IntlMessages id="user.add" />
-                  </ActionBtn>
-                </ButtonHolders>
-              </TitleWrapper>
-              <Spin spinning={currentAgency.userList.loading}>
-                <Table
-                  locale={{ emptyText: "No users in agency" }}
-                  pagination={{
-                    ...currentAgency.userList.paginationOptions,
-                    onChange: this.onTablePaginationChange(match.params.agencyId)
-                  }}
-                  bordered
-                  columns={this.columns}
-                  onRow={row => ({
-                    onDoubleClick: () => {
-                      history.push({
-                        pathname: `/admin/agency/${match.params.agencyId}/user/${row.userId}/edit`,
-                        state: {
-                          ...row
-                        }
-                      });
-                    }
-                  })}
-                  dataSource={currentAgency.userList.rows}
-                  rowKey="userId"
-                />
-              </Spin>
-            </Box>
-          </Col>
-        </Row>
-      </LayoutWrapper>
-    );
+      <List {...this.props} 
+        pageHeader = {`Agency - ${currentAgency.agencyData.name}`}
+        title = "Users"
+        onTablePaginationChange={this.onTablePaginationChange} 
+        onTableRow={(row) => ({
+          onDoubleClick: () => {
+            this.props.history.push(`/admin/agency/${row.agencyId}/details`);
+          }
+        })}
+        loading={currentAgency.userList.loading}
+        columns={this.columns}
+        createLink={`/admin/agency/${match.params.agencyId}/user/create/`}
+        data={currentAgency.userList.rows}
+        paginationOptions={currentAgency.userList.paginationOptions}
+        rowKey="userId" />
+    )
   }
 }
 
@@ -136,4 +82,4 @@ export default connect(
     requestCurrentAgency,
     requestAgencyUsers
   }
-)(List);
+)(UserList);

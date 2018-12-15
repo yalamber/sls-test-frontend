@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Form, message } from "antd";
-import { get } from 'lodash';
 import { getErrorMessageFromApiResponseError } from "@utils/response-message";
 import SWQAClient from '@helpers/apiClient';
 import TeamCreateEdit from "@appComponents/Team/CreateEdit";
@@ -10,7 +9,7 @@ class CreateEdit extends Component {
     super(props);
     this.state = {
       loading: true,
-      client: {},
+      error: null,
       team: {}
     };
     this.mode = props.match.params.teamId ? 'edit' : 'add';
@@ -28,13 +27,7 @@ class CreateEdit extends Component {
       if(this.mode === 'edit') {
         let clientTeam = await SWQAClient.getClientTeam(match.params.teamId);
         this.setState({
-          team: clientTeam,
-          client: clientTeam.client
-        });
-      } else {
-        let client = await SWQAClient.getClient(match.params.clientId);
-        this.setState({
-          client: client
+          team: clientTeam
         });
       }
     } catch(e) {
@@ -58,8 +51,8 @@ class CreateEdit extends Component {
             await SWQAClient.updateClientTeam(this.props.match.teamId, values);
             message.success("Successfully Saved.");
           } else {
-            await SWQAClient.addClientTeam({ ...values, clientId: this.props.match.clientId });
-            message.success("Successfully Saved.");
+            await SWQAClient.addClientTeam({ ...values});
+            message.success("Successfully Added.");
           }
         } catch(e) {
           message.error(getErrorMessageFromApiResponseError(e));
@@ -72,11 +65,9 @@ class CreateEdit extends Component {
   }
 
   render() {
-    let pageHeaderTitle = `Client - ${get(this.state, 'client.name', '')}`;
     return (
       <TeamCreateEdit {...this.props} 
-        initialData={this.state.team}
-        pageHeader={pageHeaderTitle}
+        initialData={this.state.team} 
         mode={this.mode} 
         loading={this.state.loading}
         handleSubmit={this.handleSubmit}/>

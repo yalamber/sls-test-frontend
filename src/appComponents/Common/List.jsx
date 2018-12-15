@@ -23,7 +23,8 @@ export default ({
   onTablePaginationChange,
   onTableRow,
   pageHeader = null,
-  emptyText = 'No Teams available',
+  title = '',
+  emptyText = 'No data',
   createLink = '',
   createText = 'Add new',
   rowKey
@@ -45,7 +46,7 @@ export default ({
                   onClick={() => history.goBack()}
                 >
                   <Icon type="left" /> <IntlMessages id="back" />
-                </ActionBtn> Teams
+                </ActionBtn> {title}
               </ComponentTitle>
               {createLink && 
                 <ButtonHolders>

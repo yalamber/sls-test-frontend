@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Layout } from 'antd';
+import { Layout, Button, Tooltip } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { get, isEmpty } from 'lodash';
 //ui
@@ -40,13 +40,15 @@ class Topbar extends Component {
   }
 
   systemAdminSwitch() {
-    const {history} = this.props;
+    const { history } = this.props;
     return (
-      <a className="switch-link" onClick={() => {
+      <Tooltip title={<IntlMessages id="topbar.switchSystemAdmin" />}>
+      <Button className="switch-link" icon="lock" shape="circle" onClick={() => {
         this.props.switchSystemAdmin({
           history
         });
-      }}><IntlMessages id="topbar.switchSystemAdmin" /></a>
+      }}></Button>
+      </Tooltip>
     )
   }
 
@@ -75,11 +77,9 @@ class Topbar extends Component {
         </div>
       )
     } catch (e) {
-      console.log(e);
       return (
         <div>
           Something went wrong, <a onClick={() => {
-
           }}>Retry</a>
         </div>
       );

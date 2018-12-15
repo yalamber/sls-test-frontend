@@ -6,15 +6,19 @@ export default [
     component: asyncComponent( () => import('@page/Dashboard'))
   },
   {
-    path: '/teams',
+    path: 'teams',
     component: asyncComponent( () => import('./containers/Teams/List'))
   },
   {
-    path: '/test-manager/test-suite',
+    path: 'team/create',
+    component: asyncComponent( () => import('./containers/Teams/CreateEdit'))
+  },
+  {
+    path: 'test-manager/test-suite',
     component: asyncComponent( () => import('./containers/TestManager/TestSuite/List'))
   },
   {
-    path: '/users',
+    path: 'users',
     component: asyncComponent( () => import('./containers/Users/List'))
   },
   {
