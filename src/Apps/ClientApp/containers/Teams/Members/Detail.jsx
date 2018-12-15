@@ -82,7 +82,8 @@ class Detail extends Component {
 
 export default connect(
   state => ({
-    ...state.Client
+    ...state.Client,
+    ...state.My
   }),
   {
   }

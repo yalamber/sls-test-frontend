@@ -4,7 +4,6 @@ import Button from "@components/uielements/button";
 import { connect } from 'react-redux';
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
@@ -35,13 +34,18 @@ class CreateEdit extends Component {
       requestClientUserRoles,
       clearCurrentClientUser
     } = this.props;
+    
     //get current client
-    requestCurrentClient(match.params.clientId);
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
+    if(get(activeCompanyTokenData, 'type') === 'clientUser' && clientId) {
+      requestCurrentClient(clientId);
+    }
     //get client roles
     requestClientUserRoles();
     //get current user and set to edit if we have userId
     if(match.params.userId) {
-      requestCurrentClientUser(match.params.clientId, match.params.userId);
+      requestCurrentClientUser(clientId, match.params.userId);
     } else {
       clearCurrentClientUser();
     }
@@ -73,7 +77,6 @@ class CreateEdit extends Component {
     let title = this.mode === 'edit'? 'Edit User' : 'Add User';
     return (
       <LayoutWrapper>
-        <PageHeader><IntlMessages id="client" /> - {currentClient.clientData.name}</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>        
@@ -133,26 +136,6 @@ const mapPropsToFields = props => {
   let { currentClientUser } = props;
   let currentUser = currentClientUser.data.user;
   let role = currentClientUser.data.role;
-  //testData TODO: remove this after test
-  /*role = {
-    roleId: 2
-  };
-  currentUser = {
-    status: 'active',
-    username: 'adadadadada',
-    resumeUrl: 'http://test.com',
-    contactInformation: {
-      emailAddress: 'teststs@sdsd.comsdsd',
-      postalAddress: 'testing ok ',
-      mobilePhone: '9843612873',
-      smsPhone: 'test2334',
-      linkedInUrl: 'testing ok',
-    },
-    instantMessengerInfos: [
-      {service: 'facebook', messengerId: 'yalu'},
-      {service: 'facebook', messengerId: 'yalu2'},
-    ]
-  };*/
   return {
     role: Form.createFormField({
       value: get(role, 'roleId')
@@ -199,7 +182,8 @@ const form = Form.create({ mapPropsToFields })(CreateEdit);
 
 export default connect(
   state => ({
-    ...state.Client
+    ...state.Client,
+    ...state.My
   }),
   {
     requestClientUserRoles,

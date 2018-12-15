@@ -26,8 +26,8 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 
 class SuiteList extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       testSuites: [],
       selectedTeamId: undefined,
@@ -257,7 +257,8 @@ class SuiteList extends Component {
 
 export default connect(
   state => ({
-    ...state.Client
+    ...state.Client,
+    ...state.My
   }),
   {
     requestCurrentClient,

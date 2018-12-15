@@ -3,7 +3,6 @@ import { Row, Col, Icon, Spin } from "antd";
 import { connect } from 'react-redux';
 import { get } from "lodash";
 import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
@@ -16,6 +15,7 @@ const {
 } = clientActions;
 
 class Detail extends Component {
+
   componentDidMount() {
     const { 
       match, 
@@ -23,8 +23,12 @@ class Detail extends Component {
       requestCurrentClientUser
     } = this.props;
     //get current client
-    requestCurrentClient(match.params.clientId);
-    requestCurrentClientUser(match.params.userId);
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
+    if(get(activeCompanyTokenData, 'type') === 'clientUser' && clientId) {
+      requestCurrentClient(clientId);
+      requestCurrentClientUser(match.params.userId);
+    }
   }
 
   render() {
@@ -35,7 +39,6 @@ class Detail extends Component {
     let title = 'User Details';
     return (
       <LayoutWrapper>
-        <PageHeader>Client - { get(currentClient, 'clientData.name', '') }</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>        
@@ -63,7 +66,8 @@ class Detail extends Component {
 
 export default connect(
   state => ({
-    ...state.Client
+    ...state.Client,
+    ...state.My
   }),
   {
     requestCurrentClient,

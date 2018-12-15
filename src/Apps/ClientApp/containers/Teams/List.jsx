@@ -43,32 +43,37 @@ class List extends Component {
   }
 
   onTablePaginationChange(page, pageSize) {
-    this.setState({
-      loading: true,
-      paginationOptions: {
-        ...this.state.paginationOptions,
-        current: page,
-        pageSize
-      }
-    }, async () => {
-      try{
-        let offset = pageSize * (page - 1);
-        let teams = await SWQAClient.getClientTeams({
-          limit: pageSize,
-          offset
-        });
-        this.setState({
-          loading: false,
-          data: get(teams, 'rows', []),
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: teams.count
-          }
-        });
-      } catch(e) {
-        this.setState({ loading: false, data: [], error: e });
-      }
-    });
+    //get client id
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
+    if(activeCompanyTokenData.type === 'clientUser' && clientId) {
+      this.setState({
+        loading: true,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          current: page,
+          pageSize
+        }
+      }, async () => {
+        try{
+          let offset = pageSize * (page - 1);
+          let teams = await SWQAClient.getClientTeams(clientId, {
+            limit: pageSize,
+            offset
+          });
+          this.setState({
+            loading: false,
+            data: get(teams, 'rows', []),
+            paginationOptions: {
+              ...this.state.paginationOptions,
+              total: teams.count
+            }
+          });
+        } catch(e) {
+          this.setState({ loading: false, data: [], error: e });
+        }
+      });
+    }
   }
 
   render() {
