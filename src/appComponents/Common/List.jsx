@@ -33,7 +33,7 @@ export default ({
     <LayoutWrapper>
       { pageHeader && 
         <PageHeader>
-          {pageHeader}
+          { pageHeader }
         </PageHeader>
       }
       <Row style={rowStyle} gutter={gutter} justify="start">

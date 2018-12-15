@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
-import TeamList from '@appComponents/Team/List';
+import List from '@appComponents/Common/List';
 import ActionButtons from "./partials/ActionButtons";
 const { requestAgencyTeams, requestCurrentAgency } = agencyActions;
 
-class List extends Component {
+class TeamList extends Component {
   constructor(props) {
     super(props);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
@@ -45,7 +45,7 @@ class List extends Component {
   render() {
     const { currentAgency = { agencyData: { name: '' }, teamList: [] }, match } = this.props;
     return (
-      <TeamList {...this.props} 
+      <List {...this.props} 
         onTablePaginationChange={this.onTablePaginationChange} 
         onTableRow={(row) => ({
           onDoubleClick: () => {
@@ -53,6 +53,7 @@ class List extends Component {
           }
         })}
         loading={currentAgency.teamList.loading}
+        title="Teams"
         pageHeader={`Agency - ${currentAgency.agencyData.name}`}
         columns={this.columns}
         createLink={`/admin/agency/${match.params.agencyId}/team/create/`}
@@ -71,4 +72,4 @@ export default connect(
     requestCurrentAgency,
     requestAgencyTeams
   }
-)(List);
+)(TeamList);

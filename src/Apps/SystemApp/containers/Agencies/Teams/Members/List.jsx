@@ -1,19 +1,8 @@
 import React, { Component } from "react";
-import { Row, Col, Icon, Spin, message } from "antd";
+import { message } from "antd";
 import { get } from 'lodash';
-import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
-import IntlMessages from "@components/utility/intlMessages";
-import basicStyle from "@settings/basicStyle";
-import Box from "@components/utility/box";
 import ActionButtons from "./partials/ActionButtons";
-import {
-  ActionBtn,
-  TitleWrapper,
-  ButtonHolders,
-  ComponentTitle,
-  TableClickable as Table
-} from "@utils/crud.style";
+import List from '@appComponents/Common/List';
 import SWQAClient from '@helpers/apiClient';
 
 class MemberList extends Component {
@@ -31,7 +20,6 @@ class MemberList extends Component {
       },
       loading: false
     };
-    //
     this.fetchData = this.fetchData.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
@@ -117,56 +105,25 @@ class MemberList extends Component {
   }
 
   render() {
-    const { rowStyle, colStyle, gutter } = basicStyle;
     const { match, history } = this.props;
     const { teamId } = match.params;
     return (
-      <LayoutWrapper>
-        <PageHeader>
-          Agency - { get(this.state, 'team.agency.name', '') }
-          <br />
-          Team - { get(this.state, 'team.name', '') }
-        </PageHeader>
-        <Row style={rowStyle} gutter={gutter} justify="start">
-          <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>
-              <TitleWrapper>
-                <ComponentTitle>
-                  <ActionBtn
-                    type="secondary"
-                    onClick={() => history.goBack()}>
-                    <Icon type="left" /> <IntlMessages id="back" />
-                  </ActionBtn> Members
-                </ComponentTitle>
-                <ButtonHolders>
-                  <ActionBtn
-                    type="primary"
-                    onClick={() => {
-                      history.push(`/admin/agency/team/${teamId}/member/add`);
-                    }}>
-                    <Icon type="plus" />
-                    Add team member
-                  </ActionBtn>
-                </ButtonHolders>
-              </TitleWrapper>
-              <Spin spinning={this.state.loading}>
-                <Table
-                  locale={{ emptyText: "No memebrs in agency team" }}
-                  size="middle"
-                  bordered
-                  pagination={{
-                    ...this.state.paginationOptions,
-                    onChange: this.onTablePaginationChange
-                  }}
-                  columns={this.columns}
-                  dataSource={this.state.data}
-                  rowKey="userId"
-                />
-              </Spin>
-            </Box>
-          </Col>
-        </Row>
-      </LayoutWrapper>
+      <List {...this.props} 
+        onTablePaginationChange={this.onTablePaginationChange} 
+        onTableRow={(row) => ({
+          onDoubleClick: () => {
+            history.push(`/admin/agency/team/${row.teamId}/member/${row.userId}/details`);
+          }
+        })}
+        loading={this.state.loading}
+        title="Members"
+        pageHeader={[`Agency - ${ get(this.state, 'team.agency.name', '') }`, <br/>, `Team - ${ get(this.state, 'team.name', '') }`]}
+        columns={this.columns}
+        createLink={`/admin/agency/team/${teamId}/member/add`}
+        createText="Add Team Member"
+        data={this.state.data}
+        paginationOptions={this.state.paginationOptions}
+        rowKey="userId" />
     );
   }
 }
