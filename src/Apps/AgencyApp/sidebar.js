@@ -6,19 +6,19 @@ const agencyOptions = [
     roles: ['agency-admin', 'agency-user']
   },
   {
-    key: "test-queue",
+    key: "test-manager/test-queue",
     label: "sidebar.testQueue",
     leftIcon: "ion-cloud",
     roles: ['agency-admin', 'agency-user']
   },
   {
-    key: "assigned-tests",
+    key: "test-manager/assigned-tests",
     label: "sidebar.assignedTests",
     leftIcon: "ion-ios-paper",
     roles: ['agency-admin', 'agency-user']
   },
   {
-    key: "completed-tests",
+    key: "test-manager/completed-tests",
     label: "sidebar.completedTests",
     leftIcon: "ion-checkmark",
     roles: ['agency-admin', 'agency-user']
