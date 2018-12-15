@@ -1,13 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { get } from 'lodash';
 import List from '@appComponents/Common/List';
-import clientActions from '@app/SystemApp/redux/client/actions';
+import SWQAClient from '@helpers/apiClient';
 import ActionButtons from "./partials/ActionButtons";
-const { requestClientUsers, requestCurrentClient } = clientActions;
 
 class UserList extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      data: [],
+      loading: true,
+      error: null,
+      paginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 10,
+        total: 1
+      },
+    }
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
@@ -38,37 +49,59 @@ class UserList extends Component {
   }
 
   componentDidMount() {
-    const { match } = this.props;
-    this.props.requestCurrentClient(match.params.clientId);
-    this.onTablePaginationChange(match.params.clientId)(1, 5);    
+    this.onTablePaginationChange(1, 10); 
   }
 
-  onTablePaginationChange(clientId) {
-    return (page, pageSize) => {  
-      this.props.requestClientUsers(clientId, {
-        page,
-        pageSize
+  onTablePaginationChange(page, pageSize) {
+    //get client id
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
+    if(activeCompanyTokenData.type === 'clientUser' && clientId) {
+      this.setState({
+        loading: true,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          current: page,
+          pageSize
+        }
+      }, async () => {
+        try{
+          let offset = pageSize * (page - 1);
+          let users = await SWQAClient.getClientUsers(clientId, {
+            limit: pageSize,
+            offset
+          });
+          this.setState({
+            loading: false,
+            data: get(users, 'rows', []),
+            paginationOptions: {
+              ...this.state.paginationOptions,
+              total: users.count
+            }
+          });
+        } catch(e) {
+          this.setState({ loading: false, data: [], error: e });
+        }
       });
     }
   }
 
   render() {
-    const { currentClient = { clientData: { name: '' } }, history, match } = this.props;
+    const { history } = this.props;
     return (
       <List {...this.props} 
-        pageHeader = {`Client - ${currentClient.clientData.name}`}
         title = "Users"
         onTablePaginationChange={this.onTablePaginationChange} 
         onTableRow={(row) => ({
           onDoubleClick: () => {
-            this.props.history.push(`/admin/client/${row.clientId}/details`);
+            history.push(`/my-client/${row.userId}/details`);
           }
         })}
-        loading={currentClient.userList.loading}
+        loading={this.state.loading}
         columns={this.columns}
-        createLink={`/admin/client/${match.params.clientId}/user/create/`}
-        data={currentClient.userList.rows}
-        paginationOptions={currentClient.userList.paginationOptions}
+        createLink={`/my-client/user/create/`}
+        data={this.state.data}
+        paginationOptions={this.state.paginationOptions}
         rowKey="userId" />
     )
   }
@@ -76,10 +109,6 @@ class UserList extends Component {
 
 export default connect(
   state => ({
-    ...state.Client
-  }),
-  {
-    requestCurrentClient,
-    requestClientUsers
-  }
+    ...state.My
+  })
 )(UserList);

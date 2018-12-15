@@ -17,7 +17,7 @@ class List extends Component {
         current: 1,
         pageSize: 10,
         total: 1
-      }, 
+      },
     }
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [

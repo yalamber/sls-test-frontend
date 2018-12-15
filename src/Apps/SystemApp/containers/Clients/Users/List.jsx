@@ -61,7 +61,7 @@ class UserList extends Component {
         onTablePaginationChange={this.onTablePaginationChange} 
         onTableRow={(row) => ({
           onDoubleClick: () => {
-            this.props.history.push(`/admin/client/${row.clientId}/details`);
+            this.props.history.push(`/admin/client/${row.clientId}/user/${row.userId}/details`);
           }
         })}
         loading={currentClient.userList.loading}
