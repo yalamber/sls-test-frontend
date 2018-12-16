@@ -86,6 +86,8 @@ export default function userReducer(state = initState, action) {
         activeAppType: 'system',
         appSwitching: false,
       };  
+    case actions.RESET_MY_DATA:
+      return initState;
     default:
       return state;
   }

@@ -11,6 +11,7 @@ import {
 import SWQAClient from '@helpers/apiClient';
 import notification from '@components/notification';
 import actions from './actions';
+import myActions from '../my/actions';
 
 export function* loginRequest() {
   yield takeEvery('LOGIN_REQUEST', function* ({ payload }) {
@@ -57,6 +58,9 @@ export function* logout() {
   yield takeEvery(actions.LOGOUT, function* () {
     clearUserToken();
     clearCompanyToken();
+    yield put({
+      type: myActions.RESET_MY_DATA
+    })
     yield put(push('/'));
   });
 }
