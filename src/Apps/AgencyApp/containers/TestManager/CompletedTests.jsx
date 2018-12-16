@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Row, Col, Icon, Spin } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
@@ -62,11 +61,13 @@ class CompletedTestList extends Component {
 
   componentDidMount() {
     const { match, requestCurrentAgency } = this.props;
-    requestCurrentAgency(match.params.agencyId);
-    this.fetchData({
-      agencyId: match.params.agencyId,
-      status: 'completed'
-    });
+    if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {    
+      requestCurrentAgency(agencyId);
+      this.fetchData({
+        agencyId: agencyId,
+        status: 'completed'
+      });
+    }
   }
 
   async fetchData(options) {
@@ -130,9 +131,6 @@ class CompletedTestList extends Component {
     const { currentAgency, history } = this.props;
     return (
       <LayoutWrapper>
-        <PageHeader>
-          Agency - {get(currentAgency, 'agencyData.name', '')}
-        </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -171,7 +169,8 @@ class CompletedTestList extends Component {
 
 export default connect(
   state => ({
-    ...state.Agency
+    ...state.Agency,
+    ...state.My
   }),
   {
     requestCurrentAgency
