@@ -122,8 +122,6 @@ class CreateEdit extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          Agency - { get(this.state, 'team.agency.name', '') }
-          <br />
           Team - { get(this.state, 'team.name', '') }
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">

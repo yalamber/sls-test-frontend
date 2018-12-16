@@ -13,7 +13,7 @@ const ActionButtons = ({ history, row }) => {
           shape="circle" 
           icon="folder" 
           onClick={() => {
-            history.push(`client/${row.clientId}/test-manager/test-suite`)
+            history.push(`client/${row.clientId}/test-manager/test-suites`)
           }} 
         />
       </Tooltip>
@@ -22,7 +22,7 @@ const ActionButtons = ({ history, row }) => {
           shape="circle" 
           icon="experiment" 
           onClick={() => {
-            history.push(`client/${row.clientId}/test-manager/test-case`)
+            history.push(`client/${row.clientId}/test-manager/test-cases`)
           }} 
         />
       </Tooltip>

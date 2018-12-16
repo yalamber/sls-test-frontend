@@ -50,8 +50,6 @@ class Detail extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          Client - { get(this.state, 'caseData.testSuite.clientTeam.client.name', '') }
-          <br />
           Team - { get(this.state, 'caseData.testSuite.clientTeam.name', '') }
           <br />
           Test Suite - { get(this.state, 'caseData.testSuite.name', '') }

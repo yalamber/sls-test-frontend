@@ -4,7 +4,6 @@ import { get } from 'lodash';
 import qs from "qs";
 import { Row, Col, Icon, Select, Tooltip, Spin, Form } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
@@ -24,6 +23,8 @@ import { dateTime } from "@constants/dateFormat";
 const { requestCurrentClient } = clientActions;
 const Option = Select.Option;
 const FormItem = Form.Item;
+
+//TODO work on search system for test suites
 
 class TestCaseList extends Component {
   constructor(props) {
@@ -70,25 +71,30 @@ class TestCaseList extends Component {
   }
 
   componentDidMount() {
-    const { match, requestCurrentClient, location } = this.props;
+    const { requestCurrentClient, location } = this.props;
     let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
     //TODO: check stat and params if same clientId already
-    requestCurrentClient(match.params.clientId);
-    //get all test cases
-    let reqParams = {};
-    if(queryParams.suiteId) {
-      reqParams.suiteId = queryParams.suiteId;
-    } else {
-      reqParams.clientId = match.params.clientId;
+    //get client id
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
+    if(activeCompanyTokenData.type === 'clientUser' && clientId) {  
+      requestCurrentClient(clientId);
+      //get all test cases
+      let reqParams = {};
+      if(queryParams.suiteId) {
+        reqParams.suiteId = queryParams.suiteId;
+      } else {
+        reqParams.clientId = clientId;
+      }
+      this.fetchTestSuites(clientId);
+      this.fetchTestCase(reqParams); 
     }
-    this.fetchTestSuites(match.params.clientId);
-    this.fetchTestCase(reqParams);
   }
 
-  async fetchTestSuites() {
+  async fetchTestSuites(clientId) {
     let testSuites = await SWQAClient.getTestSuites({
       limit: 50,
-      clientId: this.props.match.params.clientId
+      clientId
     });
     this.setState({
       testSuites: testSuites.rows
@@ -158,11 +164,11 @@ class TestCaseList extends Component {
   }
 
   handleSuiteChange(suiteId) {
-    let {history, match} = this.props;
+    let {history} = this.props;
     this.setState({
       selectedSuiteId: suiteId,
     }, () => {
-      history.push(`/admin/client/${match.params.clientId}/test-manager/test-case?suiteId=${suiteId}`);
+      history.push(`/my-client/test-manager/test-cases?suiteId=${suiteId}`);
       this.fetchTestCase({
         testSuiteId: suiteId
       });
@@ -183,7 +189,7 @@ class TestCaseList extends Component {
     };
     const { rowStyle, colStyle, gutter } = basicStyle;
 
-    const { currentClient, history } = this.props;
+    const { history } = this.props;
     const suitesOptions = (
       this.state.testSuites.map(suite => (
         <Option key={suite.testSuiteId} value={suite.testSuiteId}>
@@ -193,9 +199,6 @@ class TestCaseList extends Component {
     );
     return (
       <LayoutWrapper>
-        <PageHeader>
-          Client - {currentClient.clientData.name}
-        </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -216,7 +219,7 @@ class TestCaseList extends Component {
                     <ActionBtn
                       type="primary"
                       disabled={!this.isSuiteSelected()}
-                      onClick={() => history.push(`/admin/client/test-manager/test-suite/${this.state.selectedSuiteId}/test-case/create`)}>
+                      onClick={() => history.push(`/my-client/test-manager/test-suite/${this.state.selectedSuiteId}/test-case/create`)}>
                       <Icon type="plus" />
                       Add New
                     </ActionBtn>

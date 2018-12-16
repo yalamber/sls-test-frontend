@@ -40,7 +40,7 @@ export default [
   },
   {
     path: `team/:teamId/details`,
-    component: asyncComponent(() => import(`./containers/Teams/CreateEdit`))
+    component: asyncComponent(() => import(`./containers/Teams/Detail`))
   },
   {
     path: `team/:teamId/members`,

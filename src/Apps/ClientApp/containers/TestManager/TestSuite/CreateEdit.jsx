@@ -82,7 +82,7 @@ class CreateEdit extends Component {
               ...values 
             });
             message.success("Successfully Saved");
-            history.push(`/admin/client/test-manager/test-suite/${testSuite.testSuiteId}/details`);
+            history.push(`/my-client/test-manager/test-suite/${testSuite.testSuiteId}/details`);
           }
         } catch(e) {
           this.setState({ error: e }, () => {
@@ -107,8 +107,6 @@ class CreateEdit extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          Client - {get(this.state, 'client.name')} 
-          <br/>
           Team - {get(this.state, 'clientTeam.name')}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">

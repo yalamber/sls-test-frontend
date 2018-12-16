@@ -13,14 +13,6 @@ const ActionButtons = ({history, row}) => {
             history.push(`/admin/agency/team/${row.agencyTeamId}/members`);
           }} />
       </Tooltip>
-      <Tooltip title="Test Suites">
-        <Button
-          shape="circle"
-          icon="folder" 
-          onClick={() => {
-            history.push(`admin/test-manager/test-suite?teamId=${row.agencyTeamId}`)
-          }} />
-      </Tooltip>
       <Tooltip title="Edit Record">
         <Button
           shape="circle"

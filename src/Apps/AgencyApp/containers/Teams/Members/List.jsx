@@ -15,7 +15,7 @@ class MemberList extends Component {
       paginationOptions: {
         defaultCurrent: 1,
         current: 1,
-        pageSize: 1,
+        pageSize: 10,
         total: 1
       },
       loading: false
@@ -112,14 +112,14 @@ class MemberList extends Component {
         onTablePaginationChange={this.onTablePaginationChange} 
         onTableRow={(row) => ({
           onDoubleClick: () => {
-            history.push(`/admin/agency/team/${row.teamId}/member/${row.userId}/details`);
+            history.push(`/my-agency/team/${row.teamId}/member/${row.userId}/details`);
           }
         })}
         loading={this.state.loading}
         title="Members"
-        pageHeader={[`Agency - ${ get(this.state, 'team.agency.name', '') }`, <br/>, `Team - ${ get(this.state, 'team.name', '') }`]}
+        pageHeader={[`Team - ${ get(this.state, 'team.name', '') }`]}
         columns={this.columns}
-        createLink={`/admin/agency/team/${teamId}/member/add`}
+        createLink={`/my-agency/team/${teamId}/member/add`}
         createText="Add Team Member"
         data={this.state.data}
         paginationOptions={this.state.paginationOptions}

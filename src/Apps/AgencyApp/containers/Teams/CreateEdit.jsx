@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Form, message } from "antd";
-import { get } from 'lodash';
 import { getErrorMessageFromApiResponseError } from "@utils/response-message";
 import SWQAClient from '@helpers/apiClient';
 import TeamCreateEdit from "@appComponents/Team/CreateEdit";
@@ -10,7 +9,7 @@ class CreateEdit extends Component {
     super(props);
     this.state = {
       loading: true,
-      agency: {},
+      error: null,
       team: {}
     };
     this.mode = props.match.params.teamId ? 'edit' : 'add';
@@ -28,13 +27,7 @@ class CreateEdit extends Component {
       if(this.mode === 'edit') {
         let agencyTeam = await SWQAClient.getAgencyTeam(match.params.teamId);
         this.setState({
-          team: agencyTeam,
-          agency: agencyTeam.agency
-        });
-      } else {
-        let agency = await SWQAClient.getAgency(match.params.agencyId);
-        this.setState({
-          agency: agency
+          team: agencyTeam
         });
       }
     } catch(e) {
@@ -55,11 +48,11 @@ class CreateEdit extends Component {
         try{
           this.setState({ loading: true });
           if(this.mode === 'edit'){
-            await SWQAClient.updaetAgencyTeam(this.props.match.teamId, values);
+            await SWQAClient.updateAgencyTeam(this.props.match.teamId, values);
             message.success("Successfully Saved.");
           } else {
-            await SWQAClient.addAgencyTeam({ ...values, agencyId: this.props.match.agencyId });
-            message.success("Successfully Saved.");
+            await SWQAClient.addAgencyTeam({ ...values});
+            message.success("Successfully Added.");
           }
         } catch(e) {
           message.error(getErrorMessageFromApiResponseError(e));
@@ -72,11 +65,9 @@ class CreateEdit extends Component {
   }
 
   render() {
-    let pageHeaderTitle = `Agency - ${get(this.state, 'agency.name', '')}`;
     return (
       <TeamCreateEdit {...this.props} 
-        initialData={this.state.team}
-        pageHeader={pageHeaderTitle}
+        initialData={this.state.team} 
         mode={this.mode} 
         loading={this.state.loading}
         handleSubmit={this.handleSubmit}/>

@@ -1,13 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import agencyActions from '@app/SystemApp/redux/agency/actions';
-import List from '@appComponents/Common/List';
+import { get } from 'lodash';
+import SWQAClient from '@helpers/apiClient';
 import ActionButtons from "./partials/ActionButtons";
-const { requestAgencyTeams, requestCurrentAgency } = agencyActions;
+import TeamList from '@appComponents/Team/List';
 
-class TeamList extends Component {
+class List extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      loading: true,
+      error: null,
+      data: [],
+      paginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 10,
+        total: 1
+      },
+    }
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
@@ -28,48 +39,64 @@ class TeamList extends Component {
   }
 
   componentDidMount() {
-    const { match } = this.props;
-    this.props.requestCurrentAgency(match.params.agencyId);
-    this.onTablePaginationChange(match.params.agencyId)(1, 5);    
+    this.onTablePaginationChange(1, 10);    
   }
 
-  onTablePaginationChange(agencyId) {
-    return (page, pageSize) => {  
-      this.props.requestAgencyTeams(agencyId, {
-        page,
-        pageSize
+  onTablePaginationChange(page, pageSize) {
+    //get agency id
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
+    if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {
+      this.setState({
+        loading: true,
+        paginationOptions: {
+          ...this.state.paginationOptions,
+          current: page,
+          pageSize
+        }
+      }, async () => {
+        try{
+          let offset = pageSize * (page - 1);
+          let teams = await SWQAClient.getAgencyTeams(agencyId, {
+            limit: pageSize,
+            offset
+          });
+          this.setState({
+            loading: false,
+            data: get(teams, 'rows', []),
+            paginationOptions: {
+              ...this.state.paginationOptions,
+              total: teams.count
+            }
+          });
+        } catch(e) {
+          this.setState({ loading: false, data: [], error: e });
+        }
       });
     }
   }
 
   render() {
-    const { currentAgency = { agencyData: { name: '' }, teamList: [] }, match } = this.props;
     return (
-      <List {...this.props} 
+      <TeamList {...this.props} 
         onTablePaginationChange={this.onTablePaginationChange} 
         onTableRow={(row) => ({
           onDoubleClick: () => {
-            this.props.history.push(`/admin/agency/${match.params.agencyId}/team/${row.agencyTeamId}/details`);
+            this.props.history.push(`/my-agency/team/${row.agencyTeamId}/details`);
           }
         })}
-        loading={currentAgency.teamList.loading}
-        title="Teams"
-        pageHeader={`Agency - ${currentAgency.agencyData.name}`}
+        loading={this.state.loading}
         columns={this.columns}
-        createLink={`/admin/agency/${match.params.agencyId}/team/create/`}
-        data={currentAgency.teamList.rows}
-        paginationOptions={currentAgency.teamList.paginationOptions}
-        rowKey="agencyTeamId" />
+        createLink={`/my-agency/team/create`}
+        data={this.state.data}
+        paginationOptions={this.state.paginationOptions}
+        rowKey="agencyTeamId"/>
     );
   }
 }
 
 export default connect(
   state => ({
-    ...state.Agency
-  }),
-  {
-    requestCurrentAgency,
-    requestAgencyTeams
-  }
-)(TeamList);
+    ...state.My  
+  })
+)(List);

@@ -4,7 +4,6 @@ import { get } from 'lodash';
 import qs from "qs";
 import { Row, Col, Icon, Select, Tooltip, Spin, Form } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
@@ -71,20 +70,25 @@ class SuiteList extends Component {
   componentDidMount() {
     const { match, requestCurrentClient, requestClientTeams, location } = this.props;
     let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
-    //TODO: check state and params if same clientId already
-    requestCurrentClient(match.params.clientId);
-    requestClientTeams(match.params.clientId, {
-      page: 1,
-      pageSize: 50
-    });
-    //get all test suites
-    let reqParams = {};
-    if(queryParams.teamId) {
-      reqParams.clientTeamId = queryParams.teamId;
-    } else {
-      reqParams.clientId = match.params.clientId;
+    //get client id
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
+    if(activeCompanyTokenData.type === 'clientUser' && clientId) {
+      //TODO: check state and params if same clientId already
+      requestCurrentClient(clientId);
+      requestClientTeams(clientId, {
+        page: 1,
+        pageSize: 50
+      });
+      //get all test suites
+      let reqParams = {};
+      if(queryParams.teamId) {
+        reqParams.clientTeamId = queryParams.teamId;
+      } else {
+        reqParams.clientId = clientId;
+      }
+      this.fetchTestSuite(reqParams); 
     }
-    this.fetchTestSuite(reqParams);
   }
 
   async fetchTestSuite(options) {
@@ -147,11 +151,11 @@ class SuiteList extends Component {
   }
 
   handleTeamChange(teamId) {
-    let {history, match} = this.props;
+    let {history} = this.props;
     this.setState({
       selectedTeamId: teamId,
     }, () => {
-      history.push(`/admin/client/${match.params.clientId}/test-manager/test-suite?teamId=${teamId}`);
+      history.push(`/my-client/test-manager/test-suites?teamId=${teamId}`);
       this.fetchTestSuite({
         clientTeamId: teamId
       });
@@ -182,9 +186,6 @@ class SuiteList extends Component {
     );
     return (
       <LayoutWrapper>
-        <PageHeader>
-          Client - {currentClient.clientData.name}
-        </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -205,7 +206,7 @@ class SuiteList extends Component {
                     <ActionBtn
                       type="primary"
                       disabled={!this.isTeamSelected()}
-                      onClick={() => history.push(`/admin/client/team/${this.state.selectedTeamId}/test-manager/test-suite/create`)}>
+                      onClick={() => history.push(`/my-client/team/${this.state.selectedTeamId}/test-manager/test-suite/create`)}>
                       <Icon type="plus" />
                       Add New
                     </ActionBtn>

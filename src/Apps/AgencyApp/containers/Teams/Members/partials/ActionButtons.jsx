@@ -12,7 +12,7 @@ const ActionButtons = ({ history, row, deleteMember }) => {
           shape="circle"
           icon="edit"
           onClick={() => {
-            history.push(`/admin/agency/team/${row.teamId}/member/${row.userId}/edit`);
+            history.push(`/my-agency/team/${row.teamId}/member/${row.userId}/edit`);
           }}
         />
       </Tooltip>
@@ -21,7 +21,7 @@ const ActionButtons = ({ history, row, deleteMember }) => {
           shape="circle"
           icon="info"
           onClick={() =>{
-            history.push(`/admin/agency/team/${row.teamId}/member/${row.userId}/details`)
+            history.push(`/my-agency/team/${row.teamId}/member/${row.userId}/details`)
           }}
         />
       </Tooltip>

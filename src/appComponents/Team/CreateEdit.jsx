@@ -53,7 +53,7 @@ export default ({
               </TitleWrapper>
             </Spin>
             <Form onSubmit={handleSubmit} id="clientForm">
-              <TeamFormFields form={form}  />    
+              <TeamFormFields form={form} initialData={initialData}  />    
               <ActionWrapper style={margin}>
                 <Button type="primary" style={margin} icon="left" onClick={() => history.goBack()}>
                   Cancel

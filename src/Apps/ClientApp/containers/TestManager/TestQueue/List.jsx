@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Row, Col, Icon, Spin } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
@@ -62,11 +61,16 @@ class TestQueueList extends Component {
   }
 
   componentDidMount() {
-    const { match, requestCurrentClient } = this.props;
-    requestCurrentClient(match.params.clientId);
-    this.fetchData({
-      clientId: match.params.clientId
-    });
+    const { requestCurrentClient } = this.props;
+    //get client id
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
+    if(activeCompanyTokenData.type === 'clientUser' && clientId) {  
+      requestCurrentClient(clientId);
+      this.fetchData({
+        clientId
+      });
+    }
   }
 
   async fetchData(options) {
@@ -106,7 +110,7 @@ class TestQueueList extends Component {
       try{
         let offset = pageSize * (page - 1);
         let testQueues = await SWQAClient.getTestQueues({
-          clientId: this.props.match.params.clientId,
+          clientId: this.state.client.clientId,
           limit: pageSize,
           offset
         });
@@ -126,12 +130,9 @@ class TestQueueList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentClient, history } = this.props;
+    const { history } = this.props;
     return (
       <LayoutWrapper>
-        <PageHeader>
-          Client - {get(currentClient, 'clientData.name', '')}
-        </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -170,7 +171,8 @@ class TestQueueList extends Component {
 
 export default connect(
   state => ({
-    ...state.Client
+    ...state.Client,
+    ...state.My
   }),
   {
     requestCurrentClient

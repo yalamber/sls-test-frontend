@@ -183,8 +183,6 @@ class CreateEdit extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          Client - {get(this.state, 'client.name')} 
-          <br/>
           Team - {get(this.state, 'clientTeam.name')}
           <br/>
           Test Suite - {get(this.state, 'testSuite.name')}

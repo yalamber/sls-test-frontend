@@ -151,7 +151,7 @@ class SuiteList extends Component {
     this.setState({
       selectedTeamId: teamId,
     }, () => {
-      history.push(`/admin/client/${match.params.clientId}/test-manager/test-suite?teamId=${teamId}`);
+      history.push(`/admin/client/${match.params.clientId}/test-manager/test-suites?teamId=${teamId}`);
       this.fetchTestSuite({
         clientTeamId: teamId
       });

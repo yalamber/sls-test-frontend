@@ -162,7 +162,7 @@ class TestCaseList extends Component {
     this.setState({
       selectedSuiteId: suiteId,
     }, () => {
-      history.push(`/admin/client/${match.params.clientId}/test-manager/test-case?suiteId=${suiteId}`);
+      history.push(`/admin/client/${match.params.clientId}/test-manager/test-cases?suiteId=${suiteId}`);
       this.fetchTestCase({
         testSuiteId: suiteId
       });

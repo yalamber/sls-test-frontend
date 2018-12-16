@@ -67,11 +67,16 @@ class TestRunList extends Component {
   }
 
   componentDidMount() {
-    const { match, requestCurrentClient } = this.props;
-    requestCurrentClient(match.params.clientId);
-    this.fetchData({
-      clientId: match.params.clientId
-    });
+    const { requestCurrentClient } = this.props;
+    //get client id
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
+    if(activeCompanyTokenData.type === 'clientUser' && clientId) {  
+      requestCurrentClient(clientId);
+      this.fetchData({
+        clientId
+      });
+    }
   }
 
   async fetchData(options) {
@@ -178,7 +183,8 @@ class TestRunList extends Component {
 
 export default connect(
   state => ({
-    ...state.Client
+    ...state.Client,
+    ...state.My
   }),
   {
     requestCurrentClient

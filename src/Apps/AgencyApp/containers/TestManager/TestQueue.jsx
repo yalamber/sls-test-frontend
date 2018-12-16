@@ -16,15 +16,15 @@ import {
 } from "@utils/crud.style";
 import SWQAClient from '@helpers/apiClient';
 import { dateTime } from "@constants/dateFormat";
-import clientActions from '@app/SystemApp/redux/client/actions';
+import agencyActions from '@app/SystemApp/redux/agency/actions';
 
-const { requestCurrentClient } = clientActions;
+const { requestCurrentAgency } = agencyActions;
 
 class TestQueueList extends Component {
   constructor() {
     super();
     this.state = {
-      client: {},
+      agency: {},
       testQueues: [],
       loading: false,
       error: null,
@@ -62,11 +62,15 @@ class TestQueueList extends Component {
   }
 
   componentDidMount() {
-    const { match, requestCurrentClient } = this.props;
-    requestCurrentClient(match.params.clientId);
-    this.fetchData({
-      clientId: match.params.clientId
-    });
+    const { requestCurrentAgency } = this.props;
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
+    if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {    
+      requestCurrentAgency(agencyId);
+      this.fetchData({
+        agencyId
+      });
+    }
   }
 
   async fetchData(options) {
@@ -106,7 +110,6 @@ class TestQueueList extends Component {
       try{
         let offset = pageSize * (page - 1);
         let testQueues = await SWQAClient.getTestQueues({
-          clientId: this.props.match.params.clientId,
           limit: pageSize,
           offset
         });
@@ -126,12 +129,9 @@ class TestQueueList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentClient, history } = this.props;
+    const { currentAgency, history } = this.props;
     return (
       <LayoutWrapper>
-        <PageHeader>
-          Client - {get(currentClient, 'clientData.name', '')}
-        </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -170,9 +170,10 @@ class TestQueueList extends Component {
 
 export default connect(
   state => ({
-    ...state.Client
+    ...state.Agency,
+    ...state.My
   }),
   {
-    requestCurrentClient
+    requestCurrentAgency
   }
 )(TestQueueList);

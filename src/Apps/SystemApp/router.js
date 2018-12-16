@@ -65,7 +65,7 @@ function commonAgencyClientRoutes(type = 'agency') {
     },
     {
       path: `${routeConfig.singular}/team/:teamId/details`,
-      component: asyncComponent(() => import(`./containers/${routeConfig.containerDirectory}/Teams/CreateEdit`))
+      component: asyncComponent(() => import(`./containers/${routeConfig.containerDirectory}/Teams/Detail`))
     },
     {
       path: `${routeConfig.singular}/team/:teamId/members`,
@@ -105,7 +105,7 @@ const routes = [
   ...commonAgencyClientRoutes('client'),
   //client test manager
   {
-    path: 'client/:clientId/test-manager/test-suite',
+    path: 'client/:clientId/test-manager/test-suites',
     component: asyncComponent(() => import('./containers/Clients/TestManager/TestSuite/List'))
   },
   {
@@ -123,7 +123,7 @@ const routes = [
   
   /* test manager -> Test Case */
   {
-    path: 'client/:clientId/test-manager/test-case',
+    path: 'client/:clientId/test-manager/test-cases',
     component: asyncComponent(() => import('./containers/Clients/TestManager/TestCase/List'))
   },
   {

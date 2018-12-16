@@ -13,7 +13,7 @@ export default function ActionButtons({history, row, deleteTestSuite}) {
           shape="circle" 
           icon="experiment" 
           onClick={() => {
-            history.push(`/admin/client/${row.clientTeam.client.clientId}/test-manager/test-case?suiteId=${row.testSuiteId}`)
+            history.push(`/my-client/test-manager/test-cases?suiteId=${row.testSuiteId}`)
           }} 
         />
       </Tooltip>
@@ -22,7 +22,7 @@ export default function ActionButtons({history, row, deleteTestSuite}) {
           shape="circle"
           icon="edit" 
           onClick={() => {
-            history.push(`/admin/client/test-manager/test-suite/${row.testSuiteId}/edit`);
+            history.push(`/my-client/test-manager/test-suite/${row.testSuiteId}/edit`);
           }} />
       </Tooltip>
       <Tooltip title="Details">
@@ -30,7 +30,7 @@ export default function ActionButtons({history, row, deleteTestSuite}) {
           shape="circle"
           icon="info" 
           onClick={() => {
-            history.push(`/admin/client/test-manager/test-suite/${row.testSuiteId}/details`);
+            history.push(`/my-client/test-manager/test-suite/${row.testSuiteId}/details`);
           }} />
       </Tooltip>
       <Tooltip title="Delete Record">
