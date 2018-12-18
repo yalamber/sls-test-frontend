@@ -61,8 +61,7 @@ class AssignedTestList extends Component {
   }
 
   componentDidMount() {
-    const { match, requestCurrentAgency } = this.props;
-    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    const { activeCompanyTokenData, requestCurrentAgency } = this.props;
     let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
     if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {    
       requestCurrentAgency(agencyId);

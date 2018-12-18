@@ -42,7 +42,6 @@ class UserList extends Component {
         key: "actions",
         render: row => <ActionButtons 
           row={row}
-          clientId={props.match.params.clientId}
           history={this.props.history} />
       }
     ];

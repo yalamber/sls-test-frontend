@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Tooltip } from 'antd';
 import { ActionWrapper } from "@utils/crud.style";
 
-function ActionButtons({ history, row, clientId}) {
+function ActionButtons({ history, row}) {
   return (
     <ActionWrapper>
       <Tooltip title="Edit">

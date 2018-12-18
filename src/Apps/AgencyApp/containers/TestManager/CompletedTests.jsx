@@ -60,7 +60,8 @@ class CompletedTestList extends Component {
   }
 
   componentDidMount() {
-    const { match, requestCurrentAgency } = this.props;
+    const { requestCurrentAgency, activeCompanyTokenData } = this.props;
+    let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
     if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {    
       requestCurrentAgency(agencyId);
       this.fetchData({
@@ -128,7 +129,7 @@ class CompletedTestList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentAgency, history } = this.props;
+    const { history } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">

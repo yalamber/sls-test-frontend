@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Tooltip } from 'antd';
 import { ActionWrapper } from "@utils/crud.style";
 
-function ActionButtons({ history, row, agencyId}) {
+function ActionButtons({ history, row}) {
   return (
     <ActionWrapper>
       <Tooltip title="Edit">
@@ -10,7 +10,7 @@ function ActionButtons({ history, row, agencyId}) {
           shape="circle"
           icon="edit" 
           onClick={() => {
-            history.push(`/admin/agency/${agencyId}/user/${row.userId}/edit`);
+            history.push(`/my-agency/user/${row.userId}/edit`);
           }} />
       </Tooltip>
       <Tooltip title="User details">
@@ -18,7 +18,7 @@ function ActionButtons({ history, row, agencyId}) {
           shape="circle"
           icon="info" 
           onClick={() => {
-            history.push(`/admin/agency/${agencyId}/user/${row.userId}/details`);
+            history.push(`/my-gency/user/${row.userId}/details`);
           }} />
       </Tooltip>
     </ActionWrapper>
