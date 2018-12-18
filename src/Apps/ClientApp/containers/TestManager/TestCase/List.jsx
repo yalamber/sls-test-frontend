@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { get } from 'lodash';
 import qs from "qs";
+import Moment from "react-moment";
 import { Row, Col, Icon, Select, Tooltip, Spin, Form } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
 import ActionButtons from "./partials/ActionButtons";
-import Moment from "react-moment";
 import {
   ActionBtn,
   TitleWrapper,
@@ -71,11 +71,10 @@ class TestCaseList extends Component {
   }
 
   componentDidMount() {
-    const { requestCurrentClient, location } = this.props;
+    const { requestCurrentClient, location, activeCompanyTokenData } = this.props;
     let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
     //TODO: check stat and params if same clientId already
     //get client id
-    let activeCompanyTokenData = this.props.activeCompanyTokenData;
     let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
     if(activeCompanyTokenData.type === 'clientUser' && clientId) {  
       requestCurrentClient(clientId);
@@ -269,7 +268,8 @@ class TestCaseList extends Component {
 
 export default connect(
   state => ({
-    ...state.Client
+    ...state.Client,
+    ...state.My
   }),
   {
     requestCurrentClient

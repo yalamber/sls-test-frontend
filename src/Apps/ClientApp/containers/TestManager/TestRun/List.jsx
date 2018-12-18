@@ -139,12 +139,9 @@ class TestRunList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentClient, history } = this.props;
+    const { history } = this.props;
     return (
       <LayoutWrapper>
-        <PageHeader>
-          Client - {get(currentClient, 'clientData.name', '')}
-        </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
