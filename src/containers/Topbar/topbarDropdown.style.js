@@ -98,6 +98,11 @@ const TopbarDropdownWrapper = styled.div`
     }
   }
 
+  .dropdownTitle {
+    padding: 5px 10px;
+    font-weight: bold;
+  }
+
   .isoViewAllBtn {
     font-size: 13px;
     font-weight: 500;
@@ -272,7 +277,7 @@ const TopbarDropdownWrapper = styled.div`
       font-size: 13px;
       color: ${palette("text", 1)};
       line-height: 1.1;
-      padding: 7px 15px;
+      padding: 10px 15px;
       background-color: transparent;
       text-decoration: none;
       display: flex;

@@ -15,8 +15,7 @@ import { themeConfig } from '@settings';
 import themes from '@settings/themes';
 //components
 import TopbarUser from './TopbarUser';
-import TopbarClient from './TopbarClient';
-import TopbarAgency from './TopbarAgency';
+import TopbarCompany from './TopbarCompany';
 import TopbarWrapper from './topbar.style';
 
 const { Header } = Layout;
@@ -39,22 +38,36 @@ class Topbar extends Component {
     this.props.requestMyClients();
   }
 
-  systemAdminSwitch() {
-    const { history } = this.props;
-    return (
-      <Tooltip title={<IntlMessages id="topbar.switchSystemAdmin" />}>
-      <Button className="switch-link" icon="lock" shape="circle" onClick={() => {
-        this.props.switchSystemAdmin({
-          history
-        });
-      }}></Button>
-      </Tooltip>
-    )
+  appSwitch() {
+    const { 
+      history, 
+      activeAppType, 
+      myAgencies = { data: [], loading: true, error: false },
+      myClients = { data: [], loading: true, error: false }
+    } = this.props;
+    if(activeAppType === 'system') {
+      return (
+        <div>
+          {(myAgencies.loading || myClients.loading) && <Loader />}
+          <TopbarCompany {...this.props} />
+        </div>
+      )
+    } else {
+      return (
+        <Tooltip placement="right" title={<IntlMessages id="topbar.switchSystemAdmin" />}>
+          <Button className="switch-link" icon="lock" shape="circle" onClick={() => {
+            this.props.switchSystemAdmin({
+              history
+            });
+          }}></Button>
+        </Tooltip>
+      );
+    }
   }
 
   getTopBarTitle() {
     try {
-      const { activeCompanyTokenData, activeAppType, userTokenData, appSwitching } = this.props;
+      const { activeCompanyTokenData, userTokenData, appSwitching } = this.props;
       if(appSwitching) {
         return <Loader />;
       }
@@ -73,7 +86,7 @@ class Topbar extends Component {
       return (
         <div className="title-holder">
           <h1>{title}</h1>
-          {activeAppType !== 'system' && this.systemAdminSwitch()}
+          {this.appSwitch()}
         </div>
       )
     } catch (e) {
@@ -91,10 +104,6 @@ class Topbar extends Component {
       toggleCollapsed,
       logout,
       closeAll,
-      myAgencies = { data: [], loading: true, error: false },
-      myClients = { data: [], loading: true, error: false },
-      requestAgencyLogin,
-      requestClientLogin,
       userTokenData,
     } = this.props;
     const collapsed = this.props.collapsed && !this.props.openDrawer;
@@ -124,25 +133,6 @@ class Topbar extends Component {
           </div>
 
           <ul className="isoRight">
-            {(myAgencies.loading || myClients.loading) && <li><Loader /></li>}
-            {myAgencies.data.length > 0 &&
-              <li
-                onClick={() => this.setState({ selectedItem: "agency" })}
-                className="isoAgency"
-              >
-                <TopbarAgency myAgencies={myAgencies}
-                  requestAgencyLogin={requestAgencyLogin} />
-              </li>
-            }
-            {myClients.data.length > 0 &&
-              <li
-                onClick={() => this.setState({ selectedItem: "company" })}
-                className="isoCompany"
-              >
-                <TopbarClient myClients={myClients}
-                  requestClientLogin={requestClientLogin} />
-              </li>
-            }
             {userTokenData && userTokenData.userData &&
               <li
                 onClick={() => this.setState({ selectedItem: "user" })}
