@@ -55,10 +55,10 @@ class CreateEdit extends Component {
         try{
           this.setState({ loading: true });
           if(this.mode === 'edit'){
-            await SWQAClient.updateClientTeam(this.props.match.teamId, values);
+            await SWQAClient.updateClientTeam(this.props.match.params.teamId, values);
             message.success("Successfully Saved.");
           } else {
-            await SWQAClient.addClientTeam({ ...values, clientId: this.props.match.clientId });
+            await SWQAClient.addClientTeam({ ...values, clientId: this.props.match.params.clientId });
             message.success("Successfully Saved.");
           }
         } catch(e) {

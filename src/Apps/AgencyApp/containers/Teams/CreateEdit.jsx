@@ -48,7 +48,7 @@ class CreateEdit extends Component {
         try{
           this.setState({ loading: true });
           if(this.mode === 'edit'){
-            await SWQAClient.updateAgencyTeam(this.props.match.teamId, values);
+            await SWQAClient.updateAgencyTeam(this.props.match.params.teamId, values);
             message.success("Successfully Saved.");
           } else {
             await SWQAClient.addAgencyTeam({ ...values});
