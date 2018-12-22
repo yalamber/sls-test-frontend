@@ -42,6 +42,7 @@ class SuiteList extends Component {
     this.handleTeamChange = this.handleTeamChange.bind(this);
     this.isTeamSelected = this.isTeamSelected.bind(this);
     this.deleteTestSuite = this.deleteTestSuite.bind(this);
+    this.sendToQueue = this.sendToQueue.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
@@ -62,7 +63,7 @@ class SuiteList extends Component {
       {
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons row={row} deleteTestSuite={this.deleteTestSuite} history={this.props.history} />
+        render: row => <ActionButtons row={row} deleteTestSuite={this.deleteTestSuite} sendToQueue={this.sendToQueue} history={this.props.history} />
       }
     ];
   }
@@ -168,6 +169,10 @@ class SuiteList extends Component {
 
   deleteTestSuite(row) {
     
+  }
+
+  sendToQueue(row){
+
   }
 
   render() {

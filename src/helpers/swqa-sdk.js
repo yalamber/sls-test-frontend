@@ -86,6 +86,18 @@ class SWQA {
   }
 
   //clients
+  createClient = (payload) => {
+    return this.api.send('POST', `client`, payload);
+  }
+  
+  updateClient = (clientId, payload) => {
+    return this.api.send('PUT', `client/${clientId}`, payload);
+  }
+
+  deleteClient = (clientId) => {
+    return this.api.send('DELETE', `client/${clientId}`);
+  }
+
   getClients = (options) => {
     return this.api.send('GET', 'client', options);
   }
@@ -143,6 +155,18 @@ class SWQA {
   }
 
   //agencies
+  createAgency = (payload) => {
+    return this.api.send('POST', `agency`, payload);
+  }
+
+  updateAgency = (agencyId, payload) => {
+    return this.api.send('PUT', `agency/${agencyId}`, payload);
+  }
+
+  deleteAgency = (agencyId) => {
+    return this.api.send('DELETE', `agency/${agencyId}`);
+  }
+
   getAgencies = (options) => {
     return this.api.send('GET', 'agency', options);
   }

@@ -5,9 +5,18 @@ import {
   ActionWrapper,
 } from '@utils/crud.style';
 
-export default function ActionButtons({history, row, deleteTestSuite}) {
+export default function ActionButtons({history, row, sendToQueue, deleteTestSuite}) {
   return (
     <ActionWrapper>
+      <Tooltip title="Queue for Test">
+        <Button 
+          shape="circle" 
+          icon="cloud" 
+          onClick={() => {
+            sendToQueue(row);
+          }} 
+        />
+      </Tooltip>
       <Tooltip title="Test Cases">
         <Button 
           shape="circle" 

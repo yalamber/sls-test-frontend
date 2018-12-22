@@ -34,15 +34,15 @@ class UserFormFields extends Component {
   }
 
   generatePassword(e) {
+    let {fieldName} = this.props;
     this.setState({ passwordType: !this.state.passwordType });
-    let password = "";
     if (e.target.value) {
       this.props.form.setFieldsValue({
-        password: generateRandomPassword()
+        [`${fieldName}.password`]: generateRandomPassword()
       });
     } else {
       this.props.form.setFieldsValue({
-        password
+        [`${fieldName}.password`]: ""
       });
     }
   }
@@ -73,7 +73,7 @@ class UserFormFields extends Component {
     );
   }
 
-  renderRoleColumn(getFieldDecorator) {
+  renderRoleColumn(fieldName, getFieldDecorator) {
     const roleOptions = this.props.roles.map(role => (
       <Option key={role.roleId} value={role.roleId}>
         {role.title}
@@ -85,7 +85,7 @@ class UserFormFields extends Component {
           <FormItem style={margin} label="Select Role">
             <InputGroup size="large">
               <Col span={22}>
-                {getFieldDecorator("role", {
+                {getFieldDecorator(`${fieldName}.role`, {
                   rules: userValidation.role
                 })(
                   <Select
@@ -109,7 +109,7 @@ class UserFormFields extends Component {
     );
   }
 
-  renderStatusSelector(getFieldDecorator) {
+  renderStatusSelector(fieldName, getFieldDecorator) {
     const statusOptions = userStatus.map(status => (
       <Option key={status.id} value={status.id}>
         {status.label}
@@ -117,7 +117,7 @@ class UserFormFields extends Component {
     ));
     return (
       <FormItem label="Status" style={margin}>
-        {getFieldDecorator("status", {
+        {getFieldDecorator(`${fieldName}.status`, {
           rules: userValidation.status
         })(
           <Select showSearch placeholder="Status">
@@ -129,20 +129,19 @@ class UserFormFields extends Component {
   }
 
   render() {
-    const { form } = this.props;
+    const { form, fieldName } = this.props;
     const { getFieldDecorator } = form;
     return (
       <div>
           <Row gutter={16}>
             <Col {...formResSpan}>
               <FormItem label="User Name" style={margin}>
-                {getFieldDecorator("username", {
+                {getFieldDecorator(`${fieldName}.username`, {
                   rules: userValidation.username
                 })(<Input placeholder="Enter User Name" />)}
               </FormItem>
               <FormItem label="Password" style={margin}>
-                {getFieldDecorator(
-                  "password",
+                {getFieldDecorator(`${fieldName}.password`,
                   this.getPasswordFieldDecoratorOption()
                 )(<Input placeholder="Enter Password" />)}
               </FormItem>
@@ -161,7 +160,7 @@ class UserFormFields extends Component {
             {this.props.showRoleSelector && this.renderRoleColumn(getFieldDecorator)}
             { !this.props.showRoleSelector && 
               <Col {...formResSpan}>
-                {this.renderStatusSelector(getFieldDecorator)}
+                {this.renderStatusSelector(fieldName, getFieldDecorator)}
               </Col>
             }
           </Row>
@@ -171,37 +170,37 @@ class UserFormFields extends Component {
                 <Row gutter={16}>
                   <Col {...formResSpan}>
                     <FormItem style={margin} label="Postal Address:">
-                      {getFieldDecorator("contactInformation.postalAddress", {
+                      {getFieldDecorator(`${fieldName}.contactInformation.postalAddress`, {
                         rules: userValidation.client
                       })(
                         <TextArea placeholder="Enter Postal Address" rows={9} />
                       )}
                     </FormItem>
                     <FormItem style={margin} label="Email Address:">
-                      {getFieldDecorator("contactInformation.emailAddress", {
+                      {getFieldDecorator(`${fieldName}.contactInformation.emailAddress`, {
                         rules: userValidation.email
                       })(<Input placeholder="Enter Email Address" />)}
                     </FormItem>
                   </Col>
                   <Col {...formResSpan}>
                     <FormItem style={margin} label="Mobile Phone:">
-                      {getFieldDecorator("contactInformation.mobilePhone", {
+                      {getFieldDecorator(`${fieldName}.contactInformation.mobilePhone`, {
                         rules: userValidation.client
                       })(<Input placeholder="Enter Mobile Phone" />)}
                     </FormItem>
                     <FormItem style={margin} label="SMS:">
-                      {getFieldDecorator("contactInformation.smsPhone", {
+                      {getFieldDecorator(`${fieldName}.contactInformation.smsPhone`, {
                         rules: userValidation.client
                       })(<Input placeholder="Enter SMS Phone" />)}
                     </FormItem>
                     <FormItem style={margin} label="Instant Messaging: ">
-                      {getFieldDecorator('instantMessengerInfos[0]["messengerId"]')(
-                        <Input addonBefore={this.getIMServiceSelector('instantMessengerInfos[0]["service"]')} style={{ width: '100%' }} />
+                      {getFieldDecorator(`${fieldName}.instantMessengerInfos[0]["messengerId"]`)(
+                        <Input addonBefore={this.getIMServiceSelector(`${fieldName}.instantMessengerInfos[0]["service"]`)} style={{ width: '100%' }} />
                       )}
                     </FormItem>
                     <FormItem style={margin}>
-                      {getFieldDecorator('instantMessengerInfos[1]["messengerId"]')(
-                        <Input addonBefore={this.getIMServiceSelector('instantMessengerInfos[1]["service"]')} style={{ width: '100%' }} />
+                      {getFieldDecorator(`${fieldName}.instantMessengerInfos[1]["messengerId"]`)(
+                        <Input addonBefore={this.getIMServiceSelector(`${fieldName}.instantMessengerInfos[1]["service"]`)} style={{ width: '100%' }} />
                       )}
                     </FormItem>
                   </Col>
@@ -214,12 +213,12 @@ class UserFormFields extends Component {
             <Col span={24}>
               <Card title="Skills" style={{ marginTop: "20px" }}>
                 <FormItem label="LinkedIn URL" style={margin}>
-                  {getFieldDecorator("contactInformation.linkedInUrl", {
+                  {getFieldDecorator(`${fieldName}.contactInformation.linkedInUrl`, {
                     rules: userValidation.client
                   })(<Input placeholder="Linkedin URL" />)}
                 </FormItem>
                 <FormItem label="Resume URL" style={margin}>
-                  {getFieldDecorator("resumeUrl", {})(
+                  {getFieldDecorator(`${fieldName}.resumeUrl`, {})(
                     <Input placeholder="Resume URL" />
                   )}
                 </FormItem>
@@ -234,7 +233,12 @@ class UserFormFields extends Component {
 UserFormFields.propTypes = {
   form: PropTypes.object,
   roles: PropTypes.array,
-  showRoleSelector: PropTypes.bool
+  showRoleSelector: PropTypes.bool,
+  fieldName: PropTypes.string
+};
+
+UserFormFields.defaultProps = {
+  fieldName: 'user'
 };
 
 export default UserFormFields;

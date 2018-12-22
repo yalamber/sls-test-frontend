@@ -55,7 +55,7 @@ class CreateEdit extends Component {
           //this.props.requestUpdateClientUser(this.props.match.clientId, userId, values, this.props.history);
         } else {
           //create user and add to client
-          this.props.requestCreateClientUser(this.props.match.clientId, values, this.props.history);
+          this.props.requestCreateClientUser(this.props.match.clientId, values.user, this.props.history);
         }
       }
     });

@@ -10,8 +10,7 @@ import Box from "@components/utility/box";
 import clientActions from '@app/SystemApp/redux/client/actions';
 import { clientValidation } from "@validations/clientValidation";
 import UserFormFields from "@appComponents/User/FormFields";
-//TODO migrate to swqa sdk
-import { addCompany, editCompany } from "@helpers/http-api-client";
+import SWQAClient from '@helpers/apiClient';
 
 const FormItem = Form.Item;
 const {
@@ -49,29 +48,26 @@ class CreateEdit extends Component {
   handleSubmit(e) {
     const { history, match, form } = this.props;
     e.preventDefault();
-    this.setState({ loading: true });
-    form.validateFieldsAndScroll((err, values) => {
+    form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        if(this.mode === 'edit') {
-          console.log(values);
-          editCompany(match.params.clientId, values.client)
-          .then(res => {
-            if (res) {
+        try {
+          this.setState({ loading: true });
+          if(this.mode === 'edit') {
+            let client = await SWQAClient.updateClient(match.params.clientId, values);
+            if (client) {
               this.setState({ loading: false });
               message.success("Successfully Saved");
-              history.push(`/admin/client/${match.params.clientId}/details`);
             }
-          })
-          .catch(error => {
-            this.setState({ loading: false, errors: error });
-          });
-        } else {  
-          addCompany({ ...values.company, owner: values.user }).then(res => {
-            if (res.status) {
-              this.setState({ loading: false });
-              //TODO go to details page
-            }
-          });
+          } else {
+            let client = await SWQAClient.createClient(values);
+            history.push(`/admin/client/${client.clientId}/details`);
+          }
+        } catch(e) {
+          message.error("something went wrong");
+          //TODO: validation error show
+          this.setState({ error: e });
+        } finally{
+          this.setState({ loading: false });
         }
       }
     });
@@ -105,13 +101,13 @@ class CreateEdit extends Component {
                   <Row>
                     <Col md={12} sm={24} xs={24}>
                       <FormItem hasFeedback label="Client Name" style={margin}>
-                        {getFieldDecorator('client.name', {rules: clientValidation.name})(
+                        {getFieldDecorator('name', {rules: clientValidation.name})(
                           <Input placeholder="Enter Client Name"/>)}
                       </FormItem>
                     </Col>
                     <Col md={12} sm={24} xs={24}>
                       <FormItem hasFeedback label="Client Location" style={margin}>
-                        {getFieldDecorator('client.location', {rules: clientValidation.location})(
+                        {getFieldDecorator('location', {rules: clientValidation.location})(
                           <Input placeholder="Enter Client Location"/>)}
                       </FormItem>
                     </Col>
@@ -120,8 +116,9 @@ class CreateEdit extends Component {
                     <div>
                       <Divider orientation="left">Client Account Owner</Divider>
                       <UserFormFields
-                      form={form}
-                      roles={clientUserRoles.rows}/>
+                        fieldName="owner"
+                        form={form}
+                        roles={clientUserRoles.rows} />
                     </div>
                   }
                   <Row style={{marginTop: '10px'}}>
@@ -161,10 +158,10 @@ class CreateEdit extends Component {
 const mapPropsToFields = (props) => {
   let { currentClient } = props;
   return {
-    'client.name': Form.createFormField({
+    'name': Form.createFormField({
       value: get(currentClient, 'clientData.name')
     }),
-    'client.location': Form.createFormField({
+    'location': Form.createFormField({
       value: get(currentClient, 'clientData.location')
     })
   };

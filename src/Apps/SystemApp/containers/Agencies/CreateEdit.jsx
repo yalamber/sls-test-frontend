@@ -10,8 +10,7 @@ import Box from "@components/utility/box";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
 import { agencyValidation } from "@validations/agencyValidation";
 import UserFormFields from "@appComponents/User/FormFields";
-//TODO migrate to swqa sdk
-import { addCompany, editCompany } from "@helpers/http-api-client";
+import SWQAClient from '@helpers/apiClient';
 
 const FormItem = Form.Item;
 const {
@@ -49,28 +48,26 @@ class CreateEdit extends Component {
   handleSubmit(e) {
     const { history, match, form } = this.props;
     e.preventDefault();
-    this.setState({ loading: true });
-    form.validateFieldsAndScroll((err, values) => {
+    form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        if(this.mode === 'edit') {
-          editCompany(match.params.agencyId, values.agency)
-          .then(res => {
-            if (res) {
+        try {
+          this.setState({ loading: true });
+          if(this.mode === 'edit') {
+            let agency = await SWQAClient.updateAgency(match.params.agencyId, values);
+            if (agency) {
               this.setState({ loading: false });
               message.success("Successfully Saved");
-              history.push(`/admin/agency/${match.params.agencyId}/details`);
             }
-          })
-          .catch(error => {
-            this.setState({ loading: false, errors: error });
-          });
-        } else {  
-          addCompany({ ...values.company, owner: values.user }).then(res => {
-            if (res.status) {
-              this.setState({ loading: false });
-              //TODO go to details page
-            }
-          });
+          } else {
+            let agency = await SWQAClient.createAgency(values);
+            history.push(`/admin/agency/${agency.agencyId}/details`);
+          }
+        } catch(e) {
+          message.error("something went wrong");
+          //TODO: validation error show
+          this.setState({ error: e });
+        } finally{
+          this.setState({ loading: false });
         }
       }
     });
@@ -82,7 +79,7 @@ class CreateEdit extends Component {
     const margin = {
       margin: '0px 10px 10px 0px'
     };
-    let title = this.mode === 'edit'? 'Edit Agency' : 'Add Agency';
+    let title = this.mode === 'edit'? 'Edit Cient' : 'Add Agency';
     const { getFieldDecorator } = form;
     return (
       <LayoutWrapper>
@@ -104,13 +101,13 @@ class CreateEdit extends Component {
                   <Row>
                     <Col md={12} sm={24} xs={24}>
                       <FormItem hasFeedback label="Agency Name" style={margin}>
-                        {getFieldDecorator('agency.name', {rules: agencyValidation.name})(
+                        {getFieldDecorator('name', {rules: agencyValidation.name})(
                           <Input placeholder="Enter Agency Name"/>)}
                       </FormItem>
                     </Col>
                     <Col md={12} sm={24} xs={24}>
                       <FormItem hasFeedback label="Agency Location" style={margin}>
-                        {getFieldDecorator('agency.location', {rules: agencyValidation.location})(
+                        {getFieldDecorator('location', {rules: agencyValidation.location})(
                           <Input placeholder="Enter Agency Location"/>)}
                       </FormItem>
                     </Col>
@@ -119,8 +116,9 @@ class CreateEdit extends Component {
                     <div>
                       <Divider orientation="left">Agency Account Owner</Divider>
                       <UserFormFields
-                      form={form}
-                      roles={agencyUserRoles.rows}/>
+                        fieldName="owner"
+                        form={form}
+                        roles={agencyUserRoles.rows} />
                     </div>
                   }
                   <Row style={{marginTop: '10px'}}>
@@ -160,10 +158,10 @@ class CreateEdit extends Component {
 const mapPropsToFields = (props) => {
   let { currentAgency } = props;
   return {
-    'agency.name': Form.createFormField({
+    'name': Form.createFormField({
       value: get(currentAgency, 'agencyData.name')
     }),
-    'agency.location': Form.createFormField({
+    'location': Form.createFormField({
       value: get(currentAgency, 'agencyData.location')
     })
   };
