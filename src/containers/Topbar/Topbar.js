@@ -43,26 +43,24 @@ class Topbar extends Component {
       history, 
       activeAppType, 
       myAgencies = { data: [], loading: true, error: false },
-      myClients = { data: [], loading: true, error: false }
+      myClients = { data: [], loading: true, error: false },
+      userTokenData
     } = this.props;
-    if(activeAppType === 'system') {
-      return (
-        <div>
-          {(myAgencies.loading || myClients.loading) && <Loader />}
-          <TopbarCompany {...this.props} />
-        </div>
-      )
-    } else {
-      return (
-        <Tooltip placement="right" title={<IntlMessages id="topbar.switchSystemAdmin" />}>
-          <Button className="switch-link" icon="lock" shape="circle" onClick={() => {
-            this.props.switchSystemAdmin({
-              history
-            });
-          }}></Button>
-        </Tooltip>
-      );
-    }
+    return (
+      <div>
+        { (myAgencies.loading || myClients.loading) && <Loader /> }
+        <TopbarCompany {...this.props} />
+        { activeAppType !== 'system' && get(userTokenData, 'systemRole.key', false) === 'system-admin' &&
+          <Tooltip placement="right" title={<IntlMessages id="topbar.switchSystemAdmin" />}>
+            <Button className="switch-link" icon="lock" shape="circle" onClick={() => {
+              this.props.switchSystemAdmin({
+                history
+              });
+            }}></Button>
+          </Tooltip>
+        }
+      </div>
+    );
   }
 
   getTopBarTitle() {

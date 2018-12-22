@@ -14,11 +14,13 @@ const TopbarDropdownWrapper = styled.div`
   ${borderRadius("5px")};
   ${boxShadow("0 2px 10px rgba(0,0,0,0.2)")};
   ${transition()};
-
   @media only screen and (max-width: 767px) {
     width: 310px;
   }
-
+  .error-msg {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
   .isoDropdownHeader {
     border-bottom: 1px solid #f1f1f1;
     margin-bottom: 0px;
