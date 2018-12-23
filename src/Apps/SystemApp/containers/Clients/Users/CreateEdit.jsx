@@ -94,8 +94,7 @@ class CreateEdit extends Component {
                     form={form}
                     roles={clientUserRoles.rows}
                     mode={this.mode}
-                    showRoleSelector={true}
-                  />
+                    showRoleSelector={true} />
                   <Row style={{marginTop: '10px'}}>
                     <Col span={24}>
                       <div style={{display: 'flex', justifyContent: 'space-between'}}>

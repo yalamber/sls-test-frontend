@@ -155,9 +155,9 @@ class UserFormFields extends Component {
                   <Radio value={true}>Generate Password</Radio>
                 </RadioGroup>
               </FormItem>
-              {this.props.showRoleSelector && this.renderStatusSelector(getFieldDecorator)}
+              {this.props.showRoleSelector && this.renderStatusSelector(fieldName, getFieldDecorator)}
             </Col>
-            {this.props.showRoleSelector && this.renderRoleColumn(getFieldDecorator)}
+            {this.props.showRoleSelector && this.renderRoleColumn(fieldName, getFieldDecorator)}
             { !this.props.showRoleSelector && 
               <Col {...formResSpan}>
                 {this.renderStatusSelector(fieldName, getFieldDecorator)}
