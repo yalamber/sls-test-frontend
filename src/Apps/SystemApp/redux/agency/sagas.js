@@ -118,7 +118,7 @@ export function* receiveCreateAgencyUser() {
   yield takeEvery(actions.RECEIVE_CREATE_AGENCY_USER, function* ({membership, history}) {
     if (membership) {
       if (history && history.push) {
-        history.push(`/admin/agency/${membership.agencyId}/user/${membership.userId}/details`);
+        yield history.push(`/admin/agency/${membership.agencyId}/user/${membership.userId}/details`);
       }
     }
   });

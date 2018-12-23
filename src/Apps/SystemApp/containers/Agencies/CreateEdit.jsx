@@ -60,12 +60,13 @@ class CreateEdit extends Component {
             }
           } else {
             let agency = await SWQAClient.createAgency(values);
-            history.push(`/admin/agency/${agency.agencyId}/details`);
+            history.push(`/admin/agency/${agency.clientId}/details`);
           }
         } catch(e) {
           message.error("something went wrong");
-          //TODO: validation error show
           this.setState({ error: e });
+          setFormValidaitonError(form, e);
+          form.validateFieldsAndScroll({scroll: {offsetTop: 120}});
         } finally{
           this.setState({ loading: false });
         }
@@ -118,6 +119,7 @@ class CreateEdit extends Component {
                       <UserFormFields
                         fieldName="owner"
                         form={form}
+                        mode={this.mode}
                         roles={agencyUserRoles.rows} />
                     </div>
                   }

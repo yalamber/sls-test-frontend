@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import jwtDecode from "jwt-decode";
 
 export function setUserToken(token) {
@@ -117,4 +118,20 @@ export function generateRandomPassword() {
     retVal += charset.charAt(Math.floor(Math.random() * n));
   }
   return retVal;
+}
+
+
+export function setFormValidaitonError(form, error) {
+  const errorResponseData = get(error, 'response.data');
+  //check if validation Error
+  if(errorResponseData.name === 'ValidationError') {
+    const validationObjectDetails = get(errorResponseData, 'validationObject.details');
+    if(validationObjectDetails && validationObjectDetails.length > 0) {  
+      let fieldObject = {};
+      validationObjectDetails.forEach((errorField) => {
+        fieldObject[errorField.path.join('.')] = { errors: [new Error(errorField.message)] };
+      });
+      form.setFields(fieldObject);
+    }
+  }
 }

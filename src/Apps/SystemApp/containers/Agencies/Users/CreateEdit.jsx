@@ -93,6 +93,7 @@ class CreateEdit extends Component {
                   <UserFormFields
                     form={form}
                     roles={agencyUserRoles.rows}
+                    mode={this.mode}
                     showRoleSelector={true}
                   />
                   <Row style={{marginTop: '10px'}}>

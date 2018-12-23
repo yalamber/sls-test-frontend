@@ -24,16 +24,7 @@ const DashAppHolder = styled.div`
       color: #fff;
     }
   }
-
-  .ant-row {
-    ${'' /* margin-left: -8px;
-    margin-right: -8px; */};
-  }
-
-  .ant-row > div {
-    padding: 0;
-  }
-
+  
   .isoLeftRightComponent {
     display: flex;
     align-items: center;

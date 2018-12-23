@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Divider, Form, Row, Col, Spin, Icon, Input, message } from "antd";
 import { get } from 'lodash';
+import { setFormValidaitonError } from '@helpers/utility';
 import Button from "@components/uielements/button";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
@@ -10,6 +11,7 @@ import Box from "@components/utility/box";
 import clientActions from '@app/SystemApp/redux/client/actions';
 import { clientValidation } from "@validations/clientValidation";
 import UserFormFields from "@appComponents/User/FormFields";
+import Error from '@appComponents/Common/Error';
 import SWQAClient from '@helpers/apiClient';
 
 const FormItem = Form.Item;
@@ -23,7 +25,7 @@ const {
 class CreateEdit extends Component {
   constructor(props) {
     super(props);
-    this.state = { loading: false };
+    this.state = { loading: false, error: null };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.mode = props.match.params.clientId? 'edit': 'add';
   }
@@ -64,8 +66,9 @@ class CreateEdit extends Component {
           }
         } catch(e) {
           message.error("something went wrong");
-          //TODO: validation error show
           this.setState({ error: e });
+          setFormValidaitonError(form, e);
+          form.validateFieldsAndScroll({scroll: {offsetTop: 120}});
         } finally{
           this.setState({ loading: false });
         }
@@ -99,6 +102,9 @@ class CreateEdit extends Component {
               <Spin spinning={this.state.loading}>
                 <Form onSubmit={this.handleSubmit} id="companyForm">
                   <Row>
+                    {this.state.error && <Error error={this.state.error} />}
+                  </Row>
+                  <Row>
                     <Col md={12} sm={24} xs={24}>
                       <FormItem hasFeedback label="Client Name" style={margin}>
                         {getFieldDecorator('name', {rules: clientValidation.name})(
@@ -118,6 +124,7 @@ class CreateEdit extends Component {
                       <UserFormFields
                         fieldName="owner"
                         form={form}
+                        mode={this.mode}
                         roles={clientUserRoles.rows} />
                     </div>
                   }
@@ -163,8 +170,76 @@ const mapPropsToFields = (props) => {
     }),
     'location': Form.createFormField({
       value: get(currentClient, 'clientData.location')
-    })
+    }),
   };
+  /*
+  let currentClient = {
+    name: 'test client',
+    location: 'test location',
+    owner: {  
+      status: 'active',
+      username: 'adadada dada',
+      resumeUrl: 'http://test.com',
+      contactInformation: {
+        emailAddress: 'teststs@sdsd.comsdsd',
+        postalAddress: 'testing ok ',
+        mobilePhone: '9843612873',
+        smsPhone: 'test2334',
+        linkedInUrl: 'testing ok',
+      },
+      instantMessengerInfos: [
+        {service: 'facebook', messengerId: 'yalu'},
+        {service: 'facebook', messengerId: 'yalu2'},
+      ]
+    }
+  };
+  return {
+    'name': Form.createFormField({
+      value: get(currentClient, 'name')
+    }),
+    'location': Form.createFormField({
+      value: get(currentClient, 'location')
+    }),
+    'owner.role': Form.createFormField({
+      value: get(currentClient, 'owner.role.roleId')
+    }),
+    'owner.status': Form.createFormField({
+      value: get(currentClient, 'owner.status')
+    }),
+    'owner.username': Form.createFormField({
+      value: get(currentClient, 'owner.username')
+    }),
+    'owner.resumeUrl': Form.createFormField({
+      value: get(currentClient, 'owner.resumeUrl')
+    }),
+    'owner.contactInformation.emailAddress': Form.createFormField({
+      value: get(currentClient, 'owner.contactInformation.emailAddress')
+    }),
+    'owner.contactInformation.postalAddress': Form.createFormField({
+      value: get(currentClient, 'owner.contactInformation.postalAddress')
+    }),
+    'owner.contactInformation.mobilePhone': Form.createFormField({
+      value: get(currentClient, 'owner.contactInformation.mobilePhone')
+    }),
+    'owner.contactInformation.smsPhone': Form.createFormField({
+      value: get(currentClient, 'owner.contactInformation.smsPhone')
+    }),
+    'owner.contactInformation.linkedInUrl': Form.createFormField({
+      value: get(currentClient, 'owner.contactInformation.linkedInUrl')
+    }),
+    'owner.instantMessengerInfos[0]["service"]': Form.createFormField({
+      value: get(currentClient, 'owner.instantMessengerInfos[0]["service"]')
+    }),
+    'owner.instantMessengerInfos[0]["messengerId"]': Form.createFormField({
+      value: get(currentClient, 'owner.instantMessengerInfos[0]["messengerId"]')
+    }),
+    'owner.instantMessengerInfos[1]["service"]': Form.createFormField({
+      value: get(currentClient, 'owner.instantMessengerInfos[1]["service"]')
+    }),
+    'owner.instantMessengerInfos[1]["messengerId"]': Form.createFormField({
+      value: get(currentClient, 'owner.instantMessengerInfos[1]["messengerId"]')
+    }),
+  };*/
 };
 const form = Form.create({mapPropsToFields})(CreateEdit);
 

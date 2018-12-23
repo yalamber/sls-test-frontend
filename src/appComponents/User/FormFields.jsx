@@ -48,7 +48,7 @@ class UserFormFields extends Component {
   }
 
   getPasswordFieldDecoratorOption() {
-    if (this.props.formType === "create") {
+    if (this.props.mode === "add") {
       return {
         rules: userValidation.password
       };
@@ -238,7 +238,8 @@ UserFormFields.propTypes = {
 };
 
 UserFormFields.defaultProps = {
-  fieldName: 'user'
+  fieldName: 'user',
+  mode: 'add'
 };
 
 export default UserFormFields;
