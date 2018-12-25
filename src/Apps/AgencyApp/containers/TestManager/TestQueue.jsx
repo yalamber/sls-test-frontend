@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Row, Col, Icon, Spin } from "antd";
+import { Row, Col, Icon, Spin, Button } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
@@ -17,6 +17,7 @@ import {
 import SWQAClient from '@helpers/apiClient';
 import { dateTime } from "@constants/dateFormat";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
+import { select } from "redux-saga/effects";
 
 const { requestCurrentAgency } = agencyActions;
 
@@ -24,6 +25,7 @@ class TestQueueList extends Component {
   constructor() {
     super();
     this.state = {
+      selectedQueue: [],
       agency: {},
       testQueues: [],
       loading: false,
@@ -35,9 +37,12 @@ class TestQueueList extends Component {
         total: 1
       },
     };
-    this.fetchData = this.fetchData.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
+      {
+        title: "Id",
+        dataIndex: "testQueueId",
+        key: "testQueueId"
+      },
       {
         title: "Test Case",
         dataIndex: "testCase.title",
@@ -73,7 +78,7 @@ class TestQueueList extends Component {
     }
   }
 
-  async fetchData(options) {
+  fetchData = async (options) => {
     try {
       this.setState({loading: true});
       options.limit = this.state.paginationOptions.pageSize;
@@ -98,7 +103,7 @@ class TestQueueList extends Component {
     }
   }
 
-  async onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = async (page, pageSize) => {
     this.setState({
       loading: true,
       paginationOptions: {
@@ -127,9 +132,26 @@ class TestQueueList extends Component {
     });
   }
 
+  onSelectChange = (selectedRowKeys) => {
+    this.setState({ selectedQueue: selectedRowKeys });
+  }
+
+
+  assignToMe = () => {
+
+  }
+
+  assignToTeam = () => {
+
+  }
+
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentAgency, history } = this.props;
+    const { history } = this.props;
+    const rowSelection = {
+      selectedRowKeys: this.state.selectedQueue,
+      onChange: this.onSelectChange,
+    };
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -147,7 +169,14 @@ class TestQueueList extends Component {
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
+                <Button onClick={this.assignToMe} disabled={this.state.selectedQueue.length === 0} style={{ marginBottom: 16, marginRight: 10 }}>
+                  Assign to me
+                </Button>
+                <Button onClick={this.assignToTeam} disabled={this.state.selectedQueue.length === 0} style={{ marginBottom: 16, marginRight: 10 }}>
+                  Assign to team
+                </Button>
                 <Table
+                  rowSelection={rowSelection}
                   locale={{ emptyText: "No test run available" }}
                   size="middle"
                   bordered
