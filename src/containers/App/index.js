@@ -5,7 +5,7 @@ import { Debounce } from 'react-throttle';
 import WindowResizeListener from 'react-window-size-listener';
 import { ThemeProvider } from 'styled-components';
 
-import authAction from '@redux/auth/actions';
+import authActions from '@redux/auth/actions';
 import appActions from '@redux/app/actions';
 import Sidebar from '@containers/Sidebar/Sidebar';
 import Topbar from '@containers/Topbar/Topbar';
@@ -20,11 +20,10 @@ import AppHolder from './commonStyle';
 import './global.css';
 
 const { Content, Footer } = Layout;
-const { logout } = authAction;
+const { logout } = authActions;
 const { toggleAll } = appActions;
 
 export class App extends Component {
-
   render() {
     const { url } = this.props.match;
     const { height, appType } = this.props;

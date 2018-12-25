@@ -45,8 +45,14 @@ class TestCaseList extends Component {
     this.handleSuiteChange = this.handleSuiteChange.bind(this);
     this.isSuiteSelected = this.isSuiteSelected.bind(this);
     this.deleteTestCase = this.deleteTestCase.bind(this);
+    this.sendToQueue = this.sendToQueue.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
+      {
+        title: "Id",
+        dataIndex: "testCaseId",
+        key: "testCaseId"
+      },
       {
         title: "Title",
         dataIndex: "title",
@@ -65,7 +71,7 @@ class TestCaseList extends Component {
       {
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons row={row} delete={this.handleDelete} history={props.history} />
+        render: row => <ActionButtons row={row} sendToQueue={this.sendToQueue} delete={this.handleDelete} history={props.history} />
       }
     ];
   }
@@ -178,8 +184,15 @@ class TestCaseList extends Component {
     return !!this.state.selectedSuiteId;
   }
 
-  deleteTestCase(row) {
+  async deleteTestCase(row) {
     
+  }
+
+  async sendToQueue(row) {
+    let data = {
+      testCaseIds: [row.testCaseId],
+    };
+    return await SWQAClient.sendToQueue(data);
   }
 
   render() {

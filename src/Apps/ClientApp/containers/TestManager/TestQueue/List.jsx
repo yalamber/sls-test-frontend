@@ -13,6 +13,7 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from "@utils/crud.style";
+import ActionButtons from "./partials/ActionButtons";
 import SWQAClient from '@helpers/apiClient';
 import { dateTime } from "@constants/dateFormat";
 import clientActions from '@app/SystemApp/redux/client/actions';
@@ -20,8 +21,8 @@ import clientActions from '@app/SystemApp/redux/client/actions';
 const { requestCurrentClient } = clientActions;
 
 class TestQueueList extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       client: {},
       testQueues: [],
@@ -36,7 +37,13 @@ class TestQueueList extends Component {
     };
     this.fetchData = this.fetchData.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.columns = [
+      {
+        title: "Id",
+        dataIndex: "testQueueId",
+        key: "testQueueId"
+      },
       {
         title: "Test Case",
         dataIndex: "testCase.title",
@@ -56,6 +63,11 @@ class TestQueueList extends Component {
         title: "Created",
         render: row => <Moment format={dateTime}>{row.createdAt}</Moment>,
         key: "createdAt"
+      },
+      {
+        title: "Actions",
+        key: "actions",
+        render: row => <ActionButtons row={row} delete={this.handleDelete} history={props.history} />
       }
     ];
   }
@@ -127,6 +139,10 @@ class TestQueueList extends Component {
     });
   }
 
+  handleDelete() {
+
+  }
+
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { history } = this.props;
@@ -148,7 +164,7 @@ class TestQueueList extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table
-                  locale={{ emptyText: "No test run available" }}
+                  locale={{ emptyText: "No Test Queue available" }}
                   size="middle"
                   bordered
                   pagination={{

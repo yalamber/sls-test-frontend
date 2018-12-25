@@ -46,6 +46,11 @@ class SuiteList extends Component {
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
+        title: "Id",
+        dataIndex: "testSuiteId",
+        key: "testSuiteId"
+      },
+      {
         title: "Title",
         dataIndex: "name",
         key: "title"

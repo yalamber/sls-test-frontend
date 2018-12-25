@@ -70,14 +70,21 @@ export function* checkAuthorization() {
     try {
       const token = getUserToken();
       if (token) {
-        yield put({
-          type: actions.LOGIN_SUCCESS,
-          payload: { token },
-          token,
-          userTokenData: jwtDecode(token)
-        });
+        //TODO: check token expiry
+        const userTokenData = jwtDecode(token);
+        const expiredAt = userTokenData.expiredAt || userTokenData.exp * 1000;
+        if (expiredAt > new Date().getTime()) {
+          yield put({
+            type: actions.LOGIN_SUCCESS,
+            payload: { token },
+            token,
+            userTokenData
+          });
+        } else {
+          yield put(actions.logout());
+        }
       } else {
-        yield put({ type: actions.LOGOUT });
+        yield put(actions.logout());
       }
     } catch (e) {
       yield put({ type: actions.LOGIN_ERROR });
