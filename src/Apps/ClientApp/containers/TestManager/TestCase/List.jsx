@@ -268,7 +268,7 @@ class TestCaseList extends Component {
                   }}
                   columns={this.columns}
                   dataSource={this.state.testCases}
-                  rowKey="testSuiteId"
+                  rowKey="testCaseId"
                 />
               </Spin>
             </Box>

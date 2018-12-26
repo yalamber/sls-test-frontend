@@ -28,7 +28,7 @@ class ActionButtons extends Component {
               });
               try{
                 let queue = await sendToQueue(row);
-                
+                message.success(`${queue.length} Test Case queued successfully`);
               } catch(e) {
                 message.error(get(e, 'response.data', 'Something went Wrong!'));
               } finally{
