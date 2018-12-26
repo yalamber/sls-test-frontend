@@ -62,7 +62,7 @@ class CreateEdit extends Component {
             }
           } else {
             let client = await SWQAClient.createClient(values);
-            history.push(`/admin/client/${client.clientId}/details`);
+            history.replace(`/admin/client/${client.clientId}/details`);
           }
         } catch(e) {
           message.error("something went wrong");

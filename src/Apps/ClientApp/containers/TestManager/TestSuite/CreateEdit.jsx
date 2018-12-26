@@ -82,7 +82,7 @@ class CreateEdit extends Component {
               ...values 
             });
             message.success("Successfully Saved");
-            history.push(`/my-client/test-manager/test-suite/${testSuite.testSuiteId}/details`);
+            history.replace(`/my-client/test-manager/test-suite/${testSuite.testSuiteId}/details`);
           }
         } catch(e) {
           this.setState({ error: e }, () => {

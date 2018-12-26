@@ -148,7 +148,7 @@ class TestQueueList extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table
-                  locale={{ emptyText: "No test run available" }}
+                  locale={{ emptyText: "No Test Queue available" }}
                   size="middle"
                   bordered
                   pagination={{

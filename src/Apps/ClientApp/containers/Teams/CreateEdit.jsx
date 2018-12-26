@@ -54,7 +54,7 @@ class CreateEdit extends Component {
           } else {
             let team = await SWQAClient.addClientTeam({ ...values});
             message.success("Successfully Added.");
-            history.push(`/my-client/team/${team.clientTeamId}/details`);
+            history.replace(`/my-client/team/${team.clientTeamId}/details`);
           }
         } catch(e) {
           message.error(getErrorMessageFromApiResponseError(e));

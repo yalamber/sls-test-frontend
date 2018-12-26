@@ -86,7 +86,7 @@ class CreateEdit extends Component {
               ...omit(values, ['keys']) 
             });
             message.success("Successfully Saved");
-            history.push(`/admin/client/test-manager/test-case/${testCase.testCaseId}/details`);
+            history.replace(`/my-client/test-manager/test-case/${testCase.testCaseId}/details`);
           }
         } catch(e) {
           console.log(e);
