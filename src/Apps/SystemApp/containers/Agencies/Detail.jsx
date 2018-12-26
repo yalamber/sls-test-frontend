@@ -20,6 +20,9 @@ class Detail extends Component {
       requestCurrentAgency
     } = this.props;
     //get current agency
+    if(isNaN(match.params.agencyId)) {
+      this.props.history.goBack();
+    }
     requestCurrentAgency(match.params.agencyId);
   }
 

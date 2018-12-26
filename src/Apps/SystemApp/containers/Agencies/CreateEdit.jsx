@@ -61,7 +61,7 @@ class CreateEdit extends Component {
             }
           } else {
             let agency = await SWQAClient.createAgency(values);
-            history.replace(`/admin/agency/${agency.clientId}/details`);
+            history.replace(`/admin/agency/${agency.agencyId}/details`);
           }
         } catch(e) {
           message.error("something went wrong");

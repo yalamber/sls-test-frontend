@@ -66,7 +66,7 @@ class UserFormFields extends Component {
         <Option value="viber">Viber</Option>
         <Option value="wechat">WeChat</Option>
         <Option value="bbm">BBM</Option>
-        <Option value="telgram">Telegram</Option>
+        <Option value="telegram">Telegram</Option>
         <Option value="line">LINE</Option>
         <Option value="zalo">Zalo</Option>
       </Select>
