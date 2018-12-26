@@ -44,7 +44,7 @@ class ActionButtons extends Component {
             shape="circle" 
             icon="edit" 
             onClick={() => {
-              history.push(`/admin/client/test-manager/test-case/${row.testCaseId}/edit`);
+              history.push(`/my-client/test-manager/test-case/${row.testCaseId}/edit`);
             }} 
           />
         </Tooltip>
@@ -53,7 +53,7 @@ class ActionButtons extends Component {
             shape="circle" 
             icon="info" 
             onClick={() => {
-              history.push(`/admin/client/test-manager/test-case/${row.testCaseId}/details`);
+              history.push(`/my-client/test-manager/test-case/${row.testCaseId}/details`);
             }} 
           />
         </Tooltip>

@@ -72,9 +72,7 @@ class CreateEdit extends Component {
             const { teamId } = this.props.match.params;
             const { status, userId, roleId } = values;
             this.setState({ loading: true });
-            let clientTeamMember = await SWQAClient.editClientTeamMember({
-              userId,
-              teamId,
+            let clientTeamMember = await SWQAClient.editClientTeamMember(teamId, userId, {
               status,
               roleId,
             });
@@ -89,9 +87,8 @@ class CreateEdit extends Component {
             const { teamId } = this.props.match.params;
             const { status, userId, roleId } = values;
             this.setState({ loading: true });
-            let clientTeamMember = await SWQAClient.addClientTeamMember({
+            let clientTeamMember = await SWQAClient.addClientTeamMember(teamId, {
               userId,
-              teamId,
               status,
               roleId,
             });

@@ -279,6 +279,10 @@ class SWQA {
     return this.api.send('GET', `test/queue`, options);
   }
 
+  assignTestQueue = (payloadData) => {
+    return this.api.send('POST', `test/queue/assign`, payloadData);
+  }
+
   //users
   createUser = (payload) => {
     return this.api.send('POST', `user`, payload);

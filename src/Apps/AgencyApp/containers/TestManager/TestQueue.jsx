@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Row, Col, Icon, Spin, Button } from "antd";
+import { Row, Col, Icon, Spin, Button, Dropdown, Menu } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
@@ -16,10 +15,10 @@ import {
 } from "@utils/crud.style";
 import SWQAClient from '@helpers/apiClient';
 import { dateTime } from "@constants/dateFormat";
+//some actions for system app can be reused
 import agencyActions from '@app/SystemApp/redux/agency/actions';
-import { select } from "redux-saga/effects";
 
-const { requestCurrentAgency } = agencyActions;
+const { requestCurrentAgency, requestAgencyTeams } = agencyActions;
 
 class TestQueueList extends Component {
   constructor() {
@@ -67,11 +66,15 @@ class TestQueueList extends Component {
   }
 
   componentDidMount() {
-    const { requestCurrentAgency } = this.props;
+    const { requestCurrentAgency, requestAgencyTeams } = this.props;
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
     let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
     if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {    
       requestCurrentAgency(agencyId);
+      requestAgencyTeams(agencyId, {
+        page: 1,
+        pageSize: 50
+      });
       this.fetchData({
         agencyId
       });
@@ -137,21 +140,39 @@ class TestQueueList extends Component {
   }
 
 
-  assignToMe = () => {
+  assignToMe = async () => {
+    console.log(this.state.selectedQueue);
+    try {
+      //await SWQAClient.
+    } catch(e) {
 
+    } finally {
+
+    }
   }
 
-  assignToTeam = () => {
+  handleTeamMenuClick = (e) => {
+    console.log(e);
 
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { history } = this.props;
+    const { currentAgency = { agencyData: { name: '' }, teamList: { rows: [], count: 0 } }, history } = this.props;
+    //table row selection
     const rowSelection = {
       selectedRowKeys: this.state.selectedQueue,
       onChange: this.onSelectChange,
     };
+    console.log(currentAgency);
+    const teamsOptions = currentAgency.teamList.rows.map(team => (
+      <Menu.Item key={team.agencyTeamId}><Icon type="team" />{team.name}</Menu.Item>
+    ));
+    const teamMenu = (
+      <Menu onClick={this.handleTeamMenuClick}>
+        {teamsOptions}
+      </Menu>
+    );
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -172,9 +193,11 @@ class TestQueueList extends Component {
                 <Button onClick={this.assignToMe} disabled={this.state.selectedQueue.length === 0} style={{ marginBottom: 16, marginRight: 10 }}>
                   Assign to me
                 </Button>
-                <Button onClick={this.assignToTeam} disabled={this.state.selectedQueue.length === 0} style={{ marginBottom: 16, marginRight: 10 }}>
-                  Assign to team
-                </Button>
+                <Dropdown overlay={teamMenu} disabled={this.state.selectedQueue.length === 0}>
+                  <Button style={{ marginBottom: 16, marginRight: 10 }}>
+                    Assign to team <Icon type="down" />
+                  </Button>
+                </Dropdown>
                 <Table
                   rowSelection={rowSelection}
                   locale={{ emptyText: "No test run available" }}
@@ -203,6 +226,7 @@ export default connect(
     ...state.My
   }),
   {
-    requestCurrentAgency
+    requestCurrentAgency,
+    requestAgencyTeams
   }
 )(TestQueueList);

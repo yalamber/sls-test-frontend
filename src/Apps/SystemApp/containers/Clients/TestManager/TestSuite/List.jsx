@@ -77,7 +77,7 @@ class SuiteList extends Component {
       page: 1,
       pageSize: 50
     });
-    //get all test suites
+    //get test suites
     let reqParams = {};
     if(queryParams.teamId) {
       reqParams.clientTeamId = queryParams.teamId;

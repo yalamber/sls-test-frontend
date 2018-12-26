@@ -87,7 +87,7 @@ class TestCaseList extends Component {
       //get all test cases
       let reqParams = {};
       if(queryParams.suiteId) {
-        reqParams.suiteId = queryParams.suiteId;
+        reqParams.testSuiteId = queryParams.suiteId;
       } else {
         reqParams.clientId = clientId;
       }
@@ -119,8 +119,8 @@ class TestCaseList extends Component {
           total: testCases.count
         }
       };
-      if(options.suiteId) {
-        updateState.selectedSuiteId = parseInt(options.suiteId, 10); 
+      if(options.testSuiteId) {
+        updateState.selectedSuiteId = parseInt(options.testSuiteId, 10); 
       }
       this.setState(updateState);
     } catch(e) {
@@ -147,7 +147,7 @@ class TestCaseList extends Component {
           offset
         };
         if(this.state.selectedSuiteId) {
-          params.suiteId = this.state.selectedSuiteId;
+          params.testSuiteId = this.state.selectedSuiteId;
         } else {
           params.clientId = this.props.match.params.clientId;
         }

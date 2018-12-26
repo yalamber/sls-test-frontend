@@ -50,17 +50,21 @@ class CreateEdit extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll(async (err, values) => {
+    let { history, match, form } = this.props;
+    form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {    
         try{
           this.setState({ loading: true });
           if(this.mode === 'edit'){
-            await SWQAClient.updateClientTeam(this.props.match.params.teamId, values);
+            await SWQAClient.updateClientTeam(match.params.teamId, values);
             message.success("Successfully Saved.");
+
           } else {
-            await SWQAClient.addClientTeam({ ...values, clientId: this.props.match.params.clientId });
+            let team = await SWQAClient.addClientTeam({ ...values, clientId: match.params.clientId });
             message.success("Successfully Saved.");
+            history.push(`/admin/client/team/${team.clientTeamId}/details`);
           }
+
         } catch(e) {
           message.error(getErrorMessageFromApiResponseError(e));
           this.setState({ error: e });

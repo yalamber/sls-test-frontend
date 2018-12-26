@@ -74,14 +74,14 @@ class TestCaseList extends Component {
     let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
     //TODO: check stat and params if same clientId already
     requestCurrentClient(match.params.clientId);
-    //get all test cases
+    this.fetchTestSuites(match.params.clientId);
+    //get test cases
     let reqParams = {};
     if(queryParams.suiteId) {
-      reqParams.suiteId = queryParams.suiteId;
+      reqParams.testSuiteId = queryParams.suiteId;
     } else {
       reqParams.clientId = match.params.clientId;
     }
-    this.fetchTestSuites(match.params.clientId);
     this.fetchTestCase(reqParams);
   }
 
@@ -108,8 +108,8 @@ class TestCaseList extends Component {
           total: testCases.count
         }
       };
-      if(options.suiteId) {
-        updateState.selectedSuiteId = parseInt(options.suiteId, 10); 
+      if(options.testSuiteId) {
+        updateState.selectedSuiteId = parseInt(options.testSuiteId, 10); 
       }
       this.setState(updateState);
     } catch(e) {
@@ -136,7 +136,7 @@ class TestCaseList extends Component {
           offset
         };
         if(this.state.selectedSuiteId) {
-          params.suiteId = this.state.selectedSuiteId;
+          params.testSuiteId = this.state.selectedSuiteId;
         } else {
           params.clientId = this.props.match.params.clientId;
         }
@@ -227,6 +227,7 @@ class TestCaseList extends Component {
                 <Row>
                   <Col md={6} sm={24} xs={24} style={margin}>
                     <FormItem label="Suite Name:">
+                    {console.log(this.state)}
                       <Select
                         showSearch
                         placeholder="Please Choose Suite"

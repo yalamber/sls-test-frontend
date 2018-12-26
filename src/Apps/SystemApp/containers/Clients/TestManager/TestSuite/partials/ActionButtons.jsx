@@ -13,7 +13,7 @@ export default function ActionButtons({history, row, deleteTestSuite}) {
           shape="circle" 
           icon="experiment" 
           onClick={() => {
-            history.push(`/admin/client/${row.clientTeam.client.clientId}/test-manager/test-case?suiteId=${row.testSuiteId}`)
+            history.push(`/admin/client/${row.clientTeam.client.clientId}/test-manager/test-cases?suiteId=${row.testSuiteId}`)
           }} 
         />
       </Tooltip>

@@ -81,12 +81,12 @@ class CreateEdit extends Component {
             await SWQAClient.updateTestCase(match.params.caseId, omit(values, ['keys']));
             message.success("Successfully Updated");
           } else {
-            let testSuite = await SWQAClient.addTestCase({
+            let testCase = await SWQAClient.addTestCase({
               testSuiteId: match.params.suiteId,
               ...omit(values, ['keys']) 
             });
             message.success("Successfully Saved");
-            history.push(`/admin/client/test-manager/test-suite/${testSuite.testSuiteId}/details`);
+            history.push(`/admin/client/test-manager/test-case/${testCase.testCaseId}/details`);
           }
         } catch(e) {
           console.log(e);

@@ -22,6 +22,11 @@ class List extends Component {
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
+        title: "Id",
+        dataIndex: "agencyTeamId",
+        key: "agencyTeamId"
+      },
+      {
         title: "Team Name",
         dataIndex: "name",
         key: "name"

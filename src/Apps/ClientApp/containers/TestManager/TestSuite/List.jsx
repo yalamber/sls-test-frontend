@@ -74,7 +74,7 @@ class SuiteList extends Component {
   }
 
   componentDidMount() {
-    const { match, requestCurrentClient, requestClientTeams, location } = this.props;
+    const { requestCurrentClient, requestClientTeams, location } = this.props;
     let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
     //get client id
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
