@@ -3,96 +3,76 @@ import { Row, Col, Spin, message } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
-
 import Box from "@components/utility/box";
-import {
-  getRoleTypes,
-  addRole,
-  editRole
-} from "@helpers/http-api-client";
+import SWQAClient from '@helpers/apiClient';
 import RoleForm from "./partials/RoleForm";
 
 export default class extends Component {
-  constructor() {
-    super();
-    this.state = { loading: false, types: [] };
+  constructor(props) {
+    super(props);
+    this.state = { 
+      loading: false, 
+      role: null,
+      types: [], 
+      error: null 
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.mode = props.match.roleId ? 'edit': 'add';
   }
 
   componentDidMount() {
     this.fetchData();
   }
 
-  fetchData() {
-    this.setState(
-      {
+  async fetchData() {
+    try{
+      this.setState({
         loading: true
-      },
-      () => {
-        getRoleTypes({})
-          .then(res => {
-            if (res.status === 200) {
-              const types =
-                res.data && res.data.length
-                  ? res.data.map(type => ({ key: type, name: type }))
-                  : [];
-              this.setState({ types, loading: false });
-            }
-          })
-          .catch(errors => {
-            this.setState({
-              loading: false,
-              errors: errors
-            });
-          });
+      });
+      let roleTypes = await SWQAClient.getRoleTypes();
+      let types = roleTypes.map((roleType) => ({ key: roleType, name: roleType }));
+      if(this.mode === 'edit') {
+        let role = await SWQAClient.getRole(this.props.match.params.roleId);
+        this.setState({
+          role,
+          types
+        });
+      } else {  
+        this.setState({
+          types
+        });
       }
-    );
+    } catch(e) {
+      this.setState({
+        error: e
+      });
+    } finally {
+      this.setState({
+        loading: false
+      });
+    }
   }
 
-  handleSubmit(formData, resetForm) {
-    this.setState({ loading: true }, () => {
-      if (this.getFormMode() === "create") {
-        addRole({ ...formData })
-          .then(res => {
-            if (res.status === 200) {
-              message.success("Successfully saved.");
-              resetForm();
-              this.props.history.goBack();
-            }
-          })
-          .finally(res => {
-            this.setState({ loading: false });
-          });
+  async handleSubmit(formData, resetForm) {
+    try{
+      this.setState({loading: true});
+      if(this.mode == 'add') {  
+        let role = await SWQAClient.createRole(formData);
+        message.success("Successfully created.");
+        this.props.history.goBack();
       } else {
-        const { roleId } = this.props.history.location.state;
-        editRole(roleId, { ...formData })
-          .then(res => {
-            if (res.status === 200) {
-              message.success("Successfully saved.");
-              resetForm();
-              this.props.history.goBack();
-            }
-          })
-          .finally(res => {
-            this.setState({ loading: false });
-          });
+        let role = await SWQAClient.updateRole(this.props.match.params.roleId, formData); 
+        message.success("Successfully updated.");
       }
-    });
-  }
+    } catch(e) {
 
-  getFormMode() {
-    const isEditKeyWordFoundInUrl = new RegExp(`roles/edit`).test(
-      this.props.match.url
-    );
-    if (isEditKeyWordFoundInUrl) {
-      return "edit";
-    } else {
-      return "create";
+    } finally {
+      this.setState({ loading: false });
     }
   }
 
   renderFormTypeTitle() {
-    if (this.getFormMode() === "edit") {
+    if (this.mode === "edit") {
       const { title } = this.props.location.state;
 
       return (
@@ -120,7 +100,7 @@ export default class extends Component {
               <Spin spinning={this.state.loading}>
                 <RoleForm
                   submit={this.handleSubmit}
-                  rowData={{ ...this.props.history.location.state }}
+                  rowData={this.state.role}
                   types={this.state.types}
                 />
               </Spin>

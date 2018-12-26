@@ -12,7 +12,7 @@ import { editRolesValidation } from "@validations/editRoleValidation";
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-class GenericForm extends Component {
+class RoleForm extends Component {
   constructor() {
     super();
     this.state = {
@@ -29,7 +29,6 @@ class GenericForm extends Component {
         this.props.submit(values, this.resetForm)
       }
     });
-
   }
 
   renderTypeOptions() {
@@ -113,5 +112,5 @@ const mapPropsToFields = (props) => {
     }),
   };
 };
-const form = Form.create({mapPropsToFields})(GenericForm);
+const form = Form.create({mapPropsToFields})(RoleForm);
 export default withRouter(form);
