@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-<<<<<<< HEAD
 import { Row, Col, Icon, Spin, message } from "antd";
-=======
-import { Row, Col, Icon } from "antd";
->>>>>>> origin/SWQA-200
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
