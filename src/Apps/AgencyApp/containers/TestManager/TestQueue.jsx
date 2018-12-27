@@ -25,7 +25,6 @@ class TestQueueList extends Component {
     super();
     this.state = {
       selectedQueue: [],
-      agency: {},
       testQueues: [],
       loading: false,
       error: null,
@@ -156,8 +155,10 @@ class TestQueueList extends Component {
         testQueueIds: this.state.selectedQueue
       };
       await SWQAClient.assignTestQueue(params);
-      message.success('queue assigned successfully');
-      this.props.history.go(0);
+      message.success('Test assigned successfully');
+      this.fetchData({
+        agencyId: this.props.currentAgency.agencyData.agencyId
+      });
     } catch(e) {
       console.log(e);
       this.setState({
@@ -183,13 +184,15 @@ class TestQueueList extends Component {
         }
       });
       let params = {
-        testQueueIds: this.state.selectedQueue
+        testQueueIds: this.state.selectedQueue,
+        assignedTeamId: e.key
       };
       //TODO: assign to team
-
       await SWQAClient.assignTestQueue(params);
       message.success('queue assigned successfully');
-      this.props.history.push('/my-agency/test-manager/assigned-tests');
+      this.fetchData({
+        agencyId: this.props.currentAgency.agencyData.agencyId
+      });
     } catch(e) {
       this.setState({
         assignQueue: {
