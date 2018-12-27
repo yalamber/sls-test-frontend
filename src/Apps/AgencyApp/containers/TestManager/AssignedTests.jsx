@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Row, Col, Icon, Spin, message } from "antd";
+import { Row, Col, Icon, Spin, message, Radio  } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
@@ -18,12 +18,14 @@ import { dateTime } from "@constants/dateFormat";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
 import ActionButtons from "./partials/AssignedTestActionButtons";
 
-const { requestCurrentAgency } = agencyActions;
+const { requestCurrentAgency, requestAgencyTeams } = agencyActions;
 
 class AssignedTestList extends Component {
   constructor() {
     super();
     this.state = {
+      assignedTo: 'me',
+      assignedToTeam: null,
       testQueues: [],
       loading: false,
       error: null,
@@ -37,6 +39,11 @@ class AssignedTestList extends Component {
     this.fetchData = this.fetchData.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
+      {
+        title: "Id",
+        dataIndex: "testQueueId",
+        key: "testQueueId"
+      },
       {
         title: "Test Case",
         dataIndex: "testCase.title",
@@ -69,9 +76,12 @@ class AssignedTestList extends Component {
     let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
     if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {    
       requestCurrentAgency(agencyId);
+      requestAgencyTeams(agencyId, {
+        page: 1,
+        pageSize: 50
+      });
       this.fetchData({
-        agencyId: agencyId,
-        status: 'assigned'
+        agencyId: agencyId
       });
     }
   }
@@ -81,6 +91,7 @@ class AssignedTestList extends Component {
       this.setState({loading: true});
       options.limit = this.state.paginationOptions.pageSize;
       options.status = 'assigned';
+      options.assignedToTeam = 1;
       let testQueues = await SWQAClient.getTestQueues(options);
       let updateState = {
         loading: false,
@@ -137,7 +148,9 @@ class AssignedTestList extends Component {
     try {
       await SWQAClient.unassignTestQueue(row.testQueueId);
       message.success('queue unassigned successfully');
-      this.props.history.go('0');
+      this.fetchData({
+        agencyId: this.props.currentAgency.agencyData.agencyId
+      });
     } catch(e) {
       console.log(e);
       this.setState({
@@ -154,9 +167,15 @@ class AssignedTestList extends Component {
     }
   }
 
+  onAssignedTypeChange = (e) => {
+    console.log(e);
+
+  }
+
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { history } = this.props;
+    const { currentAgency = { agencyData: { name: '' }, teamList: { rows: [], count: 0 } }, history } = this.props;
+    
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -174,6 +193,10 @@ class AssignedTestList extends Component {
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
+                Show Tests assigned to: <Radio.Group defaultValue="me" buttonStyle="solid" style={{marginBottom: 16}} onChange={this.onAssignedTypeChange}>
+                  <Radio.Button value="me">Me</Radio.Button>
+                  <Radio.Button value="my-team">My Teams</Radio.Button>
+                </Radio.Group>
                 <Table
                   locale={{ emptyText: "No Tests available" }}
                   size="middle"
@@ -201,6 +224,7 @@ export default connect(
     ...state.My
   }),
   {
-    requestCurrentAgency
+    requestCurrentAgency,
+    requestAgencyTeams
   }
 )(AssignedTestList);
