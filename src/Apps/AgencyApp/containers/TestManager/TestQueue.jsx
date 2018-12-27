@@ -145,7 +145,6 @@ class TestQueueList extends Component {
     this.setState({ selectedQueue: selectedRowKeys });
   }
 
-
   assignToMe = async () => {
     try {
       this.setState({
@@ -158,8 +157,9 @@ class TestQueueList extends Component {
       };
       await SWQAClient.assignTestQueue(params);
       message.success('queue assigned successfully');
-      this.props.history('/my-agency/test-manager/assigned-tests');
+      this.props.history.go(0);
     } catch(e) {
+      console.log(e);
       this.setState({
         assignQueue: {
           error: e
@@ -174,9 +174,35 @@ class TestQueueList extends Component {
     }
   }
 
-  handleTeamMenuClick = (e) => {
+  handleTeamMenuClick = async (e) => {
     console.log(e);
+    try {
+      this.setState({
+        assignQueue: {
+          loading: true
+        }
+      });
+      let params = {
+        testQueueIds: this.state.selectedQueue
+      };
+      //TODO: assign to team
 
+      await SWQAClient.assignTestQueue(params);
+      message.success('queue assigned successfully');
+      this.props.history.push('/my-agency/test-manager/assigned-tests');
+    } catch(e) {
+      this.setState({
+        assignQueue: {
+          error: e
+        }
+      });
+    } finally {
+      this.setState({
+        assignQueue: {
+          loading: false
+        }
+      })
+    }
   }
 
   render() {

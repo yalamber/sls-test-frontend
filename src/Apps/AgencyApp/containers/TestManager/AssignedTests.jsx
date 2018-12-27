@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Row, Col, Icon, Spin } from "antd";
+import { Row, Col, Icon, Spin, message } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
@@ -17,6 +16,7 @@ import {
 import SWQAClient from '@helpers/apiClient';
 import { dateTime } from "@constants/dateFormat";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
+import ActionButtons from "./partials/AssignedTestActionButtons";
 
 const { requestCurrentAgency } = agencyActions;
 
@@ -56,6 +56,10 @@ class AssignedTestList extends Component {
         title: "Created",
         render: row => <Moment format={dateTime}>{row.createdAt}</Moment>,
         key: "createdAt"
+      },
+      {
+        title: "",
+        render: row => <ActionButtons row={row} unassign={this.unassign} />
       }
     ];
   }
@@ -129,9 +133,30 @@ class AssignedTestList extends Component {
     });
   }
 
+  unassign = async (row) => {
+    try {
+      await SWQAClient.unassignTestQueue(row.testQueueId);
+      message.success('queue unassigned successfully');
+      this.props.history.go('0');
+    } catch(e) {
+      console.log(e);
+      this.setState({
+        assignQueue: {
+          error: e
+        }
+      });
+    } finally {
+      this.setState({
+        assignQueue: {
+          loading: false
+        }
+      })
+    }
+  }
+
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentAgency, history } = this.props;
+    const { history } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">

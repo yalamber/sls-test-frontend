@@ -4,7 +4,6 @@ import Button from "@components/uielements/button";
 import { connect } from 'react-redux';
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
@@ -73,7 +72,6 @@ class CreateEdit extends Component {
     let title = this.mode === 'edit'? 'Edit User' : 'Add User';
     return (
       <LayoutWrapper>
-        <PageHeader><IntlMessages id="agency" /> - {currentAgency.agencyData.name}</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>        
