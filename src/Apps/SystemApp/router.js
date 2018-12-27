@@ -120,7 +120,7 @@ const routes = [
     path: 'client/test-manager/test-suite/:suiteId/edit',
     component: asyncComponent(() => import('./containers/Clients/TestManager/TestSuite/CreateEdit'))
   },
-  
+
   /* test manager -> Test Case */
   {
     path: 'client/:clientId/test-manager/test-cases',
@@ -153,7 +153,7 @@ const routes = [
     path: 'client/:clientId/test-manager/test-queue',
     component: asyncComponent(() => import('./containers/Clients/TestManager/TestQueue/List'))
   },
-  
+
   //Roles
   {
     path: "roles",
