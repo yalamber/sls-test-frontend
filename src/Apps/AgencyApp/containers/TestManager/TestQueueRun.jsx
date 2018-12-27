@@ -13,8 +13,6 @@ import {
     ComponentTitle,
     TableClickable as Table
 } from '@utils/crud.style';
-// import {getCompanies, getTeams} from "@helpers/http-api-client";
-// import {getSuites} from "@helpers/http-api-client";
 
 const Option = Select.Option;
 const RadioGroup = Radio.Group;

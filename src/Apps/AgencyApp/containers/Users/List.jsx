@@ -69,7 +69,7 @@ class UserList extends Component {
         })}
         loading={currentAgency.userList.loading}
         columns={this.columns}
-        createLink={`/my-agency/${match.params.agencyId}/user/create/`}
+        createLink={`/my-agency/user/create/`}
         data={currentAgency.userList.rows}
         paginationOptions={currentAgency.userList.paginationOptions}
         rowKey="userId" />

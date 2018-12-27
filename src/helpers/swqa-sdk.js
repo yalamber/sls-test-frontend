@@ -282,6 +282,10 @@ class SWQA {
   assignTestQueue = (payloadData) => {
     return this.api.send('POST', `test/queue/assign`, payloadData);
   }
+  
+  unassignTestQueue = (queueId) => {
+    return this.api.send('DELETE', `test/queue/${queueId}/unassign`);
+  }
 
   //users
   createUser = (payload) => {

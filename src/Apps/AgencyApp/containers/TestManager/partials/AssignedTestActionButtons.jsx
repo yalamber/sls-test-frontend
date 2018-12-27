@@ -2,16 +2,22 @@ import React from "react";
 import { Button, Tooltip } from 'antd';
 import { ActionWrapper } from "@utils/crud.style";
 
-const ActionButtons = ({history, row}) => {
+const ActionButtons = ({history, row, unassign}) => {
   return (
     <ActionWrapper>
       <Tooltip title="Run Test">
         <Button
           shape="circle"
-          icon="play" 
+          icon="caret-right" 
           onClick={() => {
             history.push(`/my-agency/test-manager/test-queue/${row.testQueueId}/run`);
-          }} />
+          }} />  
+      </Tooltip>
+      <Tooltip title="Unassign">
+        <Button
+          shape="circle"
+          icon="delete" 
+          onClick={() => unassign(row)} />
       </Tooltip>
     </ActionWrapper>
   );
