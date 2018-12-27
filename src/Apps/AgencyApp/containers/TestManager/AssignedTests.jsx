@@ -76,6 +76,7 @@ class AssignedTestList extends Component {
     try {
       this.setState({loading: true});
       options.limit = this.state.paginationOptions.pageSize;
+      options.status = 'assigned';
       let testQueues = await SWQAClient.getTestQueues(options);
       let updateState = {
         loading: false,

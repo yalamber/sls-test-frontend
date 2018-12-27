@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Row, Col, Icon, Spin, Button, Dropdown, Menu } from "antd";
+import { Row, Col, Icon, Spin, Button, Dropdown, Menu, message } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
@@ -35,6 +35,10 @@ class TestQueueList extends Component {
         pageSize: 10,
         total: 1
       },
+      assignQueue: {
+        loading: false,
+        error: null
+      }
     };
     this.columns = [
       {
@@ -85,6 +89,7 @@ class TestQueueList extends Component {
     try {
       this.setState({loading: true});
       options.limit = this.state.paginationOptions.pageSize;
+      options.status = 'unassigned';
       let testQueues = await SWQAClient.getTestQueues(options);
       let updateState = {
         loading: false,
@@ -119,7 +124,8 @@ class TestQueueList extends Component {
         let offset = pageSize * (page - 1);
         let testQueues = await SWQAClient.getTestQueues({
           limit: pageSize,
-          offset
+          offset,
+          status: 'unassigned'
         });
         this.setState({
           loading: false,
@@ -141,13 +147,30 @@ class TestQueueList extends Component {
 
 
   assignToMe = async () => {
-    console.log(this.state.selectedQueue);
     try {
-      //await SWQAClient.
+      this.setState({
+        assignQueue: {
+          loading: true
+        }
+      });
+      let params = {
+        testQueueIds: this.state.selectedQueue
+      };
+      await SWQAClient.assignTestQueue(params);
+      message.success('queue assigned successfully');
+      this.props.history('/my-agency/test-manager/assigned-tests');
     } catch(e) {
-
+      this.setState({
+        assignQueue: {
+          error: e
+        }
+      });
     } finally {
-
+      this.setState({
+        assignQueue: {
+          loading: false
+        }
+      })
     }
   }
 
@@ -164,7 +187,6 @@ class TestQueueList extends Component {
       selectedRowKeys: this.state.selectedQueue,
       onChange: this.onSelectChange,
     };
-    console.log(currentAgency);
     const teamsOptions = currentAgency.teamList.rows.map(team => (
       <Menu.Item key={team.agencyTeamId}><Icon type="team" />{team.name}</Menu.Item>
     ));
