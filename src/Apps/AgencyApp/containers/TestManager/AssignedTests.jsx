@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-<<<<<<< HEAD
 import { Row, Col, Icon, Spin, message } from "antd";
-=======
-import { Row, Col, Icon } from "antd";
->>>>>>> origin/SWQA-200
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
@@ -14,9 +10,9 @@ import Moment from "react-moment";
 import {
   ActionBtn,
   TitleWrapper,
-  ComponentTitle
+  ComponentTitle,
+  TableClickable as Table
 } from "@utils/crud.style";
-import List from '@appComponents/Common/List';
 import SWQAClient from '@helpers/apiClient';
 import { dateTime } from "@constants/dateFormat";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
@@ -71,7 +67,7 @@ class AssignedTestList extends Component {
   componentDidMount() {
     const { activeCompanyTokenData, requestCurrentAgency } = this.props;
     let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
-    if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {
+    if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {    
       requestCurrentAgency(agencyId);
       this.fetchData({
         agencyId: agencyId,
@@ -177,24 +173,20 @@ class AssignedTestList extends Component {
                   &nbsp; Assigned Tests
                 </ComponentTitle>
               </TitleWrapper>
-              <List
-                loading={this.state.loading}
-                locale={{ emptyText: "No Tests available" }}
-                size="middle"
-                bordered
-                pagination={{
-                  ...this.state.paginationOptions,
-                  onChange: this.onTablePaginationChange
-                }}
-                onTableRow={(row) => ({
-                  onDoubleClick: () => {
-                    this.props.history.push(`test-case-run/${row.testQueueId}`)
-                  }
-                })}
-                columns={this.columns}
-                data={this.state.testQueues}
-                rowKey="testQueueId"
-              />
+              <Spin spinning={this.state.loading}>
+                <Table
+                  locale={{ emptyText: "No Tests available" }}
+                  size="middle"
+                  bordered
+                  pagination={{
+                    ...this.state.paginationOptions,
+                    onChange: this.onTablePaginationChange
+                  }}
+                  columns={this.columns}
+                  dataSource={this.state.testQueues}
+                  rowKey="testQueueId"
+                />
+              </Spin>
             </Box>
           </Col>
         </Row>
