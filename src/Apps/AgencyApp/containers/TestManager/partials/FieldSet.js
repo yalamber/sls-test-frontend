@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Divider, Icon, Input } from 'antd';
-import { withRouter } from 'react-router-dom'
 
 export default class Description extends Component {
 
