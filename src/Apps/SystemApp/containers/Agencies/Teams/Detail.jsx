@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { get } from 'lodash';
-import TeamDetail from '@appComponents/Team/Detail';
-import SWQAClient from '@helpers/apiClient';
+import React, { Component } from "react";
+import { get } from "lodash";
+import TeamDetail from "@appComponents/Team/Detail";
+import SWQAClient from "@helpers/apiClient";
 
 class Detail extends Component {
   constructor(props) {
@@ -18,14 +18,14 @@ class Detail extends Component {
   }
 
   async fetchData() {
-    try{
+    try {
       const { match } = this.props;
       //if team id we get team details
       let agencyTeam = await SWQAClient.getAgencyTeam(match.params.teamId);
       this.setState({
         team: agencyTeam
       });
-    } catch(e) {
+    } catch (e) {
       this.setState({
         error: e
       });
@@ -38,7 +38,15 @@ class Detail extends Component {
 
   render() {
     return (
-      <TeamDetail {...this.state} {...this.props} pageHeader={[`Agency - ${get(this.state, 'team.agency.name', '')}`, <br />, `Team - ${get(this.state, 'team.name', '')}`]} />
+      <TeamDetail
+        {...this.state}
+        {...this.props}
+        pageHeader={[
+          `Agency - ${get(this.state, "team.agency.name", "")}`,
+          <br />,
+          `Team - ${get(this.state, "team.name", "")}`
+        ]}
+      />
     );
   }
 }
