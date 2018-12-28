@@ -10,16 +10,16 @@ import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
 
-const { 
-  requestCurrentAgency, 
+const {
+  requestCurrentAgency,
   requestCurrentAgencyUser
 } = agencyActions;
 
 class Detail extends Component {
   componentDidMount() {
-    const { 
-      match, 
-      requestCurrentAgency, 
+    const {
+      match,
+      requestCurrentAgency,
       requestCurrentAgencyUser
     } = this.props;
     //get current agency
@@ -38,7 +38,7 @@ class Detail extends Component {
         <PageHeader>Agency - {get(currentAgency, 'agencyData.name', '')}</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>        
+            <Box>
               <TitleWrapper>
                 <ComponentTitle>
                   <ActionBtn

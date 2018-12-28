@@ -17,7 +17,7 @@ const DisplayDetailsTable = ({ team = {} }) => {
   const { contactInformation = {} } = owner;
 
   const records = [];
-  team.name && records.push({ field: "Name", description: team.name });
+  team.name && records.push({ field: "Team Name", description: team.name });
 
   const agencyName = agency.name;
   agencyName && records.push({ field: "Agency Name", description: agencyName });
