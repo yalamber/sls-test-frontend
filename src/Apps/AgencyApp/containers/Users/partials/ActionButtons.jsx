@@ -18,7 +18,7 @@ function ActionButtons({ history, row}) {
           shape="circle"
           icon="info" 
           onClick={() => {
-            history.push(`/my-gency/user/${row.userId}/details`);
+            history.push(`/my-agency/user/${row.userId}/details`);
           }} />
       </Tooltip>
     </ActionWrapper>

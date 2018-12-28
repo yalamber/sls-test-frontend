@@ -24,8 +24,8 @@ class AssignedTestList extends Component {
   constructor() {
     super();
     this.state = {
+      agencyId: null,
       assignedTo: 'me',
-      assignedToTeam: null,
       testQueues: [],
       loading: false,
       error: null,
@@ -91,9 +91,12 @@ class AssignedTestList extends Component {
       this.setState({loading: true});
       options.limit = this.state.paginationOptions.pageSize;
       options.status = 'assigned';
-      options.assignedToTeam = 1;
+      if(this.state.assignedTo === 'team') {
+        options.assignedToTeam = 1;
+      }
       let testQueues = await SWQAClient.getTestQueues(options);
       let updateState = {
+        agencyId: options.agencyId,
         loading: false,
         testQueues: testQueues.rows,
         paginationOptions: {
@@ -152,7 +155,6 @@ class AssignedTestList extends Component {
         agencyId: this.props.currentAgency.agencyData.agencyId
       });
     } catch(e) {
-      console.log(e);
       this.setState({
         assignQueue: {
           error: e
@@ -168,13 +170,18 @@ class AssignedTestList extends Component {
   }
 
   onAssignedTypeChange = (e) => {
-    console.log(e);
-
+    this.setState({
+      assignedTo: e.target.value
+    }, () => {
+      this.fetchData({
+        agencyId: this.state.agencyId
+      });
+    });
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentAgency = { agencyData: { name: '' }, teamList: { rows: [], count: 0 } }, history } = this.props;
+    const { history } = this.props;
     
     return (
       <LayoutWrapper>
@@ -193,9 +200,12 @@ class AssignedTestList extends Component {
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
-                Show Tests assigned to: <Radio.Group defaultValue="me" buttonStyle="solid" style={{marginBottom: 16}} onChange={this.onAssignedTypeChange}>
+                Show Tests assigned to: &nbsp;
+                <Radio.Group defaultValue="me" buttonStyle="solid" 
+                  style={{marginBottom: 16}} 
+                  onChange={this.onAssignedTypeChange}>
                   <Radio.Button value="me">Me</Radio.Button>
-                  <Radio.Button value="my-team">My Teams</Radio.Button>
+                  <Radio.Button value="team">My Teams</Radio.Button>
                 </Radio.Group>
                 <Table
                   locale={{ emptyText: "No Tests available" }}
