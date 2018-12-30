@@ -25,7 +25,7 @@ class Detail extends Component {
     requestCurrentAgencyUser(match.params.agencyId, match.params.userId);
   }
 
-  renderDisplayDetailsTable() {
+  renderDetailsTable() {
     const { currentAgencyUser } = this.props;
     if (!currentAgencyUser) {
       return <div />;
@@ -92,7 +92,7 @@ class Detail extends Component {
                   &nbsp; {title}
                 </ComponentTitle>
               </TitleWrapper>
-              <Spin spinning={loading}>{this.renderDisplayDetailsTable()}</Spin>
+              <Spin spinning={loading}>{this.renderDetailsTable()}</Spin>
             </Box>
           </Col>
         </Row>
