@@ -10,13 +10,13 @@ const ActionButtons = ({history, row, unassign}) => {
           shape="circle"
           icon="caret-right" 
           onClick={() => {
-            history.push(`/my-agency/test-manager/test-queue/${row.testQueueId}/run`);
+            history.push(`/my-agency/test-manager/test-case-run/${row.testQueueId}`);
           }} />  
       </Tooltip>
       <Tooltip title="Unassign">
         <Button
           shape="circle"
-          icon="delete" 
+          icon="delete"
           onClick={() => unassign(row)} />
       </Tooltip>
     </ActionWrapper>

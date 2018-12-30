@@ -21,8 +21,8 @@ import ActionButtons from "./partials/AssignedTestActionButtons";
 const { requestCurrentAgency, requestAgencyTeams } = agencyActions;
 
 class AssignedTestList extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       agencyId: null,
       assignedTo: 'me',
@@ -66,7 +66,7 @@ class AssignedTestList extends Component {
       },
       {
         title: "",
-        render: row => <ActionButtons row={row} unassign={this.unassign} />
+        render: row => <ActionButtons row={row} unassign={this.unassign} history={props.history} />
       }
     ];
   }
