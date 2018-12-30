@@ -21,7 +21,7 @@ class Detail extends Component {
     requestCurrentAgency(match.params.agencyId);
   }
 
-  getMappedDataSource() {
+  renderDetailsTable() {
     const { currentAgency = {} } = this.props;
     const { agencyData = {} } = currentAgency;
     const { owner = {} } = agencyData;
@@ -49,10 +49,6 @@ class Detail extends Component {
         description: agencyOwnerEmailAddress
       });
 
-    return records;
-  }
-
-  renderDetails() {
     return (
       <Table
         columns={[
@@ -68,7 +64,7 @@ class Detail extends Component {
             dataIndex: "description"
           }
         ]}
-        dataSource={this.getMappedDataSource()}
+        dataSource={records}
         rowKey="field"
         pagination={false}
       />
@@ -97,7 +93,7 @@ class Detail extends Component {
                   &nbsp; {title}
                 </ComponentTitle>
               </TitleWrapper>
-              <Spin spinning={loading}>{this.renderDetails()}</Spin>
+              <Spin spinning={loading}>{this.renderDetailsTable()}</Spin>
             </Box>
           </Col>
         </Row>
