@@ -59,7 +59,6 @@ class StatusAndUpdate extends Component {
                         </Button>
                     </Col>
                     <Col>
-                        {/*htmlType="submit"*/}
                         <Button id="btnSubmit" style={{ marginTop: 5, marginRight: 10 }} type="primary" onClick={() => alert('clicked')} >
                             Submit Results
                         </Button>

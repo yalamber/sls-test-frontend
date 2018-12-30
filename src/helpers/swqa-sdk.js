@@ -275,6 +275,10 @@ class SWQA {
     return this.api.send('POST', `test/queue`, queueData);
   }
 
+  getTestQueue = (queueId) => {
+    return this.api.send('GET', `test/queue/${queueId}`);
+  }
+
   getTestQueues = (options) => {
     return this.api.send('GET', `test/queue`, options);
   }

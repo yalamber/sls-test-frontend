@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'antd';
+import { Form, Row, Col, Spin } from 'antd';
+import { get } from 'lodash';
 import LayoutWrapper from '@components/utility/layoutWrapper';
 import basicStyle from '@settings/basicStyle';
 import Box from '@components/utility/box';
+import SWQAClient from '@helpers/apiClient';
 import TestCaseWrapper from './partials/TestCase.style';
 import Description from './partials/Description';
+import StepsField from './partials/StepField';
 import StatusAndUpdate from './partials/StatusAndUpdate';
-import FieldSet from './partials/FieldSet';
+import Artifacts from './partials/Artifacts';
 import {
   TitleWrapper,
   ComponentTitle,
@@ -15,13 +18,35 @@ import {
 class TestQueueRun extends Component {
   state = {
     loading: true,
+    error: null,
     client: {},
-    testCase: {}
+    clientTeam: {},
+    testSuite: {},
+    testCase: {
+      testCaseSteps: []
+    }
   };
 
   async componentDidMount() {
-
-  }
+    try {
+      let testQueue = await SWQAClient.getTestQueue(this.props.match.params.queueId);
+      console.log(testQueue);
+      this.setState({
+        testCase: get(testQueue, 'testCase'),
+        testSuite: get(testQueue, 'testCase.testSuite'),
+        clientTeam: get(testQueue, 'testCase.testSuite.clientTeam'),
+        client: get(testQueue, 'testCase.testSuite.clientTeam.client'),
+      })
+    } catch(e) {
+      this.setState({
+        error: e
+      });
+    } finally{
+      this.setState({
+        loading: false
+      });
+    }
+  } 
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
@@ -34,92 +59,44 @@ class TestQueueRun extends Component {
           <Row style={rowStyle} gutter={gutter} justify="start">
             <Col md={24} sm={24} xs={24} style={colStyle}>
               <Box>
-                <TitleWrapper>
-                  <ComponentTitle style={topHeader}>Company: iXod.com L.L.C</ComponentTitle>
-                  <ComponentTitle style={topHeader}>Team: Protocols</ComponentTitle>
-                  <ComponentTitle style={topHeader}>Suit Name: Countdown</ComponentTitle>
-                </TitleWrapper>
+                <Spin spinning={this.state.loading}>
+                  <Form>
+                    <TitleWrapper>
+                      <ComponentTitle style={topHeader}>Client: {this.state.client.name}</ComponentTitle>
+                      <ComponentTitle style={topHeader}>Team: {this.state.clientTeam.name}</ComponentTitle>
+                      <ComponentTitle style={topHeader}>Suit Name: {this.state.testSuite.name}</ComponentTitle>
+                    </TitleWrapper>
 
-                <Description
-                  header={"Description"}
-                  data={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo."}
-                />
+                    <Description
+                      title={"Description"}
+                      details={this.state.testCase.description}
+                    />
 
-                <Description
-                  header={"Developer Comments"}
-                  data={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo."}
-                />
+                    <Description
+                      title={"Developer Comments"}
+                      details={this.state.testCase.developerComments}
+                    />
 
-                <Description
-                  header={"Analysis Comments"}
-                  data={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo."}
-                />
-
-                <FieldSet
-                  header={"Artifacts"}
-                  images={[
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png",
-                    "/images/icons/icon-96x96.png"
-                  ]}
-                />
-
-                <Description
-                  header={"Step #1"}
-                  isInput={true}
-                  data={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo."}
-                />
-
-                <Description
-                  isInput={true}
-                  header={"Step #2"}
-                  data={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo."}
-                />
-
-                <Description
-                  isInput={true}
-                  header={"Step #3"}
-                  data={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo."}
-                />
-
-                <Description
-                  isInput={true}
-                  header={"Step #4"}
-                  data={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo."}
-                />
-
-                <Description
-                  isInput={true}
-                  header={"Step #5"}
-                  data={"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo."}
-                />
-
-                <StatusAndUpdate
-                  header={"Final Test Case Status and Update"}
-                />
+                    <Description
+                      title={"Analysis Comments"}
+                      details={this.state.testCase.analystComments}
+                    />
+                    {this.state.testCase.testCaseSteps.map((step, index) => {
+                      return (
+                        <StepsField
+                          key={index}
+                          form={this.props.form}
+                          title={`Step #${index+1}`}
+                          details={step.description}
+                        />
+                      )
+                    })}
+                    
+                    <StatusAndUpdate
+                      header={"Final Test Case Status and Update"}
+                    />
+                  </Form>
+                </Spin>
               </Box>
             </Col>
           </Row>
@@ -129,5 +106,5 @@ class TestQueueRun extends Component {
   }
 }
 
-
-export default TestQueueRun;
+const form = Form.create()(TestQueueRun);
+export default form;
