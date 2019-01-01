@@ -251,7 +251,7 @@ class TestQueueList extends Component {
                 </Dropdown>
                 <Table
                   rowSelection={rowSelection}
-                  locale={{ emptyText: "No test run available" }}
+                  locale={{ emptyText: "No Tests available" }}
                   size="middle"
                   bordered
                   pagination={{

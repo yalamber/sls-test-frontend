@@ -91,9 +91,9 @@ class TestQueueRun extends Component {
                         />
                       )
                     })}
-                    
-                    <StatusAndUpdate
-                      header={"Final Test Case Status and Update"}
+
+                    <StatusAndUpdate 
+                      form={this.props.form}
                     />
                   </Form>
                 </Spin>
