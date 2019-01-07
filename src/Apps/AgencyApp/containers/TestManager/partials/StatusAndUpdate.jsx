@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Divider, Icon, Select, Form, Row, Col, Input, Button } from 'antd';
+import { Divider, Select, Form, Row, Col, Input, Button } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -27,15 +27,8 @@ class StatusAndUpdate extends Component {
         </FormItem>
         <Row type={"flex"} align={'middle'} justify={"start"}>
           <Col>
-            <Icon type="plus-square" theme="outlined" style={{ fontSize: 18, marginTop: 5, marginRight: 10 }} />
-          </Col>
-          <Col>
-          {getFieldDecorator('status', {
-            placeholder: 'Status',
-            rules: [{
-            }],
-          })(
-            <Select style={{ width: 120, marginTop: 5, marginRight: 10 }}>
+          {getFieldDecorator('status', {})(
+            <Select placeholder="Final Status" style={{ width: 120, marginTop: 5, marginRight: 10 }}>
               <Option value="pass">Pass</Option>
               <Option value="fail">Fail</Option>
               <Option value="blocked">Blocked</Option>

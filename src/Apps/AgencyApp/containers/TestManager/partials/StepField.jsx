@@ -4,6 +4,7 @@ import { Divider, Icon, Input, Select, Form } from 'antd';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
+const { TextArea } = Input;
 
 class StepsField extends Component {
 
@@ -13,13 +14,9 @@ class StepsField extends Component {
   }
 
   render() {
-    const { title, details, form } = this.props;
-    const selectBefore = (
-      <Icon type="plus-square" theme="outlined" style={{ fontSize: 18 }} />
-    );
-
+    const { title, details, form, stepKey } = this.props;
     const labelIcon = (
-      <Icon type="message" theme="filled" style={{ fontSize: 30, position: 'relative', top: -0.5 }} />
+      <Icon type="message" theme="filled" style={{ fontSize: 25, margin: 5 }} />
     );
 
     const { getFieldDecorator } = form;
@@ -36,8 +33,10 @@ class StepsField extends Component {
       },
     };
 
-    const selectAfter = (
-      <Select defaultValue="Status" style={{ width: 120 }}>
+    const selectAfter = getFieldDecorator(`stepStatus[${stepKey}]`, {
+      
+    })(
+      <Select placeholder="status" style={{ width: 120 }}>
         <Option value="pass">Pass</Option>
         <Option value="fail">Fail</Option>
         <Option value="blocked">Blocked</Option>
@@ -53,14 +52,14 @@ class StepsField extends Component {
         <p>{details}</p>
         {
           <FormItem {...formItemLayout} label={labelIcon}>
-            {getFieldDecorator('status', {
-              rules: [{
-              }],
-            })(
-              <Input addonBefore={selectBefore} addonAfter={selectAfter} />
+            {getFieldDecorator(`stepStatusComment[${stepKey}]`, {})(
+              <TextArea placeholder="Step comments" autosize={{ maxRows: 5 }} />
             )}
           </FormItem>
         }
+        <div style={{float: 'right'}}>
+        {selectAfter}
+        </div>
       </div>
     )
   }

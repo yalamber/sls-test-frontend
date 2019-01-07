@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Spin, Icon, Table } from "antd";
+import { Row, Col, Spin, Icon } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from "@components/utility/intlMessages";

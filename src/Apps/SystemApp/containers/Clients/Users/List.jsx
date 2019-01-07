@@ -53,7 +53,7 @@ class UserList extends Component {
   }
 
   render() {
-    const { currentClient = { clientData: { name: '' } }, history, match } = this.props;
+    const { currentClient = { clientData: { name: '' } }, match } = this.props;
     return (
       <List {...this.props} 
         pageHeader = {`Client - ${currentClient.clientData.name}`}

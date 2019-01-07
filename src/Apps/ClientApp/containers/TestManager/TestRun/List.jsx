@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Row, Col, Icon, Spin } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
-import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
@@ -61,7 +60,7 @@ class TestRunList extends Component {
       {
         title: "Status",
         dataIndex: "status",
-        key: "status" + ""
+        key: "status"
       }
     ];
   }

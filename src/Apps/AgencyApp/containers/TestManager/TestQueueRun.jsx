@@ -9,7 +9,6 @@ import TestCaseWrapper from './partials/TestCase.style';
 import Description from './partials/Description';
 import StepsField from './partials/StepField';
 import StatusAndUpdate from './partials/StatusAndUpdate';
-import Artifacts from './partials/Artifacts';
 import {
   TitleWrapper,
   ComponentTitle,
@@ -30,7 +29,6 @@ class TestQueueRun extends Component {
   async componentDidMount() {
     try {
       let testQueue = await SWQAClient.getTestQueue(this.props.match.params.queueId);
-      console.log(testQueue);
       this.setState({
         testCase: get(testQueue, 'testCase'),
         testSuite: get(testQueue, 'testCase.testSuite'),
@@ -85,6 +83,7 @@ class TestQueueRun extends Component {
                       return (
                         <StepsField
                           key={index}
+                          stepKey={index}
                           form={this.props.form}
                           title={`Step #${index+1}`}
                           details={step.description}

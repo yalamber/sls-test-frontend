@@ -56,12 +56,12 @@ export default class extends Component {
   async handleSubmit(formData, resetForm) {
     try{
       this.setState({loading: true});
-      if(this.mode == 'add') {  
-        let role = await SWQAClient.createRole(formData);
+      if(this.mode === 'add') {  
+        await SWQAClient.createRole(formData);
         message.success("Successfully created.");
         this.props.history.goBack();
       } else {
-        let role = await SWQAClient.updateRole(this.props.match.params.roleId, formData); 
+        await SWQAClient.updateRole(this.props.match.params.roleId, formData); 
         message.success("Successfully updated.");
       }
     } catch(e) {

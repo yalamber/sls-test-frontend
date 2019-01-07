@@ -117,7 +117,6 @@ export function* requestCreateClientUser() {
 
 export function* receiveCreateClientUser() {
   yield takeEvery(actions.RECEIVE_CREATE_CLIENT_USER, function* ({membership, history}) {
-    console.log('here', membership, history);
     if (membership) {
       if (history && history.push) {
         history.push(`/admin/client/${membership.clientId}/user/${membership.userId}/details`);

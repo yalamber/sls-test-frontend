@@ -57,7 +57,7 @@ class UserList extends Component {
   }
 
   render() {
-    const { currentAgency = { agencyData: { name: '' } }, history, match } = this.props;
+    const { currentAgency = { agencyData: { name: '' } }, history } = this.props;
     return (
       <List {...this.props} 
         title = "Users"

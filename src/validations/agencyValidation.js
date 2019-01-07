@@ -1,4 +1,4 @@
-import { required, email } from './rules'
+import { email } from './rules'
 
 export const agencyValidation = {
     agencyName: [{

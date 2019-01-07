@@ -151,7 +151,7 @@ export function* switchSystemAdmin() {
   yield takeEvery(actions.SWITCH_SYSTEM_ADMIN, function* ({ payload }) {
     if(payload) {  
       let { history = false } = payload;
-      clearCompanyToken();
+      yield clearCompanyToken();
       if (history && history.push) {
         history.push("/admin");
       }

@@ -61,7 +61,7 @@ class TestRunList extends Component {
       {
         title: "Status",
         dataIndex: "status",
-        key: "status" + ""
+        key: "status"
       }
     ];
   }
