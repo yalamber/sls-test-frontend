@@ -108,7 +108,6 @@ export function* requestCreateClientUser() {
         history
       });
     } catch (e) {
-      console.log(e);
       yield put({ type: actions.ERROR_CREATE_CLIENT_USER, error: e });
     }
   });
@@ -119,7 +118,7 @@ export function* receiveCreateClientUser() {
   yield takeEvery(actions.RECEIVE_CREATE_CLIENT_USER, function* ({membership, history}) {
     if (membership) {
       if (history && history.push) {
-        history.push(`/admin/client/${membership.clientId}/user/${membership.userId}/details`);
+        yield history.push(`/admin/client/${membership.clientId}/user/${membership.userId}/details`);
       }
     }
   });
