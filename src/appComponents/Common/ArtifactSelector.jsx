@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal, Dropdown, Menu, Icon, Input } from 'antd';
+import { Button, Modal, Dropdown, Menu, Icon, Input, Form } from 'antd';
 import PropTypes from 'prop-types';
 import DropboxChooser from 'react-dropbox-chooser';
 import GooglePicker from 'react-google-picker';
@@ -17,7 +17,8 @@ class ArtifactSelector extends Component {
 
   state = {
     attachLinkVisible: false,
-    attachLink: ''
+    attachLink: '',
+    attachLinkName: ''
   };
 
   handleMenuClick = (e) => {
@@ -49,15 +50,18 @@ class ArtifactSelector extends Component {
     });
   }
 
-  onAttachLinkInputChange = (e) => {
+  onAttachLinkChange = (e) => {
     this.setState({
-      attachLink: e.target.value
+      [e.target.name]: e.target.value
     });
   }
 
   handleAttachLinkOk = () => {
     let link = this.state.attachLink;
-    console.log(link);
+    this.props.onArtifactSelect([{
+      link,
+      name: ''
+    }]);
     this.setState({
       attachLinkVisible: false 
     });
@@ -104,7 +108,14 @@ class ArtifactSelector extends Component {
           visible={this.state.attachLinkVisible}
           onOk={this.handleAttachLinkOk}
           onCancel={this.handleAttachLinkCancel}>
-          <Input placeholder="Attach Link here" value={this.state.attachLink} onChange={this.onAttachLinkInputChange} />
+          <Form.Item>
+            Link:
+            <Input placeholder="Attach Link here" value={this.state.attachLink} name="attachLink" onChange={this.onAttachLinkChange} />
+          </Form.Item>
+          <Form.Item>
+            Link Name (Optional):
+            <Input placeholder="Link Name (optional)" value={this.state.attachLinkName} name="attachLinkName" onChange={this.onAttachLinkChange} />
+          </Form.Item>
         </Modal>
       </div>
     )
