@@ -19,7 +19,13 @@ class StepsField extends Component {
   }
 
   onArtifactSelect = (artifacts) => {
-    
+    this.setState({
+      artifacts: [...this.state.artifacts, ...artifacts]
+    });
+  }
+
+  onArtifactRemove = (index) => {
+
   }
 
   render() {
@@ -68,7 +74,7 @@ class StepsField extends Component {
             <Row>
               <Col lg={1} md={1} sm={2}></Col>
               <Col lg={11} md={11} sm={11}>
-                <ArtifactSelector onSelect={this.onArtifactSelect} />
+                <ArtifactSelector onArtifactSelect={this.onArtifactSelect} />
               </Col>
               <Col lg={12} md={12} sm={11}>
                 <div style={{float: 'right'}}>
@@ -77,7 +83,15 @@ class StepsField extends Component {
               </Col>
             </Row>
             <div>
-
+              <ul>
+                {this.state.artifacts.map((artifact, index) => {
+                  return (
+                    <li key={index}>
+                      {artifact.name}
+                    </li>
+                  )
+                })}
+              </ul>
             </div>
           </div>
         }

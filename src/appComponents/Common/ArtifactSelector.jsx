@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { Button, Modal, Dropdown, Menu, Icon, Input } from 'antd';
 import PropTypes from 'prop-types';
 import DropboxChooser from 'react-dropbox-chooser';
+import GooglePicker from 'react-google-picker';
 
 class ArtifactSelector extends Component {
   
   static propTypes = {
-    selectorIcon: PropTypes.string
+    selectorIcon: PropTypes.string,
+    onArtifactSelect: PropTypes.func
   };
 
   static defaultProps = {
@@ -27,8 +29,6 @@ class ArtifactSelector extends Component {
         });
         break;
       case 'google-drive':
-        alert('Implementation not complete');
-        break;
       case 'dropbox':
         //dropbox chooser is opened from dropbox chooser component
         return true;
@@ -36,7 +36,7 @@ class ArtifactSelector extends Component {
   }
 
   onDropboxSuccess = (files) => {
-    console.log(files);
+    this.props.onArtifactSelect(files);
   }
 
   onDropboxCancel = () => {
@@ -75,7 +75,19 @@ class ArtifactSelector extends Component {
             <Icon type="dropbox" /> Dropbox
           </DropboxChooser>
         </Menu.Item>
-        <Menu.Item key="google-drive"><div><Icon type="google" /> Google Drive</div></Menu.Item>
+        <Menu.Item key="google-drive">
+          <GooglePicker clientId={process.env.REACT_APP_GOOGLE_DRIVE_CLENTID}
+            developerKey={process.env.REACT_APP_GOOGLE_DRIVE_DEVELOPER_KEY}
+            scope={['https://www.googleapis.com/auth/drive.readonly']}
+            onChange={data => console.log('on change:', data)}
+            onAuthFailed={data => console.log('on auth failed:', data)}
+            multiselect={true}
+            navHidden={true}
+            authImmediate={false}
+            viewId={'DOCS'}>
+            <Icon type="google" /> Google Drive
+          </GooglePicker>
+        </Menu.Item>
         <Menu.Item key="link"><div><Icon type="link" /> Link</div></Menu.Item>
       </Menu>
     );
