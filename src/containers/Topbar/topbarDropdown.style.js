@@ -277,6 +277,7 @@ const TopbarDropdownWrapper = styled.div`
 
     .isoDropdownLink {
       font-size: 13px;
+      border: none;
       color: ${palette("text", 1)};
       line-height: 1.1;
       padding: 10px 15px;

@@ -90,8 +90,8 @@ class Topbar extends Component {
     } catch (e) {
       return (
         <div>
-          Something went wrong, <a onClick={() => {
-          }}>Retry</a>
+          Something went wrong, <Button onClick={() => {
+          }}>Retry</Button>
         </div>
       );
     }

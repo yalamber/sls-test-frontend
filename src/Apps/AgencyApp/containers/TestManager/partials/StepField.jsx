@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Divider, Icon, Input, Select, Form } from 'antd';
+import { Divider, Icon, Input, Select, Form, Row, Col } from 'antd';
+import ArtifactSelector from '@appComponents/Common/ArtifactSelector';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -13,12 +14,19 @@ class StepsField extends Component {
     details: PropTypes.string
   }
 
+  state = {
+    artifacts: []
+  }
+
+  onArtifactSelect = (artifacts) => {
+    
+  }
+
   render() {
     const { title, details, form, stepKey } = this.props;
     const labelIcon = (
       <Icon type="message" theme="filled" style={{ fontSize: 25, margin: 5 }} />
     );
-
     const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
@@ -51,15 +59,28 @@ class StepsField extends Component {
         <Divider orientation="left">{title}</Divider>
         <p>{details}</p>
         {
-          <FormItem {...formItemLayout} label={labelIcon}>
-            {getFieldDecorator(`stepStatusComment[${stepKey}]`, {})(
-              <TextArea placeholder="Step comments" autosize={{ maxRows: 5 }} />
-            )}
-          </FormItem>
+          <div style={{padding: 20, background: '#EEE', borderRadius: 4}}>
+            <FormItem {...formItemLayout} style={{marginBottom: 0}} label={labelIcon}>
+              {getFieldDecorator(`stepStatusComment[${stepKey}]`, {})(
+                <TextArea placeholder="Step comments" autosize={{ maxRows: 5 }} />
+              )}
+            </FormItem>
+            <Row>
+              <Col lg={1} md={1} sm={2}></Col>
+              <Col lg={11} md={11} sm={11}>
+                <ArtifactSelector onSelect={this.onArtifactSelect} />
+              </Col>
+              <Col lg={12} md={12} sm={11}>
+                <div style={{float: 'right'}}>
+                  {selectAfter}
+                </div>
+              </Col>
+            </Row>
+            <div>
+
+            </div>
+          </div>
         }
-        <div style={{float: 'right'}}>
-        {selectAfter}
-        </div>
       </div>
     )
   }

@@ -33,7 +33,7 @@ class TopbarAgency extends Component {
         {
           myClients.data.map((myClient, index) => (
             <div key={index}>
-              <a className="isoDropdownLink" onClick={() => {
+              <Button block className="isoDropdownLink" onClick={() => {
                 requestClientLogin({
                   history, 
                   clientData: { 
@@ -47,7 +47,7 @@ class TopbarAgency extends Component {
                 <span className="smallText">
                   &nbsp; {myClient.role.title}
                 </span>
-              </a>
+              </Button>
             </div>
           ))
         }
@@ -55,7 +55,7 @@ class TopbarAgency extends Component {
         {
           myAgencies.data.map((myAgency, index) => (
             <div key={index}>
-              <a className="isoDropdownLink" onClick={() => {
+              <Button block className="isoDropdownLink" onClick={() => {
                 requestAgencyLogin({
                   history,
                   agencyData: {
@@ -69,7 +69,7 @@ class TopbarAgency extends Component {
                 <span className="smallText">
                   &nbsp; {myAgency.role.title}
                 </span>
-              </a>
+              </Button>
             </div>
           ))
         }
