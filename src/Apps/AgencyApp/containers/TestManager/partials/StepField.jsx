@@ -87,7 +87,7 @@ class StepsField extends Component {
                 {this.state.artifacts.map((artifact, index) => {
                   return (
                     <li key={index}>
-                      {artifact.name}
+                      {artifact.name?artifact.name:artifact.link}
                     </li>
                   )
                 })}

@@ -90,7 +90,6 @@ class TestQueueRun extends Component {
                         />
                       )
                     })}
-
                     <StatusAndUpdate 
                       form={this.props.form}
                     />

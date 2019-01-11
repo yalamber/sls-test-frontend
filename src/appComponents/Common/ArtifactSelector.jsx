@@ -37,11 +37,34 @@ class ArtifactSelector extends Component {
   }
 
   onDropboxSuccess = (files) => {
+    files = files.map((file)  => {
+      return {
+        link: file.link,
+        name: file.name,
+        icon: file.icon
+      }
+    })
     this.props.onArtifactSelect(files);
   }
 
   onDropboxCancel = () => {
 
+  }
+
+  handleGoogleDriveChange = (event) => {
+    if(event.action === 'picked') {
+      let files = event.docs;
+      if(files && files.length > 0) {
+        files = files.map((file) => {
+          return {
+            link: file.url,
+            name: file.name,
+            icon: file.iconUrl
+          }
+        });
+        this.props.onArtifactSelect(files);
+      }
+    }
   }
 
   handleAttachLinkCancel = () => {
@@ -57,10 +80,10 @@ class ArtifactSelector extends Component {
   }
 
   handleAttachLinkOk = () => {
-    let link = this.state.attachLink;
     this.props.onArtifactSelect([{
-      link,
-      name: ''
+      link: this.state.attachLink,
+      name: this.state.attachLinkName,
+      icon: 'link'
     }]);
     this.setState({
       attachLinkVisible: false 
@@ -83,7 +106,7 @@ class ArtifactSelector extends Component {
           <GooglePicker clientId={process.env.REACT_APP_GOOGLE_DRIVE_CLENTID}
             developerKey={process.env.REACT_APP_GOOGLE_DRIVE_DEVELOPER_KEY}
             scope={['https://www.googleapis.com/auth/drive.readonly']}
-            onChange={data => console.log('on change:', data)}
+            onChange={this.handleGoogleDriveChange}
             onAuthFailed={data => console.log('on auth failed:', data)}
             multiselect={true}
             navHidden={true}
