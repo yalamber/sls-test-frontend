@@ -14,11 +14,11 @@ class TopbarCompany extends Component {
     };
   }
 
-  hide() {
+  hide = () => {
     this.setState({ visible: false });
   }
 
-  handleVisibleChange() {
+  handleVisibleChange = () => {
     this.setState({ visible: !this.state.visible });
   }
 
