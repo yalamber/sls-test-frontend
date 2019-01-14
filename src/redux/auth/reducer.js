@@ -13,6 +13,11 @@ export default function authReducer(state = initState, action) {
         userTokenData: action.userTokenData, 
         loginProcessing: false 
       }; 
+    case actions.LOGIN_ERROR:
+      return { 
+        ...state, 
+        loginProcessing: false 
+      }; 
     case actions.LOGOUT:
       return initState;
     default:

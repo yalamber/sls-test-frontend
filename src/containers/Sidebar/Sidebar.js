@@ -77,6 +77,7 @@ class Sidebar extends Component {
   getMenuItem = ({ singleOption, submenuStyle, submenuColor }) => {
     const { key, label, leftIcon, children } = singleOption;
     const url = stripTrailingSlash(this.props.url);
+    console.log(url);
     if (children) {
       return (
         <SubMenu
@@ -205,7 +206,7 @@ export default connect(
     app: state.App,
     height: state.App.height,
     my: state.My,
-    auth: state.auth
+    auth: state.Auth
   }),
   { toggleOpenDrawer, changeOpenKeys, changeCurrent, toggleCollapsed }
 )(Sidebar);

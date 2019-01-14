@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import { Button, Tooltip } from 'antd';
 import IntlMessages from '@components/utility/intlMessages';
 import Popover from '@components/uielements/popover';
 import TopbarDropdownWrapper from './topbarDropdown.style';
 
-class TopbarAgency extends Component {
+class TopbarCompany extends Component {
   constructor(props) {
     super(props);
     this.handleVisibleChange = this.handleVisibleChange.bind(this);
@@ -95,4 +94,4 @@ class TopbarAgency extends Component {
   }
 }
 
-export default withRouter(TopbarAgency);
+export default TopbarCompany;

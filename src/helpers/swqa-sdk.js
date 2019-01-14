@@ -317,6 +317,10 @@ class SWQA {
     return this.api.send('GET', 'role', options);
   }
 
+  getRole = (roleId) => {
+    return this.api.send('GET', `role/${roleId}`);
+  }
+
   getRoleTypes = () => {
     return this.api.send('GET', 'role/types');
   }

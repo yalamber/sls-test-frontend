@@ -38,13 +38,18 @@ export function* loginRequest() {
 }
 
 export function* loginSuccess() {
-  yield takeEvery(actions.LOGIN_SUCCESS, function* ({payload, history}) {
+  yield takeEvery(actions.LOGIN_SUCCESS, function* ({payload, history, userTokenData}) {
     if (payload) {
       const { token } = payload;
       yield setUserToken(token);
       if (history && history.push) {
         //TODO redirect to proper location
-        history.push('/admin');
+        //get token data then redirect to proper locaton
+        if(userTokenData && userTokenData.systemRole) {
+          history.push('/admin');
+        } else {
+          history.push('/my');
+        }
       }
     }
   });

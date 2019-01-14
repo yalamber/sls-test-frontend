@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import { Input, Select } from 'antd';
 import Form from '@components/uielements/form';
 import Button from '@components/uielements/button';
@@ -94,23 +94,20 @@ class RoleForm extends Component {
 }
 
 const mapPropsToFields = (props) => {
-  if (!props.hasOwnProperty('rowData')) {
-    return;
-  }
   return {
     title: Form.createFormField({
-      value: props.rowData.title
+      value: get(props, 'roleData.title', '')
     }),
     key: Form.createFormField({
-      value: props.rowData.key
+      value: get(props, 'roleData.key', '')
     }),
     description: Form.createFormField({
-      value: props.rowData.description
+      value: get(props, 'roleData.description', '')
     }),
     type: Form.createFormField({
-      value: props.rowData.type
+      value: get(props, 'roleData.type', '')
     }),
   };
 };
 const form = Form.create({mapPropsToFields})(RoleForm);
-export default withRouter(form);
+export default form;

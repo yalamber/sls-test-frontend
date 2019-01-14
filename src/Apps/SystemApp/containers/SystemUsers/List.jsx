@@ -25,12 +25,12 @@ class UsersList extends Component {
     this.columns = [
       {
         title: 'Username',
-        dataIndex: 'systemUser.username',
+        dataIndex: 'user.username',
         key: 'title',
       },
       {
         title: 'Email',
-        dataIndex: 'systemUser.contactInformation.emailAddress',
+        dataIndex: 'user.contactInformation.emailAddress',
         key: 'email',
       },
       {
@@ -64,6 +64,7 @@ class UsersList extends Component {
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { history, list } = this.props;
+    console.log(list);
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">

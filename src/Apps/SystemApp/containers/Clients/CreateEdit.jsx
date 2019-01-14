@@ -31,6 +31,7 @@ class CreateEdit extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     const { 
       match, 
       requestCurrentClient, 
@@ -45,6 +46,10 @@ class CreateEdit extends Component {
     } else {
       clearCurrentClient();
     }
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   handleSubmit(e) {
@@ -69,8 +74,10 @@ class CreateEdit extends Component {
           this.setState({ error: e });
           setFormValidaitonError(form, e);
           form.validateFieldsAndScroll({scroll: {offsetTop: 120}});
-        } finally{
-          this.setState({ loading: false });
+        } finally {
+          if(this._isMounted) {
+            this.setState({ loading: false });
+          }
         }
       }
     });

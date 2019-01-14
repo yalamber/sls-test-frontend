@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 
 import asyncComponent from '@helpers/AsyncFunc';
 import App from '@containers/App';
+import My from '@page/My';
+import Setting from '@page/Setting';
 
 const RestrictedRoute = ({Component, isLoggedIn, ...rest }) => (
   <Route
@@ -68,7 +70,8 @@ const PublicRoutes = ({ history, isLoggedIn, activeAppType }) => {
         {activeAppType === 'freelancer' &&
           <AppWrappedRoute appType="freelancer" path="/freelancer" isLoggedIn={isLoggedIn} />
         }
-        <RestrictedRoute path="/settings" isLoggedIn={isLoggedIn} />
+        <RestrictedRoute path="/my" isLoggedIn={isLoggedIn} Component={My}/>
+        <RestrictedRoute path="/settings" isLoggedIn={isLoggedIn} Component={Setting} />
         <Route path="*" component={asyncComponent(() => import('./containers/Page/Common/404'))}/>
       </Switch>
     </ConnectedRouter>

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Row, Col, Spin, message } from "antd";
+import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
 import { TitleWrapper, ComponentTitle } from "@utils/crud.style";
@@ -17,7 +18,7 @@ export default class extends Component {
       error: null 
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.mode = props.match.roleId ? 'edit': 'add';
+    this.mode = props.match.params.roleId ? 'edit': 'add';
   }
 
   componentDidMount() {
@@ -29,19 +30,18 @@ export default class extends Component {
       this.setState({
         loading: true
       });
+      let role = null;
       let roleTypes = await SWQAClient.getRoleTypes();
       let types = roleTypes.map((roleType) => ({ key: roleType, name: roleType }));
       if(this.mode === 'edit') {
-        let role = await SWQAClient.getRole(this.props.match.params.roleId);
-        this.setState({
-          role,
-          types
-        });
-      } else {  
-        this.setState({
-          types
-        });
-      }
+        role = await SWQAClient.getRole(this.props.match.params.roleId);
+      } 
+      console.log(role);
+      this.setState({
+        role,
+        types
+      });
+      
     } catch(e) {
       this.setState({
         error: e
@@ -73,11 +73,9 @@ export default class extends Component {
 
   renderFormTypeTitle() {
     if (this.mode === "edit") {
-      const { title } = this.props.location.state;
-
       return (
         <TitleWrapper>
-          <ComponentTitle>Edit Role - {title}</ComponentTitle>
+          <ComponentTitle>Edit Role - {get(this.state, 'role.title', '')}</ComponentTitle>
         </TitleWrapper>
       );
     }
@@ -100,7 +98,7 @@ export default class extends Component {
               <Spin spinning={this.state.loading}>
                 <RoleForm
                   submit={this.handleSubmit}
-                  rowData={this.state.role}
+                  roleData={this.state.role}
                   types={this.state.types}
                 />
               </Spin>
