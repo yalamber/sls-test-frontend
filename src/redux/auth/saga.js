@@ -45,6 +45,9 @@ export function* loginSuccess() {
       if (history && history.push) {
         //get token data then redirect to proper locaton
         if(userTokenData && userTokenData.systemRole) {
+          yield put({
+            type: myActions.SWITCH_SYSTEM_ADMIN
+          });
           history.push('/admin');
         } else {
           history.push('/my');

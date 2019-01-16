@@ -14,8 +14,7 @@ class SignIn extends Component {
     super(props);
     this.state = {
       redirectToReferrer: false
-    };  
-    this.handleLogin = this.handleLogin.bind(this);
+    };
   }
 
   componentDidMount() {
@@ -33,8 +32,9 @@ class SignIn extends Component {
           return history.push("/my-client");
         case 'agency':
           return history.push("/my-agency");
-        default:
         case 'freelancer':
+          return history.push("/freelancer");
+        default:
           return history.push("/my");
       }
     }
@@ -49,7 +49,7 @@ class SignIn extends Component {
     }
   }
 
-  handleLogin(values) {
+  handleLogin = (values) => {
     const { login, history } = this.props;
     login({ history, userInfo : values});
   }
