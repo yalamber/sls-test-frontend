@@ -49,7 +49,9 @@ class Topbar extends Component {
     return (
       <div>
         { (myAgencies.loading || myClients.loading) && <Loader /> }
-        <TopbarCompany {...this.props} />
+
+        { (myAgencies.data.length > 0 || myClients.data.length > 0 ) && <TopbarCompany {...this.props} /> }
+
         { activeAppType !== 'system' && get(userTokenData, 'systemRole.key', false) === 'system-admin' &&
           <Tooltip placement="right" title={<IntlMessages id="topbar.switchSystemAdmin" />}>
             <Button className="switch-link" icon="lock" shape="circle" onClick={() => {

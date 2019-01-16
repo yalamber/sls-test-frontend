@@ -43,7 +43,6 @@ export function* loginSuccess() {
       const { token } = payload;
       yield setUserToken(token);
       if (history && history.push) {
-        //TODO redirect to proper location
         //get token data then redirect to proper locaton
         if(userTokenData && userTokenData.systemRole) {
           history.push('/admin');
@@ -85,6 +84,11 @@ export function* checkAuthorization() {
             token,
             userTokenData
           });
+          if(userTokenData.systemRole) {
+            yield put({
+              type: myActions.SWITCH_SYSTEM_ADMIN
+            });
+          }
         } else {
           yield put(actions.logout());
         }

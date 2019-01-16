@@ -121,9 +121,9 @@ export function* successAccountLogin() {
           return history.push("/my-client");  
         }
         if(activeCompanyTokenData.type === 'freelanceUser'){
-          return history.push("/my");  
+          return history.push("/freelance");  
         }
-        history.push("/");
+        history.push("/my");
       }
     }
   });
@@ -138,10 +138,6 @@ export function* checkActiveAccount() {
         payload: { token },
         token,
         activeCompanyTokenData: jwtDecode(token),
-      });
-    } else {
-      yield put({
-        type: actions.SWITCH_SYSTEM_ADMIN
       });
     }
   });

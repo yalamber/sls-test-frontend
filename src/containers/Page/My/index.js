@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, List } from 'antd';
+import { Button } from 'antd';
 import MyStyleWrapper from './my.style';
 //actions
 import myAction from '@redux/my/actions';

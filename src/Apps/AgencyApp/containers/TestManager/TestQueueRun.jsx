@@ -23,7 +23,8 @@ class TestQueueRun extends Component {
     testSuite: {},
     testCase: {
       testCaseSteps: []
-    }
+    },
+    testCaseRun: {},
   };
 
   async componentDidMount() {

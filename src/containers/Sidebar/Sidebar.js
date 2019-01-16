@@ -77,7 +77,6 @@ class Sidebar extends Component {
   getMenuItem = ({ singleOption, submenuStyle, submenuColor }) => {
     const { key, label, leftIcon, children } = singleOption;
     const url = stripTrailingSlash(this.props.url);
-    console.log(url);
     if (children) {
       return (
         <SubMenu

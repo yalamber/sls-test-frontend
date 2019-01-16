@@ -16,7 +16,7 @@ const initState = {
   },
   activeCompanyToken: null,
   activeCompanyTokenData: {},
-  activeAppType: 'system',
+  activeAppType: 'global',
 };
 
 export default function userReducer(state = initState, action) {
@@ -65,7 +65,7 @@ export default function userReducer(state = initState, action) {
         appSwitching: true,
       };
     case actions.SUCCESS_ACCOUNT_LOGIN:
-      let activeAppType = 'system';
+      let activeAppType = 'global';
       if(action.activeCompanyTokenData.type === 'clientUser') {
         activeAppType = 'client';
       } else if(action.activeCompanyTokenData.type === 'agencyUser') {

@@ -31,6 +31,7 @@ export class App extends Component {
     let routes = [];
     switch(appType) {
       default:
+        break;
       case 'system':
         routes = systemRoutes;
         break;
@@ -44,6 +45,8 @@ export class App extends Component {
         routes = freelancerRoutes;
         break; 
     }
+    //TODO: append global routes to other routes
+    
     return (
       <ThemeProvider theme={themes[themeConfig.theme]}>
         <AppHolder>
