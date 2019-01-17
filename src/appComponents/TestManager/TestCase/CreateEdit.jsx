@@ -52,6 +52,7 @@ class CreateEdit extends Component {
           loading: false,
           error: null,
         });
+        stepCount = testCase.testCaseSteps.length-1;
       } else {
         let testSuite = await SWQAClient.getTestSuite(match.params.suiteId);  
         this.setState({
@@ -102,6 +103,7 @@ class CreateEdit extends Component {
         }
       } else {
         console.log(err);
+        //TODO handle error
       }
     });
   }
@@ -114,7 +116,6 @@ class CreateEdit extends Component {
     if (keys.length === 1) {
       return;
     }
-
     // can use data-binding to set
     form.setFieldsValue({
       keys: keys.filter(key => key !== k),
@@ -134,6 +135,7 @@ class CreateEdit extends Component {
   }
 
   render() {
+    //TODO: render loading check for edit
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { form, history } = this.props;
     const { getFieldDecorator , getFieldValue} = form;
@@ -153,7 +155,6 @@ class CreateEdit extends Component {
     };
     //get keys initial value
     let keysCount = get(this.state, 'testCase.testCaseSteps', [0]).length;
-
     getFieldDecorator('keys', { initialValue: range(keysCount) });
     const keys = getFieldValue('keys');
     const testCaseSteps = keys.map((k, index) => (
@@ -206,15 +207,6 @@ class CreateEdit extends Component {
                   &nbsp; {this.mode === 'edit'? 'Edit': 'Add'} Test Case
                 </ComponentTitle>
               </TitleWrapper>
-              <Row gutter={24}>
-                <Col span={24}>
-                  {/*this.state.errors.details.length ? (
-                    <Errors errors={this.state.errors} />
-                  ) : (
-                    ""
-                  )*/}
-                </Col>
-              </Row>
               <Spin spinning={this.state.loading}>
                 <Form onSubmit={this.handleSubmit} id="clientForm">
                   <Row gutter={16}>

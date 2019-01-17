@@ -155,6 +155,7 @@ class Sidebar extends Component {
       default:
       case 'global':
         activeOptions = [];
+        break;
       case 'system':
         activeOptions = options.systemAdminOptions;
       break;
