@@ -83,6 +83,9 @@ const SidebarWrapper = styled.div`
         padding: 0 24px;
         margin: 0;
       }
+      a.active {
+        color: #FFF;
+      }
 
       .isoMenuHolder {
         display: flex;

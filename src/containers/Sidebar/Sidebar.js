@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import clone from 'clone';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { Layout } from 'antd';
 
 import Scrollbars from '@components/utility/customScrollBar.js';
@@ -97,9 +97,9 @@ class Sidebar extends Component {
 
             return (
               <Menu.Item style={submenuStyle} key={child.key}>
-                <Link style={submenuColor} to={linkTo}>
+                <NavLink style={submenuColor} to={linkTo}>
                   <IntlMessages id={child.label} />
-                </Link>
+                </NavLink>
               </Menu.Item>
             );
           })}
@@ -108,14 +108,14 @@ class Sidebar extends Component {
     }
     return (
       <Menu.Item key={key}>
-        <Link to={`${url}/${key}`}>
+        <NavLink to={`${url}/${key}`}>
           <span className="isoMenuHolder" style={submenuColor}>
             <i className={leftIcon} />
             <span className="nav-text">
               <IntlMessages id={label} />
             </span>
           </span>
-        </Link>
+        </NavLink>
       </Menu.Item>
     );
   };
@@ -153,6 +153,8 @@ class Sidebar extends Component {
     let activeOptions = [];
     switch(my.activeAppType) {
       default:
+      case 'global':
+        activeOptions = [];
       case 'system':
         activeOptions = options.systemAdminOptions;
       break;
