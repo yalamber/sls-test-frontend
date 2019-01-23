@@ -92,7 +92,9 @@ class Detail extends Component {
                   &nbsp; {title}
                 </ComponentTitle>
               </TitleWrapper>
-              <Spin spinning={loading}>{this.renderDetailsTable()}</Spin>
+              <Spin spinning={loading}>
+                {this.renderDetailsTable()}
+              </Spin>
             </Box>
           </Col>
         </Row>

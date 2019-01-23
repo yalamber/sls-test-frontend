@@ -18,7 +18,6 @@ export default ({
   if(team.name){
     records.push({ field: "Team Name", description: team.name }); 
   }
-  console.log(team);
 
   return (
     <LayoutWrapper>
