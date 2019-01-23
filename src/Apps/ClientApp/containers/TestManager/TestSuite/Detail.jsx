@@ -68,7 +68,7 @@ class Detail extends Component {
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
-                
+                Not implemented yet
               </Spin>
             </Box>
           </Col>
