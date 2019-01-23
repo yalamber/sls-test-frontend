@@ -26,6 +26,12 @@ class CreateEdit extends Component {
     this.mode = props.match.params.userId? 'edit': 'add';
   }
 
+  getClientId() {
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
+    return clientId;
+  }
+
   componentDidMount() {
     const { 
       match, 
@@ -37,7 +43,7 @@ class CreateEdit extends Component {
     
     //get current client
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
-    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
+    let clientId = this.getClientId();
     if(get(activeCompanyTokenData, 'type') === 'clientUser' && clientId) {
       requestCurrentClient(clientId);
     }
@@ -59,7 +65,8 @@ class CreateEdit extends Component {
           //this.props.requestUpdateClientUser(this.props.match.clientId, userId, values, this.props.history);
         } else {
           //create user and add to client
-          this.props.requestCreateClientUser(this.props.match.clientId, values.user, this.props.history);
+          let clientId = this.getClientId();
+          this.props.requestCreateClientUser(clientId, values.user, this.props.history, 'clientApp');
         }
       }
     });

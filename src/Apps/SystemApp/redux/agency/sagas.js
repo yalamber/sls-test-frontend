@@ -90,7 +90,7 @@ export function* requestCurrentAgencyUser() {
 
 //creat agency user
 export function* requestCreateAgencyUser() {
-  yield takeLatest(actions.REQUEST_CREATE_AGENCY_USER, function* ({ agencyId, userData, history }) {
+  yield takeLatest(actions.REQUEST_CREATE_AGENCY_USER, function* ({ agencyId, userData, history, appType }) {
     try {
       let roleId = userData.role;
       let status = userData.status;
@@ -104,7 +104,8 @@ export function* requestCreateAgencyUser() {
       yield put({
         type: actions.RECEIVE_CREATE_AGENCY_USER,
         membership,
-        history
+        history,
+        appType
       });
     } catch (e) {
       console.log(e);
@@ -115,10 +116,18 @@ export function* requestCreateAgencyUser() {
 
 
 export function* receiveCreateAgencyUser() {
-  yield takeEvery(actions.RECEIVE_CREATE_AGENCY_USER, function* ({membership, history}) {
+  yield takeEvery(actions.RECEIVE_CREATE_AGENCY_USER, function* ({membership, history, appType}) {
     if (membership) {
       if (history && history.push) {
-        yield history.push(`/admin/agency/${membership.agencyId}/user/${membership.userId}/details`);
+        switch(appType) {
+          default:
+          case 'systemApp':
+            yield history.push(`/admin/agency/${membership.agencyId}/user/${membership.userId}/details`);
+          break;
+          case 'agencyApp':
+            yield history.push(`/my-agency/user/${membership.userId}/details`);
+          break;
+        }
       }
     }
   });

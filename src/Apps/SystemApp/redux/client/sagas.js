@@ -91,7 +91,8 @@ export function* requestCurrentClientUser() {
 
 //creat client user
 export function* requestCreateClientUser() {
-  yield takeLatest(actions.REQUEST_CREATE_CLIENT_USER, function* ({ clientId, userData, history }) {
+  yield takeLatest(actions.REQUEST_CREATE_CLIENT_USER, function* ({ clientId, userData, history, appType }) {
+    console.log(appType);
     try {
       let roleId = userData.role;
       let status = userData.status;
@@ -105,7 +106,8 @@ export function* requestCreateClientUser() {
       yield put({
         type: actions.RECEIVE_CREATE_CLIENT_USER,
         membership,
-        history
+        history,
+        appType
       });
     } catch (e) {
       yield put({ type: actions.ERROR_CREATE_CLIENT_USER, error: e });
@@ -115,10 +117,19 @@ export function* requestCreateClientUser() {
 
 
 export function* receiveCreateClientUser() {
-  yield takeEvery(actions.RECEIVE_CREATE_CLIENT_USER, function* ({membership, history}) {
+  yield takeEvery(actions.RECEIVE_CREATE_CLIENT_USER, function* ({membership, history, appType}) {
+    console.log(appType);
     if (membership) {
       if (history && history.push) {
-        yield history.push(`/admin/client/${membership.clientId}/user/${membership.userId}/details`);
+        switch(appType) {
+          default:
+          case 'systemApp':
+            yield history.push(`/admin/client/${membership.clientId}/user/${membership.userId}/details`);
+          break;
+          case 'clientApp':
+            yield history.push(`/my-client/user/${membership.userId}/details`);
+          break;
+        }
       }
     }
   });

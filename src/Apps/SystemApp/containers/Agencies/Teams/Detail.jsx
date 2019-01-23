@@ -37,74 +37,16 @@ class Detail extends Component {
     }
   }
 
-  renderDetailsTable() {
-    const { team = {} } = this.state;
-    if (!team) {
-      return <div />;
-    }
-
-    const { agency = {} } = team;
-    const { owner = {} } = agency;
-    const { contactInformation = {} } = owner;
-
-    const records = [];
-    team.name && records.push({ field: "Team Name", description: team.name });
-
-    const agencyName = agency.name;
-    agencyName &&
-      records.push({ field: "Agency Name", description: agencyName });
-
-    const agencyLocation = agency.location;
-    agencyLocation &&
-      records.push({ field: "Agency Location", description: agencyLocation });
-
-    const agencyOwnerUserName = owner.username;
-    agencyOwnerUserName &&
-      records.push({
-        field: "Owner Username",
-        description: agencyOwnerUserName
-      });
-
-    const agencyOwnerEmailAddress = contactInformation.emailAddress;
-    agencyOwnerEmailAddress &&
-      records.push({
-        field: "Owner Email Address",
-        description: agencyOwnerEmailAddress
-      });
-
-    return (
-      <Table
-        columns={[
-          {
-            title: "Field",
-            key: "field",
-            dataIndex: "field"
-          },
-
-          {
-            title: "Description",
-            key: "description",
-            dataIndex: "description"
-          }
-        ]}
-        dataSource={records}
-        rowKey="field"
-        pagination={false}
-      />
-    );
-  }
-
   render() {
     return (
       <TeamDetail
-        {...this.state}
-        {...this.props}
-        renderDetailsTable={this.renderDetailsTable.bind(this)}
         pageHeader={[
           `Agency - ${get(this.state, "team.agency.name", "")}`,
           <br />,
           `Team - ${get(this.state, "team.name", "")}`
         ]}
+        team={this.state.team}
+        loading={this.state.loading}
       />
     );
   }

@@ -26,6 +26,12 @@ class CreateEdit extends Component {
     this.mode = props.match.params.userId? 'edit': 'add';
   }
 
+  getAgencyId() {
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
+    return agencyId;
+  }
+
   componentDidMount() {
     const { 
       match, 
@@ -35,12 +41,17 @@ class CreateEdit extends Component {
       clearCurrentAgencyUser
     } = this.props;
     //get current agency
-    requestCurrentAgency(match.params.agencyId);
+    //get current client
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let agencyId = this.getAgencyId();
+    if(get(activeCompanyTokenData, 'type') === 'agencyUser' && agencyId) {
+      requestCurrentAgency(agencyId);
+    }
     //get agency roles
     requestAgencyUserRoles();
     //get current user and set to edit if we have userId
     if(match.params.userId) {
-      requestCurrentAgencyUser(match.params.agencyId, match.params.userId);
+      requestCurrentAgencyUser(agencyId, match.params.userId);
     } else {
       clearCurrentAgencyUser();
     }
@@ -54,7 +65,8 @@ class CreateEdit extends Component {
           //this.props.requestUpdateAgencyUser(this.props.match.agencyId, userId, values, this.props.history);
         } else {
           //create user and add to agency
-          this.props.requestCreateAgencyUser(this.props.match.agencyId, values.user, this.props.history);
+          let agencyId = this.getAgencyId();
+          this.props.requestCreateAgencyUser(agencyId, values.user, this.props.history, 'agencyApp');
         }
       }
     });

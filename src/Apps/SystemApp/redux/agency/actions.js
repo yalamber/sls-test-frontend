@@ -86,11 +86,12 @@ const actions = {
     userData
   }),
   //add agency user
-  requestCreateAgencyUser: (agencyId, userData, history) => ({
+  requestCreateAgencyUser: (agencyId, userData, history, appType) => ({
     type: actions.REQUEST_CREATE_AGENCY_USER,
     agencyId,
     userData,
-    history
+    history,
+    appType
   }),
   receiveCreateAgencyUser: (membershipData) => ({
     type: actions.RECEIVE_CREATE_AGENCY_USER,

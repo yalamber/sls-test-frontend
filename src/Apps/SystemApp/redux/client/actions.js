@@ -86,11 +86,12 @@ const actions = {
     userData
   }),
   //add client user
-  requestCreateClientUser: (clientId, userData, history) => ({
+  requestCreateClientUser: (clientId, userData, history, appType) => ({
     type: actions.REQUEST_CREATE_CLIENT_USER,
     clientId,
     userData,
-    history
+    history,
+    appType
   }),
   receiveCreateClientUser: (membershipData) => ({
     type: actions.RECEIVE_CREATE_CLIENT_USER,

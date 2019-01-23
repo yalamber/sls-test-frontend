@@ -97,14 +97,13 @@ class Detail extends Component {
   render() {
     return (
       <TeamDetail
-        {...this.state}
-        {...this.props}
-        renderDetailsTable={this.renderDetailsTable.bind(this)}
         pageHeader={[
           `Client - ${get(this.state, "team.client.name", "")}`,
           <br />,
           `Team - ${get(this.state, "team.name", "")}`
         ]}
+        team={this.state.team}
+        loading={this.state.loading}
       />
     );
   }

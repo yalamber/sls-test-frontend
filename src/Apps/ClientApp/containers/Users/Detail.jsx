@@ -54,7 +54,7 @@ class Detail extends Component {
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={loading}>
-
+                
               </Spin>
             </Box>
           </Col>

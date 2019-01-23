@@ -55,7 +55,8 @@ class CreateEdit extends Component {
           //this.props.requestUpdateAgencyUser(this.props.match.agencyId, userId, values, this.props.history);
         } else {
           //create user and add to agency
-          this.props.requestCreateAgencyUser(this.props.match.agencyId, values.user, this.props.history);
+          this.props.requestCreateAgencyUser(this.props.match.agencyId, values.user, this.props.history, 'systemApp');
+
         }
       }
     });

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { get } from 'lodash';
+import { Table } from "antd";
 import TeamDetail from '@appComponents/Team/Detail';
 import SWQAClient from '@helpers/apiClient';
 
@@ -36,9 +37,14 @@ class Detail extends Component {
     }
   }
 
+  
   render() {
     return (
-      <TeamDetail {...this.state} {...this.props} pageHeader={`Team - ${get(this.state, 'team.name')}`} />
+      <TeamDetail
+        pageHeader={`Team - ${get(this.state, 'team.name')}`}
+        team={this.state.team}
+        loading={this.state.loading}
+      />
     );
   }
 }

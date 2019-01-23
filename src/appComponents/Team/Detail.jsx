@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Spin, Icon } from "antd";
+import { Row, Col, Spin, Icon, Table } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from "@components/utility/intlMessages";
@@ -11,10 +11,15 @@ export default ({
   loading,
   pageHeader = null,
   team = {},
-  history,
-  renderDetailsTable
+  history
 }) => {
   const { rowStyle, colStyle, gutter } = basicStyle;
+  const records = [];
+  if(team.name){
+    records.push({ field: "Team Name", description: team.name }); 
+  }
+  console.log(team);
+
   return (
     <LayoutWrapper>
       {pageHeader && <PageHeader>{pageHeader}</PageHeader>}
@@ -30,7 +35,24 @@ export default ({
                   &nbsp; Details
                 </ComponentTitle>
               </TitleWrapper>
-              {renderDetailsTable ? renderDetailsTable() : <div />}
+              <Table
+                columns={[
+                  {
+                    title: "Field",
+                    key: "field",
+                    dataIndex: "field"
+                  },
+
+                  {
+                    title: "Description",
+                    key: "description",
+                    dataIndex: "description"
+                  }
+                ]}
+                dataSource={records}
+                rowKey="field"
+                pagination={false}
+              />
             </Spin>
           </Box>
         </Col>
