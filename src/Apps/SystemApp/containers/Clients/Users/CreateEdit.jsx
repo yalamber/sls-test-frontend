@@ -21,9 +21,9 @@ const {
 } = clientActions;
 
 class CreateEdit extends Component {
+
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.mode = props.match.params.userId? 'edit': 'add';
   }
 
@@ -47,15 +47,16 @@ class CreateEdit extends Component {
     }
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
+    const { form, match} = this.props;
+    form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if(this.mode === 'edit') {
-          //this.props.requestUpdateClientUser(this.props.match.clientId, userId, values, this.props.history);
+          //this.props.requestUpdateClientUser(match.params.clientId, userId, values, this.props.history);
         } else {
           //create user and add to client
-          this.props.requestCreateClientUser(this.props.match.clientId, values.user, this.props.history, 'systemApp');
+          this.props.requestCreateClientUser(match.params.clientId, values.user, this.props.history, 'systemApp');
         }
       }
     });

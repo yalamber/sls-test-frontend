@@ -18,7 +18,6 @@ export default ({
   if(team.name){
     records.push({ field: "Team Name", description: team.name }); 
   }
-
   return (
     <LayoutWrapper>
       {pageHeader && <PageHeader>{pageHeader}</PageHeader>}
