@@ -1,5 +1,5 @@
 import React from "react";
-import TestCaseCreateEdit from '@appComponents/TestManager/TestSuite/CreateEdit';
+import TestCaseCreateEdit from '@appComponents/TestManager/TestCase/CreateEdit';
 
 function CreateEdit(props) {
   return (

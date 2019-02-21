@@ -29,15 +29,10 @@ class CreateEdit extends Component {
       error: null,
       loading: true
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.mode = props.match.params.suiteId ? 'edit': 'add';
   }
 
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  async fetchData() {
+  fetchData = async () => {
     try{
       let { match } = this.props;
       if(match.params.suiteId) {
@@ -66,7 +61,7 @@ class CreateEdit extends Component {
     }
   }
 
-  handleSubmit(e) {
+  handleSubmit = async (e) => {
     e.preventDefault();
     let { history, match } = this.props;
     this.props.form.validateFieldsAndScroll(async (err, values) => {
@@ -99,6 +94,10 @@ class CreateEdit extends Component {
     });
   }
 
+  componentDidMount() {
+    this.fetchData();
+  }
+
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     const { form, history } = this.props;
@@ -111,7 +110,8 @@ class CreateEdit extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          { this.props.appType === 'system' && <div>Client - {get(this.state, 'client.name')}</div>}
+          { this.props.appType === 'system' && <span>Client - {get(this.state, 'client.name')}</span>}
+          <br />
           Team - {get(this.state, 'clientTeam.name')}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">

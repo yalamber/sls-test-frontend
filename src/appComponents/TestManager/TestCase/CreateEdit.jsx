@@ -188,7 +188,8 @@ class CreateEdit extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          { this.props.appType === 'system' && <div>Client - {get(this.state, 'client.name')}</div>}
+          { this.props.appType === 'system' && <span>Client - {get(this.state, 'client.name')}</span>}
+          <br />
           Team - {get(this.state, 'clientTeam.name')}
           <br/>
           Test Suite - {get(this.state, 'testSuite.name')}
