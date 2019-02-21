@@ -11,8 +11,6 @@ const { requestClients, deleteClient } = clientActions;
 class ClientList extends Component {
   constructor(props) {
     super(props);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: <IntlMessages id="client.name"/>,
@@ -55,22 +53,22 @@ class ClientList extends Component {
     ];
   }
 
-  componentDidMount() {
-    this.props.requestClients({
-      page: 1,
-      pageSize: 5
-    });
-  }
-
-  onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = (page, pageSize) => {
     this.props.requestClients({
       page,
       pageSize
     });
   }
 
-  handleDelete(row) {
+  handleDelete = (row) => {
     this.props.deleteClient(row.clientId);
+  }
+
+  componentDidMount() {
+    this.props.requestClients({
+      page: 1,
+      pageSize: 5
+    });
   }
 
   render() {
