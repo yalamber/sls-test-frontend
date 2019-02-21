@@ -25,15 +25,11 @@ const formResSpan = {
 
 
 class UserFormFields extends Component {
-  constructor() {
-    super();
-    this.state = {
-      passwordType: false
-    };
-    this.generatePassword = this.generatePassword.bind(this);
-  }
+  state = {
+    passwordType: false
+  };
 
-  generatePassword(e) {
+  generatePassword = (e) => {
     let {fieldName} = this.props;
     this.setState({ passwordType: !this.state.passwordType });
     if (e.target.value) {

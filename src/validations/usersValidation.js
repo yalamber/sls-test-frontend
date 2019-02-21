@@ -9,7 +9,7 @@ export const userValidation = {
     {whitespace: true, message: "Username must not just have whitespace."}
   ],
   userId: [required],
-  password: [required, {min: 6}],
+  password: [required, {min: 6, message: "Password must be atleast 6 characters."}],
   email: [email, required],
   client: [required],
   company: [required],
