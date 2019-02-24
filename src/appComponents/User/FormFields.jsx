@@ -112,7 +112,7 @@ class UserFormFields extends Component {
       </Option>
     ));
     return (
-      <FormItem label="Status" style={margin}>
+      <FormItem hasFeedback label="Status" style={margin}>
         {getFieldDecorator(`${fieldName}.status`, {
           rules: userValidation.status
         })(
@@ -131,12 +131,12 @@ class UserFormFields extends Component {
       <div>
           <Row gutter={16}>
             <Col {...formResSpan}>
-              <FormItem label="User Name" style={margin}>
+              <FormItem hasFeedback label="User Name" style={margin}>
                 {getFieldDecorator(`${fieldName}.username`, {
                   rules: userValidation.username
                 })(<Input placeholder="Enter User Name" />)}
               </FormItem>
-              <FormItem label="Password" style={margin}>
+              <FormItem hasFeedback label="Password" style={margin}>
                 {getFieldDecorator(`${fieldName}.password`,
                   this.getPasswordFieldDecoratorOption()
                 )(<Input placeholder="Enter Password" />)}
@@ -154,7 +154,7 @@ class UserFormFields extends Component {
               {this.props.showRoleSelector && this.renderStatusSelector(fieldName, getFieldDecorator)}
             </Col>
             {this.props.showRoleSelector && this.renderRoleColumn(fieldName, getFieldDecorator)}
-            { !this.props.showRoleSelector && 
+            { !this.props.showRoleSelector &&
               <Col {...formResSpan}>
                 {this.renderStatusSelector(fieldName, getFieldDecorator)}
               </Col>
@@ -165,26 +165,26 @@ class UserFormFields extends Component {
               <Card title="Contact Information" style={{ marginTop: "20px" }}>
                 <Row gutter={16}>
                   <Col {...formResSpan}>
-                    <FormItem style={margin} label="Postal Address:">
+                    <FormItem hasFeedback style={margin} label="Postal Address:">
                       {getFieldDecorator(`${fieldName}.contactInformation.postalAddress`, {
                         rules: userValidation.client
                       })(
                         <TextArea placeholder="Enter Postal Address" rows={9} />
                       )}
                     </FormItem>
-                    <FormItem style={margin} label="Email Address:">
+                    <FormItem hasFeedback style={margin} label="Email Address:">
                       {getFieldDecorator(`${fieldName}.contactInformation.emailAddress`, {
                         rules: userValidation.email
                       })(<Input placeholder="Enter Email Address" />)}
                     </FormItem>
                   </Col>
                   <Col {...formResSpan}>
-                    <FormItem style={margin} label="Mobile Phone:">
+                    <FormItem hasFeedback style={margin} label="Mobile Phone:">
                       {getFieldDecorator(`${fieldName}.contactInformation.mobilePhone`, {
                         rules: userValidation.client
                       })(<Input placeholder="Enter Mobile Phone" />)}
                     </FormItem>
-                    <FormItem style={margin} label="SMS:">
+                    <FormItem hasFeedback style={margin} label="SMS:">
                       {getFieldDecorator(`${fieldName}.contactInformation.smsPhone`, {
                         rules: userValidation.client
                       })(<Input placeholder="Enter SMS Phone" />)}
@@ -208,7 +208,7 @@ class UserFormFields extends Component {
           <Row gutter={16}>
             <Col span={24}>
               <Card title="Skills" style={{ marginTop: "20px" }}>
-                <FormItem label="LinkedIn URL" style={margin}>
+                <FormItem hasFeedback label="LinkedIn URL" style={margin}>
                   {getFieldDecorator(`${fieldName}.contactInformation.linkedInUrl`, {
                     rules: userValidation.client
                   })(<Input placeholder="Linkedin URL" />)}
