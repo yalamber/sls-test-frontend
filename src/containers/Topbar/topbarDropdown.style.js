@@ -290,7 +290,7 @@ const TopbarDropdownWrapper = styled.div`
       &:hover {
         background-color: ${palette("secondary", 6)};
       }
-      
+
       .smallText {
         font-size: 10px !important;
       }

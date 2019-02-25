@@ -11,11 +11,11 @@ import RoleForm from "./partials/RoleForm";
 export default class extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      loading: false, 
+    this.state = {
+      loading: false,
       role: null,
-      types: [], 
-      error: null 
+      types: [],
+      error: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.mode = props.match.params.roleId ? 'edit': 'add';
@@ -35,13 +35,13 @@ export default class extends Component {
       let types = roleTypes.map((roleType) => ({ key: roleType, name: roleType }));
       if(this.mode === 'edit') {
         role = await SWQAClient.getRole(this.props.match.params.roleId);
-      } 
+      }
       console.log(role);
       this.setState({
         role,
         types
       });
-      
+
     } catch(e) {
       this.setState({
         error: e
@@ -56,12 +56,12 @@ export default class extends Component {
   async handleSubmit(formData, resetForm) {
     try{
       this.setState({loading: true});
-      if(this.mode === 'add') {  
+      if(this.mode === 'add') {
         await SWQAClient.createRole(formData);
         message.success("Successfully created.");
         this.props.history.goBack();
       } else {
-        await SWQAClient.updateRole(this.props.match.params.roleId, formData); 
+        await SWQAClient.updateRole(this.props.match.params.roleId, formData);
         message.success("Successfully updated.");
       }
     } catch(e) {
@@ -100,6 +100,7 @@ export default class extends Component {
                   submit={this.handleSubmit}
                   roleData={this.state.role}
                   types={this.state.types}
+                  history={this.props.history}
                 />
               </Spin>
             </Box>
