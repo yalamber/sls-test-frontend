@@ -108,7 +108,7 @@ const TopbarWrapper = styled.div`
 
         .isoIconWrapper {
           position: relative;
-          line-height: normal;
+          line-height: norma;
 
           span {
             font-size: 12px;
