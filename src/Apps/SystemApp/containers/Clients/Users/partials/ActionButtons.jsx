@@ -8,7 +8,7 @@ function ActionButtons({ history, row, clientId}) {
       <Tooltip title="Edit">
         <Button
           shape="circle"
-          icon="edit" 
+          icon="edit"
           onClick={() => {
             history.push(`/admin/client/${clientId}/user/${row.userId}/edit`);
           }} />
@@ -16,7 +16,7 @@ function ActionButtons({ history, row, clientId}) {
       <Tooltip title="User details">
         <Button
           shape="circle"
-          icon="info" 
+          icon="info"
           onClick={() => {
             history.push(`/admin/client/${clientId}/user/${row.userId}/details`);
           }} />
