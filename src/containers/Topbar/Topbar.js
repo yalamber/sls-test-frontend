@@ -39,9 +39,9 @@ class Topbar extends Component {
   }
 
   appSwitch() {
-    const { 
-      history, 
-      activeAppType, 
+    const {
+      history,
+      activeAppType,
       myAgencies = { data: [], loading: true, error: false },
       myClients = { data: [], loading: true, error: false },
       userTokenData

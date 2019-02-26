@@ -52,7 +52,7 @@ class CreateEdit extends Component {
     e.preventDefault();
     let { history, match, form } = this.props;
     form.validateFieldsAndScroll(async (err, values) => {
-      if (!err) {    
+      if (!err) {
         try{
           this.setState({ loading: true });
           if(this.mode === 'edit'){
@@ -78,12 +78,13 @@ class CreateEdit extends Component {
   render() {
     let pageHeaderTitle = `Client - ${get(this.state, 'client.name', '')}`;
     return (
-      <TeamCreateEdit {...this.props} 
+      <TeamCreateEdit {...this.props}
         initialData={this.state.team}
         pageHeader={pageHeaderTitle}
-        mode={this.mode} 
+        mode={this.mode}
         loading={this.state.loading}
-        handleSubmit={this.handleSubmit}/>
+        handleSubmit={this.handleSubmit}
+        history={this.props.history}/>
     );
   }
 }

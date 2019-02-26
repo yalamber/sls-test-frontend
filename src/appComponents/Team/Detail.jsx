@@ -16,7 +16,7 @@ export default ({
   const { rowStyle, colStyle, gutter } = basicStyle;
   const records = [];
   if(team.name){
-    records.push({ field: "Team Name", description: team.name }); 
+    records.push({ field: "Team Name", description: team.name });
   }
   return (
     <LayoutWrapper>

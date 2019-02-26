@@ -67,7 +67,7 @@ class CreateEdit extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        try {  
+        try {
           if(this.mode === 'edit') {
             const { teamId } = this.props.match.params;
             const { status, userId, roleId } = values;
@@ -77,7 +77,7 @@ class CreateEdit extends Component {
               roleId,
             });
             //TODO check for clientTeamMember field for success
-            if(clientTeamMember){  
+            if(clientTeamMember){
               message.success("Successfully updated");
               this.props.form.resetFields();
               this.setState({ errors: { details: [] } });
@@ -93,7 +93,7 @@ class CreateEdit extends Component {
               roleId,
             });
             //TODO check for clientTeamMember field for success
-            if(clientTeamMember){  
+            if(clientTeamMember){
               message.success("Successfully Saved");
               this.props.form.resetFields();
               this.setState({ errors: { details: [] } });

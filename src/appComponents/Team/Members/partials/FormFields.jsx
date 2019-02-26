@@ -43,7 +43,7 @@ class MemberForm extends Component {
         <Row gutter={16}>
           <Col {...formResSpan}>
             {
-              !get(this.props, 'membershipData.userId', false) && 
+              !get(this.props, 'membershipData.userId', false) &&
               <FormItem label="Select User" style={margin}>
                 {getFieldDecorator("userId", {
                   rules: userValidation.userId
@@ -61,10 +61,10 @@ class MemberForm extends Component {
                     {userOptions}
                   </Select>
                 )}
-              </FormItem>  
+              </FormItem>
             }
             {
-              get(this.props, 'membershipData.userId', false) && 
+              get(this.props, 'membershipData.userId', false) &&
               <FormItem label="User" style={margin}>
                 {get(this.props, 'membershipData.user.username')}
               </FormItem>

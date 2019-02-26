@@ -104,6 +104,7 @@ class Detail extends Component {
         ]}
         team={this.state.team}
         loading={this.state.loading}
+        history={this.props.history}
       />
     );
   }

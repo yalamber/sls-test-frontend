@@ -16,7 +16,7 @@ import SWQAClient from '@helpers/apiClient';
 
 const FormItem = Form.Item;
 const {
-  requestCurrentClient, 
+  requestCurrentClient,
   requestClientUserRoles,
   requestCreateClientUser,
   clearCurrentClient,
@@ -32,9 +32,9 @@ class CreateEdit extends Component {
 
   componentDidMount() {
     this._isMounted = true;
-    const { 
-      match, 
-      requestCurrentClient, 
+    const {
+      match,
+      requestCurrentClient,
       requestClientUserRoles,
       clearCurrentClient,
     } = this.props;
@@ -97,7 +97,7 @@ class CreateEdit extends Component {
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
               <TitleWrapper>
-                <ComponentTitle> 
+                <ComponentTitle>
                   <ActionBtn
                     type="secondary"
                     onClick={() => history.goBack()}>
@@ -125,7 +125,7 @@ class CreateEdit extends Component {
                       </FormItem>
                     </Col>
                   </Row>
-                  {this.mode === 'add' && 
+                  {this.mode === 'add' &&
                     <div>
                       <Divider orientation="left">Client Account Owner</Divider>
                       <UserFormFields
@@ -183,7 +183,7 @@ const mapPropsToFields = (props) => {
   let currentClient = {
     name: 'test client',
     location: 'test location',
-    owner: {  
+    owner: {
       status: 'active',
       username: 'adadada dada',
       resumeUrl: 'http://test.com',

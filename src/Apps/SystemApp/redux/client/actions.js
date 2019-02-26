@@ -30,7 +30,7 @@ const actions = {
   REQUEST_CLIENT_TEAM_LIST: 'REQUEST_CLIENT_TEAM_LIST',
   RECEIVE_CLIENT_TEAM_LIST: 'RECEIVE_CLIENT_TEAM_LIST',
   ERROR_CLIENT_TEAM_LIST: 'ERROR_CLIENT_TEAM_LIST',
-  
+
   //current client creators
   requestCurrentClient: (clientId) => ({
     type: actions.REQUEST_CURRENT_CLIENT,
