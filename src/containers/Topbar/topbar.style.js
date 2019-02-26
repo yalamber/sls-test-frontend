@@ -101,14 +101,18 @@ const TopbarWrapper = styled.div`
         }
 
         i {
-          font-size: 24px;
+          font-size: 23px;
           color: ${palette("text", 0)};
           line-height: 1;
+          height: 22px;
         }
 
         .isoIconWrapper {
           position: relative;
           line-height: normal;
+          display: flex;
+          align-items: flex-end;
+
 
           span {
             font-size: 12px;
