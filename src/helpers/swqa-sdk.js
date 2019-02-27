@@ -154,6 +154,10 @@ class SWQA {
     return this.api.send('put', `client-team/${teamId}/member/${userId}`, payload);
   }
 
+  deleteClientTeamMember = (teamId, userId) => {
+    return this.api.send('delete', `client-team/${teamId}/member/${userId}`);
+  }
+
   //agencies
   createAgency = (payload) => {
     return this.api.send('POST', `agency`, payload);
@@ -221,6 +225,10 @@ class SWQA {
 
   editAgencyTeamMembership = (teamId, userId, payload) => {
     return this.api.send('put', `agency-team/${teamId}/member/${userId}`, payload);
+  }
+  
+  deleteAgencyTeamMember = (teamId, userId) => {
+    return this.api.send('delete', `agency-team/${teamId}/member/${userId}`);
   }
 
   //test manager 

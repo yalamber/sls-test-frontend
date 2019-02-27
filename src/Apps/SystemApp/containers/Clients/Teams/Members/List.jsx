@@ -15,7 +15,7 @@ class MemberList extends Component {
       paginationOptions: {
         defaultCurrent: 1,
         current: 1,
-        pageSize: 1,
+        pageSize: 5,
         total: 1
       },
       loading: false
@@ -29,7 +29,7 @@ class MemberList extends Component {
       },
       {
         title: "Status",
-        dataIndex: "user.status",
+        dataIndex: "status",
         key: "status",
         sorter: (a, b) => a.status >= b.status
       },
@@ -41,7 +41,7 @@ class MemberList extends Component {
             row={row}
             history={props.history}
             deleteMember={() => {
-              alert('Not implemented yet');
+              this.deleteMember(props.match.params.teamId, row.user.userId);
             }} />
         )
       }
@@ -99,6 +99,17 @@ class MemberList extends Component {
         this.setState({ loading: false, dataSource: [] });
       }
     });
+  }
+
+  deleteMember = async (teamId, userId) => {
+    try {
+      await SWQAClient.deleteClientTeamMember(teamId, userId);
+      message.success('Member Removed from Team');
+      this.fetchData();
+    } catch(e) {
+      console.log(e);
+      message.error("Problem occured.");
+    }
   }
 
   componentDidMount() {

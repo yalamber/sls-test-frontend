@@ -57,7 +57,8 @@
     "build": "rescripts  build",
     "test": "rescripts test --env=jsdom",
     "push-deploy-dev": "git push origin master && npm run deploy-dev",
-    "deploy-dev": "npm run build && aws s3 sync build/ s3://btc-dev-incbizco"
+    "deploy-dev": "npm run build && npm run aws-deploy",
+    "aws-deploy": "aws s3 sync build/ s3://btc-dev-incbizco"
   },
   "eslintConfig": {
     "extends": "react-app"
