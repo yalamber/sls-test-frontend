@@ -19,7 +19,6 @@ class List extends Component {
         total: 1
       }
     };
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: "Id",
@@ -46,11 +45,7 @@ class List extends Component {
     ];
   }
 
-  componentDidMount() {
-    this.onTablePaginationChange(1, 10);
-  }
-
-  onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = (page, pageSize) => {
     //get agency id
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
     let agencyId = get(activeCompanyTokenData, "agencyData.agencyId", null);
@@ -85,6 +80,10 @@ class List extends Component {
         }
       );
     }
+  }
+  
+  componentDidMount() {
+    this.onTablePaginationChange(1, 10);
   }
 
   render() {

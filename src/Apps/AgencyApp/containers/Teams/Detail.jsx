@@ -43,6 +43,7 @@ class Detail extends Component {
         pageHeader={`Team - ${get(this.state, "team.name")}`}
         team={this.state.team}
         loading={this.state.loading}
+        history={this.props.history}
       />
     );
   }

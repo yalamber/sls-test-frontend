@@ -37,13 +37,14 @@ class Detail extends Component {
     }
   }
 
-  
+
   render() {
     return (
       <TeamDetail
         pageHeader={`Team - ${get(this.state, 'team.name')}`}
         team={this.state.team}
         loading={this.state.loading}
+        history={this.props.history}
       />
     );
   }
