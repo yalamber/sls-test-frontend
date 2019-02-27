@@ -19,7 +19,7 @@ class TeamList extends Component {
         className: 'column-actions',
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons 
+        render: row => <ActionButtons
           row={row}
           agencyId={props.match.params.agencyId}
           history={this.props.history} />
@@ -30,11 +30,11 @@ class TeamList extends Component {
   componentDidMount() {
     const { match } = this.props;
     this.props.requestCurrentAgency(match.params.agencyId);
-    this.onTablePaginationChange(match.params.agencyId)(1, 5);    
+    this.onTablePaginationChange(match.params.agencyId)(1, 5);
   }
 
   onTablePaginationChange(agencyId) {
-    return (page, pageSize) => {  
+    return (page, pageSize) => {
       this.props.requestAgencyTeams(agencyId, {
         page,
         pageSize
@@ -45,11 +45,11 @@ class TeamList extends Component {
   render() {
     const { currentAgency = { agencyData: { name: '' }, teamList: [] }, match } = this.props;
     return (
-      <List {...this.props} 
-        onTablePaginationChange={this.onTablePaginationChange} 
+      <List {...this.props}
+        onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
           onDoubleClick: () => {
-            this.props.history.push(`/admin/agency/${match.params.agencyId}/team/${row.agencyTeamId}/details`);
+            this.props.history.push(`/admin/agency/team/${row.agencyTeamId}/details`);
           }
         })}
         loading={currentAgency.teamList.loading}
