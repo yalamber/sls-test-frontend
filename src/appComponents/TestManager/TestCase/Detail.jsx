@@ -26,7 +26,7 @@ class Detail extends Component {
   }
 
   async fetchData() {
-    try {  
+    try {
       const { match } = this.props;
       this.setState({ loading: true });
       let caseData = await SWQAClient.getTestCase(match.params.caseId);
@@ -49,14 +49,14 @@ class Detail extends Component {
     const { history, appType } = this.props;
     const dataSource = [{
       key: '1',
-      field: 'Name',
-      details: this.state.caseData.name,
+      field: 'Title',
+      details: this.state.caseData.title,
     }, {
       key: '2',
       field: 'Description',
       details: this.state.caseData.description,
     }];
-    
+
     const columns = [{
       title: 'Field',
       dataIndex: 'field',
@@ -77,7 +77,7 @@ class Detail extends Component {
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>        
+            <Box>
               <TitleWrapper>
                 <ComponentTitle>
                   <ActionBtn

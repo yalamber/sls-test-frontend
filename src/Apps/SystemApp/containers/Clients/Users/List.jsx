@@ -29,7 +29,7 @@ class UserList extends Component {
         className: 'column-actions',
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons 
+        render: row => <ActionButtons
           row={row}
           clientId={props.match.params.clientId}
           history={this.props.history} />
@@ -40,11 +40,11 @@ class UserList extends Component {
   componentDidMount() {
     const { match } = this.props;
     this.props.requestCurrentClient(match.params.clientId);
-    this.onTablePaginationChange(match.params.clientId)(1, 5);    
+    this.onTablePaginationChange(match.params.clientId)(1, 5);
   }
 
   onTablePaginationChange(clientId) {
-    return (page, pageSize) => {  
+    return (page, pageSize) => {
       this.props.requestClientUsers(clientId, {
         page,
         pageSize
@@ -55,10 +55,10 @@ class UserList extends Component {
   render() {
     const { currentClient = { clientData: { name: '' } }, match } = this.props;
     return (
-      <List {...this.props} 
+      <List {...this.props}
         pageHeader = {`Client - ${currentClient.clientData.name}`}
         title = "Users"
-        onTablePaginationChange={this.onTablePaginationChange} 
+        onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
           onDoubleClick: () => {
             this.props.history.push(`/admin/client/${row.clientId}/user/${row.userId}/details`);

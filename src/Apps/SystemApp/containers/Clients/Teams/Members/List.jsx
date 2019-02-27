@@ -39,7 +39,10 @@ class MemberList extends Component {
         render: row => (
           <ActionButtons
             row={row}
-            history={props.history} />
+            history={props.history}
+            deleteMember={() => {
+              alert('Not implemented yet');
+            }} />
         )
       }
     ];
@@ -106,8 +109,8 @@ class MemberList extends Component {
     const { match, history } = this.props;
     const { teamId } = match.params;
     return (
-      <List {...this.props} 
-        onTablePaginationChange={this.onTablePaginationChange} 
+      <List {...this.props}
+        onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
           onDoubleClick: () => {
             history.push(`/admin/client/team/${row.teamId}/member/${row.userId}/details`);

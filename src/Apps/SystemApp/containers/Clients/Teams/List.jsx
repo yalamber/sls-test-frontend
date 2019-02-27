@@ -19,7 +19,7 @@ class TeamList extends Component {
         className: 'column-actions',
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons 
+        render: row => <ActionButtons
           row={row}
           clientId={props.match.params.clientId}
           history={this.props.history} />
@@ -30,11 +30,11 @@ class TeamList extends Component {
   componentDidMount() {
     const { match } = this.props;
     this.props.requestCurrentClient(match.params.clientId);
-    this.onTablePaginationChange(match.params.clientId)(1, 5);    
+    this.onTablePaginationChange(match.params.clientId)(1, 5);
   }
 
   onTablePaginationChange(clientId) {
-    return (page, pageSize) => {  
+    return (page, pageSize) => {
       this.props.requestClientTeams(clientId, {
         page,
         pageSize
@@ -45,11 +45,11 @@ class TeamList extends Component {
   render() {
     const { currentClient = { clientData: { name: '' }, teamList: [] }, match } = this.props;
     return (
-      <List {...this.props} 
-        onTablePaginationChange={this.onTablePaginationChange} 
+      <List {...this.props}
+        onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
           onDoubleClick: () => {
-            this.props.history.push(`/admin/client/${match.params.clientId}/team/${row.clientTeamId}/details`);
+            this.props.history.push(`/admin/client/team/${row.clientTeamId}/details`);
           }
         })}
         loading={currentClient.teamList.loading}
