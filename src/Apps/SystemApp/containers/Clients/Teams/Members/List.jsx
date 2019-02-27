@@ -20,8 +20,6 @@ class MemberList extends Component {
       },
       loading: false
     };
-    this.fetchData = this.fetchData.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: "Username",
@@ -47,11 +45,7 @@ class MemberList extends Component {
     ];
   }
 
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  async fetchData() {
+  fetchData = async () => {
     try {
       const { match } = this.props;
       this.setState({ loading: true });
@@ -75,7 +69,7 @@ class MemberList extends Component {
     }
   }
 
-  async onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = async (page, pageSize) => {
     this.setState({
       loading: true,
       paginationOptions: {
@@ -102,6 +96,10 @@ class MemberList extends Component {
         this.setState({ loading: false, dataSource: [] });
       }
     });
+  }
+
+  componentDidMount() {
+    this.fetchData();
   }
 
   render() {
