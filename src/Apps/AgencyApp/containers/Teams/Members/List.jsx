@@ -20,8 +20,6 @@ class MemberList extends Component {
       },
       loading: false
     };
-    this.fetchData = this.fetchData.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: "Username",
@@ -41,17 +39,27 @@ class MemberList extends Component {
         render: row => (
           <ActionButtons
             row={row}
-            history={props.history} />
+            history={props.history}
+            deleteMember={() => {
+              this.deleteMember(props.match.params.teamId, row.user.userId);
+            }} />
         )
       }
     ];
   }
 
-  componentDidMount() {
-    this.fetchData();
+  deleteMember = async (teamId, userId) => {
+    try {
+      await SWQAClient.deleteAgencyTeamMember(teamId, userId);
+      message.success('Member Removed from Team');
+      this.fetchData();
+    } catch(e) {
+      console.log(e);
+      message.error("Problem occured.");
+    }
   }
 
-  async fetchData() {
+  fetchData = async () => {
     try {
       const { match } = this.props;
       this.setState({ loading: true });
@@ -75,7 +83,7 @@ class MemberList extends Component {
     }
   }
 
-  async onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = async (page, pageSize) => {
     this.setState({
       loading: true,
       paginationOptions: {
@@ -104,12 +112,16 @@ class MemberList extends Component {
     });
   }
 
+  componentDidMount() {
+    this.fetchData();
+  }
+
   render() {
     const { match, history } = this.props;
     const { teamId } = match.params;
     return (
-      <List {...this.props} 
-        onTablePaginationChange={this.onTablePaginationChange} 
+      <List {...this.props}
+        onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
           onDoubleClick: () => {
             history.push(`/my-agency/team/${row.teamId}/member/${row.userId}/details`);

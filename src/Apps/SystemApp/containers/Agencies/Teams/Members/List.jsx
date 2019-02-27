@@ -41,10 +41,24 @@ class MemberList extends Component {
         render: row => (
           <ActionButtons
             row={row}
-            history={props.history} />
+            history={props.history}
+            deleteMember={() => {
+              this.deleteMember(props.match.params.teamId, row.user.userId);
+            }}/>
         )
       }
     ];
+  }
+
+  deleteMember = async (teamId, userId) => {
+    try {
+      await SWQAClient.deleteAgencyTeamMember(teamId, userId);
+      message.success('Member Removed from Team');
+      this.fetchData();
+    } catch(e) {
+      console.log(e);
+      message.error("Problem occured.");
+    }
   }
 
   componentDidMount() {
@@ -108,8 +122,8 @@ class MemberList extends Component {
     const { match, history } = this.props;
     const { teamId } = match.params;
     return (
-      <List {...this.props} 
-        onTablePaginationChange={this.onTablePaginationChange} 
+      <List {...this.props}
+        onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
           onDoubleClick: () => {
             history.push(`/admin/agency/team/${row.teamId}/member/${row.userId}/details`);

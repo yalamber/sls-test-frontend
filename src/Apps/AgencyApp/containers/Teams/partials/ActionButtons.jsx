@@ -8,7 +8,7 @@ const ActionButtons = ({history, row}) => {
       <Tooltip title="Show Members List">
         <Button
           shape="circle"
-          icon="user" 
+          icon="user"
           onClick={() => {
             history.push(`/my-agency/team/${row.agencyTeamId}/members`);
           }} />
@@ -16,7 +16,7 @@ const ActionButtons = ({history, row}) => {
       <Tooltip title="Edit Record">
         <Button
           shape="circle"
-          icon="edit" 
+          icon="edit"
           onClick={() => {
             history.push(`/my-agency/team/${row.agencyTeamId}/edit`);
           }} />
@@ -24,7 +24,7 @@ const ActionButtons = ({history, row}) => {
       <Tooltip title="Show Team Info">
         <Button
           shape="circle"
-          icon="info" 
+          icon="info"
           onClick={() => {
             history.push(`/my-agency/team/${row.agencyTeamId}/details`);
           }} />
