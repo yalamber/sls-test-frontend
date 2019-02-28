@@ -15,13 +15,13 @@ class ActionButtons extends Component {
   }
 
   render() {
-    const { row, sendToQueue, delteItem, history } = this.props;
+    const { row, sendToQueue, deleteTestCase, history } = this.props;
     return (
       <ActionWrapper>
         <Tooltip title="Queue for Test">
-          <Button 
-            shape="circle" 
-            icon={this.state.sendingToQueue? 'loading': 'cloud'} 
+          <Button
+            shape="circle"
+            icon={this.state.sendingToQueue? 'loading': 'cloud'}
             onClick={async () => {
               this.setState({
                 sendingToQueue: true
@@ -36,25 +36,25 @@ class ActionButtons extends Component {
                   sendingToQueue: false
                 });
               }
-            }} 
+            }}
           />
         </Tooltip>
         <Tooltip title="Edit Record">
-          <Button 
-            shape="circle" 
-            icon="edit" 
+          <Button
+            shape="circle"
+            icon="edit"
             onClick={() => {
               history.push(`/my-client/test-manager/test-case/${row.testCaseId}/edit`);
-            }} 
+            }}
           />
         </Tooltip>
         <Tooltip title="Details">
-          <Button 
-            shape="circle" 
-            icon="info" 
+          <Button
+            shape="circle"
+            icon="info"
             onClick={() => {
               history.push(`/my-client/test-manager/test-case/${row.testCaseId}/details`);
-            }} 
+            }}
           />
         </Tooltip>
         <Tooltip placement="topLeft" title="Delete Record">
@@ -63,10 +63,10 @@ class ActionButtons extends Component {
             okText="Yes"
             cancelText="No"
             placement="topRight"
-            onConfirm={() => delteItem(row)}
+            onConfirm={() => deleteTestCase(row.testCaseId)}
           >
-            <Button 
-              shape="circle" 
+            <Button
+              shape="circle"
               icon="delete" />
           </Popconfirms>
         </Tooltip>

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { get } from 'lodash';
 import qs from "qs";
 import Moment from "react-moment";
-import { Row, Col, Icon, Select, Tooltip, Spin, Form } from "antd";
+import { Row, Col, Icon, Select, Tooltip, Spin, Form, message } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
@@ -71,7 +71,7 @@ class TestCaseList extends Component {
       {
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons row={row} sendToQueue={this.sendToQueue} delete={this.handleDelete} history={props.history} />
+        render: row => <ActionButtons row={row} sendToQueue={this.sendToQueue} deleteTestCase={this.deleteTestCase} history={props.history} />
       }
     ];
   }
@@ -82,7 +82,7 @@ class TestCaseList extends Component {
     //TODO: check stat and params if same clientId already
     //get client id
     let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
-    if(activeCompanyTokenData.type === 'clientUser' && clientId) {  
+    if(activeCompanyTokenData.type === 'clientUser' && clientId) {
       requestCurrentClient(clientId);
       //get all test cases
       let reqParams = {};
@@ -92,7 +92,7 @@ class TestCaseList extends Component {
         reqParams.clientId = clientId;
       }
       this.fetchTestSuites(clientId);
-      this.fetchTestCase(reqParams); 
+      this.fetchTestCase(reqParams);
     }
   }
 
@@ -120,7 +120,7 @@ class TestCaseList extends Component {
         }
       };
       if(options.testSuiteId) {
-        updateState.selectedSuiteId = parseInt(options.testSuiteId, 10); 
+        updateState.selectedSuiteId = parseInt(options.testSuiteId, 10);
       }
       this.setState(updateState);
     } catch(e) {
@@ -184,8 +184,19 @@ class TestCaseList extends Component {
     return !!this.state.selectedSuiteId;
   }
 
-  async deleteTestCase(row) {
-    
+  // async deleteTestCase(row) {
+  //
+  // }
+
+  deleteTestCase = async (caseId) => {
+    try {
+      await
+      await SWQAClient.deleteTestCase(caseId);
+      message.success("Test case deleted");
+    } catch(e) {
+      console.log(e);
+      message.error("Problem occured.");
+    }
   }
 
   async sendToQueue(row) {

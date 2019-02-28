@@ -81,7 +81,7 @@ class List extends Component {
       );
     }
   }
-  
+
   componentDidMount() {
     this.onTablePaginationChange(1, 10);
   }

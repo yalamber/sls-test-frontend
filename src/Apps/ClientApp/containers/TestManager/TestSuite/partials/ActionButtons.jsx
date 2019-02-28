@@ -9,27 +9,27 @@ export default function ActionButtons({history, row, sendToQueue, deleteTestSuit
   return (
     <ActionWrapper>
       <Tooltip title="Queue for Test">
-        <Button 
-          shape="circle" 
-          icon="cloud" 
+        <Button
+          shape="circle"
+          icon="cloud"
           onClick={() => {
             sendToQueue(row);
-          }} 
+          }}
         />
       </Tooltip>
       <Tooltip title="Test Cases">
-        <Button 
-          shape="circle" 
-          icon="experiment" 
+        <Button
+          shape="circle"
+          icon="experiment"
           onClick={() => {
             history.push(`/my-client/test-manager/test-cases?suiteId=${row.testSuiteId}`)
-          }} 
+          }}
         />
       </Tooltip>
       <Tooltip title="Edit Record">
         <Button
           shape="circle"
-          icon="edit" 
+          icon="edit"
           onClick={() => {
             history.push(`/my-client/test-manager/test-suite/${row.testSuiteId}/edit`);
           }} />
@@ -37,7 +37,7 @@ export default function ActionButtons({history, row, sendToQueue, deleteTestSuit
       <Tooltip title="Details">
         <Button
           shape="circle"
-          icon="info" 
+          icon="info"
           onClick={() => {
             history.push(`/my-client/test-manager/test-suite/${row.testSuiteId}/details`);
           }} />
@@ -49,7 +49,7 @@ export default function ActionButtons({history, row, sendToQueue, deleteTestSuit
           cancelText="No"
           placement="topRight"
           onConfirm={() => {
-            deleteTestSuite(row);
+            deleteTestSuite(row.testSuiteId);
           }}
         >
           <Button

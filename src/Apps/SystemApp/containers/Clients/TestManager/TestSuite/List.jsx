@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { get } from 'lodash';
 import qs from "qs";
-import { Row, Col, Icon, Select, Tooltip, Spin, Form } from "antd";
+import { Row, Col, Icon, Select, Tooltip, Spin, Form, message } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
@@ -100,7 +100,7 @@ class SuiteList extends Component {
         }
       };
       if(options.clientTeamId) {
-        updateState.selectedTeamId = parseInt(options.clientTeamId, 10); 
+        updateState.selectedTeamId = parseInt(options.clientTeamId, 10);
       }
       this.setState(updateState);
     } catch(e) {
@@ -162,8 +162,19 @@ class SuiteList extends Component {
     return !!this.state.selectedTeamId;
   }
 
-  deleteTestSuite(row) {
-    
+  // deleteTestSuite(row) {
+  //
+  // }
+
+  deleteTestSuite = async (suiteId) => {
+    try {
+      await SWQAClient.deleteTestSuite(suiteId);
+      message.success("Test suite deleted");
+      //Todo
+    } catch(e) {
+      console.log(e);
+      message.error("Problem occured.");
+    }
   }
 
   render() {

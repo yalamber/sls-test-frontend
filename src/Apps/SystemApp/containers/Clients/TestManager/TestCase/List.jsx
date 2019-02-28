@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { get } from 'lodash';
 import qs from "qs";
-import { Row, Col, Icon, Select, Tooltip, Spin, Form } from "antd";
+import { Row, Col, Icon, Select, Tooltip, Spin, Form, message } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
@@ -64,7 +64,7 @@ class TestCaseList extends Component {
       {
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons row={row} delete={this.handleDelete} history={props.history} />
+        render: row => <ActionButtons row={row} delete={this.deleteTestSuite} history={props.history} />
       }
     ];
   }
@@ -109,7 +109,7 @@ class TestCaseList extends Component {
         }
       };
       if(options.testSuiteId) {
-        updateState.selectedSuiteId = parseInt(options.testSuiteId, 10); 
+        updateState.selectedSuiteId = parseInt(options.testSuiteId, 10);
       }
       this.setState(updateState);
     } catch(e) {
@@ -173,8 +173,19 @@ class TestCaseList extends Component {
     return !!this.state.selectedSuiteId;
   }
 
-  deleteTestCase(row) {
-    
+  // deleteTestCase(row) {
+  //
+  // }
+
+  deleteTestCase = async (caseId) => {
+    try {
+      await
+      await SWQAClient.deleteTestCase(caseId);
+      message.success("Test case deleted");
+    } catch(e) {
+      console.log(e);
+      message.error("Problem occured.");
+    }
   }
 
   render() {
