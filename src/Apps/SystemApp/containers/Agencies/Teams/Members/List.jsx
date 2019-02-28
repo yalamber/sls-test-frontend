@@ -31,7 +31,7 @@ class MemberList extends Component {
       },
       {
         title: "Status",
-        dataIndex: "user.status",
+        dataIndex: "status",
         key: "status",
         sorter: (a, b) => a.status >= b.status
       },
