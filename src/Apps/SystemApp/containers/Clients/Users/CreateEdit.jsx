@@ -134,64 +134,44 @@ const mapPropsToFields = props => {
   let { currentClientUser } = props;
   let currentUser = currentClientUser.data.user;
   let role = currentClientUser.data.role;
-  //testData TODO: remove this after test
-  /*role = {
-    roleId: 2
-  };
-  currentUser = {
-    status: 'active',
-    username: 'adadadadada',
-    resumeUrl: 'http://test.com',
-    contactInformation: {
-      emailAddress: 'teststs@sdsd.comsdsd',
-      postalAddress: 'testing ok ',
-      mobilePhone: '9843612873',
-      smsPhone: 'test2334',
-      linkedInUrl: 'testing ok',
-    },
-    instantMessengerInfos: [
-      {service: 'facebook', messengerId: 'yalu'},
-      {service: 'facebook', messengerId: 'yalu2'},
-    ]
-  };*/
   return {
-    role: Form.createFormField({
+    'user.role': Form.createFormField({
       value: get(role, 'roleId')
     }),
-    status: Form.createFormField({
+    'user.status': Form.createFormField({
       value: get(currentUser, 'status')
     }),
-    username: Form.createFormField({
+    'user.username': Form.createFormField({
       value: get(currentUser, 'username')
     }),
-    resumeUrl: Form.createFormField({
+    'user.resumeUrl': Form.createFormField({
       value: get(currentUser, 'resumeUrl')
     }),
-    'contactInformation.emailAddress': Form.createFormField({
+    'user.contactInformation.emailAddress': Form.createFormField({
       value: get(currentUser, 'contactInformation.emailAddress')
     }),
-    'contactInformation.postalAddress': Form.createFormField({
+    'user.contactInformation.postalAddress': Form.createFormField({
       value: get(currentUser, 'contactInformation.postalAddress')
     }),
-    'contactInformation.mobilePhone': Form.createFormField({
+    'user.contactInformation.mobilePhone': Form.createFormField({
       value: get(currentUser, 'contactInformation.mobilePhone')
     }),
-    'contactInformation.smsPhone': Form.createFormField({
+    'user.contactInformation.smsPhone': Form.createFormField({
       value: get(currentUser, 'contactInformation.smsPhone')
     }),
-    'contactInformation.linkedInUrl': Form.createFormField({
+    'user.contactInformation.linkedInUrl': Form.createFormField({
       value: get(currentUser, 'contactInformation.linkedInUrl')
     }),
-    'instantMessengerInfos[0]["service"]': Form.createFormField({
+    'user.instantMessengerInfos[0]["service"]': Form.createFormField({
       value: get(currentUser, 'instantMessengerInfos[0]["service"]')
     }),
-    'instantMessengerInfos[0]["messengerId"]': Form.createFormField({
+    'user.instantMessengerInfos[0]["messengerId"]': Form.createFormField({
       value: get(currentUser, 'instantMessengerInfos[0]["messengerId"]')
     }),
-    'instantMessengerInfos[1]["service"]': Form.createFormField({
+    'user.instantMessengerInfos[1]["service"]': Form.createFormField({
       value: get(currentUser, 'instantMessengerInfos[1]["service"]')
     }),
-    'instantMessengerInfos[1]["messengerId"]': Form.createFormField({
+    'user.instantMessengerInfos[1]["messengerId"]': Form.createFormField({
       value: get(currentUser, 'instantMessengerInfos[1]["messengerId"]')
     }),
   };

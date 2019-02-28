@@ -23,7 +23,6 @@ const formResSpan = {
   sm: { span: 24 }
 };
 
-
 class UserFormFields extends Component {
   state = {
     passwordType: false

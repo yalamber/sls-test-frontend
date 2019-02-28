@@ -179,13 +179,12 @@ const mapPropsToFields = (props) => {
       value: get(currentClient, 'clientData.location')
     }),
   };
-  /*
-  let currentClient = {
+  /*let currentClient = {
     name: 'test client',
     location: 'test location',
     owner: {
       status: 'active',
-      username: 'adadada dada',
+      username: 'test',
       resumeUrl: 'http://test.com',
       contactInformation: {
         emailAddress: 'teststs@sdsd.comsdsd',

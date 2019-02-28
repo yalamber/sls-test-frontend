@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ThemeProvider } from "styled-components";
 import { LocaleProvider } from "antd";
 import { IntlProvider } from "react-intl";
+import { get } from 'lodash';
 import { store, history } from "@redux/store";
 import Boot from "@redux/boot";
 import authActions from "@redux/auth/actions";
@@ -16,14 +17,13 @@ import config, {
 import PublicRoutes from "./router";
 import DashAppHolder from "./dashAppStyle";
 
-
 /** Intercept any unauthorized request.
 * dispatch logout action accordingly **/
 const { dispatch } = store; // direct access to redux store.
 axios.interceptors.response.use(
   response => response,
   error => {
-    const {status} = error.response;
+    const status = get(error, 'response.status', null);;
     if (status === 401) {
       dispatch(authActions.logout());
     }
