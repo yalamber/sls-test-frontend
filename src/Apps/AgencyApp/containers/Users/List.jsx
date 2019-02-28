@@ -30,7 +30,7 @@ class UserList extends Component {
         className: 'column-actions',
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons 
+        render: row => <ActionButtons
           row={row}
           history={this.props.history} />
       }
@@ -41,14 +41,14 @@ class UserList extends Component {
     const { requestCurrentAgency } = this.props;
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
     let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
-    if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {  
+    if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {
       requestCurrentAgency(agencyId);
-      this.onTablePaginationChange(agencyId)(1, 5);    
+      this.onTablePaginationChange(agencyId)(1, 5);
     }
   }
 
   onTablePaginationChange(agencyId) {
-    return (page, pageSize) => { 
+    return (page, pageSize) => {
       this.props.requestAgencyUsers(agencyId, {
         page,
         pageSize
@@ -59,9 +59,9 @@ class UserList extends Component {
   render() {
     const { currentAgency = { agencyData: { name: '' } }, history } = this.props;
     return (
-      <List {...this.props} 
+      <List {...this.props}
         title = "Users"
-        onTablePaginationChange={this.onTablePaginationChange} 
+        onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
           onDoubleClick: () => {
             history.push(`/my-agency/user/${row.userId}/details`);

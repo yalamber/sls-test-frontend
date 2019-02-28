@@ -11,9 +11,9 @@ import Box from "@components/utility/box";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
 import UserFormFields from "@appComponents/User/FormFields";
 
-const { 
-  requestCurrentAgency, 
-  requestCurrentAgencyUser, 
+const {
+  requestCurrentAgency,
+  requestCurrentAgencyUser,
   requestAgencyUserRoles,
   requestCreateAgencyUser,
   clearCurrentAgencyUser,
@@ -33,9 +33,9 @@ class CreateEdit extends Component {
   }
 
   componentDidMount() {
-    const { 
-      match, 
-      requestCurrentAgency, 
+    const {
+      match,
+      requestCurrentAgency,
       requestCurrentAgencyUser,
       requestAgencyUserRoles,
       clearCurrentAgencyUser
@@ -86,7 +86,7 @@ class CreateEdit extends Component {
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>        
+            <Box>
               <TitleWrapper>
                 <ComponentTitle>
                   <ActionBtn
