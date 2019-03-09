@@ -64,7 +64,7 @@ class TestCaseList extends Component {
       {
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons row={row} delete={this.deleteTestSuite} history={props.history} />
+        render: row => <ActionButtons row={row} deleteTestCase={this.deleteTestCase} history={props.history} />
       }
     ];
   }

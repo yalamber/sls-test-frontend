@@ -9,17 +9,17 @@ import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import clientActions from '@app/SystemApp/redux/client/actions';
 
-const { 
-  requestCurrentClient, 
+const {
+  requestCurrentClient,
   requestCurrentClientUser
 } = clientActions;
 
 class Detail extends Component {
 
   componentDidMount() {
-    const { 
-      match, 
-      requestCurrentClient, 
+    const {
+      match,
+      requestCurrentClient,
       requestCurrentClientUser
     } = this.props;
     //get current client
@@ -41,7 +41,7 @@ class Detail extends Component {
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>        
+            <Box>
               <TitleWrapper>
                 <ComponentTitle>
                   <ActionBtn

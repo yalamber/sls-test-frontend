@@ -76,7 +76,7 @@ class TestQueueList extends Component {
     const { requestCurrentClient, activeCompanyTokenData } = this.props;
     //get client id
     let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
-    if(activeCompanyTokenData.type === 'clientUser' && clientId) {  
+    if(activeCompanyTokenData.type === 'clientUser' && clientId) {
       requestCurrentClient(clientId);
       this.fetchData({
         clientId

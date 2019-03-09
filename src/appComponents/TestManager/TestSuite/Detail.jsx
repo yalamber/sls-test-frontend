@@ -18,7 +18,7 @@ class Detail extends Component {
   };
 
   fetchData = async () => {
-    try {  
+    try {
       const { match } = this.props;
       this.setState({ loading: true });
       const suiteData = await SWQAClient.getTestSuite(match.params.suiteId);
@@ -52,7 +52,7 @@ class Detail extends Component {
       field: 'Description',
       details: this.state.suiteData.description,
     }];
-    
+
     const columns = [{
       title: 'Field',
       dataIndex: 'field',
@@ -62,7 +62,7 @@ class Detail extends Component {
       dataIndex: 'details',
       key: 'details',
     }];
-    
+
     return (
       <LayoutWrapper>
         <PageHeader>
@@ -72,7 +72,7 @@ class Detail extends Component {
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>        
+            <Box>
               <TitleWrapper>
                 <ComponentTitle>
                   <ActionBtn

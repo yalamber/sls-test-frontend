@@ -11,9 +11,9 @@ import Box from "@components/utility/box";
 import clientActions from '@app/SystemApp/redux/client/actions';
 import UserFormFields from "@appComponents/User/FormFields";
 
-const { 
-  requestCurrentClient, 
-  requestCurrentClientUser, 
+const {
+  requestCurrentClient,
+  requestCurrentClientUser,
   requestClientUserRoles,
   requestCreateClientUser,
   clearCurrentClientUser,
@@ -33,14 +33,14 @@ class CreateEdit extends Component {
   }
 
   componentDidMount() {
-    const { 
-      match, 
-      requestCurrentClient, 
+    const {
+      match,
+      requestCurrentClient,
       requestCurrentClientUser,
       requestClientUserRoles,
       clearCurrentClientUser
     } = this.props;
-    
+
     //get current client
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
     let clientId = this.getClientId();
@@ -86,7 +86,7 @@ class CreateEdit extends Component {
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>        
+            <Box>
               <TitleWrapper>
                 <ComponentTitle>
                   <ActionBtn

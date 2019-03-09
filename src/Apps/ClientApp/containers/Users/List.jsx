@@ -40,7 +40,7 @@ class UserList extends Component {
         className: 'column-actions',
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons 
+        render: row => <ActionButtons
           row={row}
           history={this.props.history} />
       }
@@ -48,7 +48,7 @@ class UserList extends Component {
   }
 
   componentDidMount() {
-    this.onTablePaginationChange(1, 10); 
+    this.onTablePaginationChange(1, 10);
   }
 
   onTablePaginationChange(page, pageSize) {
@@ -88,9 +88,9 @@ class UserList extends Component {
   render() {
     const { history } = this.props;
     return (
-      <List {...this.props} 
+      <List {...this.props}
         title = "Users"
-        onTablePaginationChange={this.onTablePaginationChange} 
+        onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
           onDoubleClick: () => {
             history.push(`/my-client/${row.userId}/details`);
