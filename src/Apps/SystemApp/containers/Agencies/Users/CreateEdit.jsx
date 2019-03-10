@@ -12,32 +12,32 @@ import Box from "@components/utility/box";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
 import UserFormFields from "@appComponents/User/FormFields";
 
-const { 
-  requestCurrentAgency, 
-  requestCurrentAgencyUser, 
+const {
+  requestCurrentAgency,
+  requestCurrentAgencyUser,
   requestAgencyUserRoles,
   requestCreateAgencyUser,
   clearCurrentAgencyUser,
 } = agencyActions;
 
 class CreateEdit extends Component {
+
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.mode = props.match.params.userId? 'edit': 'add';
   }
 
   componentDidMount() {
-    const { 
-      match, 
-      requestCurrentAgency, 
+    const {
+      match,
+      requestCurrentAgency,
       requestCurrentAgencyUser,
       requestAgencyUserRoles,
       clearCurrentAgencyUser
     } = this.props;
-    //get current agency
+    //get current client
     requestCurrentAgency(match.params.agencyId);
-    //get agency roles
+    //get client roles
     requestAgencyUserRoles();
     //get current user and set to edit if we have userId
     if(match.params.userId) {
@@ -47,16 +47,16 @@ class CreateEdit extends Component {
     }
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
+    const { form, match} = this.props;
+    form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if(this.mode === 'edit') {
-          //this.props.requestUpdateAgencyUser(this.props.match.agencyId, userId, values, this.props.history);
+          //this.props.requestUpdateClientUser(match.params.clientId, userId, values, this.props.history);
         } else {
-          //create user and add to agency
-          this.props.requestCreateAgencyUser(this.props.match.agencyId, values.user, this.props.history, 'systemApp');
-
+          //create user and add to client
+          this.props.requestCreateAgencyUser(match.params.agencyId, values.user, this.props.history, 'systemApp');
         }
       }
     });
@@ -74,10 +74,10 @@ class CreateEdit extends Component {
     let title = this.mode === 'edit'? 'Edit User' : 'Add User';
     return (
       <LayoutWrapper>
-        <PageHeader><IntlMessages id="agency" /> - {currentAgency.agencyData.name}</PageHeader>
+        <PageHeader><IntlMessages id="client" /> - {currentAgency.agencyData.name}</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>        
+            <Box>
               <TitleWrapper>
                 <ComponentTitle>
                   <ActionBtn

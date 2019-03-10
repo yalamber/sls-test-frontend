@@ -29,7 +29,7 @@ class UserList extends Component {
         className: 'column-actions',
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons 
+        render: row => <ActionButtons
           row={row}
           agencyId={props.match.params.agencyId}
           history={this.props.history} />
@@ -40,11 +40,11 @@ class UserList extends Component {
   componentDidMount() {
     const { match } = this.props;
     this.props.requestCurrentAgency(match.params.agencyId);
-    this.onTablePaginationChange(match.params.agencyId)(1, 5);    
+    this.onTablePaginationChange(match.params.agencyId)(1, 5);
   }
 
   onTablePaginationChange(agencyId) {
-    return (page, pageSize) => {  
+    return (page, pageSize) => {
       this.props.requestAgencyUsers(agencyId, {
         page,
         pageSize
@@ -55,13 +55,13 @@ class UserList extends Component {
   render() {
     const { currentAgency = { agencyData: { name: '' } }, match } = this.props;
     return (
-      <List {...this.props} 
+      <List {...this.props}
         pageHeader = {`Agency - ${currentAgency.agencyData.name}`}
         title = "Users"
-        onTablePaginationChange={this.onTablePaginationChange} 
+        onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
           onDoubleClick: () => {
-            this.props.history.push(`/admin/agency/${row.agencyId}/details`);
+            this.props.history.push(`/admin/agency/${row.agencyId}/user/${row.userId}/details`);
           }
         })}
         loading={currentAgency.userList.loading}

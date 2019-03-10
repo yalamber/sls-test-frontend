@@ -30,7 +30,7 @@ const actions = {
   REQUEST_AGENCY_TEAM_LIST: 'REQUEST_AGENCY_TEAM_LIST',
   RECEIVE_AGENCY_TEAM_LIST: 'RECEIVE_AGENCY_TEAM_LIST',
   ERROR_AGENCY_TEAM_LIST: 'ERROR_AGENCY_TEAM_LIST',
-  
+
   //current agency creators
   requestCurrentAgency: (agencyId) => ({
     type: actions.REQUEST_CURRENT_AGENCY,

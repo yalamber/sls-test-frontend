@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Icon, Spin } from "antd";
+import { Row, Col, Icon, Spin, Table } from "antd";
 import { connect } from 'react-redux';
 import { get } from "lodash";
 import LayoutWrapper from "@components/utility/layoutWrapper";
@@ -23,8 +23,57 @@ class Detail extends Component {
       requestCurrentAgencyUser
     } = this.props;
     //get current agency
-    requestCurrentAgency(match.params.agencyId);
-    requestCurrentAgencyUser(match.params.userId);
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
+    if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {
+        requestCurrentAgency(agencyId);
+        requestCurrentAgencyUser(agencyId, match.params.userId);
+    }
+  }
+
+  renderDetailsTable() {
+    const { currentAgencyUser } = this.props;
+    if (!currentAgencyUser) {
+      return <div />;
+    }
+
+    const { data = {} } = currentAgencyUser;
+    const { agency = {}, user = {}, role = {} } = data;
+
+    const records = [];
+    user.username &&
+      records.push({ field: "User Name", description: user.username });
+
+    const userStatus = user.status;
+    userStatus &&
+      records.push({ field: "User Status", description: userStatus });
+
+    const agencyName = agency.name;
+    agencyName && records.push({ field: "Agency", description: agencyName });
+
+    const roleTitle = role.title;
+    roleTitle && records.push({ field: "Role", description: roleTitle });
+
+    return (
+      <Table
+        columns={[
+          {
+            title: "Field",
+            key: "field",
+            dataIndex: "field"
+          },
+
+          {
+            title: "Description",
+            key: "description",
+            dataIndex: "description"
+          }
+        ]}
+        dataSource={records}
+        rowKey="field"
+        pagination={false}
+      />
+    );
   }
 
   render() {
@@ -35,7 +84,7 @@ class Detail extends Component {
     let title = 'User Details';
     return (
       <LayoutWrapper>
-        <PageHeader>Agency - {get(currentAgency, 'agencyData.name', '')}</PageHeader>
+        <PageHeader>User Detail</PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
             <Box>
@@ -51,7 +100,7 @@ class Detail extends Component {
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={loading}>
-                In progress
+                {this.renderDetailsTable()}
               </Spin>
             </Box>
           </Col>
@@ -63,7 +112,8 @@ class Detail extends Component {
 
 export default connect(
   state => ({
-    ...state.Agency
+    ...state.Agency,
+    ...state.My
   }),
   {
     requestCurrentAgency,
