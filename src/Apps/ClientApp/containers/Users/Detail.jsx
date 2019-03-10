@@ -41,7 +41,7 @@ class Detail extends Component {
     user.username &&
       records.push({ field: "User Name", description: user.username });
 
-    const userStatus = user.status;
+    const userStatus = data.status;
     userStatus &&
       records.push({ field: "User Status", description: userStatus });
 
