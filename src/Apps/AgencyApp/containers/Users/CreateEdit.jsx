@@ -209,7 +209,8 @@ const form = Form.create({ mapPropsToFields })(CreateEdit);
 
 export default connect(
   state => ({
-    ...state.Agency
+    ...state.Agency,
+    ...state.My
   }),
   {
     requestAgencyUserRoles,

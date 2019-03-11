@@ -24,6 +24,7 @@ class CreateEdit extends Component {
 
   constructor(props) {
     super(props);
+    this.state = { loading: false, error: null };
     this.mode = props.match.params.userId? 'edit': 'add';
   }
 

@@ -9,6 +9,17 @@ const { requestAgencyUsers, requestCurrentAgency } = agencyActions;
 class UserList extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      data: [],
+      loading: true,
+      error: null,
+      paginationOptions: {
+        defaultCurrent: 1,
+        current: 1,
+        pageSize: 10,
+        total: 1
+      },
+    }
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {

@@ -89,7 +89,7 @@ class CreateEdit extends Component {
     const margin = {
       margin: '0px 10px 10px 0px'
     };
-    let title = this.mode === 'edit'? 'Edit Cient' : 'Add Client';
+    let title = this.mode === 'edit'? 'Edit Client' : 'Add Client';
     const { getFieldDecorator } = form;
     return (
       <LayoutWrapper>
