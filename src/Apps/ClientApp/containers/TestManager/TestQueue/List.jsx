@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Row, Col, Icon, Spin } from "antd";
+import { Row, Col, Icon, Spin, message } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
@@ -35,9 +35,6 @@ class TestQueueList extends Component {
         total: 1
       },
     };
-    this.fetchData = this.fetchData.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
     this.columns = [
       {
         title: "Id",
@@ -67,7 +64,7 @@ class TestQueueList extends Component {
       {
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons row={row} delete={this.handleDelete} history={props.history} />
+        render: row => <ActionButtons row={row} deleteTestQueue={this.deleteTestQueue} history={props.history} />
       }
     ];
   }
@@ -84,7 +81,7 @@ class TestQueueList extends Component {
     }
   }
 
-  async fetchData(options) {
+  fetchData = async (options) => {
     try {
       this.setState({loading: true});
       options.limit = this.state.paginationOptions.pageSize;
@@ -109,7 +106,7 @@ class TestQueueList extends Component {
     }
   }
 
-  async onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = async (page, pageSize) => {
     this.setState({
       loading: true,
       paginationOptions: {
@@ -139,8 +136,21 @@ class TestQueueList extends Component {
     });
   }
 
-  handleDelete() {
-
+  deleteTestQueue = async (queueId) => {
+    try {
+      await SWQAClient.deleteTestQueue(queueId);
+      message.success("Test queue deleted");
+      // Todo
+      let clientId = get(this.props, 'activeCompanyTokenData.clientData.clientId', null);
+      if(clientId) {
+        this.fetchData({
+          clientId
+        });
+      }
+    } catch(e) {
+      console.log(e);
+      message.error("Problem occured.");
+    }
   }
 
   render() {
