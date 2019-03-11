@@ -35,9 +35,6 @@ class TestQueueList extends Component {
         total: 1
       },
     };
-    this.fetchData = this.fetchData.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
-    this.deleteTestQueue = this.deleteTestQueue.bind(this);
     this.columns = [
       {
         title: "Id",
@@ -84,7 +81,7 @@ class TestQueueList extends Component {
     }
   }
 
-  async fetchData(options) {
+  fetchData = async (options) => {
     try {
       this.setState({loading: true});
       options.limit = this.state.paginationOptions.pageSize;
@@ -109,7 +106,7 @@ class TestQueueList extends Component {
     }
   }
 
-  async onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = async (page, pageSize) => {
     this.setState({
       loading: true,
       paginationOptions: {
@@ -144,19 +141,17 @@ class TestQueueList extends Component {
       await SWQAClient.deleteTestQueue(queueId);
       message.success("Test queue deleted");
       // Todo
+      let clientId = get(this.props, 'activeCompanyTokenData.clientData.clientId', null);
+      if(clientId) {
+        this.fetchData({
+          clientId
+        });
+      }
     } catch(e) {
       console.log(e);
       message.error("Problem occured.");
     }
   }
-
-
-  // async sendToQueue(row) {
-  //   let data = {
-  //     testQueueId: [row],
-  //   };
-  //   return await SWQAClient.sendToQueue(data);
-  // }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;

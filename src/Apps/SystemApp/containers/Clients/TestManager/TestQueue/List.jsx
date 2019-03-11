@@ -35,8 +35,6 @@ class TestQueueList extends Component {
         total: 1
       },
     };
-    this.fetchData = this.fetchData.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: "Test Case",
@@ -64,12 +62,14 @@ class TestQueueList extends Component {
   componentDidMount() {
     const { match, requestCurrentClient } = this.props;
     requestCurrentClient(match.params.clientId);
-    this.fetchData({
-      clientId: match.params.clientId
-    });
+    this.fetchData();
   }
 
-  async fetchData(options) {
+  fetchData = async () => {
+    const { match } = this.props;
+    let options = {
+      clientId: match.params.clientId
+    };
     try {
       this.setState({loading: true});
       options.limit = this.state.paginationOptions.pageSize;
@@ -94,7 +94,7 @@ class TestQueueList extends Component {
     }
   }
 
-  async onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = async (page, pageSize) => {
     this.setState({
       loading: true,
       paginationOptions: {
