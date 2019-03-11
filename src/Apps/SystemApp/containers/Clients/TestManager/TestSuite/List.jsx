@@ -69,25 +69,25 @@ class SuiteList extends Component {
   }
 
   componentDidMount() {
-    const { match, requestCurrentClient, requestClientTeams, location } = this.props;
-    let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
+    const { match, requestCurrentClient, requestClientTeams } = this.props;
     //TODO: check state and params if same clientId already
     requestCurrentClient(match.params.clientId);
     requestClientTeams(match.params.clientId, {
       page: 1,
       pageSize: 50
     });
-    //get test suites
-    let reqParams = {};
-    if(queryParams.teamId) {
-      reqParams.clientTeamId = queryParams.teamId;
-    } else {
-      reqParams.clientId = match.params.clientId;
-    }
-    this.fetchTestSuite(reqParams);
+    this.fetchTestSuite();
   }
 
-  async fetchTestSuite(options) {
+  async fetchTestSuite() {
+    const { match, location } = this.props;
+    let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
+    let options = {};
+    if(queryParams.teamId) {
+      options.clientTeamId = queryParams.teamId;
+    } else {
+      options.clientId = match.params.clientId;
+    }
     try {
       this.setState({loading: true});
       let testSuites = await SWQAClient.getTestSuites(options);
@@ -162,15 +162,12 @@ class SuiteList extends Component {
     return !!this.state.selectedTeamId;
   }
 
-  // deleteTestSuite(row) {
-  //
-  // }
-
   deleteTestSuite = async (suiteId) => {
     try {
       await SWQAClient.deleteTestSuite(suiteId);
       message.success("Test suite deleted");
-      //Todo
+      //fetch new set of test suties
+      this.fetchTestSuite();
     } catch(e) {
       console.log(e);
       message.error("Problem occured.");
