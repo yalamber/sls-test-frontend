@@ -15,7 +15,7 @@ import {
 const { rowStyle, colStyle, gutter } = basicStyle;
 
 export default ({
-  columns, 
+  columns,
   history,
   paginationOptions,
   loading,
@@ -31,7 +31,7 @@ export default ({
 }) => {
   return (
     <LayoutWrapper>
-      { pageHeader && 
+      { pageHeader &&
         <PageHeader>
           { pageHeader }
         </PageHeader>
@@ -48,7 +48,7 @@ export default ({
                   <Icon type="left" /> <IntlMessages id="back" />
                 </ActionBtn> {title}
               </ComponentTitle>
-              {createLink && 
+              {createLink &&
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"

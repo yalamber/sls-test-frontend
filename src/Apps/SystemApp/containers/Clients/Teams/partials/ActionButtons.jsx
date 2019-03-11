@@ -8,7 +8,7 @@ const ActionButtons = ({history, row}) => {
       <Tooltip title="Show Members List">
         <Button
           shape="circle"
-          icon="user" 
+          icon="user"
           onClick={() => {
             history.push(`/admin/client/team/${row.clientTeamId}/members`);
           }} />
@@ -16,7 +16,7 @@ const ActionButtons = ({history, row}) => {
       <Tooltip title="Test Suites">
         <Button
           shape="circle"
-          icon="folder" 
+          icon="folder"
           onClick={() => {
             history.push(`/admin/client/${row.clientId}/test-manager/test-suite?teamId=${row.clientTeamId}`)
           }} />
@@ -24,7 +24,7 @@ const ActionButtons = ({history, row}) => {
       <Tooltip title="Edit Record">
         <Button
           shape="circle"
-          icon="edit" 
+          icon="edit"
           onClick={() => {
             history.push(`/admin/client/team/${row.clientTeamId}/edit`);
           }} />
@@ -32,7 +32,7 @@ const ActionButtons = ({history, row}) => {
       <Tooltip title="Show Team Info">
         <Button
           shape="circle"
-          icon="info" 
+          icon="info"
           onClick={() => {
             history.push(`/admin/client/team/${row.clientTeamId}/details`);
           }} />

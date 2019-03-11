@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { get } from 'lodash';
 import List from '@appComponents/Common/List';
 import clientActions from "@app/SystemApp/redux/client/actions";
-import SWQAClient from '@helpers/apiClient';
 import ActionButtons from "./partials/ActionButtons";
 const { requestClientUsers, requestCurrentClient} = clientActions;
 

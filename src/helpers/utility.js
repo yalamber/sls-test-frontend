@@ -123,7 +123,6 @@ export function generateRandomPassword() {
 
 export function setFormValidaitonError(form, error) {
   const errorResponseData = get(error, 'response.data');
-  //check if validation Error
   if(error && error.name === 'ValidationError') {
     const validationObjectDetails = get(errorResponseData, 'validationObject.details');
     if(validationObjectDetails && validationObjectDetails.length > 0) {  

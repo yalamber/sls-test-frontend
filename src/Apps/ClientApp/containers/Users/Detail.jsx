@@ -10,7 +10,10 @@ import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import clientActions from "@app/SystemApp/redux/client/actions";
 
-const { requestCurrentClient, requestCurrentClientUser } = clientActions;
+const {
+  requestCurrentClient,
+  requestCurrentClientUser
+} = clientActions;
 
 class Detail extends Component {
   componentDidMount() {

@@ -11,7 +11,7 @@ import Box from "@components/utility/box";
 import clientActions from '@app/SystemApp/redux/client/actions';
 import { clientValidation } from "@validations/clientValidation";
 import UserFormFields from "@appComponents/User/FormFields";
-import Error from '@appComponents/Common/Error';
+import ErrorBox from '@appComponents/Common/Error';
 import SWQAClient from '@helpers/apiClient';
 
 const FormItem = Form.Item;
@@ -73,7 +73,11 @@ class CreateEdit extends Component {
           message.error("something went wrong");
           this.setState({ error: e });
           setFormValidaitonError(form, e);
-          form.validateFieldsAndScroll({scroll: {offsetTop: 120}});
+          //set custom error to fields
+          setTimeout(() => {
+            this.setErrorFields(form, e);
+            //form.validateFieldsAndScroll({scroll: {offsetTop: 120}});
+          });
         } finally {
           if(this._isMounted) {
             this.setState({ loading: false });
@@ -81,6 +85,28 @@ class CreateEdit extends Component {
         }
       }
     });
+  }
+
+  setErrorFields(form, e) {
+    const errorResponseData = get(e, 'response.data');
+    if(errorResponseData && errorResponseData.length > 0) {
+      let fieldObject = {};
+      errorResponseData.map((msg) => {
+        if(msg.path === 'username') {
+          fieldObject['owner.username'] = {
+            value: msg.value,
+            errors: [new Error(msg.message)]
+          };
+        }
+        if(msg.path === 'email') {
+          fieldObject['owner.contactInformation.emailAddress'] = {
+            value: msg.value,
+            errors: [new Error(msg.message)]
+          };
+        }
+      });
+      form.setFields(fieldObject);
+    }
   }
 
   render() {
@@ -109,7 +135,7 @@ class CreateEdit extends Component {
               <Spin spinning={this.state.loading}>
                 <Form onSubmit={this.handleSubmit} id="companyForm">
                   <Row>
-                    {this.state.error && <Error error={this.state.error} />}
+                    {this.state.error && <ErrorBox error={this.state.error} />}
                   </Row>
                   <Row>
                     <Col md={12} sm={24} xs={24}>
@@ -170,7 +196,7 @@ class CreateEdit extends Component {
 
 
 const mapPropsToFields = (props) => {
-  let { currentClient } = props;
+  /*let { currentClient } = props;
   return {
     'name': Form.createFormField({
       value: get(currentClient, 'clientData.name')
@@ -178,8 +204,8 @@ const mapPropsToFields = (props) => {
     'location': Form.createFormField({
       value: get(currentClient, 'clientData.location')
     }),
-  };
-  /*let currentClient = {
+  };*/
+  let currentClient = {
     name: 'test client',
     location: 'test location',
     owner: {
@@ -245,7 +271,7 @@ const mapPropsToFields = (props) => {
     'owner.instantMessengerInfos[1]["messengerId"]': Form.createFormField({
       value: get(currentClient, 'owner.instantMessengerInfos[1]["messengerId"]')
     }),
-  };*/
+  };
 };
 const form = Form.create({mapPropsToFields})(CreateEdit);
 
