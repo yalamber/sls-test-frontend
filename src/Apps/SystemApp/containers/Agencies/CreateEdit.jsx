@@ -67,12 +67,38 @@ class CreateEdit extends Component {
           message.error("something went wrong");
           this.setState({ error: e });
           setFormValidaitonError(form, e);
-          form.validateFieldsAndScroll({scroll: {offsetTop: 120}});
+          //set custom error to fields
+          setTimeout(() => {
+            this.setErrorFields(form, e);
+            //form.validateFieldsAndScroll({scroll: {offsetTop: 120}});
+          });
         } finally{
           this.setState({ loading: false });
         }
       }
     });
+  }
+
+  setErrorFields(form, e) {
+    const errorResponseData = get(e, 'response.data');
+    if(errorResponseData && errorResponseData.length > 0) {
+      let fieldObject = {};
+      errorResponseData.map((msg) => {
+        if(msg.path === 'username') {
+          fieldObject['owner.username'] = {
+            value: msg.value,
+            errors: [new Error(msg.message)]
+          };
+        }
+        if(msg.path === 'email') {
+          fieldObject['owner.contactInformation.emailAddress'] = {
+            value: msg.value,
+            errors: [new Error(msg.message)]
+          };
+        }
+      });
+      form.setFields(fieldObject);
+    }
   }
 
   render() {
