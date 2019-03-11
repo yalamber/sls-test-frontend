@@ -48,13 +48,17 @@ class UserList extends Component {
     ];
   }
 
+  // componentDidMount() {
+  //   this.onTablePaginationChange(1, 10);
+  // }
+
   componentDidMount() {
     const { requestCurrentAgency } = this.props;
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
     let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
     if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {
       requestCurrentAgency(agencyId);
-      this.onTablePaginationChange(agencyId)(1, 5);
+      this.onTablePaginationChange(agencyId)(1, 10);
     }
   }
 
@@ -66,6 +70,40 @@ class UserList extends Component {
       });
     }
   }
+
+  // onTablePaginationChange(page, pageSize) {
+  //   //get agency id
+  //   let activeCompanyTokenData = this.props.activeCompanyTokenData;
+  //   let agencyId = get(activeCompanyTokenData, 'agencyData.clientId', null);
+  //   if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {
+  //     this.setState({
+  //       loading: true,
+  //       paginationOptions: {
+  //         ...this.state.paginationOptions,
+  //         current: page,
+  //         pageSize
+  //       }
+  //     }, async () => {
+  //       try{
+  //         let offset = pageSize * (page - 1);
+  //         let users = await SWQAAgency.getAgencyUsers(agencyId, {
+  //           limit: pageSize,
+  //           offset
+  //         });
+  //         this.setState({
+  //           loading: false,
+  //           data: get(users, 'rows', []),
+  //           paginationOptions: {
+  //             ...this.state.paginationOptions,
+  //             total: users.count
+  //           }
+  //         });
+  //       } catch(e) {
+  //         this.setState({ loading: false, data: [], error: e });
+  //       }
+  //     });
+  //   }
+  // }
 
   render() {
     const { currentAgency = { agencyData: { name: '' } }, history } = this.props;

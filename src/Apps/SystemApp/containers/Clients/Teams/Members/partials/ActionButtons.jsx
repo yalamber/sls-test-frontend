@@ -33,8 +33,8 @@ const ActionButtons = ({ history, row, deleteMember }) => {
           placement="topRight"
           onConfirm={() => deleteMember(row)}
         >
-          <Button 
-            shape="circle" 
+          <Button
+            shape="circle"
             icon="delete"
           />
         </Popconfirms>

@@ -73,9 +73,9 @@ class ClientList extends Component {
 
   render() {
     return (
-      <List {...this.props} 
+      <List {...this.props}
         title = "Clients"
-        onTablePaginationChange={this.onTablePaginationChange} 
+        onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
           onDoubleClick: () => {
             this.props.history.push(`/admin/client/${row.clientId}/details`);

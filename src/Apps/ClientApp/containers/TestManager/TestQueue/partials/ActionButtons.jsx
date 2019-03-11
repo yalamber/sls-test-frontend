@@ -25,8 +25,8 @@ class ActionButtons extends Component {
             placement="left"
             onConfirm={() => delteItem(row)}
           >
-            <Button 
-              shape="circle" 
+            <Button
+              shape="circle"
               icon="delete" />
           </Popconfirms>
         </Tooltip>
