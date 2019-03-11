@@ -190,7 +190,7 @@ class TestCaseList extends Component {
 
   deleteTestCase = async (caseId) => {
     try {
-      await
+      // await
       await SWQAClient.deleteTestCase(caseId);
       message.success("Test case deleted");
     } catch(e) {

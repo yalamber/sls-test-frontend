@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Row, Col, Icon, Spin } from "antd";
+import { Row, Col, Icon, Spin, message } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
@@ -37,7 +37,7 @@ class TestQueueList extends Component {
     };
     this.fetchData = this.fetchData.bind(this);
     this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
+    this.deleteTestQueue = this.deleteTestQueue.bind(this);
     this.columns = [
       {
         title: "Id",
@@ -67,7 +67,7 @@ class TestQueueList extends Component {
       {
         title: "Actions",
         key: "actions",
-        render: row => <ActionButtons row={row} delete={this.handleDelete} history={props.history} />
+        render: row => <ActionButtons row={row} deleteTestQueue={this.deleteTestQueue} history={props.history} />
       }
     ];
   }
@@ -76,7 +76,7 @@ class TestQueueList extends Component {
     const { requestCurrentClient, activeCompanyTokenData } = this.props;
     //get client id
     let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
-    if(activeCompanyTokenData.type === 'clientUser' && clientId) {  
+    if(activeCompanyTokenData.type === 'clientUser' && clientId) {
       requestCurrentClient(clientId);
       this.fetchData({
         clientId
@@ -139,9 +139,24 @@ class TestQueueList extends Component {
     });
   }
 
-  handleDelete() {
-
+  deleteTestQueue = async (queueId) => {
+    try {
+      await SWQAClient.deleteTestQueue(queueId);
+      message.success("Test queue deleted");
+      // Todo
+    } catch(e) {
+      console.log(e);
+      message.error("Problem occured.");
+    }
   }
+
+
+  // async sendToQueue(row) {
+  //   let data = {
+  //     testQueueId: [row],
+  //   };
+  //   return await SWQAClient.sendToQueue(data);
+  // }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;

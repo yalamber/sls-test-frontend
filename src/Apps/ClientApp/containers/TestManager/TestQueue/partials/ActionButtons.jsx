@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tooltip, Button } from "antd";
+import { Tooltip, Button, message } from "antd";
 import Popconfirms from '@components/feedback/popconfirm';
 import {
   ActionWrapper,
@@ -14,7 +14,7 @@ class ActionButtons extends Component {
   }
 
   render() {
-    const { row, delteItem } = this.props;
+    const { row, deleteTestQueue } = this.props;
     return (
       <ActionWrapper>
         <Tooltip placement="topRight" title="Remove from Queue">
@@ -23,10 +23,10 @@ class ActionButtons extends Component {
             okText="Yes"
             cancelText="No"
             placement="left"
-            onConfirm={() => delteItem(row)}
+            onConfirm={() => deleteTestQueue(row.testQueueId)}
           >
-            <Button 
-              shape="circle" 
+            <Button
+              shape="circle"
               icon="delete" />
           </Popconfirms>
         </Tooltip>

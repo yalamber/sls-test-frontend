@@ -54,7 +54,7 @@ class SWQA {
   constructor(options) {
     this.options = options;
     this.baseURL = options.baseURL;
-    
+
     this.api = new APIRequest(
       options.baseURL,
       options.httpsAgent,
@@ -89,7 +89,7 @@ class SWQA {
   createClient = (payload) => {
     return this.api.send('POST', `client`, payload);
   }
-  
+
   updateClient = (clientId, payload) => {
     return this.api.send('PUT', `client/${clientId}`, payload);
   }
@@ -145,7 +145,7 @@ class SWQA {
   getClientTeamMembers = (teamId, options) => {
     return this.api.send('GET', `client-team/${teamId}/member`, options);
   }
-  
+
   getClientTeamMembership = (teamId, userId) => {
     return this.api.send('GET', `client-team/${teamId}/member/${userId}`);
   }
@@ -226,16 +226,16 @@ class SWQA {
   editAgencyTeamMembership = (teamId, userId, payload) => {
     return this.api.send('put', `agency-team/${teamId}/member/${userId}`, payload);
   }
-  
+
   deleteAgencyTeamMember = (teamId, userId) => {
     return this.api.send('delete', `agency-team/${teamId}/member/${userId}`);
   }
 
-  //test manager 
+  //test manager
   addTestSuite = (suiteData) => {
     return this.api.send('POST', `test/suite`, suiteData);
   }
-  
+
   getTestSuites = (options) => {
     return this.api.send('GET', `test/suite`, options);
   }
@@ -243,7 +243,7 @@ class SWQA {
   getTestSuite = (suiteId) => {
     return this.api.send('GET', `test/suite/${suiteId}`);
   }
-  
+
   updateTestSuite = (suiteId, suiteData) => {
     return this.api.send('PUT', `test/suite/${suiteId}`, suiteData);
   }
@@ -294,9 +294,13 @@ class SWQA {
   assignTestQueue = (payloadData) => {
     return this.api.send('POST', `test/queue/assign`, payloadData);
   }
-  
+
   unassignTestQueue = (queueId) => {
     return this.api.send('DELETE', `test/queue/${queueId}/unassign`);
+  }
+
+  deleteTestQueue = (queueId) => {
+    return this.api.send('DELETE', `test/queue/${queueId}`);
   }
 
   //users
@@ -336,7 +340,7 @@ class SWQA {
   updateRole = (roleId, options) => {
     return this.api.send('PUT', `role/${roleId}`, options);
   }
-  
+
   deleteRole = (roleId) => {
     return this.api.send('DELETE', `role/${roleId}`);
   }
