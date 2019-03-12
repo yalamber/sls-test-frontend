@@ -196,7 +196,7 @@ class CreateEdit extends Component {
 
 
 const mapPropsToFields = (props) => {
-  /*let { currentClient } = props;
+  let { currentClient } = props;
   return {
     'name': Form.createFormField({
       value: get(currentClient, 'clientData.name')
@@ -204,8 +204,8 @@ const mapPropsToFields = (props) => {
     'location': Form.createFormField({
       value: get(currentClient, 'clientData.location')
     }),
-  };*/
-  let currentClient = {
+  };
+  /*let currentClient = {
     name: 'test client',
     location: 'test location',
     owner: {
@@ -271,7 +271,7 @@ const mapPropsToFields = (props) => {
     'owner.instantMessengerInfos[1]["messengerId"]': Form.createFormField({
       value: get(currentClient, 'owner.instantMessengerInfos[1]["messengerId"]')
     }),
-  };
+  };*/
 };
 const form = Form.create({mapPropsToFields})(CreateEdit);
 
