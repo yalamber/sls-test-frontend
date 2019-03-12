@@ -63,7 +63,6 @@ export default function clientReducer(state = initState, action) {
       let {
         payload: { clientListData = { rows: [], count: 0, paginationOptions: { current: 1 } } }
       } = action;
-      console.log(clientListData);
       return {
         ...state,
         list: {
