@@ -6,9 +6,9 @@ import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from "@components/utility/intlMessages";
 import basicStyle from "@settings/basicStyle";
 import Button from "@components/uielements/button";
-import { getErrorDataFromApiResponseError } from "@utils/response-message";
 import { ActionWrapper, TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
+import ErrorBox from '@appComponents/Common/Error';
 import MemberFormFields from "@appComponents/Team/Members/partials/FormFields";
 import SWQAClient from '@helpers/apiClient';
 
@@ -101,7 +101,8 @@ class CreateEdit extends Component {
             }
           }
         } catch (error) {
-          this.setState({ errors: getErrorDataFromApiResponseError(error) });
+          this.setState({ errors: error });
+          message.error('Something Went wrong!');
         } finally {
           this.setState({ loading: false });
         }
@@ -137,6 +138,7 @@ class CreateEdit extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Form onSubmit={this.handleSubmit} id="clientForm">
+                  {this.state.errors && <ErrorBox error={this.state.errors} />}
                   <MemberFormFields
                     form={this.props.form}
                     users={this.state.users}
