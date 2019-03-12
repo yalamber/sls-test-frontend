@@ -77,26 +77,32 @@ class TestCaseList extends Component {
   }
 
   componentDidMount() {
-    const { requestCurrentClient, location, activeCompanyTokenData } = this.props;
-    let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
+    const { requestCurrentClient, activeCompanyTokenData } = this.props;
     //TODO: check stat and params if same clientId already
     //get client id
     let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
     if(activeCompanyTokenData.type === 'clientUser' && clientId) {
       requestCurrentClient(clientId);
       //get all test cases
-      let reqParams = {};
-      if(queryParams.suiteId) {
-        reqParams.testSuiteId = queryParams.suiteId;
-      } else {
-        reqParams.clientId = clientId;
-      }
       this.fetchTestSuites(clientId);
-      this.fetchTestCase(reqParams);
+      this.fetchTestCase(this.getFetchReqParams(clientId));
     }
   }
 
-  async fetchTestSuites(clientId) {
+  getFetchReqParams = (clientId) => {
+    const { location } = this.props;
+    let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
+    //get all test suites
+    let reqParams = {};
+    if(queryParams.suiteId) {
+      reqParams.testSuiteId = queryParams.suiteId;
+    } else {
+      reqParams.clientId = clientId;
+    }
+    return reqParams;
+  }
+
+  fetchTestSuites = async (clientId) => {
     let testSuites = await SWQAClient.getTestSuites({
       limit: 50,
       clientId
@@ -106,7 +112,7 @@ class TestCaseList extends Component {
     });
   }
 
-  async fetchTestCase(options) {
+  fetchTestCase = async (options) => {
     try {
       this.setState({loading: true});
       options.limit = this.state.paginationOptions.pageSize;
@@ -131,7 +137,7 @@ class TestCaseList extends Component {
     }
   }
 
-  onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = (page, pageSize) => {
     this.setState({
       loading: true,
       paginationOptions: {
@@ -168,7 +174,7 @@ class TestCaseList extends Component {
     });
   }
 
-  handleSuiteChange(suiteId) {
+  handleSuiteChange = (suiteId) => {
     let {history} = this.props;
     this.setState({
       selectedSuiteId: suiteId,
@@ -189,6 +195,8 @@ class TestCaseList extends Component {
       // await
       await SWQAClient.deleteTestCase(caseId);
       message.success("Test case deleted");
+      let clientId = get(this.props, 'activeCompanyTokenData.clientData.clientId', null);
+      this.fetchTestCase(this.getFetchReqParams(clientId));
     } catch(e) {
       console.log(e);
       message.error("Problem occured.");
