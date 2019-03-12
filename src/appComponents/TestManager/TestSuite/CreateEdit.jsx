@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Row, Col, message, Spin, Form, Button, Input, Select, Icon } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
+import { setFormValidaitonError } from '@helpers/utility';
 import basicStyle from "@settings/basicStyle";
 import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
@@ -63,8 +64,8 @@ class CreateEdit extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    let { history, match } = this.props;
-    this.props.form.validateFieldsAndScroll(async (err, values) => {
+    let { history, match, form } = this.props;
+    form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
         try{
           this.setState({ loading: true });
@@ -85,6 +86,7 @@ class CreateEdit extends Component {
           }
         } catch(e) {
           this.setState({ error: e }, () => {
+            setFormValidaitonError(form, e);
             scrollToTop();
           });
         } finally {

@@ -123,12 +123,13 @@ export function generateRandomPassword() {
 
 export function setFormValidaitonError(form, error) {
   const errorResponseData = get(error, 'response.data');
-  if(error && error.name === 'ValidationError') {
+  if(errorResponseData && errorResponseData.name === 'ValidationError') {
     const validationObjectDetails = get(errorResponseData, 'validationObject.details');
     if(validationObjectDetails && validationObjectDetails.length > 0) {  
       let fieldObject = {};
       validationObjectDetails.forEach((errorField) => {
-        fieldObject[errorField.path.join('.')] = { errors: [new Error(errorField.message)] };
+        let errorPath = errorField.path.length > 1? errorField.path.join('.'): errorField.path[0];
+        fieldObject[errorPath] = { errors: [new Error(errorField.message)] };
       });
       form.setFields(fieldObject);
     }

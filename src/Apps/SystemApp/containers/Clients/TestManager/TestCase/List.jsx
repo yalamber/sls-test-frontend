@@ -41,10 +41,6 @@ class TestCaseList extends Component {
         total: 1
       },
     };
-    this.handleSuiteChange = this.handleSuiteChange.bind(this);
-    this.isSuiteSelected = this.isSuiteSelected.bind(this);
-    this.deleteTestCase = this.deleteTestCase.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: "Title",
@@ -70,22 +66,26 @@ class TestCaseList extends Component {
   }
 
   componentDidMount() {
-    const { match, requestCurrentClient, location } = this.props;
-    let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
+    const { match, requestCurrentClient } = this.props;
     //TODO: check stat and params if same clientId already
     requestCurrentClient(match.params.clientId);
     this.fetchTestSuites(match.params.clientId);
-    //get test cases
+    this.fetchTestCases(this.getFetchReqParams());
+  }
+
+  getFetchReqParams = () => {
+    const { match, location } = this.props;
+    let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
     let reqParams = {};
     if(queryParams.suiteId) {
       reqParams.testSuiteId = queryParams.suiteId;
     } else {
       reqParams.clientId = match.params.clientId;
     }
-    this.fetchTestCase(reqParams);
+    return reqParams;
   }
 
-  async fetchTestSuites() {
+  fetchTestSuites = async () => {
     let testSuites = await SWQAClient.getTestSuites({
       limit: 50,
       clientId: this.props.match.params.clientId
@@ -95,7 +95,7 @@ class TestCaseList extends Component {
     });
   }
 
-  async fetchTestCase(options) {
+  fetchTestCases = async (options) => {
     try {
       this.setState({loading: true});
       options.limit = this.state.paginationOptions.pageSize;
@@ -120,7 +120,7 @@ class TestCaseList extends Component {
     }
   }
 
-  onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = (page, pageSize) => {
     this.setState({
       loading: true,
       paginationOptions: {
@@ -157,31 +157,28 @@ class TestCaseList extends Component {
     });
   }
 
-  handleSuiteChange(suiteId) {
+  handleSuiteChange = (suiteId) => {
     let {history, match} = this.props;
     this.setState({
       selectedSuiteId: suiteId,
     }, () => {
       history.push(`/admin/client/${match.params.clientId}/test-manager/test-cases?suiteId=${suiteId}`);
-      this.fetchTestCase({
+      this.fetchTestCases({
         testSuiteId: suiteId
       });
     });
   }
 
-  isSuiteSelected() {
+  isSuiteSelected = () => {
     return !!this.state.selectedSuiteId;
   }
 
-  // deleteTestCase(row) {
-  //
-  // }
-
   deleteTestCase = async (caseId) => {
     try {
-      await
       await SWQAClient.deleteTestCase(caseId);
       message.success("Test case deleted");
+      //get test cases
+      this.fetchTestCases(this.getFetchReqParams());
     } catch(e) {
       console.log(e);
       message.error("Problem occured.");

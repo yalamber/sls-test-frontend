@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Divider, Form, Row, Col, Spin, Icon, Input, message } from "antd";
 import { get } from 'lodash';
 import { setFormValidaitonError } from '@helpers/utility';
+import { scrollToTop } from '@utils/dom-util';
 import Button from "@components/uielements/button";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import basicStyle from "@settings/basicStyle";
@@ -65,12 +66,11 @@ class CreateEdit extends Component {
           }
         } catch(e) {
           message.error("something went wrong");
-          this.setState({ error: e });
-          setFormValidaitonError(form, e);
-          //set custom error to fields
-          setTimeout(() => {
+          this.setState({ error: e }, () => {
+            setFormValidaitonError(form, e);
+            //set custom error to fields
             this.setErrorFields(form, e);
-            //form.validateFieldsAndScroll({scroll: {offsetTop: 120}});
+            scrollToTop();
           });
         } finally{
           this.setState({ loading: false });

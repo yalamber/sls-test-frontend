@@ -39,11 +39,6 @@ class SuiteList extends Component {
         total: 1
       },
     };
-    this.handleTeamChange = this.handleTeamChange.bind(this);
-    this.isTeamSelected = this.isTeamSelected.bind(this);
-    this.deleteTestSuite = this.deleteTestSuite.bind(this);
-    this.sendToQueue = this.sendToQueue.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: "Id",
@@ -74,8 +69,7 @@ class SuiteList extends Component {
   }
 
   componentDidMount() {
-    const { requestCurrentClient, requestClientTeams, location } = this.props;
-    let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
+    const { requestCurrentClient, requestClientTeams } = this.props;
     //get client id
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
     let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
@@ -86,18 +80,24 @@ class SuiteList extends Component {
         page: 1,
         pageSize: 50
       });
-      //get all test suites
-      let reqParams = {};
-      if(queryParams.teamId) {
-        reqParams.clientTeamId = queryParams.teamId;
-      } else {
-        reqParams.clientId = clientId;
-      }
-      this.fetchTestSuite(reqParams);
+      this.fetchTestSuites(this.getFetchReqParams(clientId));
     }
   }
 
-  async fetchTestSuite(options) {
+  getFetchReqParams = (clientId) => {
+    const { location } = this.props;
+    let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
+    //get all test suites
+    let reqParams = {};
+    if(queryParams.teamId) {
+      reqParams.clientTeamId = queryParams.teamId;
+    } else {
+      reqParams.clientId = clientId;
+    }
+    return reqParams;
+  }
+
+  fetchTestSuites = async (options) => {
     try {
       this.setState({loading: true});
       let testSuites = await SWQAClient.getTestSuites(options);
@@ -121,7 +121,7 @@ class SuiteList extends Component {
     }
   }
 
-  onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = (page, pageSize) => {
     this.setState({
       loading: true,
       paginationOptions: {
@@ -156,7 +156,7 @@ class SuiteList extends Component {
     });
   }
 
-  handleTeamChange(teamId) {
+  handleTeamChange = (teamId) => {
     let {history} = this.props;
     this.setState({
       selectedTeamId: teamId,
@@ -168,19 +168,16 @@ class SuiteList extends Component {
     });
   }
 
-  isTeamSelected() {
+  isTeamSelected = () => {
     return !!this.state.selectedTeamId;
   }
-
-  // deleteTestSuite(row) {
-  //
-  // }
 
   deleteTestSuite = async (suiteId) => {
     try {
       await SWQAClient.deleteTestSuite(suiteId);
       message.success("Test suite deleted");
-      //Todo
+      let clientId = get(this.props, 'activeCompanyTokenData.clientData.clientId', null);
+      this.fetchTestSuite(this.getFetchReqParams(clientId));
     } catch(e) {
       console.log(e);
       message.error("Problem occured.");

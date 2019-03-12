@@ -180,13 +180,9 @@ class TestCaseList extends Component {
     });
   }
 
-  isSuiteSelected() {
+  isSuiteSelected = () => {
     return !!this.state.selectedSuiteId;
   }
-
-  // async deleteTestCase(row) {
-  //
-  // }
 
   deleteTestCase = async (caseId) => {
     try {

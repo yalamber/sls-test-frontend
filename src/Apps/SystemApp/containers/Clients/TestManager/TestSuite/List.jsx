@@ -40,10 +40,6 @@ class SuiteList extends Component {
         total: 1
       },
     };
-    this.handleTeamChange = this.handleTeamChange.bind(this);
-    this.isTeamSelected = this.isTeamSelected.bind(this);
-    this.deleteTestSuite = this.deleteTestSuite.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: "Title",
@@ -76,18 +72,23 @@ class SuiteList extends Component {
       page: 1,
       pageSize: 50
     });
-    this.fetchTestSuite();
+    this.fetchTestSuite(this.getFetchReqParams());
   }
 
-  async fetchTestSuite() {
-    const { match, location } = this.props;
+  getFetchReqParams = () => {
+    let {match, location} = this.props;
     let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
-    let options = {};
+    let reqParams = {};
     if(queryParams.teamId) {
-      options.clientTeamId = queryParams.teamId;
+      reqParams.clientTeamId = queryParams.teamId;
     } else {
-      options.clientId = match.params.clientId;
+      reqParams.clientId = match.params.clientId;
     }
+    return reqParams;
+  }
+
+  fetchTestSuite = async (options) => {
+    
     try {
       this.setState({loading: true});
       let testSuites = await SWQAClient.getTestSuites(options);
@@ -111,7 +112,7 @@ class SuiteList extends Component {
     }
   }
 
-  onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = (page, pageSize) => {
     this.setState({
       loading: true,
       paginationOptions: {
@@ -146,7 +147,7 @@ class SuiteList extends Component {
     });
   }
 
-  handleTeamChange(teamId) {
+  handleTeamChange = (teamId) => {
     let {history, match} = this.props;
     this.setState({
       selectedTeamId: teamId,
@@ -158,7 +159,7 @@ class SuiteList extends Component {
     });
   }
 
-  isTeamSelected() {
+  isTeamSelected = () => {
     return !!this.state.selectedTeamId;
   }
 
@@ -167,7 +168,7 @@ class SuiteList extends Component {
       await SWQAClient.deleteTestSuite(suiteId);
       message.success("Test suite deleted");
       //fetch new set of test suties
-      this.fetchTestSuite();
+      this.fetchTestSuite(this.getFetchReqParams());
     } catch(e) {
       console.log(e);
       message.error("Problem occured.");
