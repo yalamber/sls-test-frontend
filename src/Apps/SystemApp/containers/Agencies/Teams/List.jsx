@@ -8,7 +8,6 @@ const { requestAgencyTeams, requestCurrentAgency } = agencyActions;
 class TeamList extends Component {
   constructor(props) {
     super(props);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: "Team Name",
@@ -33,7 +32,7 @@ class TeamList extends Component {
     this.onTablePaginationChange(match.params.agencyId)(1, 5);
   }
 
-  onTablePaginationChange(agencyId) {
+  onTablePaginationChange = (agencyId) => {
     return (page, pageSize) => {
       this.props.requestAgencyTeams(agencyId, {
         page,
@@ -46,7 +45,7 @@ class TeamList extends Component {
     const { currentAgency = { agencyData: { name: '' }, teamList: [] }, match } = this.props;
     return (
       <List {...this.props}
-        onTablePaginationChange={this.onTablePaginationChange}
+        onTablePaginationChange={this.onTablePaginationChange(match.params.agencyId)}
         onTableRow={(row) => ({
           onDoubleClick: () => {
             this.props.history.push(`/admin/agency/team/${row.agencyTeamId}/details`);
