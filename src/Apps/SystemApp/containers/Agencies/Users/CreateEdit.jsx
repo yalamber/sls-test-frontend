@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Form, Row, Col, Icon, Spin } from "antd";
+import { Form, Row, Col, Icon, Spin, message } from "antd";
 import Button from "@components/uielements/button";
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import { get, omit, isArray } from 'lodash';
+import { scrollToTop } from '@utils/dom-util';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
@@ -11,12 +12,12 @@ import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
 import UserFormFields from "@appComponents/User/FormFields";
+import SWQAClient from '@helpers/apiClient';
 
 const {
   requestCurrentAgency,
   requestCurrentAgencyUser,
   requestAgencyUserRoles,
-  requestCreateAgencyUser,
   clearCurrentAgencyUser,
 } = agencyActions;
 
@@ -49,22 +50,70 @@ class CreateEdit extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { form, match} = this.props;
-    form.validateFieldsAndScroll((err, values) => {
+    const { form, match, history} = this.props;
+    form.validateFieldsAndScroll( async (err, values) => {
+      let userData = values.user;
       if (!err) {
-        if(this.mode === 'edit') {
-          //this.props.requestUpdateClientUser(match.params.clientId, userId, values, this.props.history);
-        } else {
-          //create user and add to client
-          this.props.requestCreateAgencyUser(match.params.agencyId, values.user, this.props.history, 'systemApp');
+        try {
+          this.setState({ loading: true });
+          if(this.mode === 'edit') {
+            let user = await SWQAClient.updateUser(match.params.userId, userData);
+            if (user) {
+              message.success("Successfully Saved");
+            }
+          } else {
+            let roleId = userData.role;
+            let status = userData.status;
+            userData = omit(userData, ['role']);
+            //TODO in future add this in separate api with db transactions
+            let user = await SWQAClient.createUser(userData);
+            let membership = await SWQAClient.addAgencyUser(match.params.agencyId, {
+              status: status,
+              roleId: roleId,
+              userId: user.userId
+            });
+            history.replace(`/admin/agency/${membership.agencyId}/user/${membership.userId}/details`);
+          }
+        } catch(e) {
+          message.error("something went wrong");
+          this.setState({ error: e }, () => {
+            console.log(e);
+            //set custom error to fields
+            this.setErrorFields(form, e);
+            scrollToTop();
+          });
+        } finally{
+          this.setState({ loading: false });
         }
       }
     });
   }
 
-  resetForm() {
+  resetForm = () => {
     this.setState({ passwordType: false });
     this.props.form.resetFields();
+  }
+
+  setErrorFields = (form, e) => {
+    const errorResponseData = get(e, 'response.data.errors');
+    if(errorResponseData && isArray(errorResponseData)) {
+      let fieldObject = {};
+      errorResponseData.map((msg) => {
+        if(msg.path === 'username') {
+          fieldObject['user.username'] = {
+            value: msg.value,
+            errors: [new Error(msg.message)]
+          };
+        }
+        if(msg.path === 'email') {
+          fieldObject['user.contactInformation.emailAddress'] = {
+            value: msg.value,
+            errors: [new Error(msg.message)]
+          };
+        }
+      });
+      form.setFields(fieldObject);
+    }
   }
 
   render() {
@@ -134,32 +183,12 @@ const mapPropsToFields = props => {
   let { currentAgencyUser } = props;
   let currentUser = currentAgencyUser.data.user;
   let role = currentAgencyUser.data.role;
-  //testData TODO: remove this after test
-  /*role = {
-    roleId: 2
-  };
-  currentUser = {
-    status: 'active',
-    username: 'adadadadada',
-    resumeUrl: 'http://test.com',
-    contactInformation: {
-      emailAddress: 'teststs@sdsd.comsdsd',
-      postalAddress: 'testing ok ',
-      mobilePhone: '9843612873',
-      smsPhone: 'test2334',
-      linkedInUrl: 'testing ok',
-    },
-    instantMessengerInfos: [
-      {service: 'facebook', messengerId: 'yalu'},
-      {service: 'facebook', messengerId: 'yalu2'},
-    ]
-  };*/
   return {
     'user.role': Form.createFormField({
       value: get(role, 'roleId')
     }),
     'user.status': Form.createFormField({
-      value: get(currentUser, 'status')
+      value: get(currentAgencyUser, 'data.status')
     }),
     'user.username': Form.createFormField({
       value: get(currentUser, 'username')
@@ -207,6 +236,5 @@ export default connect(
     requestCurrentAgency,
     requestCurrentAgencyUser,
     clearCurrentAgencyUser,
-    requestCreateAgencyUser,
   }
 )(form);

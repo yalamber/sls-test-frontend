@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Form, Row, Col, Icon, Spin } from "antd";
+import { Form, Row, Col, Icon, Spin, message } from "antd";
 import Button from "@components/uielements/button";
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import { get, omit, isArray } from 'lodash';
+import { scrollToTop } from '@utils/dom-util';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
@@ -10,12 +11,12 @@ import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import agencyActions from '@app/SystemApp/redux/agency/actions';
 import UserFormFields from "@appComponents/User/FormFields";
+import SWQAClient from '@helpers/apiClient';
 
 const {
   requestCurrentAgency,
   requestCurrentAgencyUser,
   requestAgencyUserRoles,
-  requestCreateAgencyUser,
   clearCurrentAgencyUser,
 } = agencyActions;
 
@@ -57,24 +58,77 @@ class CreateEdit extends Component {
     }
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
+    const { form, match, history } = this.props;
+    form.validateFieldsAndScroll( async (err, values) => {
+      let userData = values.user;
       if (!err) {
-        if(this.mode === 'edit') {
-          //this.props.requestUpdateAgencyUser(this.props.match.agencyId, userId, values, this.props.history);
-        } else {
-          //create user and add to agency
+        try {
+          let roleId = userData.role;
+          let status = userData.status;
           let agencyId = this.getAgencyId();
-          this.props.requestCreateAgencyUser(agencyId, values.user, this.props.history, 'agencyApp');
+          if(this.mode === 'edit') {
+            let userData = omit(userData, ['role', 'status']);
+            let user = await SWQAClient.updateUser(match.params.userId, userData);
+            let membership = await SWQAClient.updateAgencyUser(agencyId, match.params.userId, {
+              status: status,
+              roleId: roleId
+            });
+            if (membership && user) {
+              message.success("Successfully Saved");
+            }
+          } else {
+            userData = omit(userData, ['role']);
+            //TODO in future add this in separate api with db transactions
+            let user = await SWQAClient.createUser(userData);
+            let membership = await SWQAClient.addAgencyUser(agencyId, {
+              status: status,
+              roleId: roleId,
+              userId: user.userId
+            });
+            history.replace(`/my-agency/user/${membership.userId}/details`);
+          }
+        } catch(e) {
+          message.error("something went wrong");
+          this.setState({ error: e }, () => {
+            console.log(e);
+            //set custom error to fields
+            this.setErrorFields(form, e);
+            scrollToTop();
+          });
+        } finally{
+          this.setState({ loading: false });
         }
       }
     });
   }
 
-  resetForm() {
+  resetForm = () => {
     this.setState({ passwordType: false });
     this.props.form.resetFields();
+  }
+
+  setErrorFields = (form, e) => {
+    const errorResponseData = get(e, 'response.data.errors');
+    if(errorResponseData && isArray(errorResponseData)) {
+      let fieldObject = {};
+      errorResponseData.map((msg) => {
+        if(msg.path === 'username') {
+          fieldObject['user.username'] = {
+            value: msg.value,
+            errors: [new Error(msg.message)]
+          };
+        }
+        if(msg.path === 'email') {
+          fieldObject['user.contactInformation.emailAddress'] = {
+            value: msg.value,
+            errors: [new Error(msg.message)]
+          };
+        }
+      });
+      form.setFields(fieldObject);
+    }
   }
 
   render() {
@@ -103,6 +157,7 @@ class CreateEdit extends Component {
                   <UserFormFields
                     form={form}
                     roles={agencyUserRoles.rows}
+                    mode={this.mode}
                     showRoleSelector={true}
                   />
                   <Row style={{marginTop: '10px'}}>
@@ -143,32 +198,12 @@ const mapPropsToFields = props => {
   let { currentAgencyUser } = props;
   let currentUser = currentAgencyUser.data.user;
   let role = currentAgencyUser.data.role;
-  //testData TODO: remove this after test
-  /*role = {
-    roleId: 2
-  };
-  currentUser = {
-    status: 'active',
-    username: 'adadadadada',
-    resumeUrl: 'http://test.com',
-    contactInformation: {
-      emailAddress: 'teststs@sdsd.comsdsd',
-      postalAddress: 'testing ok ',
-      mobilePhone: '9843612873',
-      smsPhone: 'test2334',
-      linkedInUrl: 'testing ok',
-    },
-    instantMessengerInfos: [
-      {service: 'facebook', messengerId: 'yalu'},
-      {service: 'facebook', messengerId: 'yalu2'},
-    ]
-  };*/
   return {
     'user.role': Form.createFormField({
       value: get(role, 'roleId')
     }),
     'user.status': Form.createFormField({
-      value: get(currentUser, 'status')
+      value: get(currentAgencyUser, 'data.status')
     }),
     'user.username': Form.createFormField({
       value: get(currentUser, 'username')
@@ -217,6 +252,5 @@ export default connect(
     requestCurrentAgency,
     requestCurrentAgencyUser,
     clearCurrentAgencyUser,
-    requestCreateAgencyUser,
   }
 )(form);

@@ -20,9 +20,7 @@ class CreateEdit extends Component {
       team: {},
       users: [],
       roles: [],
-      errors: {
-        details: []
-      },
+      errors: null,
       loading: true
     };
     this.fetchData = this.fetchData.bind(this);

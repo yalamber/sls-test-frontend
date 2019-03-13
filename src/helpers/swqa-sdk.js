@@ -119,6 +119,14 @@ class SWQA {
     return this.api.send('GET', `client/${clientId}/user/${userId}`);
   }
 
+  updateClientUser = (clientId, userId, payload) => {
+    return this.api.send('PUT', `client/${clientId}/user/${userId}`, payload);
+  }
+
+  deleteClientUser = (clientId, userId) => {
+    return this.api.send('DELETE', `client/${clientId}/user/${userId}`);
+  }
+
   // client teams
   addClientTeam = (payload) => {
     return this.api.send('POST', `client-team`, payload);
@@ -190,6 +198,14 @@ class SWQA {
 
   getAgencyUser = (agencyId, userId) => {
     return this.api.send('GET', `agency/${agencyId}/user/${userId}`);
+  }
+
+  updateAgencyUser = (agencyId, userId, payload) => {
+    return this.api.send('PUT', `agency/${agencyId}/user/${userId}`, payload);
+  }
+
+  deleteAgencyUser = (agencyId, userId) => {
+    return this.api.send('DELETE', `agency/${agencyId}/user/${userId}`);
   }
 
   // agency teams

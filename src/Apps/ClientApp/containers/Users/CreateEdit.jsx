@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Form, Row, Col, Icon, Spin } from "antd";
+import { Form, Row, Col, Icon, Spin, message } from "antd";
 import Button from "@components/uielements/button";
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import { get, omit, isArray } from 'lodash';
+import { scrollToTop } from '@utils/dom-util';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
@@ -10,12 +11,12 @@ import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import clientActions from '@app/SystemApp/redux/client/actions';
 import UserFormFields from "@appComponents/User/FormFields";
+import SWQAClient from '@helpers/apiClient';
 
 const {
   requestCurrentClient,
   requestCurrentClientUser,
   requestClientUserRoles,
-  requestCreateClientUser,
   clearCurrentClientUser,
 } = clientActions;
 
@@ -58,22 +59,76 @@ class CreateEdit extends Component {
     }
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
+    const { form, match, history} = this.props;
+    form.validateFieldsAndScroll( async (err, values) => {
+      let userData = values.user;
       if (!err) {
-        if(this.mode === 'edit') {
-          //this.props.requestUpdateClientUser(this.props.match.clientId, userId, values, this.props.history);
-        } else {
-          //create user and add to client
+        try {
+          this.setState({ loading: true });
+          let roleId = userData.role;
+          let status = userData.status;
           let clientId = this.getClientId();
-          this.props.requestCreateClientUser(clientId, values.user, this.props.history, 'clientApp');
+          if(this.mode === 'edit') {
+            let userData = omit(userData, ['role', 'status']);
+            let user = await SWQAClient.updateUser(match.params.userId, userData);
+            let membership = await SWQAClient.updateClientUser(clientId, match.params.userId, {
+              status: status,
+              roleId: roleId
+            });
+            if (membership && user) {
+              message.success("Successfully Saved");
+            }
+          } else {
+            userData = omit(userData, ['role']);
+            //TODO in future add this in separate api with db transactions
+            let user = await SWQAClient.createUser(userData);
+            let membership = await SWQAClient.addClientUser(clientId, {
+              status: status,
+              roleId: roleId,
+              userId: user.userId
+            });
+            history.replace(`/my-client/user/${membership.userId}/details`);
+          }
+        } catch(e) {
+          message.error("something went wrong");
+          this.setState({ error: e }, () => {
+            console.log(e);
+            //set custom error to fields
+            this.setErrorFields(form, e);
+            scrollToTop();
+          });
+        } finally{
+          this.setState({ loading: false });
         }
       }
     });
   }
 
-  resetForm() {
+  setErrorFields = (form, e) => {
+    const errorResponseData = get(e, 'response.data.errors');
+    if(errorResponseData && isArray(errorResponseData)) {
+      let fieldObject = {};
+      errorResponseData.map((msg) => {
+        if(msg.path === 'username') {
+          fieldObject['user.username'] = {
+            value: msg.value,
+            errors: [new Error(msg.message)]
+          };
+        }
+        if(msg.path === 'email') {
+          fieldObject['user.contactInformation.emailAddress'] = {
+            value: msg.value,
+            errors: [new Error(msg.message)]
+          };
+        }
+      });
+      form.setFields(fieldObject);
+    }
+  }
+
+  resetForm = () => {
     this.setState({ passwordType: false });
     this.props.form.resetFields();
   }
@@ -104,6 +159,7 @@ class CreateEdit extends Component {
                   <UserFormFields
                     form={form}
                     roles={clientUserRoles.rows}
+                    mode={this.mode}
                     showRoleSelector={true}
                   />
                   <Row style={{marginTop: '10px'}}>
@@ -149,7 +205,7 @@ const mapPropsToFields = props => {
       value: get(role, 'roleId')
     }),
     'user.status': Form.createFormField({
-      value: get(currentUser, 'status')
+      value: get(currentClientUser, 'data.status')
     }),
     'user.username': Form.createFormField({
       value: get(currentUser, 'username')
@@ -198,6 +254,5 @@ export default connect(
     requestCurrentClient,
     requestCurrentClientUser,
     clearCurrentClientUser,
-    requestCreateClientUser,
   }
 )(form);
