@@ -1,19 +1,42 @@
-import React from "react";
-import { Tooltip, Button } from "antd";
+import React, { Component } from "react";
+import { Tooltip, Button, message } from "antd";
+import { get } from 'lodash';
 import Popconfirms from '@components/feedback/popconfirm';
 import {
   ActionWrapper,
 } from '@utils/crud.style';
 
-export default function ActionButtons({history, row, sendToQueue, deleteTestSuite}) {
-  return (
+class ActionButtons extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sendingToQueue: false,
+    };
+  }
+
+  render() {
+    const { history, row, sendToQueue, deleteTestSuite } = this.props;
+    return(
     <ActionWrapper>
       <Tooltip title="Queue for Test">
         <Button
           shape="circle"
-          icon="cloud"
-          onClick={() => {
-            sendToQueue(row);
+          icon={this.state.sendingToQueue? 'loading': 'cloud'}
+          onClick={async () => {
+            this.setState({
+              sendingToQueue: true
+            });
+            try {
+              let queue = await sendToQueue(row);
+              message.success(`${queue.length} Test Case queued successfully`);
+            } catch(e) {
+              console.log(e);
+              message.error(get(e, 'response.data', 'Something went Wrong!'));
+            } finally{
+              this.setState({
+                sendingToQueue: false
+              });
+            }
           }}
         />
       </Tooltip>
@@ -59,5 +82,9 @@ export default function ActionButtons({history, row, sendToQueue, deleteTestSuit
         </Popconfirms>
       </Tooltip>
     </ActionWrapper>
-  );
+    )
+  }
+
 }
+
+export default ActionButtons;

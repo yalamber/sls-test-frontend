@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import { get, isArray } from 'lodash';
 import qs from "qs";
 import { Row, Col, Icon, Select, Tooltip, Spin, Form, message } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
@@ -162,7 +162,7 @@ class SuiteList extends Component {
       selectedTeamId: teamId,
     }, () => {
       history.push(`/my-client/test-manager/test-suites?teamId=${teamId}`);
-      this.fetchTestSuite({
+      this.fetchTestSuites({
         clientTeamId: teamId
       });
     });
@@ -177,15 +177,25 @@ class SuiteList extends Component {
       await SWQAClient.deleteTestSuite(suiteId);
       message.success("Test suite deleted");
       let clientId = get(this.props, 'activeCompanyTokenData.clientData.clientId', null);
-      this.fetchTestSuite(this.getFetchReqParams(clientId));
+      this.fetchTestSuites(this.getFetchReqParams(clientId));
     } catch(e) {
       console.log(e);
       message.error("Problem occured.");
     }
   }
 
-  sendToQueue(row){
-
+  sendToQueue = async (row) => {
+    if(isArray(row.testCases)){  
+      let testCaseIds = row.testCases.map((testCase) => {
+        return testCase.testCaseId;
+      })
+      let data = {
+        testCaseIds: testCaseIds,
+      };
+      return await SWQAClient.sendToQueue(data);
+    } else {
+      throw new Error('Test case Ids not set');
+    }
   }
 
   render() {
