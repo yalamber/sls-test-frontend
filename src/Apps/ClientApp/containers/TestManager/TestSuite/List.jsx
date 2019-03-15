@@ -185,6 +185,7 @@ class SuiteList extends Component {
   }
 
   sendToQueue = async (row) => {
+    console.log(row);
     if(isArray(row.testCases)){  
       let testCaseIds = row.testCases.map((testCase) => {
         return testCase.testCaseId;
