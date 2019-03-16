@@ -176,7 +176,6 @@ class TestQueueList extends Component {
   }
 
   handleTeamMenuClick = async (e) => {
-    console.log(e);
     try {
       this.setState({
         assignQueue: {

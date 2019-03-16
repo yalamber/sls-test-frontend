@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Row, Col, Icon, Spin, message, Radio  } from "antd";
+import { Row, Col, Icon, Spin, message, Button, Menu, Dropdown } from "antd";
 import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
@@ -19,13 +19,16 @@ import agencyActions from '@app/SystemApp/redux/agency/actions';
 import ActionButtons from "./partials/AssignedTestActionButtons";
 
 const { requestCurrentAgency, requestAgencyTeams } = agencyActions;
+const ButtonGroup = Button.Group;
 
 class AssignedTestList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       agencyId: null,
-      assignedTo: 'me',
+      assignedToType: 'me', //me or team
+      assignedTeamId: null,
+      selectedTeamLabel: 'My Teams',
       testQueues: [],
       loading: false,
       error: null,
@@ -36,8 +39,6 @@ class AssignedTestList extends Component {
         total: 1
       },
     };
-    this.fetchData = this.fetchData.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: "Id",
@@ -72,7 +73,7 @@ class AssignedTestList extends Component {
   }
 
   componentDidMount() {
-    const { activeCompanyTokenData, requestCurrentAgency } = this.props;
+    const { activeCompanyTokenData, requestCurrentAgency, requestAgencyTeams } = this.props;
     let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
     if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {    
       requestCurrentAgency(agencyId);
@@ -86,13 +87,13 @@ class AssignedTestList extends Component {
     }
   }
 
-  async fetchData(options) {
+  fetchData = async (options) => {
     try {
       this.setState({loading: true});
       options.limit = this.state.paginationOptions.pageSize;
       options.status = 'assigned';
-      if(this.state.assignedTo === 'team') {
-        options.assignedToTeam = 1;
+      if(this.state.assignedToType === 'team' && this.state.assignedTeamId) {
+        options.assignedTeamId = this.state.assignedTeamId;
       }
       let testQueues = await SWQAClient.getTestQueues(options);
       let updateState = {
@@ -116,7 +117,7 @@ class AssignedTestList extends Component {
     }
   }
 
-  async onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = async (page, pageSize) => {
     this.setState({
       loading: true,
       paginationOptions: {
@@ -169,9 +170,11 @@ class AssignedTestList extends Component {
     }
   }
 
-  onAssignedTypeChange = (e) => {
+  handleMeClick = (e) => {
     this.setState({
-      assignedTo: e.target.value
+      assignedToType: 'me',
+      assignedTeamId: null,
+      loading: true
     }, () => {
       this.fetchData({
         agencyId: this.state.agencyId
@@ -179,10 +182,31 @@ class AssignedTestList extends Component {
     });
   }
 
+  handleTeamMenuClick = (e) => {
+    this.setState({
+      assignedTeamId: e.key,
+      assignedToType: 'team',
+      loading: true
+    }, () => {
+      let params = {
+        agencyId: this.props.currentAgency.agencyData.agencyId,
+        assignedTeamId: e.key
+      };
+      this.fetchData(params);
+    });
+  }
+
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { history } = this.props;
-    
+    const { history, currentAgency = { agencyData: { name: '' }, teamList: { rows: [], count: 0 } } } = this.props;
+    const teamsOptions = currentAgency.teamList.rows.map(team => (
+      <Menu.Item key={team.agencyTeamId}><Icon type="team" />{team.name}</Menu.Item>
+    ));
+    const teamMenu = (
+      <Menu onClick={this.handleTeamMenuClick}>
+        {teamsOptions}
+      </Menu>
+    );
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -200,13 +224,17 @@ class AssignedTestList extends Component {
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
-                Show Tests assigned to: &nbsp;
-                <Radio.Group defaultValue="me" buttonStyle="solid" 
-                  style={{marginBottom: 16}} 
-                  onChange={this.onAssignedTypeChange}>
-                  <Radio.Button value="me">Me</Radio.Button>
-                  <Radio.Button value="team">My Teams</Radio.Button>
-                </Radio.Group>
+                <div style={{marginBottom: 15}}>
+                  Show Tests assigned to: &nbsp;
+                  <ButtonGroup>
+                    <Button type={(this.state.assignedToType === 'me'? 'primary': 'default')} onClick={this.handleMeClick}>Me</Button>
+                    <Dropdown overlay={teamMenu}> 
+                      <Button type={(this.state.assignedToType === 'team'? 'primary': 'default')}>
+                        My Teams <Icon type="down" />
+                      </Button>
+                    </Dropdown>
+                  </ButtonGroup>
+                </div>
                 <Table
                   locale={{ emptyText: "No Tests available" }}
                   size="middle"
