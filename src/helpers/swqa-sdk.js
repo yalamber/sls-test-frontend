@@ -315,6 +315,10 @@ class SWQA {
     return this.api.send('DELETE', `test/queue/${queueId}/unassign`);
   }
 
+  initTestQueueRun = (queueId) => {
+    return this.api.send('PUT', `test/queue/${queueId}/initRun`);
+  }
+
   deleteTestQueue = (queueId) => {
     return this.api.send('DELETE', `test/queue/${queueId}`);
   }

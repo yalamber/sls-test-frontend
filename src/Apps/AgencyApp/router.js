@@ -68,6 +68,10 @@ export default [
     component: asyncComponent(() => import('./containers/TestManager/AssignedTests'))
   },
   {
+    path: 'test-manager/running-tests',
+    component: asyncComponent(() => import('./containers/TestManager/RunningTests'))
+  },
+  {
     path: 'test-manager/completed-tests',
     component: asyncComponent(() => import('./containers/TestManager/CompletedTests'))
   },

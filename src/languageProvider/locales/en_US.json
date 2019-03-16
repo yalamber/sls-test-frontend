@@ -40,6 +40,7 @@
   "sidebar.teams": "Teams",
   "sidebar.testQueue": "Test Queue",
   "sidebar.assignedTests": "Assigned Tests",
+  "sidebar.runningTests": "Running Tests",
   "sidebar.completedTests": "Completed Tests",
   "sidebar.users": "Users",
   "sidebar.company.testingManager": "Testing Manager",

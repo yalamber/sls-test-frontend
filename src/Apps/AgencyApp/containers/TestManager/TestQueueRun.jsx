@@ -29,7 +29,10 @@ class TestQueueRun extends Component {
 
   async componentDidMount() {
     try {
-      let testQueue = await SWQAClient.getTestQueue(this.props.match.params.queueId);
+      let { match } = this.props;
+      let testQueue = await SWQAClient.getTestQueue(match.params.queueId);
+      //init test queue run
+      let initRun = await SWQAClient.initTestQueueRun(match.params.queueId);
       this.setState({
         testCase: get(testQueue, 'testCase'),
         testSuite: get(testQueue, 'testCase.testSuite'),
