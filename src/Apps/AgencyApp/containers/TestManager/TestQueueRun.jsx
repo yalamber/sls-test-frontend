@@ -7,7 +7,7 @@ import Box from '@components/utility/box';
 import SWQAClient from '@helpers/apiClient';
 import TestCaseWrapper from './partials/TestCase.style';
 import Description from './partials/Description';
-import StepsField from './partials/StepField';
+import StepsField from './partials/StepsField';
 import StatusAndUpdate from './partials/StatusAndUpdate';
 import {
   TitleWrapper,
@@ -25,6 +25,7 @@ class TestQueueRun extends Component {
       testCaseSteps: []
     },
     testCaseRun: {},
+    finalStatus: null,
   };
 
   async componentDidMount() {
@@ -32,7 +33,7 @@ class TestQueueRun extends Component {
       let { match } = this.props;
       let testQueue = await SWQAClient.getTestQueue(match.params.queueId);
       //init test queue run
-      let initRun = await SWQAClient.initTestQueueRun(match.params.queueId);
+      await SWQAClient.initTestQueueRun(match.params.queueId);
       this.setState({
         testCase: get(testQueue, 'testCase'),
         testSuite: get(testQueue, 'testCase.testSuite'),
@@ -50,11 +51,14 @@ class TestQueueRun extends Component {
     }
   } 
 
+  handleStepResult = () => {
+
+  }
+
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
     //Top header
     const topHeader = { fontSize: 14, fontWeight: '300' };
-
     return (
       <TestCaseWrapper>
         <LayoutWrapper>
@@ -83,6 +87,7 @@ class TestQueueRun extends Component {
                       title={"Analysis Comments"}
                       details={this.state.testCase.analystComments}
                     />
+                    
                     {this.state.testCase.testCaseSteps.map((step, index) => {
                       return (
                         <StepsField
@@ -91,11 +96,13 @@ class TestQueueRun extends Component {
                           form={this.props.form}
                           title={`Step #${index+1}`}
                           details={step.description}
+                          handleStepResult={this.handleStepResult}
                         />
                       )
                     })}
                     <StatusAndUpdate 
                       form={this.props.form}
+                      status={this.state.finalStatus}
                     />
                   </Form>
                 </Spin>
