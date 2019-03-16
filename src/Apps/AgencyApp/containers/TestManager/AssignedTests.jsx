@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Row, Col, Icon, Spin, message, Button, Menu, Dropdown } from "antd";
-import { get } from 'lodash';
+import { get, find } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
@@ -27,8 +27,7 @@ class AssignedTestList extends Component {
     this.state = {
       agencyId: null,
       assignedToType: 'me', //me or team
-      assignedTeamId: null,
-      selectedTeamLabel: 'My Teams',
+      selectedAssignedTeam: null,
       testQueues: [],
       loading: false,
       error: null,
@@ -173,7 +172,7 @@ class AssignedTestList extends Component {
   handleMeClick = (e) => {
     this.setState({
       assignedToType: 'me',
-      assignedTeamId: null,
+      selectedAssignedTeam: null,
       loading: true
     }, () => {
       this.fetchData({
@@ -183,17 +182,21 @@ class AssignedTestList extends Component {
   }
 
   handleTeamMenuClick = (e) => {
-    this.setState({
-      assignedTeamId: e.key,
-      assignedToType: 'team',
-      loading: true
-    }, () => {
-      let params = {
-        agencyId: this.props.currentAgency.agencyData.agencyId,
-        assignedTeamId: e.key
-      };
-      this.fetchData(params);
-    });
+    const { currentAgency = { agencyData: { name: '' }, teamList: { rows: [], count: 0 } } } = this.props;
+    if(e.key) {
+      let selectedTeam = find(currentAgency.teamList.rows, function(o) { return o.agencyTeamId === parseInt(e.key); }); 
+      this.setState({
+        selectedAssignedTeam: selectedTeam,
+        assignedToType: 'team',
+        loading: true
+      }, () => {
+        let params = {
+          agencyId: this.props.currentAgency.agencyData.agencyId,
+          assignedTeamId: e.key
+        };
+        this.fetchData(params);
+      });
+    }
   }
 
   render() {
@@ -220,7 +223,7 @@ class AssignedTestList extends Component {
                   >
                     <Icon type="left" /> <IntlMessages id="back" />
                   </ActionBtn>
-                  &nbsp; Assigned Tests
+                  &nbsp; Assigned Tests  {this.state.selectedAssignedTeam ? `for Team ${this.state.selectedAssignedTeam.name}` : ''}
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
