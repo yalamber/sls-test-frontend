@@ -54,7 +54,7 @@ class TestRunList extends Component {
       {
         title: "Test Case",
         render: row => <div>{row.testQueue.testCase.title}</div>,
-        key: "testSuite"
+        key: "testCase"
       },
       {
         title: "Created",
