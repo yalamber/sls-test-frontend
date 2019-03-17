@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Row, Col, Spin } from 'antd';
+import { Form, Row, Col, Spin, message } from 'antd';
 import { get } from 'lodash';
 import LayoutWrapper from '@components/utility/layoutWrapper';
 import basicStyle from '@settings/basicStyle';
@@ -33,7 +33,13 @@ class TestQueueRun extends Component {
       let { match } = this.props;
       let testQueue = await SWQAClient.getTestQueue(match.params.queueId);
       //init test queue run
-      await SWQAClient.initTestQueueRun(match.params.queueId);
+      if(['assigned', 'running'].indexOf(testQueue.status) === -1 ) {
+        throw new Error('Test queue status must be assigned or running.');
+      }
+      if(testQueue.status === 'assigned') {
+        //init test run if not already running
+        await SWQAClient.initTestQueueRun(match.params.queueId);
+      }
       this.setState({
         testCase: get(testQueue, 'testCase'),
         testSuite: get(testQueue, 'testCase.testSuite'),
@@ -85,19 +91,28 @@ class TestQueueRun extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    let { match, form, history } = this.props;
+    form.validateFields(async (err, values) => {
       if (!err) {
-        //format data to send to test run
-        let testRun = {
-          testQueueId: ''
-        };
-        let stepResults = values.stepResult.map((result, key) => {
-          result.artifacts = this.state.stepArtifacts[key];
-          return result;
-        });
-
-
-        SWQAClient.createTestRun(testRun);
+        try {   
+          //format data to send to test run
+          let stepResults = values.stepResult.map((result, key) => {
+            result.artifacts = this.state.stepArtifacts[key];
+            return result;
+          });
+          let testRun = {
+            testQueueId: match.params.queueId,
+            stepResults,
+            comment: values.comment,
+            status: values.status,
+          };
+          await SWQAClient.createTestRun(testRun);
+          message.success('Submitted Test results successfully');
+          //redirect to complted tests page
+          history.replace('my-agency/test-manager/completed-tests');
+        } catch(e) {
+          message.error('Something went wrong!');
+        }
       }
     });
   }
@@ -113,46 +128,48 @@ class TestQueueRun extends Component {
             <Col md={24} sm={24} xs={24} style={colStyle}>
               <Box>
                 <Spin spinning={this.state.loading}>
-                  <Form onSubmit={this.handleSubmit}>
-                    <TitleWrapper>
-                      <ComponentTitle style={topHeader}>Client: {this.state.client.name}</ComponentTitle>
-                      <ComponentTitle style={topHeader}>Team: {this.state.clientTeam.name}</ComponentTitle>
-                      <ComponentTitle style={topHeader}>Suit Name: {this.state.testSuite.name}</ComponentTitle>
-                    </TitleWrapper>
+                  {this.state.error && <div>Cannot load Test queue Run</div>}
+                  {!this.state.error && <Form onSubmit={this.handleSubmit}>
+                      <TitleWrapper>
+                        <ComponentTitle style={topHeader}>Client: {this.state.client.name}</ComponentTitle>
+                        <ComponentTitle style={topHeader}>Team: {this.state.clientTeam.name}</ComponentTitle>
+                        <ComponentTitle style={topHeader}>Suit Name: {this.state.testSuite.name}</ComponentTitle>
+                      </TitleWrapper>
 
-                    <Description
-                      title={"Description"}
-                      details={this.state.testCase.description}
-                    />
+                      <Description
+                        title={"Description"}
+                        details={this.state.testCase.description}
+                      />
 
-                    <Description
-                      title={"Developer Comments"}
-                      details={this.state.testCase.developerComments}
-                    />
+                      <Description
+                        title={"Developer Comments"}
+                        details={this.state.testCase.developerComments}
+                      />
 
-                    <Description
-                      title={"Analysis Comments"}
-                      details={this.state.testCase.analystComments}
-                    />
-                    
-                    {this.state.testCase.testCaseSteps.map((step, index) => {
-                      return (
-                        <StepsField
-                          key={index}
-                          stepKey={index}
-                          form={this.props.form}
-                          title={`Step #${index+1}`}
-                          details={step.description}
-                          handleStepStatus={this.handleStepStatus}
-                          updateArtifacts={this.updateArtifacts}
-                        />
-                      )
-                    })}
-                    <StatusAndUpdate 
-                      form={this.props.form}
-                      status={this.state.finalStatus}
-                    />
-                  </Form>
+                      <Description
+                        title={"Analysis Comments"}
+                        details={this.state.testCase.analystComments}
+                      />
+                      
+                      {this.state.testCase.testCaseSteps.map((step, index) => {
+                        return (
+                          <StepsField
+                            key={index}
+                            stepKey={index}
+                            form={this.props.form}
+                            title={`Step #${index+1}`}
+                            details={step.description}
+                            handleStepStatus={this.handleStepStatus}
+                            updateArtifacts={this.updateArtifacts}
+                          />
+                        )
+                      })}
+                      <StatusAndUpdate 
+                        form={this.props.form}
+                        status={this.state.finalStatus}
+                      />
+                    </Form>
+                  }
                 </Spin>
               </Box>
             </Col>

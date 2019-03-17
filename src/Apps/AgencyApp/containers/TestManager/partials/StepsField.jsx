@@ -74,8 +74,8 @@ class StepsField extends Component {
         <Option value="fail">Fail</Option>
         <Option value="blocked">Blocked</Option>
         <Option value="broken">Broken</Option>
-        <Option value="on hold">On Hold</Option>
-        <Option value="question(s)">Question(s)</Option>
+        <Option value="on-hold">On Hold</Option>
+        <Option value="questions">Question(s)</Option>
       </Select>
     );
 

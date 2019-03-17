@@ -76,7 +76,7 @@ export default [
     component: asyncComponent(() => import('./containers/TestManager/CompletedTests'))
   },
   {
-    path: 'test-manager/test-case-run/:queueId',
+    path: 'test-manager/test-queue-run/:queueId',
     component: asyncComponent(() => import('./containers/TestManager/TestQueueRun'))
   },
   {
