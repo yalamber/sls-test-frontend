@@ -289,18 +289,7 @@ class SWQA {
     return this.api.send('DELETE', `test/case/${caseId}`);
   }
 
-  //Test runs
-  createTestRun = (payload) => {
-    return this.api.send('POST', `test/run`, payload);
-  }
-
-  getTestRun = (testRunId) => {
-    return this.api.send('GET', `test/run/${testRunId}`);
-  }
   
-  getTestRuns = (options) => {
-    return this.api.send('GET', `test/run`, options);
-  }
 
   //Test queue
   sendToQueue = (queueData) => {
@@ -329,6 +318,19 @@ class SWQA {
 
   deleteTestQueue = (queueId) => {
     return this.api.send('DELETE', `test/queue/${queueId}`);
+  }
+
+  //Test runs
+  createTestRun = (payload) => {
+    return this.api.send('POST', `test/run`, payload);
+  }
+
+  getTestRun = (testRunId) => {
+    return this.api.send('GET', `test/run/${testRunId}`);
+  }
+  
+  getTestRuns = (options) => {
+    return this.api.send('GET', `test/run`, options);
   }
 
   //users

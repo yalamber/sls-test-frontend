@@ -15,13 +15,14 @@ import {
 } from "@utils/crud.style";
 import SWQAClient from '@helpers/apiClient';
 import { dateTime } from "@constants/dateFormat";
+import ActionButtons from "./partials/ActionButtons";
 import clientActions from '@app/SystemApp/redux/client/actions';
 
 const { requestCurrentClient } = clientActions;
 
 class TestRunList extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       client: {},
       testRuns: [],
@@ -34,18 +35,26 @@ class TestRunList extends Component {
         total: 1
       },
     };
-    this.fetchData = this.fetchData.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
-        title: "Agency Team",
-        dataIndex: "agencyTeam.name",
-        key: "agencyTeam"
+        title: "#ID",
+        dataIndex: "testQueueRunId",
+        key: "testQueueRunId"
       },
       {
-        title: "Run Title",
-        dataIndex: "runTitle",
-        key: "runTitle"
+        title: "Tester",
+        render: row => <div>{row.testQueue.assignedUser.username}</div>,
+        key: "assignedUser"
+      },
+      {
+        title: "Test Suite",
+        render: row => <div>{row.testQueue.testCase.testSuite.name}</div>,
+        key: "testSuite"
+      },
+      {
+        title: "Test Case",
+        render: row => <div>{row.testQueue.testCase.title}</div>,
+        key: "testSuite"
       },
       {
         title: "Created",
@@ -53,14 +62,14 @@ class TestRunList extends Component {
         key: "createdAt"
       },
       {
-        title: "TC Count",
-        dataIndex: "tcCount",
-        key: "tcCount"
-      },
-      {
         title: "Status",
         dataIndex: "status",
         key: "status"
+      },
+      {
+        title: "Actions",
+        key: "actions",
+        render: row => <ActionButtons row={row} deleteTestQueue={this.deleteTestQueue} history={props.history} />
       }
     ];
   }
@@ -78,7 +87,7 @@ class TestRunList extends Component {
     }
   }
 
-  async fetchData(options) {
+  fetchData = async (options) => {
     try {
       this.setState({loading: true});
       options.limit = this.state.paginationOptions.pageSize;
@@ -106,7 +115,7 @@ class TestRunList extends Component {
     }
   }
 
-  async onTablePaginationChange(page, pageSize) {
+  onTablePaginationChange = async (page, pageSize) => {
     this.setState({
       loading: true,
       paginationOptions: {
@@ -166,7 +175,7 @@ class TestRunList extends Component {
                   }}
                   columns={this.columns}
                   dataSource={this.state.testRuns}
-                  rowKey="testRunId"
+                  rowKey="testQueueRunId"
                 />
               </Spin>
             </Box>

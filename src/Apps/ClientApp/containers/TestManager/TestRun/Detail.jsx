@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { Row, Col, Icon, Spin } from "antd";
 import { connect } from 'react-redux';
 import { get } from "lodash";
+import Moment from "react-moment";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
+import { dateTime } from "@constants/dateFormat";
 import { TitleWrapper, ComponentTitle, ActionBtn } from "@utils/crud.style";
 import Box from "@components/utility/box";
 import SWQAClient from "@helpers/apiClient";
@@ -17,7 +19,7 @@ class Detail extends Component {
     this.state = {
       loading: true,
       error: null,
-      caseData: {},
+      testRunData: {},
     };
   }
 
@@ -25,13 +27,13 @@ class Detail extends Component {
     this.fetchData();
   }
 
-  async fetchData() {
+  fetchData = async () => {
     try {  
-      const { caseId } = this.props.match.params;
+      const { match } = this.props;
       this.setState({ loading: true });
-      let caseData = await SWQAClient.getTestCase(caseId);
+      let testRunData = await SWQAClient.getTestRun(match.params.runId);
       this.setState({
-        caseData
+        testRunData
       });
     } catch(e) {
       this.setState({
@@ -50,11 +52,9 @@ class Detail extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          Client - { get(this.state, 'caseData.testSuite.clientTeam.client.name', '') }
+          Test Suite - { get(this.state, 'testRunData.testQueue.testCase.testSuite.name', '') }
           <br />
-          Team - { get(this.state, 'caseData.testSuite.clientTeam.name', '') }
-          <br />
-          Test Suite - { get(this.state, 'caseData.testSuite.name', '') }
+          Test Case - { get(this.state, 'testRunData.testQueue.testCase.title', '') }
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -67,11 +67,16 @@ class Detail extends Component {
                   >
                     <Icon type="left" /> <IntlMessages id="back" />
                   </ActionBtn>
-                  &nbsp; Test Case Details
+                  &nbsp; Test Run Details
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
-                
+                {this.state.error && <div>Unable to load Test run</div>}
+                {!this.state.error && !!this.state.testRunData && <div>
+                  Run Date: <Moment format={dateTime}>{this.state.testRunData.createdAt}</Moment>
+                  <br /> 
+                  Log File Url: {this.state.testRunData.logFileUrl}
+                </div>}
               </Spin>
             </Box>
           </Col>
