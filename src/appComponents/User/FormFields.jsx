@@ -209,11 +209,13 @@ class UserFormFields extends Component {
               <Card title="Skills" style={{ marginTop: "20px" }}>
                 <FormItem hasFeedback label="LinkedIn URL" style={margin}>
                   {getFieldDecorator(`${fieldName}.contactInformation.linkedInUrl`, {
-                    rules: userValidation.client
+                    rules: userValidation.linkedin
                   })(<Input placeholder="Linkedin URL" />)}
                 </FormItem>
                 <FormItem label="Resume URL" style={margin}>
-                  {getFieldDecorator(`${fieldName}.resumeUrl`, {})(
+                  {getFieldDecorator(`${fieldName}.resumeUrl`, {
+                    rules: userValidation.resume
+                  })(
                     <Input placeholder="Resume URL" />
                   )}
                 </FormItem>

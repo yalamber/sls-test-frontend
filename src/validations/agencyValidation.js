@@ -8,34 +8,4 @@ export const agencyValidation = {
     agencyAddress: [
         { required: true, message: "Agency Address is required" }
     ],
-    username: [{
-        required: true,
-        message: "User Name is required"
-    }],
-    password: [
-        { min: 5, message: "Password should be 5 characters or digits long" },
-        { required: true, message: "Password is required" }
-    ],
-    postalAddress: [
-        { required: true, message: "Postal Address is required" }
-    ],
-    email: [
-        email,
-        { required: true, message: "Email Address is required" }
-    ],
-    linkedin: [
-        { required: true, message: "Linkedin URL is required" }
-    ],
-    resume: [
-        { required: false }
-    ],
-    mobile: [
-        { required: true, message: "Mobile address is required" }
-    ],
-    sms: [
-        { required: true, message: "Message is required" }
-    ],
-    instantMessaging: [
-        { required: true, message: "Instant Messaging is required" }
-    ]
 };

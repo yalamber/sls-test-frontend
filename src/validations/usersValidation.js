@@ -13,5 +13,13 @@ export const userValidation = {
   email: [email, required],
   client: [required],
   company: [required],
-  role: [required]
+  role: [required],
+  //TODO: in futue add linkedin specific regexp
+  linkedin: [
+    { required: true, message: "Linkedin URL is required" },
+    { type: 'url', message: "Linkedin URL should be valid url." }
+  ],
+  resume: [
+    { type: 'url', message: "Resume URL should be valid url." }
+  ]
 };
