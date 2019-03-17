@@ -53,7 +53,6 @@ export function* errorCurrentClient() {
 export function* requestClientUserList() {
   yield takeLatest(actions.REQUEST_CLIENT_USER_LIST, function* ({ clientId, options }) {
     try {
-      console.log(options);
       let offset = options.pageSize * (options.page - 1);
       const data = yield call(SWQAClient.getClientUsers, clientId, {
         offset,
@@ -92,7 +91,6 @@ export function* requestCurrentClientUser() {
 //creat client user
 export function* requestCreateClientUser() {
   yield takeLatest(actions.REQUEST_CREATE_CLIENT_USER, function* ({ clientId, userData, history, appType }) {
-    console.log(appType);
     try {
       let roleId = userData.role;
       let status = userData.status;
@@ -118,7 +116,6 @@ export function* requestCreateClientUser() {
 
 export function* receiveCreateClientUser() {
   yield takeEvery(actions.RECEIVE_CREATE_CLIENT_USER, function* ({membership, history, appType}) {
-    console.log(appType);
     if (membership) {
       if (history && history.push) {
         switch(appType) {
