@@ -11,7 +11,7 @@ import { scrollToTop } from '@utils/dom-util';
 import {
   ActionWrapper,
 } from '@utils/crud.style';
-import {testCaseValidation} from "@validations/testCaseValidation";
+import { testCaseValidation } from "@validations/testCaseValidation";
 import testCaseStatus from '@constants/testCaseStatus';
 import SWQAClient from '@helpers/apiClient';
 

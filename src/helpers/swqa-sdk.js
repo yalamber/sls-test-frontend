@@ -290,6 +290,14 @@ class SWQA {
   }
 
   //Test runs
+  createTestRun = (payload) => {
+    return this.api.send('POST', `test/run`, payload);
+  }
+
+  getTestRun = (testRunId) => {
+    return this.api.send('GET', `test/run/${testRunId}`);
+  }
+  
   getTestRuns = (options) => {
     return this.api.send('GET', `test/run`, options);
   }

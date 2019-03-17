@@ -86,7 +86,9 @@ class ArtifactSelector extends Component {
       icon: 'link'
     }]);
     this.setState({
-      attachLinkVisible: false 
+      attachLinkVisible: false,
+      attachLink: '',
+      attachLinkName: ''
     });
   }
 

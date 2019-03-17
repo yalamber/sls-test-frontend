@@ -24,8 +24,8 @@ class TestQueueRun extends Component {
     testCase: {
       testCaseSteps: []
     },
-    testCaseRun: {},
-    finalStatus: null,
+    stepArtifacts: [],
+    finalStatus: undefined,
   };
 
   async componentDidMount() {
@@ -51,8 +51,55 @@ class TestQueueRun extends Component {
     }
   } 
 
-  handleStepResult = () => {
+  handleStepStatus = () => {
+    setImmediate(() => {
+      let values = this.props.form.getFieldsValue();
+      let allStepStatus = get(values, 'stepResult', []);
+      let checkAllStepFilled = true;
+      let finalStatus = 'pass';
+      allStepStatus.forEach((value) => {
+        //set false if any status field undefined
+        if(!value.status) {
+          checkAllStepFilled = false;
+          return false;
+        }
+        if(value.status !== 'pass') {
+          finalStatus = 'fail';
+        }
+      });
+      if(checkAllStepFilled) {  
+        this.setState({
+          finalStatus: finalStatus
+        });
+      }
+    });
+  }
 
+  updateArtifacts = (key, artifacts) => {
+    let stepArtifacts = [...this.state.stepArtifacts];
+    stepArtifacts[key] = artifacts;
+    this.setState({
+      stepArtifacts
+    });
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        //format data to send to test run
+        let testRun = {
+          testQueueId: ''
+        };
+        let stepResults = values.stepResult.map((result, key) => {
+          result.artifacts = this.state.stepArtifacts[key];
+          return result;
+        });
+
+
+        SWQAClient.createTestRun(testRun);
+      }
+    });
   }
 
   render() {
@@ -66,7 +113,7 @@ class TestQueueRun extends Component {
             <Col md={24} sm={24} xs={24} style={colStyle}>
               <Box>
                 <Spin spinning={this.state.loading}>
-                  <Form>
+                  <Form onSubmit={this.handleSubmit}>
                     <TitleWrapper>
                       <ComponentTitle style={topHeader}>Client: {this.state.client.name}</ComponentTitle>
                       <ComponentTitle style={topHeader}>Team: {this.state.clientTeam.name}</ComponentTitle>
@@ -96,7 +143,8 @@ class TestQueueRun extends Component {
                           form={this.props.form}
                           title={`Step #${index+1}`}
                           details={step.description}
-                          handleStepResult={this.handleStepResult}
+                          handleStepStatus={this.handleStepStatus}
+                          updateArtifacts={this.updateArtifacts}
                         />
                       )
                     })}
