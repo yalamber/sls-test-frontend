@@ -1,5 +1,4 @@
-import notification from './notification';
 import ColorChoser from './colorChoser';
-import EditableComponent from './editableComponent';
+import notification from './notification';
 
-export { notification, ColorChoser, EditableComponent };
+export { ColorChoser, notification };
