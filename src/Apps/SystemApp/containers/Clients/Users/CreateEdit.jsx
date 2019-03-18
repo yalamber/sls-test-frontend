@@ -73,7 +73,7 @@ class CreateEdit extends Component {
               roleId: roleId,
               userId: user.userId
             });
-            history.replace(`/admin/agency/${membership.agencyId}/user/${membership.userId}/details`);
+            history.replace(`/admin/client/${membership.clientId}/user/${membership.userId}/details`);
           }
         } catch(e) {
           message.error("something went wrong");
