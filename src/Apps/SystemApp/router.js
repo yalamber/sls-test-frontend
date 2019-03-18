@@ -179,6 +179,10 @@ const routes = [
   {
     path: "user/:userId/edit",
     component: asyncComponent(() => import("./containers/SystemUsers/CreateEdit.jsx"))
+  },
+  {
+    path: "*",
+    component: asyncComponent( () => import('@page/Common/404'))
   }
 ];
 
