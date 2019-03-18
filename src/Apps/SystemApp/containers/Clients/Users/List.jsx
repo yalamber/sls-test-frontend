@@ -8,7 +8,6 @@ const { requestClientUsers, requestCurrentClient } = clientActions;
 class UserList extends Component {
   constructor(props) {
     super(props);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
     this.columns = [
       {
         title: "Name",
@@ -43,7 +42,7 @@ class UserList extends Component {
     this.onTablePaginationChange(match.params.clientId)(1, 5);
   }
 
-  onTablePaginationChange(clientId) {
+  onTablePaginationChange = (clientId) => {
     return (page, pageSize) => {
       this.props.requestClientUsers(clientId, {
         page,
@@ -58,7 +57,7 @@ class UserList extends Component {
       <List {...this.props}
         pageHeader = {`Client - ${currentClient.clientData.name}`}
         title = "Users"
-        onTablePaginationChange={this.onTablePaginationChange}
+        onTablePaginationChange={this.onTablePaginationChange(match.params.clientId)}
         onTableRow={(row) => ({
           onDoubleClick: () => {
             this.props.history.push(`/admin/client/${row.clientId}/user/${row.userId}/details`);
