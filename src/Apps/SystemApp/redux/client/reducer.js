@@ -88,7 +88,7 @@ export default function clientReducer(state = initState, action) {
         },
       };
     //current client
-    case actions.CLEAR_CURRENT_CLIENT: 
+    case actions.CLEAR_CURRENT_CLIENT:
       return  {
         ...state,
         currentClient: initState.currentClient
@@ -160,12 +160,12 @@ export default function clientReducer(state = initState, action) {
         }
       };
     //current client
-    case actions.CLEAR_CURRENT_CLIENT_USER: 
+    case actions.CLEAR_CURRENT_CLIENT_USER:
       return  {
         ...state,
         currentClientUser: initState.currentClientUser
       };
-    case actions.REQUEST_CURRENT_CLIENT_USER: 
+    case actions.REQUEST_CURRENT_CLIENT_USER:
       return  {
         ...state,
         currentClientUser: initState.currentClientUser
@@ -222,11 +222,11 @@ export default function clientReducer(state = initState, action) {
       return {
         ...state,
         currentClientUser: {
-          loading: false, 
+          loading: false,
           error: null,
           data: action.membership
         }
-      };  
+      };
     case actions.ERROR_CREATE_CLIENT_USER:
       return {
         ...state,
@@ -236,7 +236,7 @@ export default function clientReducer(state = initState, action) {
           loading: false,
         }
       };
-    
+
     //client Team list
     case actions.REQUEST_CLIENT_TEAM_LIST:
       return  {

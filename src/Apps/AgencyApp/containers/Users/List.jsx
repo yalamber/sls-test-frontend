@@ -13,6 +13,7 @@ class UserList extends Component {
       data: [],
       loading: true,
       error: null,
+      userId: null,
       paginationOptions: {
         defaultCurrent: 1,
         current: 1,
@@ -55,10 +56,11 @@ class UserList extends Component {
   componentDidMount() {
     const { requestCurrentAgency } = this.props;
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
-    let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
+    const agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
     if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {
       requestCurrentAgency(agencyId);
       this.onTablePaginationChange(agencyId)(1, 10);
+      this.setState({userId: agencyId});
     }
   }
 
@@ -70,6 +72,8 @@ class UserList extends Component {
       });
     }
   }
+
+  
 
   // onTablePaginationChange(page, pageSize) {
   //   //get agency id
@@ -110,7 +114,7 @@ class UserList extends Component {
     return (
       <List {...this.props}
         title = "Users"
-        onTablePaginationChange={this.onTablePaginationChange}
+        onTablePaginationChange={this.onTablePaginationChange(this.state.userId && this.state.userId)}
         onTableRow={(row) => ({
           onDoubleClick: () => {
             history.push(`/my-agency/user/${row.userId}/details`);
