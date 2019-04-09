@@ -13,6 +13,7 @@ class UserList extends Component {
       data: [],
       loading: true,
       error: null,
+      userId: null,
       paginationOptions: {
         defaultCurrent: 1,
         current: 1,
@@ -51,11 +52,15 @@ class UserList extends Component {
   componentDidMount() {
     const { requestCurrentClient } = this.props;
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
-    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
+    const clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
     if(activeCompanyTokenData.type === 'clientUser' && clientId) {
       requestCurrentClient(clientId);
       this.onTablePaginationChange(clientId)(1, 5);
+      this.setState({userId:clientId});
     }
+    // console.log(this.props);
+    // console.log(activeCompanyTokenData);
+    // // console.log(clientId);
   }
 
   onTablePaginationChange(clientId) {
@@ -72,7 +77,7 @@ class UserList extends Component {
     return (
       <List {...this.props}
         title = "Users"
-        onTablePaginationChange={this.onTablePaginationChange}
+        onTablePaginationChange={this.onTablePaginationChange(this.state.userId && this.state.userId)}
         onTableRow={(row) => ({
           onDoubleClick: () => {
             history.push(`/my-client/user/${row.userId}/details`);
