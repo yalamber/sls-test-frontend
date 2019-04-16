@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Icon, Spin, Table } from "antd";
+import { Row, Col, Icon, Spin, Table, Card  } from "antd";
 import { connect } from 'react-redux';
 import { get } from "lodash";
 import LayoutWrapper from "@components/utility/layoutWrapper";
@@ -90,6 +90,15 @@ class Detail extends Component {
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table dataSource={dataSource} columns={columns} pagination={false} />
+                <div>
+                  {this.state.caseData.testCaseSteps && this.state.caseData.testCaseSteps.map((step, index) => {
+                    return (
+                      <Card key={index} title={`Step #${index+1}`} size="small">
+                        {step.description}
+                      </Card>
+                    )
+                  })}
+                </div>
               </Spin>
             </Box>
           </Col>
