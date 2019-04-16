@@ -200,6 +200,11 @@ const mapPropsToFields = props => {
   let { currentClientUser } = props;
   let currentUser = currentClientUser.data.user;
   let role = currentClientUser.data.role;
+  let resumeUrl = get(currentUser, 'resumeUrl');
+  let IM0Service = get(currentUser, 'instantMessengerInfos[0]["service"]');
+  let IM0ID = get(currentUser, 'instantMessengerInfos[0]["messengerId"]');
+  let IM1Service = get(currentUser, 'instantMessengerInfos[1]["service"]');
+  let IM1ID = get(currentUser, 'instantMessengerInfos[1]["messengerId"]');
   return {
     'user.role': Form.createFormField({
       value: get(role, 'roleId')
@@ -211,7 +216,7 @@ const mapPropsToFields = props => {
       value: get(currentUser, 'username')
     }),
     'user.resumeUrl': Form.createFormField({
-      value: get(currentUser, 'resumeUrl')
+      value: resumeUrl?resumeUrl:''
     }),
     'user.contactInformation.emailAddress': Form.createFormField({
       value: get(currentUser, 'contactInformation.emailAddress')
@@ -229,16 +234,16 @@ const mapPropsToFields = props => {
       value: get(currentUser, 'contactInformation.linkedInUrl')
     }),
     'user.instantMessengerInfos[0]["service"]': Form.createFormField({
-      value: get(currentUser, 'instantMessengerInfos[0]["service"]')
+      value: IM0Service?IM0Service:''
     }),
     'user.instantMessengerInfos[0]["messengerId"]': Form.createFormField({
-      value: get(currentUser, 'instantMessengerInfos[0]["messengerId"]')
+      value: IM0ID?IM0ID:''
     }),
     'user.instantMessengerInfos[1]["service"]': Form.createFormField({
-      value: get(currentUser, 'instantMessengerInfos[1]["service"]')
+      value: IM1Service?IM1Service:''
     }),
     'user.instantMessengerInfos[1]["messengerId"]': Form.createFormField({
-      value: get(currentUser, 'instantMessengerInfos[1]["messengerId"]')
+      value: IM1ID?IM1ID:''
     }),
   };
 };

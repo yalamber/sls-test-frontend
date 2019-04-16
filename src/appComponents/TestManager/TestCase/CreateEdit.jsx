@@ -73,23 +73,24 @@ class CreateEdit extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    let { history, match, form } = this.props;
+    let { history, match, form, appType } = this.props;
     form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
         try{
           this.setState({ loading: true });
+          let data = omit(values, ['keys'])
           if(this.mode === 'edit') {
-            await SWQAClient.updateTestCase(match.params.caseId, omit(values, ['keys']));
+            await SWQAClient.updateTestCase(match.params.caseId, data);
             message.success("Successfully Updated");
           } else {
             let testCase = await SWQAClient.addTestCase({
               testSuiteId: match.params.suiteId,
-              ...omit(values, ['keys']) 
+              ...data 
             });
             message.success("Successfully Saved");
-            if(this.props.appType === 'system') {
+            if(appType === 'system') {
                 history.replace(`/admin/client/test-manager/test-case/${testCase.testCaseId}/details`);
-            } else if(this.props.appType === 'client') {
+            } else if(appType === 'client') {
                 history.replace(`/my-client/test-manager/test-case/${testCase.testCaseId}/details`);
             }
           }
