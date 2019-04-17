@@ -19,7 +19,7 @@ const FormItem = Form.Item;
 const TextArea = Input.TextArea;
 const Option = Select.Option;
 
-let stepCount = 0;
+let stepCount;
 class CreateEdit extends Component {
   constructor(props) {
     super(props);
@@ -36,6 +36,7 @@ class CreateEdit extends Component {
   }
 
   componentDidMount() {
+    stepCount = 0;
     this.fetchData();
   }
 
