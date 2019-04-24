@@ -108,7 +108,8 @@ class CreateEdit extends Component {
       margin: '5px 5px 0px 0'
     };
     const statusOptions = testSuiteStatus.map(status => <Option key={status.id}>{status.label}</Option>);
-
+    console.log('====Test====');
+    console.log(this.state);
     return (
       <LayoutWrapper>
         <PageHeader>

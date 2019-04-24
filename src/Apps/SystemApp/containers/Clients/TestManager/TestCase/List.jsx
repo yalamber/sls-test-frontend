@@ -140,17 +140,17 @@ class TestCaseList extends Component {
         } else {
           params.clientId = this.props.match.params.clientId;
         }
-        let testRuns = await SWQAClient.getTestCases(params);
+        let testCases = await SWQAClient.getTestCases(params);
         this.setState({
           loading: false,
-          testRuns: get(testRuns, 'rows', []),
+          testCases: get(testCases, 'rows', []),
           paginationOptions: {
             ...this.state.paginationOptions,
-            total: testRuns.count
+            total: testCases.count
           }
         });
       } catch(e) {
-        this.setState({ testRuns: [], error: e });
+        this.setState({ testCases: [], error: e });
       } finally {
         this.setState({ loading: false });
       }

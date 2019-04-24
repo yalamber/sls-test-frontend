@@ -166,6 +166,7 @@ class TestQueueRun extends Component {
                       })}
                       <StatusAndUpdate 
                         form={this.props.form}
+                        history={this.props.history}
                         status={this.state.finalStatus}
                       />
                     </Form>
