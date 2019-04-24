@@ -109,7 +109,7 @@ class TestQueueRun extends Component {
           await SWQAClient.createTestRun(testRun);
           message.success('Submitted Test results successfully');
           //redirect to complted tests page
-          history.replace('my-agency/test-manager/completed-tests');
+          history.replace('/my-agency/test-manager/completed-tests');
         } catch(e) {
           message.error('Something went wrong!');
         }
