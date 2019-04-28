@@ -234,13 +234,13 @@ const mapPropsToFields = props => {
       value: get(currentUser, 'contactInformation.linkedInUrl')
     }),
     'user.instantMessengerInfos[0]["service"]': Form.createFormField({
-      value: IM0Service?IM0Service:''
+      value: IM0Service
     }),
     'user.instantMessengerInfos[0]["messengerId"]': Form.createFormField({
       value: IM0ID?IM0ID:''
     }),
     'user.instantMessengerInfos[1]["service"]': Form.createFormField({
-      value: IM1Service?IM1Service:''
+      value: IM1Service
     }),
     'user.instantMessengerInfos[1]["messengerId"]': Form.createFormField({
       value: IM1ID?IM1ID:''
