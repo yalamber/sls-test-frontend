@@ -43,17 +43,17 @@ class TestRunList extends Component {
       },
       {
         title: "Tester",
-        render: row => <div>{row.testQueue.assignedUser.username}</div>,
+        render: row => <div>{get(row, 'testQueue.assignedUser.username', '-')}</div>,
         key: "assignedUser"
       },
       {
         title: "Test Suite",
-        render: row => <div>{row.testQueue.testCase.testSuite.name}</div>,
+        render: row => <div>{get(row, 'testQueue.testCase.testSuite.name', '-')}</div>,
         key: "testSuite"
       },
       {
         title: "Test Case",
-        render: row => <div>{row.testQueue.testCase.title}</div>,
+        render: row => <div>{get(row, 'testQueue.testCase.title', '-')}</div>,
         key: "testCase"
       },
       {
