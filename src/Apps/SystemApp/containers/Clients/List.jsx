@@ -1,102 +1,144 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { message } from 'antd';
+import { push, goBack } from 'connected-react-router';
+import qs from 'qs';
 import IntlMessages from '@components/utility/intlMessages';
 import ActionButtons from "./partials/ActionButtons";
 import TestManagerActionButtons from './partials/TestManagerActionButtons';
 import List from '@appComponents/Common/List';
-import clientActions from '@app/SystemApp/redux/client/actions';
-
-const { requestClients, deleteClient } = clientActions;
+import SWQAClient from "@helpers/apiClient";
 
 class ClientList extends Component {
-  constructor(props) {
-    super(props);
-    this.columns = [
-      {
-        title: <IntlMessages id="client.name"/>,
-        dataIndex: "name",
-        key: "name"
-      },
-      {
-        title: <IntlMessages id="client.owner"/>,
-        dataIndex: "owner.username",
-        key: "client_owner"
-      },
-      {
-        title: <IntlMessages id="client.owner.email"/>,
-        dataIndex: "owner.contactInformation.emailAddress",
-        key: "client_owner_email"
-      },
-      {
-        title: <IntlMessages id="client.location"/>,
-        dataIndex: "location",
-        key: "location"
-      },
-      {
-        title: <IntlMessages id="client.testManagerActions"/>,
-        key: "testManagerActions",
-        render: row => <TestManagerActionButtons
-          row={row}
-          history={this.props.history}
-          delete={this.handleDelete}
-          setCurrentClient={props.setCurrentClient} />
-      },
-      {
-        title: <IntlMessages id="actions"/>,
-        key: "actions",
-        render: row => <ActionButtons
-          row={row}
-          history={this.props.history}
-          delete={this.handleDelete}
-          setCurrentClient={props.setCurrentClient} />
-      }
-    ];
+  columns = [
+    {
+      title: <IntlMessages id="client.name" />,
+      dataIndex: "name",
+      key: "name"
+    },
+    {
+      title: <IntlMessages id="client.owner" />,
+      dataIndex: "owner.username",
+      key: "client_owner"
+    },
+    {
+      title: <IntlMessages id="client.owner.email" />,
+      dataIndex: "owner.contactInformation.emailAddress",
+      key: "client_owner_email"
+    },
+    {
+      title: <IntlMessages id="client.location" />,
+      dataIndex: "location",
+      key: "location"
+    },
+    {
+      title: <IntlMessages id="client.testManagerActions" />,
+      key: "testManagerActions",
+      render: row => <TestManagerActionButtons
+        row={row}
+        history={this.props.history}
+        setCurrentClient={this.props.setCurrentClient} />
+    },
+    {
+      title: <IntlMessages id="actions" />,
+      key: "actions",
+      render: row => <ActionButtons
+        row={row}
+        history={this.props.history}
+        setCurrentClient={this.props.setCurrentClient} />
+    }
+  ];
+
+  state = {
+    loading: true,
+    clients: [],
+    limit: 2,
+    totalCount: 0,
+    currentPage: 1
   }
 
-  onTablePaginationChange = (page, pageSize) => {
-    this.props.requestClients({
-      page,
-      pageSize
+  async fetchData(page) {
+    this.setState({
+      loading: true
     });
+    try {
+      let data = await SWQAClient.getClients({
+        offset: (this.state.limit * page) - this.state.limit,
+        limit: this.state.limit
+      });
+      this.setState({
+        clients: data.rows,
+        totalCount: data.count,
+        currentPage: page
+      });
+    } catch (e) {
+      console.log(e);
+      message.error('Data fetch failed');
+    } finally {
+      this.setState({
+        loading: false
+      });
+    }
   }
 
-  handleDelete = (row) => {
-    this.props.deleteClient(row.clientId);
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.search !== prevProps.search) {
+      console.log(this.props.search)
+      console.log(prevProps.search);
+      let currentPage = this.getPagefromLocation(this.props.search);
+      this.fetchData(currentPage);
+    }
   }
 
   componentDidMount() {
-    this.props.requestClients({
-      page: 1,
-      pageSize: 5
-    });
+    let currentPage = this.getPagefromLocation(this.props.location.search);
+    this.fetchData(currentPage);
+  }
+
+  getPagefromLocation(search) {
+    let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
+    return queryParams.page?Number(queryParams.page):1;
   }
 
   render() {
     return (
       <List {...this.props}
-        title = "Clients"
+        title="Clients"
         onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
           onDoubleClick: () => {
-            this.props.history.push(`/admin/client/${row.clientId}/details`);
+            this.props.push(`/admin/client/${row.clientId}/details`);
           }
         })}
-        loading={this.props.list.loading}
+        goBack={this.props.goBack}
+        history={this.props.history}
+        loading={this.state.loading}
         columns={this.columns}
         createLink={`/admin/client/create/`}
-        data={this.props.list.rows}
-        paginationOptions={this.props.list.paginationOptions}
+        data={this.state.clients}
+        paginationOptions={{
+          total: this.state.totalCount,
+          pageSize: this.state.limit,
+          current: this.state.currentPage,
+          onChange: (page) => {
+            this.props.push(`/admin/clients?page=${page}`);
+          }
+        }}
         rowKey="clientId" />
     );
   }
 }
 
+const mapStateToProps = state => ({
+  pathname: state.router.location.pathname,
+  search: state.router.location.search,
+  hash: state.router.location.hash,
+})
+
 export default connect(
-  state => ({
-    ...state.Client
-  }),
+  mapStateToProps,
   {
-    requestClients,
-    deleteClient
+    push,
+    goBack
   }
 )(ClientList);

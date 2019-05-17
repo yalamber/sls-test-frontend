@@ -16,7 +16,8 @@ const { rowStyle, colStyle, gutter } = basicStyle;
 
 export default ({
   columns,
-  history,
+  push,
+  goBack,
   paginationOptions,
   loading,
   data = [],
@@ -43,7 +44,7 @@ export default ({
               <ComponentTitle>
                 <ActionBtn
                   type="secondary"
-                  onClick={() => history.goBack()}
+                  onClick={() => goBack()}
                 >
                   <Icon type="left" /> <IntlMessages id="back" />
                 </ActionBtn> {title}
@@ -53,7 +54,7 @@ export default ({
                   <ActionBtn
                     type="primary"
                     onClick={() => {
-                      history.push(createLink);
+                      push(createLink);
                     }}>
                     <Icon type="plus" />
                     {createText}
@@ -64,10 +65,7 @@ export default ({
             <Spin spinning={loading}>
               <Table
                 locale={{ emptyText }}
-                pagination={{
-                  ...paginationOptions,
-                  onChange: onTablePaginationChange
-                }}
+                pagination={paginationOptions}
                 bordered
                 columns={columns}
                 onRow={onTableRow}
