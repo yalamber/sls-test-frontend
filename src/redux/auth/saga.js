@@ -1,5 +1,5 @@
 import { all, takeEvery, put, call, fork } from 'redux-saga/effects';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import { get } from 'lodash';
 import jwtDecode from "jwt-decode";
 import { 

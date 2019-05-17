@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Table } from "antd";
 import { get } from "lodash";
 import TeamDetail from "@appComponents/Team/Detail";
 import SWQAClient from "@helpers/apiClient";

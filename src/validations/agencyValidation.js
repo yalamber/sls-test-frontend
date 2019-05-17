@@ -1,5 +1,3 @@
-import { email } from './rules'
-
 export const agencyValidation = {
     agencyName: [{
         required: true,

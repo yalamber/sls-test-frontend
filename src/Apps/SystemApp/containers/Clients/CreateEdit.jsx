@@ -91,7 +91,7 @@ class CreateEdit extends Component {
     const errorResponseData = get(e, 'response.data');
     if(errorResponseData && errorResponseData.length > 0) {
       let fieldObject = {};
-      errorResponseData.map((msg) => {
+      errorResponseData.forEach((msg) => {
         if(msg.path === 'username') {
           fieldObject['owner.username'] = {
             value: msg.value,

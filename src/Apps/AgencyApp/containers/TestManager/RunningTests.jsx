@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Row, Col, Icon, Spin, message, Button, Menu, Dropdown } from "antd";
-import { get, find } from 'lodash';
+import { Row, Col, Icon, Spin, message } from "antd";
+import { get } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
@@ -19,7 +19,6 @@ import agencyActions from '@app/SystemApp/redux/agency/actions';
 import ActionButtons from "./partials/AssignedTestActionButtons";
 
 const { requestCurrentAgency, requestAgencyTeams } = agencyActions;
-const ButtonGroup = Button.Group;
 
 class AssignedTestList extends Component {
   constructor(props) {

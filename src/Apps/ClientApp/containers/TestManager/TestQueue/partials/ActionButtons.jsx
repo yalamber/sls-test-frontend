@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tooltip, Button, message } from "antd";
+import { Tooltip, Button } from "antd";
 import Popconfirms from '@components/feedback/popconfirm';
 import {
   ActionWrapper,

@@ -6,7 +6,7 @@ function Error ({ error }) {
   let data = get(error, 'response.data');
   let message = '';
   if(isArray(data)) {
-    data.map((msg) => {
+    data.forEach((msg) => {
       message += msg.message;
     });
   } else {

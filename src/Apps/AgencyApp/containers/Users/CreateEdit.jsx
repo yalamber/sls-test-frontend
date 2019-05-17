@@ -69,7 +69,7 @@ class CreateEdit extends Component {
           let status = userData.status;
           let agencyId = this.getAgencyId();
           if(this.mode === 'edit') {
-            let userData = omit(userData, ['role', 'status']);
+            userData = omit(userData, ['role', 'status']);
             let user = await SWQAClient.updateUser(match.params.userId, userData);
             let membership = await SWQAClient.updateAgencyUser(agencyId, match.params.userId, {
               status: status,
@@ -113,7 +113,7 @@ class CreateEdit extends Component {
     const errorResponseData = get(e, 'response.data.errors');
     if(errorResponseData && isArray(errorResponseData)) {
       let fieldObject = {};
-      errorResponseData.map((msg) => {
+      errorResponseData.forEach((msg) => {
         if(msg.path === 'username') {
           fieldObject['user.username'] = {
             value: msg.value,

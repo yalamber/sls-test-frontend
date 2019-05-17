@@ -111,7 +111,7 @@ class CreateEdit extends Component {
     const errorResponseData = get(e, 'response.data.errors');
     if(errorResponseData && isArray(errorResponseData)) {
       let fieldObject = {};
-      errorResponseData.map((msg) => {
+      errorResponseData.forEach((msg) => {
         if(msg.path === 'username') {
           fieldObject['user.username'] = {
             value: msg.value,

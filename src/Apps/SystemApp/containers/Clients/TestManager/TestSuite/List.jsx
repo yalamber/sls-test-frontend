@@ -88,7 +88,6 @@ class SuiteList extends Component {
   }
 
   fetchTestSuite = async (options) => {
-
     try {
       this.setState({loading: true});
       let testSuites = await SWQAClient.getTestSuites(options);
