@@ -83,8 +83,6 @@ class ClientList extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.search !== prevProps.search) {
-      console.log(this.props.search)
-      console.log(prevProps.search);
       let currentPage = this.getPagefromLocation(this.props.search);
       this.fetchData(currentPage);
     }
