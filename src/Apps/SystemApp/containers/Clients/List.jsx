@@ -109,7 +109,7 @@ class ClientList extends Component {
           }
         })}
         goBack={this.props.goBack}
-        history={this.props.history}
+        push={this.props.push}
         loading={this.state.loading}
         columns={this.columns}
         createLink={`/admin/client/create/`}
