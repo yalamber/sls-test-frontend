@@ -36,23 +36,21 @@ class ClientList extends Component {
       key: "testManagerActions",
       render: row => <TestManagerActionButtons
         row={row}
-        history={this.props.history}
-        setCurrentClient={this.props.setCurrentClient} />
+        push={this.props.push} />
     },
     {
       title: <IntlMessages id="actions" />,
       key: "actions",
       render: row => <ActionButtons
         row={row}
-        history={this.props.history}
-        setCurrentClient={this.props.setCurrentClient} />
+        push={this.props.push} />
     }
   ];
 
   state = {
     loading: true,
     clients: [],
-    limit: 2,
+    limit: 10,
     totalCount: 0,
     currentPage: 1
   }

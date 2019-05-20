@@ -1,74 +1,119 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import clientActions from '@app/SystemApp/redux/client/actions';
+import { push, goBack } from 'connected-react-router';
+import qs from 'qs';
+import { message }  from 'antd';
 import List from '@appComponents/Common/List';
 import ActionButtons from "./partials/ActionButtons";
-const { requestClientTeams, requestCurrentClient } = clientActions;
+import SWQAClient from "@helpers/apiClient";
 
 class TeamList extends Component {
-  constructor(props) {
-    super(props);
-    this.columns = [
-      {
-        title: "Team Name",
-        dataIndex: "name",
-        key: "name"
-      },
-      {
-        className: 'column-actions',
-        title: "Actions",
-        key: "actions",
-        render: row => <ActionButtons
-          row={row}
-          clientId={props.match.params.clientId}
-          history={this.props.history} />
-      }
-    ];
+
+  columns = [
+    {
+      title: "Team Name",
+      dataIndex: "name",
+      key: "name"
+    },
+    {
+      className: 'column-actions',
+      title: "Actions",
+      key: "actions",
+      render: row => <ActionButtons
+        row={row}
+        clientId={this.props.match.params.clientId}
+        push={this.props.push} />
+    }
+  ];
+
+  state = {
+    loading: true,
+    client: {},
+    users: [],
+    limit: 2,
+    totalCount: 0,
+    currentPage: 1
   }
+
 
   componentDidMount() {
-    const { match } = this.props;
-    this.props.requestCurrentClient(match.params.clientId);
-    this.onTablePaginationChange(match.params.clientId)(1, 5);
+    const { match, location } = this.props;
+    let currentPage = this.getPagefromLocation(location.search);
+    this.fetchData(match.params.clientId, currentPage);
   }
 
-  onTablePaginationChange = (clientId) => {
-    return (page, pageSize) => {
-      this.props.requestClientTeams(clientId, {
-        page,
-        pageSize
+  async fetchData(clientId, page) {
+    this.setState({
+      loading: true
+    });
+    try {
+      let clientData = await SWQAClient.getClient(clientId);
+      let teamsData = await SWQAClient.getClientTeams(clientId, {
+        offset: (this.state.limit * page) - this.state.limit,
+        limit: this.state.limit
+      }); 
+      this.setState({
+        client: clientData,
+        teams: teamsData.rows,
+        totalCount: teamsData.count,
+        currentPage: page
+      });
+    } catch (e) {
+      console.log(e);
+      message.error('Data fetch failed');
+    } finally {
+      this.setState({
+        loading: false
       });
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.search !== prevProps.search) {
+      let currentPage = this.getPagefromLocation(this.props.search);
+      this.fetchData(this.props.match.params.clientId, currentPage);
+    }
+  }
+
+  getPagefromLocation(search) {
+    let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
+    return queryParams.page?Number(queryParams.page):1;
+  }
+
   render() {
-    const { currentClient = { clientData: { name: '' }, teamList: [] }, match } = this.props;
+    const { match, push } = this.props;
     return (
       <List {...this.props}
-        onTablePaginationChange={this.onTablePaginationChange(match.params.clientId)}
         onTableRow={(row) => ({
-          onDoubleClick: () => {
-            this.props.history.push(`/admin/client/team/${row.clientTeamId}/details`);
-          }
+          onDoubleClick: () => push(`/admin/client/team/${row.clientTeamId}/details`)
         })}
-        loading={currentClient.teamList.loading}
+        loading={this.state.loading}
         title="Teams"
-        pageHeader={`Client - ${currentClient.clientData.name}`}
+        pageHeader={`Client - ${this.state.client.name}`}
         columns={this.columns}
         createLink={`/admin/client/${match.params.clientId}/team/create/`}
-        data={currentClient.teamList.rows}
-        paginationOptions={currentClient.teamList.paginationOptions}
+        data={this.state.teams}
+        paginationOptions={{
+          total: this.state.totalCount,
+          pageSize: this.state.limit,
+          current: this.state.currentPage,
+          onChange: (page) => push(`/admin/client/${match.params.clientId}/teams?page=${page}`)
+        }}
         rowKey="clientTeamId" />
     );
   }
 }
 
+const mapStateToProps = state => ({
+  pathname: state.router.location.pathname,
+  search: state.router.location.search,
+  hash: state.router.location.hash,
+})
+
 export default connect(
-  state => ({
-    ...state.Client
-  }),
+  mapStateToProps,
   {
-    requestCurrentClient,
-    requestClientTeams
+    goBack,
+    push
   }
 )(TeamList);

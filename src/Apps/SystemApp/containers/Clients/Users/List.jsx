@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push, goBack } from 'connected-react-router';
 import qs from 'qs';
+import { message }  from 'antd';
 import List from '@appComponents/Common/List';
 import ActionButtons from "./partials/ActionButtons";
 import SWQAClient from "@helpers/apiClient";
@@ -30,7 +31,7 @@ class UserList extends Component {
       render: row => <ActionButtons
         row={row}
         clientId={this.props.match.params.clientId}
-        history={this.props.history} />
+        push={this.props.push} />
     }
   ];
 
@@ -38,7 +39,7 @@ class UserList extends Component {
     loading: true,
     client: {},
     users: [],
-    limit: 2,
+    limit: 10,
     totalCount: 0,
     currentPage: 1
   }
@@ -89,18 +90,14 @@ class UserList extends Component {
   }
 
   render() {
-    const { match } = this.props;
+    const { match, push } = this.props;
     return (
       <List {...this.props}
         pageHeader={`Client - ${this.state.client.name}`}
         title="Users"
         onTableRow={(row) => ({
-          onDoubleClick: () => {
-            this.props.push(`/admin/client/${row.clientId}/user/${row.userId}/details`);
-          }
+          onDoubleClick: () => push(`/admin/client/${row.clientId}/user/${row.userId}/details`)
         })}
-        goBack={this.props.goBack}
-        push={this.props.push}
         loading={this.state.loading}
         columns={this.columns}
         createLink={`/admin/client/${match.params.clientId}/user/create/`}
@@ -109,9 +106,7 @@ class UserList extends Component {
           total: this.state.totalCount,
           pageSize: this.state.limit,
           current: this.state.currentPage,
-          onChange: (page) => {
-            this.props.push(`/admin/client/${match.params.clientId}/users?page=${page}`);
-          }
+          onChange: (page) => push(`/admin/client/${match.params.clientId}/users?page=${page}`)
         }}
         rowKey="userId" />
     )
