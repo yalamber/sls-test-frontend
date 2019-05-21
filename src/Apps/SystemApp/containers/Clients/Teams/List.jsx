@@ -30,7 +30,7 @@ class TeamList extends Component {
     loading: true,
     client: {},
     users: [],
-    limit: 2,
+    limit: 10,
     totalCount: 0,
     currentPage: 1
   }

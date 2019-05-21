@@ -1,60 +1,81 @@
-import React, { Component } from 'react';
-import { Row, Col, Icon, Spin } from 'antd';
-import { connect } from 'react-redux';
-import IntlMessages from '@components/utility/intlMessages';
-import LayoutWrapper from '@components/utility/layoutWrapper';
-import basicStyle from '@settings/basicStyle';
-import Box from '@components/utility/box';
-import {
-  ActionBtn,
-  TitleWrapper,
-  ButtonHolders,
-  ComponentTitle,
-  TableClickable as Table
-} from '@utils/crud.style';
-import systemUserActions from '@app/SystemApp/redux/systemUser/actions';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { push, goBack } from 'connected-react-router';
+import qs from 'qs';
+import { message } from 'antd';
+import List from '@appComponents/Common/List';
 import ActionButtons from "./partials/ActionButtons";
-
-const { requestSystemUsers, deleteSystemUser } = systemUserActions;
+import SWQAClient from "@helpers/apiClient";
 
 class UsersList extends Component {
-  constructor(props) {
-    super(props);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
-    this.columns = [
-      {
-        title: 'Username',
-        dataIndex: 'user.username',
-        key: 'title',
-      },
-      {
-        title: 'Email',
-        dataIndex: 'user.contactInformation.emailAddress',
-        key: 'email',
-      },
-      {
-        title: 'Role',
-        dataIndex: 'role.title',
-        key: 'role',
-      },
-      {
-        title: 'Actions',
-        key: 'actions',
-        render: (row) => <ActionButtons row={row} deleteUser={this.handleDelete} />
-      }
-    ];
-  }
+
+  state = {
+    loading: false,
+    users: [],
+    limit: 10,
+    totalCount: 0,
+    currentPage: 1
+  };
+
+  columns = [
+    {
+      title: 'Username',
+      dataIndex: 'user.username',
+      key: 'title',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'user.contactInformation.emailAddress',
+      key: 'email',
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role.title',
+      key: 'role',
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (row) => <ActionButtons row={row} deleteUser={this.handleDelete} />
+    }
+  ];
 
   componentDidMount() {
-    this.onTablePaginationChange(1, 5);
+    const { location } = this.props;
+    let currentPage = this.getPagefromLocation(location.search);
+    this.fetchData(currentPage);
   }
 
-  onTablePaginationChange(page, pageSize) {
-    this.props.requestSystemUsers({
-      page,
-      pageSize
-    });
+  fetchData = async (page) => {
+    try {
+      this.setState({ loading: true });
+      let usersData = await SWQAClient.getSystemUsers({
+        offset: (this.state.limit * page) - this.state.limit,
+        limit: this.state.limit
+      });
+      this.setState({
+        loading: false,
+        users: usersData.rows,
+        totalCount: usersData.count,
+        currentPage: page
+      });
+    } catch (e) {
+      console.log(e);
+      message.error("Problem occured.");
+      this.setState({ loading: false });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.search !== prevProps.search) {
+      let currentPage = this.getPagefromLocation(this.props.search);
+      this.fetchData(this.props.match.params.teamId, currentPage);
+    }
+  }
+
+  getPagefromLocation(search) {
+    let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
+    return queryParams.page ? Number(queryParams.page) : 1;
   }
 
   handleDelete(row) {
@@ -62,57 +83,40 @@ class UsersList extends Component {
   }
 
   render() {
-    const { rowStyle, colStyle, gutter } = basicStyle;
-    const { history, list } = this.props;
-    console.log(list);
+    const { push } = this.props;
     return (
-      <LayoutWrapper>
-        <Row style={rowStyle} gutter={gutter} justify="start">
-          <Col md={24} sm={24} xs={24} style={colStyle}>
-            <Box>
-              <TitleWrapper>
-                <ComponentTitle><IntlMessages id="system.users" /></ComponentTitle>
-                <ButtonHolders>
-                  <ActionBtn type="primary" onClick={() => {
-                    history.push('user/create')
-                  }}>
-                    <Icon type="plus" />
-                    Add System User
-                  </ActionBtn>
-                </ButtonHolders>
-              </TitleWrapper>
-              <Spin spinning={list.loading}>
-                <Table
-                  pagination={{
-                    ...list.paginationOptions,
-                    onChange: this.onTablePaginationChange
-                  }}
-                  rowKey="userId"
-                  columns={this.columns}
-                  dataSource={list.rows}
-                  onRow={row => ({
-                    onDoubleClick: () => {
-                      history.push(`details/${row.systemUserId}`);
-                    }
-                  })}
-                />
-              </Spin>
-            </Box>
-
-          </Col>
-        </Row>
-      </LayoutWrapper>
+      <List {...this.props}
+        onTableRow={(row) => ({
+          onDoubleClick: () => push(`details/${row.systemUserId}`)
+        })}
+        loading={this.state.loading}
+        title="System Users"
+        pageHeader={'System Users'}
+        columns={this.columns}
+        createLink={`/admin/user/create`}
+        createText="Add System User"
+        data={this.state.users}
+        paginationOptions={{
+          total: this.state.totalCount,
+          pageSize: this.state.limit,
+          current: this.state.currentPage,
+          onChange: (page) => push(`/admin/users?page=${page}`)
+        }}
+        rowKey="userId" />
     );
   }
 }
 
+const mapStateToProps = state => ({
+  pathname: state.router.location.pathname,
+  search: state.router.location.search,
+  hash: state.router.location.hash,
+})
 
 export default connect(
-  state => ({
-    ...state.SystemUser
-  }),
+  mapStateToProps,
   {
-    requestSystemUsers,
-    deleteSystemUser
+    goBack,
+    push
   }
 )(UsersList);

@@ -1,53 +1,88 @@
 import React, { Component } from "react";
-import { message } from "antd";
+import { connect } from "react-redux";
+import { push, goBack } from 'connected-react-router';
 import { get } from 'lodash';
-import ActionButtons from "./partials/ActionButtons";
+import qs from 'qs';
+import { message } from 'antd';
 import List from '@appComponents/Common/List';
-import SWQAClient from '@helpers/apiClient';
+import ActionButtons from "./partials/ActionButtons";
+import SWQAClient from "@helpers/apiClient";
 
 class MemberList extends Component {
-  constructor(props) {
-    super(props);
-    //initial state
-    this.state = {
-      team: {},
-      data: [],
-      paginationOptions: {
-        defaultCurrent: 1,
-        current: 1,
-        pageSize: 1,
-        total: 1
-      },
-      loading: false
-    };
-    this.fetchData = this.fetchData.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
-    this.columns = [
-      {
-        title: "Username",
-        dataIndex: "user.username",
-        key: "name",
-        sorter: (a, b) => a.name >= b.name
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
-        sorter: (a, b) => a.status >= b.status
-      },
-      {
-        title: "Actions",
-        key: "actions",
-        render: row => (
-          <ActionButtons
-            row={row}
-            history={props.history}
-            deleteMember={() => {
-              this.deleteMember(props.match.params.teamId, row.user.userId);
-            }}/>
-        )
-      }
-    ];
+
+  state = {
+    loading: false,
+    team: {},
+    users: [],
+    limit: 10,
+    totalCount: 0,
+    currentPage: 1
+  };
+
+  columns = [
+    {
+      title: "Username",
+      dataIndex: "user.username",
+      key: "name",
+      sorter: (a, b) => a.name >= b.name
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      sorter: (a, b) => a.status >= b.status
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: row => (
+        <ActionButtons
+          row={row}
+          push={this.props.push}
+          deleteMember={() => this.deleteMember(this.props.match.params.teamId, row.user.userId)} />
+      )
+    }
+  ];
+
+  componentDidMount() {
+    const { match, location } = this.props;
+    let currentPage = this.getPagefromLocation(location.search);
+    this.fetchData(match.params.teamId, currentPage);
+  }
+
+  fetchData = async (teamId, page) => {
+    try {
+      const { match } = this.props;
+      this.setState({ loading: true });
+      let team = await SWQAClient.getAgencyTeam(match.params.teamId);
+      let userData = await SWQAClient.getAgencyTeamMembers(match.params.teamId, {
+        offset: (this.state.limit * page) - this.state.limit,
+        limit: this.state.limit
+      });
+      this.setState({
+        loading: false,
+        team,
+        users: userData.rows,
+        totalCount: userData.count,
+        currentPage: page
+      });
+    } catch (e) {
+      console.log(e);
+      message.error("Problem occured.");
+      this.setState({ loading: false });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.search !== prevProps.search) {
+      let currentPage = this.getPagefromLocation(this.props.search);
+      this.fetchData(this.props.match.params.teamId, currentPage);
+    }
+  }
+
+  getPagefromLocation(search) {
+    let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
+    return queryParams.page ? Number(queryParams.page) : 1;
   }
 
   deleteMember = async (teamId, userId) => {
@@ -55,91 +90,48 @@ class MemberList extends Component {
       await SWQAClient.deleteAgencyTeamMember(teamId, userId);
       message.success('Member Removed from Team');
       this.fetchData();
-    } catch(e) {
+    } catch (e) {
       console.log(e);
       message.error("Problem occured.");
     }
-  }
-
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  async fetchData() {
-    try {
-      const { match } = this.props;
-      this.setState({ loading: true });
-      let team = await SWQAClient.getAgencyTeam(match.params.teamId);
-      let users = await SWQAClient.getAgencyTeamMembers(match.params.teamId, {
-        limit: this.state.paginationOptions.pageSize,
-      });
-      this.setState({
-        loading: false,
-        team,
-        data: get(users, 'rows', []),
-        paginationOptions: {
-          ...this.state.paginationOptions,
-          total: users.count
-        }
-      });
-    } catch(e) {
-      console.log(e);
-      message.error("Problem occured.");
-      this.setState({ loading: false });
-    }
-  }
-
-  async onTablePaginationChange(page, pageSize) {
-    this.setState({
-      loading: true,
-      paginationOptions: {
-        ...this.state.paginationOptions,
-        current: page,
-        pageSize
-      }
-    }, async () => {
-      try{
-        let offset = pageSize * (page - 1);
-        let users = await SWQAClient.getAgencyTeamMembers(this.props.match.params.teamId, {
-          limit: pageSize,
-          offset
-        });
-        this.setState({
-          loading: false,
-          data: get(users, 'rows', []),
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: users.count
-          }
-        });
-      } catch(e) {
-        this.setState({ loading: false, dataSource: [] });
-      }
-    });
   }
 
   render() {
-    const { match, history } = this.props;
+    const { match, push } = this.props;
     const { teamId } = match.params;
     return (
       <List {...this.props}
-        onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
-          onDoubleClick: () => {
-            history.push(`/admin/agency/team/${row.teamId}/member/${row.userId}/details`);
-          }
+          onDoubleClick: () => push(`/admin/agency/team/${row.teamId}/member/${row.userId}/details`)
         })}
         loading={this.state.loading}
         title="Members"
-        pageHeader={[`Agency - ${ get(this.state, 'team.agency.name', '') }`, <br/>, `Team - ${ get(this.state, 'team.name', '') }`]}
+        pageHeader={!this.state.loading && [`Agency - ${ get(this.state, 'team.agency.name', '') }`, <br key="0" />, `Team - ${ get(this.state, 'team.name', '') }`]}
         columns={this.columns}
         createLink={`/admin/agency/team/${teamId}/member/add`}
         createText="Add Team Member"
-        data={this.state.data}
-        paginationOptions={this.state.paginationOptions}
+        data={this.state.users}
+        paginationOptions={{
+          total: this.state.totalCount,
+          pageSize: this.state.limit,
+          current: this.state.currentPage,
+          onChange: (page) => push(`/admin/agency/team/${match.params.teamId}/members?page=${page}`)
+        }}
         rowKey="userId" />
     );
   }
 }
 
-export default MemberList;
+const mapStateToProps = state => ({
+  pathname: state.router.location.pathname,
+  search: state.router.location.search,
+  hash: state.router.location.hash,
+})
+
+export default connect(
+  mapStateToProps,
+  {
+    goBack,
+    push
+  }
+)(MemberList);

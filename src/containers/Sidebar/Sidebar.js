@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import clone from 'clone';
 import { NavLink } from 'react-router-dom';
 import { Layout } from 'antd';
-
 import Scrollbars from '@components/utility/customScrollBar.js';
 import Menu from '@components/uielements/menu';
 import IntlMessages from '@components/utility/intlMessages';

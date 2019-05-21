@@ -4,25 +4,21 @@ import Popconfirms from "@components/feedback/popconfirm";
 import { ActionWrapper } from "@utils/crud.style";
 import { Tooltip } from "antd";
 
-const ActionButtons = ({ history, row, deleteMember }) => {
+const ActionButtons = ({ push, row, deleteMember }) => {
   return (
     <ActionWrapper>
       <Tooltip title="Edit Membership">
         <Button
           shape="circle"
           icon="edit"
-          onClick={() => {
-            history.push(`/admin/client/team/${row.teamId}/member/${row.userId}/edit`);
-          }}
+          onClick={() => push(`/admin/client/team/${row.teamId}/member/${row.userId}/edit`)}
         />
       </Tooltip>
       <Tooltip title="Membership Details">
         <Button
           shape="circle"
           icon="info"
-          onClick={() =>{
-            history.push(`/admin/client/team/${row.teamId}/member/${row.userId}/details`)
-          }}
+          onClick={() => push(`/admin/client/team/${row.teamId}/member/${row.userId}/details`)}
         />
       </Tooltip>
       <Tooltip title="Delete">

@@ -8,5 +8,6 @@ const options = {
   clientOptions,
   agencyOptions,
   freelancerOptions,
-}
+};
+
 export default options;
