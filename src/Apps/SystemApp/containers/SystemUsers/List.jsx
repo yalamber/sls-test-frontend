@@ -36,7 +36,7 @@ class UsersList extends Component {
     {
       title: 'Actions',
       key: 'actions',
-      render: (row) => <ActionButtons row={row} deleteUser={this.handleDelete} />
+      render: (row) => <ActionButtons row={row} deleteUser={this.handleDelete} push={this.props.push} />
     }
   ];
 
