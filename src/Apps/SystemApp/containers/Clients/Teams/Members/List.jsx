@@ -88,7 +88,7 @@ class MemberList extends Component {
     try {
       await SWQAClient.deleteClientTeamMember(teamId, userId);
       message.success('Member Removed from Team');
-      this.fetchData();
+      this.fetchData(teamId, this.state.currentPage);
     } catch (e) {
       console.log(e);
       message.error("Problem occured.");

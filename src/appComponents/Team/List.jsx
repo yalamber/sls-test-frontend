@@ -16,11 +16,11 @@ const { rowStyle, colStyle, gutter } = basicStyle;
 
 export default ({
   columns,
-  history,
+  goBack,
+  push,
   paginationOptions,
   loading,
   data = [],
-  onTablePaginationChange,
   onTableRow,
   pageHeader = null,
   emptyText = 'No Teams available',
@@ -42,7 +42,7 @@ export default ({
               <ComponentTitle>
                 <ActionBtn
                   type="secondary"
-                  onClick={() => history.goBack()}
+                  onClick={() => goBack()}
                 >
                   <Icon type="left" /> <IntlMessages id="back" />
                 </ActionBtn> Teams
@@ -51,9 +51,7 @@ export default ({
                 <ButtonHolders>
                   <ActionBtn
                     type="primary"
-                    onClick={() => {
-                      history.push(createLink);
-                    }}>
+                    onClick={() => push(createLink)}>
                     <Icon type="plus" />
                     {createText}
                   </ActionBtn>
@@ -64,8 +62,7 @@ export default ({
               <Table
                 locale={{ emptyText }}
                 pagination={{
-                  ...paginationOptions,
-                  onChange: onTablePaginationChange
+                  ...paginationOptions
                 }}
                 bordered
                 columns={columns}
