@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import { push, goBack } from 'connected-react-router';
+import { omit } from 'lodash';
 import qs from "qs";
 import { Row, Col, Icon, Select, Tooltip, Spin, Form, message } from "antd";
 import LayoutWrapper from "@components/utility/layoutWrapper";
@@ -18,144 +19,110 @@ import {
   TableClickable as Table
 } from "@utils/crud.style";
 import SWQAClient from '@helpers/apiClient';
-import clientActions from '@app/SystemApp/redux/client/actions';
 import { dateTime } from "@constants/dateFormat";
 
-const { requestCurrentClient, requestClientTeams } = clientActions;
 const Option = Select.Option;
 const FormItem = Form.Item;
 
 class SuiteList extends Component {
-  constructor() {
-    super();
-    this.state = {
-      testSuites: [],
-      selectedTeamId: undefined,
-      loading: true,
-      error: null,
-      paginationOptions: {
-        defaultCurrent: 1,
-        current: 1,
-        pageSize: 10,
-        total: 1
-      },
-    };
-    this.columns = [
-      {
-        title: "Title",
-        dataIndex: "name",
-        key: "title"
-      },
-      {
-        title: "Last Updated",
-        render: row => <Moment format={dateTime}>{row.updatedBy}</Moment>,
-        key: "lastUpdated"
-      },
-      {
-        title: "Team",
-        dataIndex: "clientTeam.name",
-        key: "team"
-      },
-      {
-        title: "Actions",
-        key: "actions",
-        render: row => <ActionButtons row={row} deleteTestSuite={this.deleteTestSuite} history={this.props.history} />
-      }
-    ];
-  }
+  state = {
+    client: {},
+    teams: [],
+    testSuites: [],
+    selectedTeamId: undefined,
+    loading: true,
+    error: null,
+    limit: 10,
+    totalCount: 0,
+    currentPage: 1
+  };
+
+  columns = [
+    {
+      title: "Title",
+      dataIndex: "name",
+      key: "title"
+    },
+    {
+      title: "Last Updated",
+      render: row => <Moment format={dateTime}>{row.updatedBy}</Moment>,
+      key: "lastUpdated"
+    },
+    {
+      title: "Team",
+      dataIndex: "clientTeam.name",
+      key: "team"
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: row => <ActionButtons row={row} deleteTestSuite={this.deleteTestSuite} push={this.props.push} />
+    }
+  ];
 
   componentDidMount() {
-    const { match, requestCurrentClient, requestClientTeams } = this.props;
-    //TODO: check state and params if same clientId already
-    requestCurrentClient(match.params.clientId);
-    requestClientTeams(match.params.clientId, {
-      page: 1,
-      pageSize: 50
-    });
-    this.fetchTestSuite(this.getFetchReqParams());
+    const { location } = this.props;
+    this.fetchTestSuite(this.getFetchReqParams(location.search));
   }
 
-  getFetchReqParams = () => {
-    let {match, location} = this.props;
-    let queryParams = qs.parse(location.search, { ignoreQueryPrefix: true });
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.search !== prevProps.search) {
+      this.fetchTestSuite(this.getFetchReqParams(this.props.search));
+    }
+  }
+
+  getFetchReqParams = (search) => {
+    let { match } = this.props;
+    let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
     let reqParams = {};
-    if(queryParams.teamId) {
+    if (queryParams.teamId) {
       reqParams.clientTeamId = queryParams.teamId;
     } else {
       reqParams.clientId = match.params.clientId;
     }
+    reqParams.page = queryParams.page ? Number(queryParams.page) : 1;
     return reqParams;
   }
 
   fetchTestSuite = async (options) => {
+    let { match } = this.props;
     try {
-      this.setState({loading: true});
-      let testSuites = await SWQAClient.getTestSuites(options);
+      this.setState({ loading: true });  
+      let client = await SWQAClient.getClient(match.params.clientId);
+      let teamData = await SWQAClient.getClientTeams(match.params.clientId, {
+        offset: 0,
+        limit: 50
+      });
+      options.offset = (this.state.limit * options.page) - this.state.limit;
+      options.limit = this.state.limit;
+      let testSuiteData = await SWQAClient.getTestSuites(omit(options, ['page']));
       let updateState = {
-        loading: false,
-        testSuites: testSuites.rows,
-        paginationOptions: {
-          ...this.state.paginationOptions,
-          total: testSuites.count
-        }
+        client,
+        teams: teamData.rows,
+        testSuites: testSuiteData.rows,
+        totalCount: testSuiteData.count,
+        currentPage: options.page
       };
-      if(options.clientTeamId) {
+      if (options.clientTeamId) {
         updateState.selectedTeamId = parseInt(options.clientTeamId, 10);
       }
       this.setState(updateState);
-    } catch(e) {
+    } catch (e) {
       this.setState({
-        loading: false,
         error: e,
+      });
+    } finally {
+      this.setState({
+        lodaing: false
       });
     }
   }
 
-  onTablePaginationChange = (page, pageSize) => {
-    this.setState({
-      loading: true,
-      paginationOptions: {
-        ...this.state.paginationOptions,
-        current: page,
-        pageSize
-      }
-    }, async () => {
-      try{
-        let offset = pageSize * (page - 1);
-        let params = {
-          limit: pageSize,
-          offset
-        };
-        if(this.state.selectedTeamId) {
-          params.clientTeamId = this.state.selectedTeamId;
-        } else {
-          params.clientId = this.props.match.params.clientId;
-        }
-        let testSuites = await SWQAClient.getTestSuites(params);
-        this.setState({
-          loading: false,
-          testSuites: get(testSuites, 'rows', []),
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: testSuites.count
-          }
-        });
-      } catch(e) {
-        this.setState({ loading: false, dataSource: [] });
-      }
-    });
-  }
-
   handleTeamChange = (teamId) => {
-    let {history, match} = this.props;
+    let { push, match } = this.props;
     this.setState({
       selectedTeamId: teamId,
-    }, () => {
-      history.push(`/admin/client/${match.params.clientId}/test-manager/test-suites?teamId=${teamId}`);
-      this.fetchTestSuite({
-        clientTeamId: teamId
-      });
-    });
+    }, () => push(`/admin/client/${match.params.clientId}/test-manager/test-suites?teamId=${teamId}`));
   }
 
   isTeamSelected = () => {
@@ -168,7 +135,7 @@ class SuiteList extends Component {
       message.success("Test suite deleted");
       //fetch new set of test suties
       this.fetchTestSuite(this.getFetchReqParams());
-    } catch(e) {
+    } catch (e) {
       console.log(e);
       message.error("Problem occured.");
     }
@@ -180,9 +147,9 @@ class SuiteList extends Component {
     };
     const { rowStyle, colStyle, gutter } = basicStyle;
 
-    const { currentClient = { clientData: { name: '' }, teamList: { rows: [], count: 0 } }, history } = this.props;
+    const { push, goBack } = this.props;
     const teamsOptions = (
-      currentClient.teamList.rows.map(team => (
+      this.state.teams.map(team => (
         <Option key={team.clientTeamId} value={team.clientTeamId}>
           {team.name}
         </Option>
@@ -191,7 +158,7 @@ class SuiteList extends Component {
     return (
       <LayoutWrapper>
         <PageHeader>
-          Client - {currentClient.clientData.name}
+          Client - {this.state.client.name}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -200,7 +167,7 @@ class SuiteList extends Component {
                 <ComponentTitle>
                   <ActionBtn
                     type="secondary"
-                    onClick={() => history.goBack()}
+                    onClick={() => goBack()}
                   >
                     <Icon type="left" /> <IntlMessages id="back" />
                   </ActionBtn>
@@ -209,11 +176,11 @@ class SuiteList extends Component {
                 <ButtonHolders>
                   <Tooltip
                     placement="topRight"
-                    title={!this.isTeamSelected()? "Please select Team.": ""}>
+                    title={!this.isTeamSelected() ? "Please select Team." : ""}>
                     <ActionBtn
                       type="primary"
                       disabled={!this.isTeamSelected()}
-                      onClick={() => history.push(`/admin/client/team/${this.state.selectedTeamId}/test-manager/test-suite/create`)}>
+                      onClick={() => push(`/admin/client/team/${this.state.selectedTeamId}/test-manager/test-suite/create`)}>
                       <Icon type="plus" />
                       Add New
                     </ActionBtn>
@@ -242,11 +209,18 @@ class SuiteList extends Component {
                 </Row>
                 <Table
                   locale={{ emptyText: "No Test Suites available" }}
-                  size="middle"
                   bordered
                   pagination={{
-                    ...this.state.paginationOptions,
-                    onChange: this.onTablePaginationChange
+                    total: this.state.totalCount,
+                    pageSize: this.state.limit,
+                    current: this.state.currentPage,
+                    onChange: (page) => {
+                      let pushUrlQuery = `?page=${page}`;
+                      if(this.state.selectedTeamId) {
+                        pushUrlQuery = `?teamId=${this.state.selectedTeamId}&page=${page}`
+                      }
+                      return push(`/admin/client/${this.props.match.params.clientId}/test-manager/test-suites${pushUrlQuery}`);
+                    }
                   }}
                   columns={this.columns}
                   dataSource={this.state.testSuites}
@@ -261,14 +235,16 @@ class SuiteList extends Component {
   }
 }
 
-
+const mapStateToProps = state => ({
+  pathname: state.router.location.pathname,
+  search: state.router.location.search,
+  hash: state.router.location.hash,
+})
 
 export default connect(
-  state => ({
-    ...state.Client
-  }),
+  mapStateToProps,
   {
-    requestCurrentClient,
-    requestClientTeams
+    goBack,
+    push
   }
 )(SuiteList);

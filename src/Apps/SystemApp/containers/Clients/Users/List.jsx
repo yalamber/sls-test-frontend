@@ -84,7 +84,6 @@ class UserList extends Component {
   }
 
   getPagefromLocation(search) {
-    console.log(search);
     let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
     return queryParams.page?Number(queryParams.page):1;
   }

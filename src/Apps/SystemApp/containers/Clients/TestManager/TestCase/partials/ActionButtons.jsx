@@ -5,25 +5,21 @@ import {
   ActionWrapper,
 } from '@utils/crud.style';
 
-export default function ActionButtons({row, deleteTestCase, history}) {
+export default function ActionButtons({row, deleteTestCase, push}) {
   return (
     <ActionWrapper>
       <Tooltip title="Edit Record">
         <Button
           shape="circle"
           icon="edit"
-          onClick={() => {
-            history.push(`/admin/client/test-manager/test-case/${row.testCaseId}/edit`);
-          }}
+          onClick={() => push(`/admin/client/test-manager/test-case/${row.testCaseId}/edit`)}
         />
       </Tooltip>
       <Tooltip title="Details">
         <Button
           shape="circle"
           icon="info"
-          onClick={() => {
-            history.push(`/admin/client/test-manager/test-case/${row.testCaseId}/details`);
-          }}
+          onClick={() => push(`/admin/client/test-manager/test-case/${row.testCaseId}/details`)}
         />
       </Tooltip>
       <Tooltip placement="topLeft" title="Delete Record">

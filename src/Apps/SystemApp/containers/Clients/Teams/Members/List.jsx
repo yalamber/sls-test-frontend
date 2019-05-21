@@ -9,7 +9,6 @@ import ActionButtons from "./partials/ActionButtons";
 import SWQAClient from "@helpers/apiClient";
 
 class MemberList extends Component {
-
   state = {
     loading: false,
     team: {},

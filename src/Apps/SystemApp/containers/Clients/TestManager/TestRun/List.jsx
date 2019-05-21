@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { push, goBack } from 'connected-react-router';
 import { Row, Col, Icon, Spin } from "antd";
-import { get } from 'lodash';
+import { omit } from 'lodash';
+import qs from "qs";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import PageHeader from "@components/utility/pageHeader";
 import IntlMessages from '@components/utility/intlMessages';
@@ -16,82 +19,82 @@ import {
 } from "@utils/crud.style";
 import SWQAClient from '@helpers/apiClient';
 import { dateTime } from "@constants/dateFormat";
-import clientActions from '@app/SystemApp/redux/client/actions';
-
-const { requestCurrentClient } = clientActions;
 
 class TestRunList extends Component {
-  constructor() {
-    super();
-    this.state = {
-      client: {},
-      testRuns: [],
-      loading: false,
-      error: null,
-      paginationOptions: {
-        defaultCurrent: 1,
-        current: 1,
-        pageSize: 10,
-        total: 1
-      },
-    };
-    this.fetchData = this.fetchData.bind(this);
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
-    this.columns = [
-      {
-        title: "Agency Team",
-        dataIndex: "agencyTeam.name",
-        key: "agencyTeam"
-      },
-      {
-        title: "Run Title",
-        dataIndex: "runTitle",
-        key: "runTitle"
-      },
-      {
-        title: "Created",
-        render: row => <Moment format={dateTime}>{row.createdAt}</Moment>,
-        key: "createdAt"
-      },
-      {
-        title: "TC Count",
-        dataIndex: "tcCount",
-        key: "tcCount"
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "status"
-      }
-    ];
-  }
+
+  state = {
+    client: {},
+    testRuns: [],
+    loading: false,
+    error: null,
+    limit: 10,
+    totalCount: 0,
+    currentPage: 1
+  };
+
+  columns = [
+    {
+      title: "Assigned Team",
+      dataIndex: "testQueue.assignedTeam.name",
+      key: "agencyTeam"
+    },
+    {
+      title: "Assigned User",
+      dataIndex: "testQueue.assignedUser.username",
+      key: "agencyTeam"
+    },
+    {
+      title: "Created",
+      render: row => <Moment format={dateTime}>{row.createdAt}</Moment>,
+      key: "createdAt"
+    },
+    {
+      title: "Test Case",
+      render: row => <Link to={`/admin/client/test-manager/test-case/${row.testQueue.testCase.testCaseId}/details`}>{row.testQueue.testCase.title}</Link>,
+      key: "testCase"
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status"
+    }
+  ];
 
   componentDidMount() {
-    const { match, requestCurrentClient } = this.props;
-    requestCurrentClient(match.params.clientId);
-    this.fetchData({
-      clientId: match.params.clientId
-    });
+    const { location } = this.props;
+    this.fetchData(this.getFetchReqParams(location.search));
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.search !== prevProps.search) {
+      this.fetchData(this.getFetchReqParams(this.props.search));
+    }
+  }
+
+  getFetchReqParams = (search) => {
+    let { match } = this.props;
+    let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
+    let reqParams = {};
+    reqParams.clientId = match.params.clientId;
+    reqParams.page = queryParams.page ? Number(queryParams.page) : 1;
+    return reqParams;
   }
 
   async fetchData(options) {
     try {
-      this.setState({loading: true});
-      options.limit = this.state.paginationOptions.pageSize;
-      let testRuns = await SWQAClient.getTestRuns(options);
+      this.setState({ loading: true });
+      let client = await SWQAClient.getClient(this.props.match.params.clientId);
+      options.offset = (this.state.limit * options.page) - this.state.limit;
+      options.limit = this.state.limit;
+      let testRunData = await SWQAClient.getTestRuns(omit(options, ['page']));
       let updateState = {
-        loading: false,
-        testRuns: testRuns.rows,
-        paginationOptions: {
-          ...this.state.paginationOptions,
-          total: testRuns.count
-        }
+        client,
+        testRuns: testRunData.rows,
+        totalCount: testRunData.count,
+        currentPage: options.page
       };
-      if(options.clientTeamId) {
-        updateState.selectedTeamId = parseInt(options.clientTeamId, 10); 
-      }
       this.setState(updateState);
-    } catch(e) {
+    } catch (e) {
       this.setState({
         error: e,
       });
@@ -102,43 +105,13 @@ class TestRunList extends Component {
     }
   }
 
-  async onTablePaginationChange(page, pageSize) {
-    this.setState({
-      loading: true,
-      paginationOptions: {
-        ...this.state.paginationOptions,
-        current: page,
-        pageSize
-      }
-    }, async () => {
-      try{
-        let offset = pageSize * (page - 1);
-        let testRuns = await SWQAClient.getTestRuns({
-          clientId: this.props.match.params.clientId,
-          limit: pageSize,
-          offset
-        });
-        this.setState({
-          loading: false,
-          testRuns: get(testRuns, 'rows', []),
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: testRuns.count
-          }
-        });
-      } catch(e) {
-        this.setState({ loading: false, testRuns: [] });
-      }
-    });
-  }
-
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentClient, history } = this.props;
+    const { goBack, push} = this.props;
     return (
       <LayoutWrapper>
         <PageHeader>
-          Client - {get(currentClient, 'clientData.name', '')}
+          Client - {this.state.client.name}
         </PageHeader>
         <Row style={rowStyle} gutter={gutter} justify="start">
           <Col md={24} sm={24} xs={24} style={colStyle}>
@@ -147,25 +120,29 @@ class TestRunList extends Component {
                 <ComponentTitle>
                   <ActionBtn
                     type="secondary"
-                    onClick={() => history.goBack()}
+                    onClick={() => goBack()}
                   >
                     <Icon type="left" /> <IntlMessages id="back" />
                   </ActionBtn>
-                  &nbsp; Test Run
+                  &nbsp; Test Runs
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
                 <Table
                   locale={{ emptyText: "No test run available" }}
-                  size="middle"
                   bordered
                   pagination={{
-                    ...this.state.paginationOptions,
-                    onChange: this.onTablePaginationChange
+                    total: this.state.totalCount,
+                    pageSize: this.state.limit,
+                    current: this.state.currentPage,
+                    onChange: (page) => {
+                      let pushUrlQuery = `?page=${page}`;
+                      return push(`/admin/client/${this.props.match.params.clientId}/test-manager/test-run${pushUrlQuery}`);
+                    }
                   }}
                   columns={this.columns}
                   dataSource={this.state.testRuns}
-                  rowKey="testRunId"
+                  rowKey="testQueueRunId"
                 />
               </Spin>
             </Box>
@@ -176,11 +153,16 @@ class TestRunList extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  pathname: state.router.location.pathname,
+  search: state.router.location.search,
+  hash: state.router.location.hash,
+})
+
 export default connect(
-  state => ({
-    ...state.Client
-  }),
+  mapStateToProps,
   {
-    requestCurrentClient
+    goBack,
+    push
   }
 )(TestRunList);
