@@ -100,7 +100,7 @@ class CompletedTestList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { currentAgency, goBack, push } = this.props;
+    const { goBack, push } = this.props;
     return (
       <LayoutWrapper>
         <PageHeader>

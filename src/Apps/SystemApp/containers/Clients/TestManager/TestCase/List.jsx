@@ -132,7 +132,7 @@ class TestCaseList extends Component {
       await SWQAClient.deleteTestCase(caseId);
       message.success("Test case deleted");
       //get test cases
-      this.fetchTestCases(this.getFetchReqParams());
+      this.fetchTestCase(this.getFetchReqParams(this.props.location.search));
     } catch(e) {
       console.log(e);
       message.error("Problem occured.");
