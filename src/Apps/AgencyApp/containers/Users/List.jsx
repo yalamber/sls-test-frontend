@@ -1,142 +1,131 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { push, goBack } from 'connected-react-router';
 import { get } from 'lodash';
+import qs from 'qs';
+import { message }  from 'antd';
 import List from '@appComponents/Common/List';
-import agencyActions from '@app/SystemApp/redux/agency/actions';
 import ActionButtons from "./partials/ActionButtons";
-const { requestAgencyUsers, requestCurrentAgency } = agencyActions;
+import SWQAClient from "@helpers/apiClient";
 
 class UserList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-      loading: true,
-      error: null,
-      userId: null,
-      paginationOptions: {
-        defaultCurrent: 1,
-        current: 1,
-        pageSize: 10,
-        total: 1
-      },
-    }
-    this.onTablePaginationChange = this.onTablePaginationChange.bind(this);
-    this.columns = [
-      {
-        title: "Name",
-        dataIndex: "user.username",
-        key: "name"
-      },
-      {
-        title: "Role",
-        dataIndex: "role.title",
-        key: "role"
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "status"
-      },
-      {
-        className: 'column-actions',
-        title: "Actions",
-        key: "actions",
-        render: row => <ActionButtons
-          row={row}
-          history={this.props.history} />
-      }
-    ];
-  }
+  state = {
+    users: [],
+    loading: true,
+    error: null,
+    limit: 10,
+    totalCount: 0,
+    currentPage: 1
+  };
 
-  // componentDidMount() {
-  //   this.onTablePaginationChange(1, 10);
-  // }
+  columns = [
+    {
+      title: "Name",
+      dataIndex: "user.username",
+      key: "name"
+    },
+    {
+      title: "Role",
+      dataIndex: "role.title",
+      key: "role"
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status"
+    },
+    {
+      className: 'column-actions',
+      title: "Actions",
+      key: "actions",
+      render: row => <ActionButtons
+        row={row}
+        push={this.props.push} />
+    }
+  ];
 
   componentDidMount() {
-    const { requestCurrentAgency } = this.props;
+    const { location } = this.props;
+    let currentPage = this.getPagefromLocation(location.search);
+    this.fetchData(currentPage);
+  }
+
+  async fetchData(page) {
+    //get agency id
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
-    const agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
-    if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {
-      requestCurrentAgency(agencyId);
-      this.onTablePaginationChange(agencyId)(1, 10);
-      this.setState({userId: agencyId});
-    }
-  }
-
-  onTablePaginationChange(agencyId) {
-    return (page, pageSize) => {
-      this.props.requestAgencyUsers(agencyId, {
-        page,
-        pageSize
+    let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
+    if (activeCompanyTokenData.type === 'agencyUser' && agencyId) {
+      this.setState({
+        loading: true
       });
+      try {
+        let usersData = await SWQAClient.getAgencyUsers(agencyId, {
+          limit: this.state.limit,
+          offset: (this.state.limit * page) - this.state.limit
+        }); 
+        this.setState({
+          loading: false,
+          users: usersData.rows,
+          totalCount: usersData.count,
+          currentPage: page
+        });
+      } catch (e) {
+        message.error('Data fetch failed');
+        this.setState({
+          loading: false,
+          error: e
+        });
+      }
     }
   }
 
-  
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.search !== prevProps.search) {
+      let currentPage = this.getPagefromLocation(this.props.search);
+      this.fetchData(currentPage);
+    }
+  }
 
-  // onTablePaginationChange(page, pageSize) {
-  //   //get agency id
-  //   let activeCompanyTokenData = this.props.activeCompanyTokenData;
-  //   let agencyId = get(activeCompanyTokenData, 'agencyData.clientId', null);
-  //   if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {
-  //     this.setState({
-  //       loading: true,
-  //       paginationOptions: {
-  //         ...this.state.paginationOptions,
-  //         current: page,
-  //         pageSize
-  //       }
-  //     }, async () => {
-  //       try{
-  //         let offset = pageSize * (page - 1);
-  //         let users = await SWQAAgency.getAgencyUsers(agencyId, {
-  //           limit: pageSize,
-  //           offset
-  //         });
-  //         this.setState({
-  //           loading: false,
-  //           data: get(users, 'rows', []),
-  //           paginationOptions: {
-  //             ...this.state.paginationOptions,
-  //             total: users.count
-  //           }
-  //         });
-  //       } catch(e) {
-  //         this.setState({ loading: false, data: [], error: e });
-  //       }
-  //     });
-  //   }
-  // }
+  getPagefromLocation(search) {
+    let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
+    return queryParams.page?Number(queryParams.page):1;
+  }
+
 
   render() {
-    const { currentAgency = { agencyData: { name: '' } }, history } = this.props;
+    const { push } = this.props;
     return (
       <List {...this.props}
-        title = "Users"
-        onTablePaginationChange={this.onTablePaginationChange(this.state.userId && this.state.userId)}
+        title="Users"
         onTableRow={(row) => ({
-          onDoubleClick: () => {
-            history.push(`/my-agency/user/${row.userId}/details`);
-          }
+          onDoubleClick: () => push(`/my-agency/user/${row.userId}/details`)
         })}
-        loading={currentAgency.userList.loading}
+        loading={this.state.loading}
         columns={this.columns}
         createLink={`/my-agency/user/create/`}
-        data={currentAgency.userList.rows}
-        paginationOptions={currentAgency.userList.paginationOptions}
+        data={this.state.users}
+        paginationOptions={{
+          total: this.state.totalCount,
+          pageSize: this.state.limit,
+          current: this.state.currentPage,
+          onChange: (page) => push(`/my-agency/users?page=${page}`)
+        }}
         rowKey="userId" />
     )
   }
 }
 
+const mapStateToProps = state => ({
+  ...state.My,
+  pathname: state.router.location.pathname,
+  search: state.router.location.search,
+  hash: state.router.location.hash,
+})
+
 export default connect(
-  state => ({
-    ...state.Agency,
-    ...state.My
-  }),
+  mapStateToProps,
   {
-    requestCurrentAgency,
-    requestAgencyUsers
+    goBack,
+    push
   }
 )(UserList);

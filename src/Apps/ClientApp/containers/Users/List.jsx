@@ -8,7 +8,6 @@ import List from '@appComponents/Common/List';
 import ActionButtons from "./partials/ActionButtons";
 import SWQAClient from "@helpers/apiClient";
 
-
 class UserList extends Component {
   state = {
     users: [],
@@ -91,7 +90,6 @@ class UserList extends Component {
     let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
     return queryParams.page?Number(queryParams.page):1;
   }
-
 
   render() {
     const { push } = this.props;

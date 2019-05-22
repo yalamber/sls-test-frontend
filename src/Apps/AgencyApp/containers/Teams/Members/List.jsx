@@ -1,143 +1,136 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { message } from "antd";
+import { push, goBack } from 'connected-react-router';
 import { get } from 'lodash';
+import qs from 'qs';
+import SWQAClient from '@helpers/apiClient';
 import ActionButtons from "./partials/ActionButtons";
 import List from '@appComponents/Common/List';
-import SWQAClient from '@helpers/apiClient';
 
 class MemberList extends Component {
-  constructor(props) {
-    super(props);
-    //initial state
-    this.state = {
-      team: {},
-      data: [],
-      paginationOptions: {
-        defaultCurrent: 1,
-        current: 1,
-        pageSize: 10,
-        total: 1
-      },
-      loading: false
-    };
-    this.columns = [
-      {
-        title: "Username",
-        dataIndex: "user.username",
-        key: "name",
-        sorter: (a, b) => a.name >= b.name
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
-        sorter: (a, b) => a.status >= b.status
-      },
-      {
-        title: "Actions",
-        key: "actions",
-        render: row => (
-          <ActionButtons
-            row={row}
-            history={props.history}
-            deleteMember={() => {
-              this.deleteMember(props.match.params.teamId, row.user.userId);
-            }} />
-        )
-      }
-    ];
-  }
+  state = {
+    team: {},
+    data: [],
+    error: null,
+    loading: false,
+    limit: 10,
+    totalCount: 0,
+    currentPage: 1,
+  };
+
+  columns = [
+    {
+      title: "Username",
+      dataIndex: "user.username",
+      key: "name",
+      sorter: (a, b) => a.name >= b.name
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      sorter: (a, b) => a.status >= b.status
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: row => (
+        <ActionButtons
+          row={row}
+          push={this.props.push}
+          deleteMember={() => this.deleteMember(this.props.match.params.teamId, row.user.userId)} />
+      )
+    }
+  ];
 
   deleteMember = async (teamId, userId) => {
     try {
       await SWQAClient.deleteAgencyTeamMember(teamId, userId);
       message.success('Member Removed from Team');
-      this.fetchData();
-    } catch(e) {
+      this.fetchData(this.state.currentPage);
+    } catch (e) {
       console.log(e);
       message.error("Problem occured.");
     }
   }
 
-  fetchData = async () => {
+  fetchData = async (page) => {
     try {
       const { match } = this.props;
       this.setState({ loading: true });
       let team = await SWQAClient.getAgencyTeam(match.params.teamId);
-      let users = await SWQAClient.getAgencyTeamMembers(match.params.teamId, {
-        limit: this.state.paginationOptions.pageSize,
+      let teamMemberData = await SWQAClient.getAgencyTeamMembers(match.params.teamId, {
+        limit: this.state.limit,
+        offset: (this.state.limit * page) - this.state.limit
       });
       this.setState({
         loading: false,
         team,
-        data: get(users, 'rows', []),
-        paginationOptions: {
-          ...this.state.paginationOptions,
-          total: users.count
-        }
+        data: teamMemberData.rows,
+        totalCount: teamMemberData.count,
+        currentPage: page
       });
-    } catch(e) {
-      console.log(e);
+    } catch (e) {
       message.error("Problem occured.");
       this.setState({ loading: false });
     }
   }
 
-  onTablePaginationChange = async (page, pageSize) => {
-    this.setState({
-      loading: true,
-      paginationOptions: {
-        ...this.state.paginationOptions,
-        current: page,
-        pageSize
-      }
-    }, async () => {
-      try{
-        let offset = pageSize * (page - 1);
-        let users = await SWQAClient.getAgencyTeamMembers(this.props.match.params.teamId, {
-          limit: pageSize,
-          offset
-        });
-        this.setState({
-          loading: false,
-          data: get(users, 'rows', []),
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: users.count
-          }
-        });
-      } catch(e) {
-        this.setState({ loading: false, dataSource: [] });
-      }
-    });
+  componentDidMount() {
+    const { location } = this.props;
+    let currentPage = this.getPagefromLocation(location.search);
+    this.fetchData(currentPage);
   }
 
-  componentDidMount() {
-    this.fetchData();
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.search !== prevProps.search) {
+      let currentPage = this.getPagefromLocation(this.props.search);
+      this.fetchData(currentPage);
+    }
+  }
+
+  getPagefromLocation(search) {
+    let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
+    return queryParams.page ? Number(queryParams.page) : 1;
   }
 
   render() {
-    const { match, history } = this.props;
+    const { match, push } = this.props;
     const { teamId } = match.params;
     return (
       <List {...this.props}
-        onTablePaginationChange={this.onTablePaginationChange}
         onTableRow={(row) => ({
-          onDoubleClick: () => {
-            history.push(`/my-agency/team/${row.teamId}/member/${row.userId}/details`);
-          }
+          onDoubleClick: () => push(`/my-agency/team/${row.teamId}/member/${row.userId}/details`)
         })}
         loading={this.state.loading}
         title="Members"
-        pageHeader={[`Team - ${ get(this.state, 'team.name', '') }`]}
+        pageHeader={[`Team - ${get(this.state, 'team.name', '')}`]}
         columns={this.columns}
         createLink={`/my-agency/team/${teamId}/member/add`}
         createText="Add Team Member"
         data={this.state.data}
-        paginationOptions={this.state.paginationOptions}
+        paginationOptions={{
+          total: this.state.totalCount,
+          pageSize: this.state.limit,
+          current: this.state.currentPage,
+          onChange: (page) => this.props.push(`/my-agency/team/${teamId}/members?page=${page}`)
+        }}
         rowKey="userId" />
     );
   }
 }
 
-export default MemberList;
+const mapStateToProps = state => ({
+  pathname: state.router.location.pathname,
+  search: state.router.location.search,
+  hash: state.router.location.hash,
+});
+
+export default connect(
+  mapStateToProps,
+  {
+    goBack,
+    push
+  }
+)(MemberList);

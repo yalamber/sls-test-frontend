@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import qs from 'qs';
+import { omit, get, find } from 'lodash';
+import { push, goBack } from 'connected-react-router';
 import { Row, Col, Icon, Spin, message, Button, Menu, Dropdown } from "antd";
-import { get, find } from 'lodash';
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
@@ -13,148 +15,125 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from "@utils/crud.style";
+import ActionButtons from './partials/AssignedTestActionButtons';
 import SWQAClient from '@helpers/apiClient';
 import { dateTime } from "@constants/dateFormat";
-import agencyActions from '@app/SystemApp/redux/agency/actions';
-import ActionButtons from "./partials/AssignedTestActionButtons";
 
-const { requestCurrentAgency, requestAgencyTeams } = agencyActions;
 const ButtonGroup = Button.Group;
 
 class AssignedTestList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      agencyId: null,
-      assignedToType: 'me', //me or team
-      selectedAssignedTeam: null,
-      testQueues: [],
-      loading: false,
-      error: null,
-      paginationOptions: {
-        defaultCurrent: 1,
-        current: 1,
-        pageSize: 10,
-        total: 1
-      },
-    };
-    this.columns = [
-      {
-        title: "Id",
-        dataIndex: "testQueueId",
-        key: "testQueueId"
-      },
-      {
-        title: "Test Case",
-        dataIndex: "testCase.title",
-        key: "testCaseTitle"
-      },
-      {
-        title: "Test Suite",
-        dataIndex: "testCase.testSuite.name",
-        key: "testSuiteName"
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "status"
-      },
-      {
-        title: "Created",
-        render: row => <Moment format={dateTime}>{row.createdAt}</Moment>,
-        key: "createdAt"
-      },
-      {
-        title: "",
-        render: row => <ActionButtons row={row} unassign={this.unassign} history={props.history} />
-      }
-    ];
-  }
+  state = {
+    agencyId: null,
+    assignedToType: 'me', //me or team
+    selectedAssignedTeam: null,
+    teams: [],
+    testQueues: [],
+    loading: false,
+    error: null,
+    limit: 1,
+    totalCount: 0,
+    currentPage: 1,
+  };
+
+  columns = [
+    {
+      title: "Id",
+      dataIndex: "testQueueId",
+      key: "testQueueId"
+    },
+    {
+      title: "Test Case",
+      dataIndex: "testCase.title",
+      key: "testCaseTitle"
+    },
+    {
+      title: "Test Suite",
+      dataIndex: "testCase.testSuite.name",
+      key: "testSuiteName"
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status"
+    },
+    {
+      title: "Created",
+      render: row => <Moment format={dateTime}>{row.createdAt}</Moment>,
+      key: "createdAt"
+    },
+    {
+      title: "",
+      render: row => <ActionButtons row={row} unassign={this.unassign} push={this.props.push} />
+    }
+  ];
 
   componentDidMount() {
-    const { activeCompanyTokenData, requestCurrentAgency, requestAgencyTeams } = this.props;
-    let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
-    if(activeCompanyTokenData.type === 'agencyUser' && agencyId) {    
-      requestCurrentAgency(agencyId);
-      requestAgencyTeams(agencyId, {
-        page: 1,
-        pageSize: 50
-      });
-      this.fetchData({
-        agencyId: agencyId
-      });
+    const { location } = this.props;
+    this.fetchData(this.getFetchReqParams(location.search));
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.search !== prevProps.search) {
+      this.fetchData(this.getFetchReqParams(this.props.search));
     }
+  }
+
+  getFetchReqParams = (search) => {
+    let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
+    let reqParams = {};
+    if(queryParams.assignedTeamId) {
+      reqParams.assignedTeamId = queryParams.assignedTeamId
+    }
+    reqParams.page = queryParams.page ? Number(queryParams.page) : 1;
+    return reqParams;
   }
 
   fetchData = async (options) => {
-    try {
-      this.setState({loading: true});
-      options.limit = this.state.paginationOptions.pageSize;
-      options.status = 'assigned';
-      if(this.state.assignedToType === 'team' && this.state.assignedTeamId) {
-        options.assignedTeamId = this.state.assignedTeamId;
-      }
-      let testQueues = await SWQAClient.getTestQueues(options);
-      let updateState = {
-        agencyId: options.agencyId,
-        loading: false,
-        testQueues: testQueues.rows,
-        paginationOptions: {
-          ...this.state.paginationOptions,
-          total: testQueues.count
+    // get agency id
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let agencyId = get(activeCompanyTokenData, 'agencyData.agencyId', null);
+    if (activeCompanyTokenData.type === 'agencyUser' && agencyId) {
+      try {
+        this.setState({ loading: true });
+        let teamsData = await SWQAClient.getAgencyTeams(agencyId, {
+          limit: 50,
+          offset: 0
+        });
+        options.offset = (this.state.limit * options.page) - this.state.limit;
+        options.limit = this.state.limit;
+        options.status = 'assigned';
+        let testQueueData = await SWQAClient.getTestQueues(omit(options, ['page']));
+        let updateState = {
+          teams: teamsData.rows,
+          testQueues: testQueueData.rows,
+          totalCount: testQueueData.count,
+          currentPage: options.page
+        };
+        if(options.assignedTeamId) {
+          updateState.assignedTeamId = options.assignedTeamId;
+          updateState.assignedToType = 'team';
         }
-      };
-      this.setState(updateState);
-    } catch(e) {
-      this.setState({
-        error: e,
-      });
-    } finally {
-      this.setState({
-        loading: false
-      })
-    }
-  }
-
-  onTablePaginationChange = async (page, pageSize) => {
-    this.setState({
-      loading: true,
-      paginationOptions: {
-        ...this.state.paginationOptions,
-        current: page,
-        pageSize
-      }
-    }, async () => {
-      try{
-        let offset = pageSize * (page - 1);
-        let testQueues = await SWQAClient.getTestQueues({
-          agencyId: this.props.match.params.agencyId,
-          status: 'assigned',
-          limit: pageSize,
-          offset
-        });
+        this.setState(updateState);
+      } catch (e) {
         this.setState({
-          loading: false,
-          testQueues: get(testQueues, 'rows', []),
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: testQueues.count
-          }
+          error: e,
         });
-      } catch(e) {
-        this.setState({ loading: false, testQueues: [] });
+        message.error('Unable to fetch test queue');
+      } finally {
+        this.setState({
+          loading: false
+        })
       }
-    });
+    }
   }
 
   unassign = async (row) => {
     try {
       await SWQAClient.unassignTestQueue(row.testQueueId);
       message.success('queue unassigned successfully');
-      this.fetchData({
-        agencyId: this.props.currentAgency.agencyData.agencyId
-      });
-    } catch(e) {
+      //fetch new test queue
+      this.fetchData(this.getFetchReqParams(this.props.location.search));
+    } catch (e) {
       this.setState({
         assignQueue: {
           error: e
@@ -174,35 +153,26 @@ class AssignedTestList extends Component {
       assignedToType: 'me',
       selectedAssignedTeam: null,
       loading: true
-    }, () => {
-      this.fetchData({
-        agencyId: this.state.agencyId
-      });
-    });
+    }, () => this.props.push(`/my-agency/test-manager/assigned-tests`));
   }
 
   handleTeamMenuClick = (e) => {
-    const { currentAgency = { agencyData: { name: '' }, teamList: { rows: [], count: 0 } } } = this.props;
-    if(e.key) {
-      let selectedTeam = find(currentAgency.teamList.rows, function(o) { return o.agencyTeamId === parseInt(e.key); }); 
+    if (e.key) {
+      let selectedTeam = find(this.state.teams, function (o) { 
+        return o.agencyTeamId === parseInt(e.key); 
+      });
       this.setState({
         selectedAssignedTeam: selectedTeam,
         assignedToType: 'team',
         loading: true
-      }, () => {
-        let params = {
-          agencyId: this.props.currentAgency.agencyData.agencyId,
-          assignedTeamId: e.key
-        };
-        this.fetchData(params);
-      });
+      }, () => this.props.push(`/my-agency/test-manager/assigned-tests?assignedTeamId=${selectedTeam.agencyTeamId}`));
     }
   }
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { history, currentAgency = { agencyData: { name: '' }, teamList: { rows: [], count: 0 } } } = this.props;
-    const teamsOptions = currentAgency.teamList.rows.map(team => (
+    const { push, goBack } = this.props;
+    const teamsOptions = this.state.teams.map(team => (
       <Menu.Item key={team.agencyTeamId}><Icon type="team" />{team.name}</Menu.Item>
     ));
     const teamMenu = (
@@ -219,7 +189,7 @@ class AssignedTestList extends Component {
                 <ComponentTitle>
                   <ActionBtn
                     type="secondary"
-                    onClick={() => history.goBack()}
+                    onClick={() => goBack()}
                   >
                     <Icon type="left" /> <IntlMessages id="back" />
                   </ActionBtn>
@@ -227,12 +197,12 @@ class AssignedTestList extends Component {
                 </ComponentTitle>
               </TitleWrapper>
               <Spin spinning={this.state.loading}>
-                <div style={{marginBottom: 15}}>
+                <div style={{ marginBottom: 15 }}>
                   Show Tests assigned to: &nbsp;
                   <ButtonGroup>
-                    <Button type={(this.state.assignedToType === 'me'? 'primary': 'default')} onClick={this.handleMeClick}>Me</Button>
-                    <Dropdown overlay={teamMenu}> 
-                      <Button type={(this.state.assignedToType === 'team'? 'primary': 'default')}>
+                    <Button type={(this.state.assignedToType === 'me' ? 'primary' : 'default')} onClick={this.handleMeClick}>Me</Button>
+                    <Dropdown overlay={teamMenu}>
+                      <Button type={(this.state.assignedToType === 'team' ? 'primary' : 'default')}>
                         My Teams <Icon type="down" />
                       </Button>
                     </Dropdown>
@@ -240,11 +210,18 @@ class AssignedTestList extends Component {
                 </div>
                 <Table
                   locale={{ emptyText: "No Tests available" }}
-                  size="middle"
                   bordered
                   pagination={{
-                    ...this.state.paginationOptions,
-                    onChange: this.onTablePaginationChange
+                    total: this.state.totalCount,
+                    pageSize: this.state.limit,
+                    current: this.state.currentPage,
+                    onChange: (page) => {
+                      let pushUrlQuery = `?page=${page}`;
+                      if(this.state.selectedAssignedTeam) {
+                        pushUrlQuery = `?assignedTeamId=${this.state.selectedAssignedTeam.agencyTeamId}&page=${page}`
+                      }
+                      return push(`/my-agency/test-manager/assigned-tests${pushUrlQuery}`);
+                    }
                   }}
                   columns={this.columns}
                   dataSource={this.state.testQueues}
@@ -259,13 +236,17 @@ class AssignedTestList extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  ...state.My,
+  pathname: state.router.location.pathname,
+  search: state.router.location.search,
+  hash: state.router.location.hash,
+})
+
 export default connect(
-  state => ({
-    ...state.Agency,
-    ...state.My
-  }),
+  mapStateToProps,
   {
-    requestCurrentAgency,
-    requestAgencyTeams
+    goBack,
+    push
   }
 )(AssignedTestList);
