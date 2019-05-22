@@ -4,16 +4,14 @@ import {
   ActionWrapper,
 } from '@utils/crud.style';
 
-export default function ActionButtons({ history, row }) {
+export default function ActionButtons({ push, row }) {
   return (
     <ActionWrapper>
       <Tooltip title="View details">
         <Button 
           shape="circle" 
           icon="info" 
-          onClick={() => {
-            history.push(`/my-client/test-manager/test-run/${row.testQueueRunId}/details`);
-          }} 
+          onClick={() => push(`/my-client/test-manager/test-run/${row.testQueueRunId}/details`)} 
         />
       </Tooltip>
     </ActionWrapper>

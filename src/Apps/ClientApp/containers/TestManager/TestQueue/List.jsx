@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import { push, goBack } from 'connected-react-router';
 import { Row, Col, Icon, Spin, message } from "antd";
-import { get } from 'lodash';
+import { get, omit } from 'lodash';
+import qs from "qs";
 import LayoutWrapper from "@components/utility/layoutWrapper";
 import IntlMessages from '@components/utility/intlMessages';
 import basicStyle from "@settings/basicStyle";
 import Box from "@components/utility/box";
+import ActionButtons from "./partials/ActionButtons";
 import Moment from "react-moment";
 import {
   ActionBtn,
@@ -13,141 +16,106 @@ import {
   ComponentTitle,
   TableClickable as Table
 } from "@utils/crud.style";
-import ActionButtons from "./partials/ActionButtons";
 import SWQAClient from '@helpers/apiClient';
 import { dateTime } from "@constants/dateFormat";
-import clientActions from '@app/SystemApp/redux/client/actions';
-
-const { requestCurrentClient } = clientActions;
 
 class TestQueueList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      client: {},
-      testQueues: [],
-      loading: false,
-      error: null,
-      paginationOptions: {
-        defaultCurrent: 1,
-        current: 1,
-        pageSize: 10,
-        total: 1
-      },
-    };
-    this.columns = [
-      {
-        title: "Id",
-        dataIndex: "testQueueId",
-        key: "testQueueId"
-      },
-      {
-        title: "Test Case",
-        dataIndex: "testCase.title",
-        key: "testCaseTitle"
-      },
-      {
-        title: "Test Suite",
-        dataIndex: "testCase.testSuite.name",
-        key: "testSuiteName"
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "status"
-      },
-      {
-        title: "Created",
-        render: row => <Moment format={dateTime}>{row.createdAt}</Moment>,
-        key: "createdAt"
-      },
-      {
-        title: "Actions",
-        key: "actions",
-        render: row => <ActionButtons row={row} deleteTestQueue={this.deleteTestQueue} history={props.history} />
-      }
-    ];
-  }
+  state = {
+    testQueues: [],
+    loading: false,
+    error: null,
+    limit: 10,
+    totalCount: 0,
+    currentPage: 1
+  };
+
+  columns = [
+    {
+      title: "Id",
+      dataIndex: "testQueueId",
+      key: "testQueueId"
+    },
+    {
+      title: "Test Case",
+      dataIndex: "testCase.title",
+      key: "testCaseTitle"
+    },
+    {
+      title: "Test Suite",
+      dataIndex: "testCase.testSuite.name",
+      key: "testSuiteName"
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status"
+    },
+    {
+      title: "Created",
+      render: row => <Moment format={dateTime}>{row.createdAt}</Moment>,
+      key: "createdAt"
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: row => <ActionButtons row={row} deleteTestQueue={this.deleteTestQueue} />
+    }
+  ];
 
   componentDidMount() {
-    const { requestCurrentClient, activeCompanyTokenData } = this.props;
-    //get client id
-    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
-    if(activeCompanyTokenData.type === 'clientUser' && clientId) {
-      requestCurrentClient(clientId);
-      this.fetchData({
-        clientId
-      });
+    const { location } = this.props;
+    this.fetchData(this.getFetchReqParams(location.search));
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.search !== prevProps.search) {
+      this.fetchData(this.getFetchReqParams(this.props.search));
     }
+  }
+
+  getFetchReqParams = (search) => {
+    let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
+    let reqParams = {};
+    reqParams.page = queryParams.page ? Number(queryParams.page) : 1;
+    return reqParams;
   }
 
   fetchData = async (options) => {
-    try {
-      this.setState({loading: true});
-      options.limit = this.state.paginationOptions.pageSize;
-      let testQueues = await SWQAClient.getTestQueues(options);
-      let updateState = {
-        loading: false,
-        testQueues: testQueues.rows,
-        paginationOptions: {
-          ...this.state.paginationOptions,
-          total: testQueues.count
-        }
-      };
-      this.setState(updateState);
-    } catch(e) {
-      this.setState({
-        error: e,
-      });
-    } finally {
-      this.setState({
-        loading: false
-      })
-    }
-  }
-
-  onTablePaginationChange = async (page, pageSize) => {
-    this.setState({
-      loading: true,
-      paginationOptions: {
-        ...this.state.paginationOptions,
-        current: page,
-        pageSize
-      }
-    }, async () => {
-      try{
-        let offset = pageSize * (page - 1);
-        let testQueues = await SWQAClient.getTestQueues({
-          clientId: this.state.client.clientId,
-          limit: pageSize,
-          offset
-        });
+    // get client id
+    let activeCompanyTokenData = this.props.activeCompanyTokenData;
+    let clientId = get(activeCompanyTokenData, 'clientData.clientId', null);
+    if (activeCompanyTokenData.type === 'clientUser' && clientId) {
+      try {
+        this.setState({ loading: true });
+        options.offset = (this.state.limit * options.page) - this.state.limit;
+        options.limit = this.state.limit;
+        let testQueueData = await SWQAClient.getTestQueues(omit(options, ['page']));
+        let updateState = {
+          testQueues: testQueueData.rows,
+          totalCount: testQueueData.count,
+          currentPage: options.page
+        };
+        this.setState(updateState);
+      } catch (e) {
         this.setState({
-          loading: false,
-          testQueues: get(testQueues, 'rows', []),
-          paginationOptions: {
-            ...this.state.paginationOptions,
-            total: testQueues.count
-          }
+          error: e,
         });
-      } catch(e) {
-        this.setState({ loading: false, testQueues: [] });
+        message.error('Unable to fetch test queue');
+      } finally {
+        this.setState({
+          loading: false
+        })
       }
-    });
+    }
   }
 
   deleteTestQueue = async (queueId) => {
     try {
       await SWQAClient.deleteTestQueue(queueId);
       message.success("Test queue deleted");
-      // Todo
-      let clientId = get(this.props, 'activeCompanyTokenData.clientData.clientId', null);
-      if(clientId) {
-        this.fetchData({
-          clientId
-        });
-      }
-    } catch(e) {
+      //fetch new set of test cases
+      this.fetchData(this.getFetchReqParams(this.props.location.search));
+    } catch (e) {
       console.log(e);
       message.error("Problem occured.");
     }
@@ -155,7 +123,7 @@ class TestQueueList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { history } = this.props;
+    const { goBack, push } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">
@@ -165,7 +133,7 @@ class TestQueueList extends Component {
                 <ComponentTitle>
                   <ActionBtn
                     type="secondary"
-                    onClick={() => history.goBack()}
+                    onClick={() => goBack()}
                   >
                     <Icon type="left" /> <IntlMessages id="back" />
                   </ActionBtn>
@@ -175,11 +143,15 @@ class TestQueueList extends Component {
               <Spin spinning={this.state.loading}>
                 <Table
                   locale={{ emptyText: "No Test Queue available" }}
-                  size="middle"
                   bordered
                   pagination={{
-                    ...this.state.paginationOptions,
-                    onChange: this.onTablePaginationChange
+                    total: this.state.totalCount,
+                    pageSize: this.state.limit,
+                    current: this.state.currentPage,
+                    onChange: (page) => {
+                      let pushUrlQuery = `?page=${page}`;
+                      return push(`/my-client/test-manager/test-queue${pushUrlQuery}`);
+                    }
                   }}
                   columns={this.columns}
                   dataSource={this.state.testQueues}
@@ -194,12 +166,17 @@ class TestQueueList extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  ...state.My,
+  pathname: state.router.location.pathname,
+  search: state.router.location.search,
+  hash: state.router.location.hash,
+})
+
 export default connect(
-  state => ({
-    ...state.Client,
-    ...state.My
-  }),
+  mapStateToProps,
   {
-    requestCurrentClient
+    goBack,
+    push
   }
 )(TestQueueList);
