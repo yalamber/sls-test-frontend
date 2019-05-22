@@ -15,7 +15,7 @@ class ActionButtons extends Component {
   }
 
   render() {
-    const { history, row, sendToQueue, deleteTestSuite } = this.props;
+    const { push, row, sendToQueue, deleteTestSuite } = this.props;
     return(
     <ActionWrapper>
       <Tooltip title="Queue for Test">
@@ -44,26 +44,20 @@ class ActionButtons extends Component {
         <Button
           shape="circle"
           icon="experiment"
-          onClick={() => {
-            history.push(`/my-client/test-manager/test-cases?suiteId=${row.testSuiteId}`)
-          }}
+          onClick={() => push(`/my-client/test-manager/test-cases?suiteId=${row.testSuiteId}`)}
         />
       </Tooltip>
       <Tooltip title="Edit Record">
         <Button
           shape="circle"
           icon="edit"
-          onClick={() => {
-            history.push(`/my-client/test-manager/test-suite/${row.testSuiteId}/edit`);
-          }} />
+          onClick={() => push(`/my-client/test-manager/test-suite/${row.testSuiteId}/edit`)} />
       </Tooltip>
       <Tooltip title="Details">
         <Button
           shape="circle"
           icon="info"
-          onClick={() => {
-            history.push(`/my-client/test-manager/test-suite/${row.testSuiteId}/details`);
-          }} />
+          onClick={() => push(`/my-client/test-manager/test-suite/${row.testSuiteId}/details`)} />
       </Tooltip>
       <Tooltip title="Delete Record">
         <Popconfirms
