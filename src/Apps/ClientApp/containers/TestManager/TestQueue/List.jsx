@@ -114,7 +114,7 @@ class TestQueueList extends Component {
       await SWQAClient.deleteTestQueue(queueId);
       message.success("Test queue deleted");
       //fetch new set of test cases
-      this.fetchData(this.getFetchReqParams(this.props.location.search));
+      this.fetchData(this.getFetchReqParams(this.props.search));
     } catch (e) {
       console.log(e);
       message.error("Problem occured.");

@@ -30,7 +30,7 @@ class TestCaseList extends Component {
     selectedSuiteId: undefined,
     loading: true,
     error: null,
-    limit: 10,
+    limit: 4,
     totalCount: 0,
     currentPage: 1
   };
@@ -138,7 +138,8 @@ class TestCaseList extends Component {
       await SWQAClient.deleteTestCase(caseId);
       message.success("Test case deleted");
       //fetch new set of test cases
-      this.fetchData(this.getFetchReqParams(this.props.location.search));
+      //TODO: if last item refetch second last page
+      this.fetchData(this.getFetchReqParams(this.props.search));
     } catch (e) {
       console.log(e);
       message.error("Problem occured.");

@@ -136,7 +136,7 @@ class SuiteList extends Component {
       await SWQAClient.deleteTestSuite(suiteId);
       message.success("Test suite deleted");
       //fetch new set of test suties
-      this.fetchData(this.getFetchReqParams(this.props.location.search));
+      this.fetchData(this.getFetchReqParams(this.props.search));
     } catch (e) {
       console.log(e);
       message.error("Problem occured.");
