@@ -132,6 +132,7 @@ class TestQueueList extends Component {
       message.success('Test assigned successfully');
       //fetch new test queue
       this.fetchData(this.getFetchReqParams(this.props.location.search));
+      //TODO pagination 
     } catch (e) {
       console.log(e);
       this.setState({

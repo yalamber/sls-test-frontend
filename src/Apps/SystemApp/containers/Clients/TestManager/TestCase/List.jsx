@@ -133,6 +133,7 @@ class TestCaseList extends Component {
       message.success("Test case deleted");
       //get test cases
       this.fetchTestCase(this.getFetchReqParams(this.props.search));
+      
     } catch(e) {
       console.log(e);
       message.error("Problem occured.");

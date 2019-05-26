@@ -48,7 +48,13 @@ class MemberList extends Component {
     try {
       await SWQAClient.deleteAgencyTeamMember(teamId, userId);
       message.success('Member Removed from Team');
-      this.fetchData(this.state.currentPage);
+      await this.fetchData(this.state.currentPage);
+      if(this.state.data.length === 0) {
+        let page = this.state.currentPage-1;
+        if(page > 1) {
+          return this.props.push(`/my-agency/team/${teamId}/members?page=${page}`);
+        }
+      }
     } catch (e) {
       console.log(e);
       message.error("Problem occured.");

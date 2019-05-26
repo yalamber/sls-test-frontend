@@ -132,7 +132,17 @@ class AssignedTestList extends Component {
       await SWQAClient.unassignTestQueue(row.testQueueId);
       message.success('queue unassigned successfully');
       //fetch new test queue
-      this.fetchData(this.getFetchReqParams(this.props.location.search));
+      await this.fetchData(this.getFetchReqParams(this.props.location.search));
+      if(this.state.testQueues.length === 0) {
+        let page = this.state.currentPage-1;
+        if(page > 1) {
+          let pushUrlQuery = `?page=${page}`;
+          if(this.state.selectedAssignedTeam) {
+            pushUrlQuery = `?assignedTeamId=${this.state.selectedAssignedTeam.agencyTeamId}&page=${page}`
+          }
+          return push(`/my-agency/test-manager/assigned-tests${pushUrlQuery}`);
+        }
+      }
     } catch (e) {
       this.setState({
         assignQueue: {

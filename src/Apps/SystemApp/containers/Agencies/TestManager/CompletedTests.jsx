@@ -25,7 +25,7 @@ class CompletedTestList extends Component {
     testQueues: [],
     loading: false,
     error: null,
-    limit: 2,
+    limit: 10,
     totalCount: 0,
     currentPage: 1
   };

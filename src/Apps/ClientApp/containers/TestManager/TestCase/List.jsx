@@ -30,7 +30,7 @@ class TestCaseList extends Component {
     selectedSuiteId: undefined,
     loading: true,
     error: null,
-    limit: 4,
+    limit: 10,
     totalCount: 0,
     currentPage: 1
   };
@@ -73,13 +73,16 @@ class TestCaseList extends Component {
     }
   }
 
-  getFetchReqParams = (search) => {
+  getFetchReqParams = (search, minusPage = false) => {
     let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
     let reqParams = {};
     if (queryParams.suiteId) {
       reqParams.testSuiteId = queryParams.suiteId;
     }
     reqParams.page = queryParams.page ? Number(queryParams.page) : 1;
+    if(minusPage > 1) {
+      reqParams.page = reqParams.page-1;
+    }
     return reqParams;
   }
 
@@ -138,8 +141,17 @@ class TestCaseList extends Component {
       await SWQAClient.deleteTestCase(caseId);
       message.success("Test case deleted");
       //fetch new set of test cases
-      //TODO: if last item refetch second last page
-      this.fetchData(this.getFetchReqParams(this.props.search));
+      await this.fetchData(this.getFetchReqParams(this.props.search));
+      if(this.state.testCases.length === 0) {
+        let page = this.state.currentPage-1;
+        if(page > 1) {
+          let pushUrlQuery = `?page=${page}`;
+          if(this.state.selectedSuiteId) {
+            pushUrlQuery = `?suiteId=${this.state.selectedSuiteId}&page=${page}`
+          }
+          return this.props.push(`/my-client/test-manager/test-cases${pushUrlQuery}`);
+        }
+      }
     } catch (e) {
       console.log(e);
       message.error("Problem occured.");

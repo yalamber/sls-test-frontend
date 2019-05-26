@@ -114,7 +114,14 @@ class TestQueueList extends Component {
       await SWQAClient.deleteTestQueue(queueId);
       message.success("Test queue deleted");
       //fetch new set of test cases
-      this.fetchData(this.getFetchReqParams(this.props.search));
+      await this.fetchData(this.getFetchReqParams(this.props.search));
+      if(this.state.testQueues.length === 0) {
+        let page = this.state.currentPage-1;
+        if(page > 1) {
+          let pushUrlQuery = `?page=${page}`;
+          return this.props.push(`/my-client/test-manager/test-queue${pushUrlQuery}`);
+        }
+      }
     } catch (e) {
       console.log(e);
       message.error("Problem occured.");

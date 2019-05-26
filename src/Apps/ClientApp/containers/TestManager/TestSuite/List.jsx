@@ -136,7 +136,17 @@ class SuiteList extends Component {
       await SWQAClient.deleteTestSuite(suiteId);
       message.success("Test suite deleted");
       //fetch new set of test suties
-      this.fetchData(this.getFetchReqParams(this.props.search));
+      await this.fetchData(this.getFetchReqParams(this.props.search));
+      if(this.state.testSuites.length === 0) {
+        let page = this.state.currentPage-1;
+        if(page > 1) {
+          let pushUrlQuery = `?page=${page}`;
+          if(this.state.selectedTeamId) {
+            pushUrlQuery = `?teamId=${this.state.selectedTeamId}&page=${page}`
+          }
+          return this.props.push(`/my-client/test-manager/test-suites${pushUrlQuery}`);
+        }
+      }
     } catch (e) {
       console.log(e);
       message.error("Problem occured.");
