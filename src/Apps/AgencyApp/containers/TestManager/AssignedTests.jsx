@@ -88,6 +88,14 @@ class AssignedTestList extends Component {
     return reqParams;
   }
 
+  pushPage = (page) => {
+    let pushUrlQuery = `?page=${page}`;
+    if(this.state.selectedAssignedTeam) {
+      pushUrlQuery = `?assignedTeamId=${this.state.selectedAssignedTeam.agencyTeamId}&page=${page}`
+    }
+    return this.props.push(`/my-agency/test-manager/assigned-tests${pushUrlQuery}`);
+  }
+
   fetchData = async (options) => {
     // get agency id
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
@@ -136,11 +144,7 @@ class AssignedTestList extends Component {
       if(this.state.testQueues.length === 0) {
         let page = this.state.currentPage-1;
         if(page > 1) {
-          let pushUrlQuery = `?page=${page}`;
-          if(this.state.selectedAssignedTeam) {
-            pushUrlQuery = `?assignedTeamId=${this.state.selectedAssignedTeam.agencyTeamId}&page=${page}`
-          }
-          return push(`/my-agency/test-manager/assigned-tests${pushUrlQuery}`);
+          this.pushPage(page);
         }
       }
     } catch (e) {
@@ -225,13 +229,7 @@ class AssignedTestList extends Component {
                     total: this.state.totalCount,
                     pageSize: this.state.limit,
                     current: this.state.currentPage,
-                    onChange: (page) => {
-                      let pushUrlQuery = `?page=${page}`;
-                      if(this.state.selectedAssignedTeam) {
-                        pushUrlQuery = `?assignedTeamId=${this.state.selectedAssignedTeam.agencyTeamId}&page=${page}`
-                      }
-                      return push(`/my-agency/test-manager/assigned-tests${pushUrlQuery}`);
-                    }
+                    onChange: this.pushPage
                   }}
                   columns={this.columns}
                   dataSource={this.state.testQueues}

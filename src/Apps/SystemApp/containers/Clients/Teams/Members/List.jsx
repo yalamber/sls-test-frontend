@@ -84,11 +84,19 @@ class MemberList extends Component {
     return queryParams.page ? Number(queryParams.page) : 1;
   }
 
+  pushPage = (page) => this.props.push(`/admin/agency/team/${match.params.teamId}/members?page=${page}`);
+
   deleteMember = async (teamId, userId) => {
     try {
       await SWQAClient.deleteClientTeamMember(teamId, userId);
       message.success('Member Removed from Team');
-      this.fetchData(teamId, this.state.currentPage);
+      await this.fetchData(teamId, this.state.currentPage);
+      if(this.state.users.length === 0) {
+        let page = this.state.currentPage-1;
+        if(page > 1) {
+          this.pushPage(page);
+        }
+      }
     } catch (e) {
       console.log(e);
       message.error("Problem occured.");

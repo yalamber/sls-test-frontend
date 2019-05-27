@@ -73,6 +73,11 @@ class CompletedTestList extends Component {
     return reqParams;
   }
 
+  pushPage = (page) => {
+    let pushUrlQuery = `?page=${page}`;
+    return this.props.push(`/my-agency/test-manager/completed-tests${pushUrlQuery}`);
+  };
+
   async fetchData(options) {
     // get agency id
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
@@ -130,10 +135,7 @@ class CompletedTestList extends Component {
                     total: this.state.totalCount,
                     pageSize: this.state.limit,
                     current: this.state.currentPage,
-                    onChange: (page) => {
-                      let pushUrlQuery = `?page=${page}`;
-                      return push(`/my-agency/test-manager/completed-tests${pushUrlQuery}`);
-                    }
+                    onChange: this.pushPage
                   }}
                   columns={this.columns}
                   dataSource={this.state.testQueues}

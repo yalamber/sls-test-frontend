@@ -80,6 +80,11 @@ class TestQueueList extends Component {
     return reqParams;
   }
 
+  pushPage = (page) => {
+    let pushUrlQuery = `?page=${page}`;
+    return this.props.push(`/my-client/test-manager/test-queue${pushUrlQuery}`);
+  }
+
   fetchData = async (options) => {
     // get client id
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
@@ -118,8 +123,7 @@ class TestQueueList extends Component {
       if(this.state.testQueues.length === 0) {
         let page = this.state.currentPage-1;
         if(page > 1) {
-          let pushUrlQuery = `?page=${page}`;
-          return this.props.push(`/my-client/test-manager/test-queue${pushUrlQuery}`);
+          this.pushPage(page);
         }
       }
     } catch (e) {
@@ -155,10 +159,7 @@ class TestQueueList extends Component {
                     total: this.state.totalCount,
                     pageSize: this.state.limit,
                     current: this.state.currentPage,
-                    onChange: (page) => {
-                      let pushUrlQuery = `?page=${page}`;
-                      return push(`/my-client/test-manager/test-queue${pushUrlQuery}`);
-                    }
+                    onChange: this.pushPage
                   }}
                   columns={this.columns}
                   dataSource={this.state.testQueues}

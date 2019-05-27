@@ -73,7 +73,12 @@ class AssignedTestList extends Component {
     return reqParams;
   }
 
-  async fetchData(options) {
+  pushPage = (page) => {
+    let pushUrlQuery = `?page=${page}`;
+    return this.props.push(`/admin/agency/${this.props.match.params.agencyId}/test-manager/assigned-tests${pushUrlQuery}`);
+  }
+
+  fetchData = async (options) => {
     try {
       this.setState({ loading: true });
       let agency = await SWQAClient.getAgency(this.props.match.params.agencyId);
@@ -128,10 +133,7 @@ class AssignedTestList extends Component {
                     total: this.state.totalCount,
                     pageSize: this.state.limit,
                     current: this.state.currentPage,
-                    onChange: (page) => {
-                      let pushUrlQuery = `?page=${page}`;
-                      return push(`/admin/agency/${this.props.match.params.agencyId}/test-manager/assigned-tests${pushUrlQuery}`);
-                    }
+                    onChange: this.pushPage
                   }}
                   columns={this.columns}
                   dataSource={this.state.testQueues}

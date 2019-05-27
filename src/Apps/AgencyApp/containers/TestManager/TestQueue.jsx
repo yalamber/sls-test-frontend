@@ -79,6 +79,11 @@ class TestQueueList extends Component {
     return reqParams;
   }
 
+  pushPage = (page) => {
+    let pushUrlQuery = `?page=${page}`;
+    return this.props.push(`/my-agency/test-manager/test-queue${pushUrlQuery}`);
+  }
+
   fetchData = async (options) => {
     // get agency id
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
@@ -132,7 +137,12 @@ class TestQueueList extends Component {
       message.success('Test assigned successfully');
       //fetch new test queue
       this.fetchData(this.getFetchReqParams(this.props.location.search));
-      //TODO pagination 
+      if(this.state.testQueues.length === 0) {
+        let page = this.state.currentPage-1;
+        if(page > 1) {
+          this.pushPage(page);
+        }
+      }
     } catch (e) {
       console.log(e);
       this.setState({
@@ -228,10 +238,7 @@ class TestQueueList extends Component {
                     total: this.state.totalCount,
                     pageSize: this.state.limit,
                     current: this.state.currentPage,
-                    onChange: (page) => {
-                      let pushUrlQuery = `?page=${page}`;
-                      return push(`/my-agency/test-manager/test-queue${pushUrlQuery}`);
-                    }
+                    onChange: this.pushPage
                   }}
                   columns={this.columns}
                   dataSource={this.state.testQueues}

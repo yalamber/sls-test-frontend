@@ -86,6 +86,14 @@ class TestCaseList extends Component {
     return reqParams;
   }
 
+  pushPage = (page) => {
+    let pushUrlQuery = `?page=${page}`;
+    if(this.state.selectedSuiteId) {
+      pushUrlQuery = `?suiteId=${this.state.selectedSuiteId}&page=${page}`
+    }
+    return this.props.push(`/my-client/test-manager/test-cases${pushUrlQuery}`);
+  }
+
   fetchData = async (options) => {
     // get client id
     let activeCompanyTokenData = this.props.activeCompanyTokenData;
@@ -145,11 +153,7 @@ class TestCaseList extends Component {
       if(this.state.testCases.length === 0) {
         let page = this.state.currentPage-1;
         if(page > 1) {
-          let pushUrlQuery = `?page=${page}`;
-          if(this.state.selectedSuiteId) {
-            pushUrlQuery = `?suiteId=${this.state.selectedSuiteId}&page=${page}`
-          }
-          return this.props.push(`/my-client/test-manager/test-cases${pushUrlQuery}`);
+          this.pushPage(page);
         }
       }
     } catch (e) {
@@ -235,13 +239,7 @@ class TestCaseList extends Component {
                     total: this.state.totalCount,
                     pageSize: this.state.limit,
                     current: this.state.currentPage,
-                    onChange: (page) => {
-                      let pushUrlQuery = `?page=${page}`;
-                      if(this.state.selectedSuiteId) {
-                        pushUrlQuery = `?suiteId=${this.state.selectedSuiteId}&page=${page}`
-                      }
-                      return push(`/my-client/test-manager/test-cases${pushUrlQuery}`);
-                    }
+                    onChange: this.pushPage
                   }}
                   columns={this.columns}
                   dataSource={this.state.testCases}

@@ -29,7 +29,7 @@ class SuiteList extends Component {
     selectedTeamId: undefined,
     loading: true,
     error: null,
-    limit: 1,
+    limit: 10,
     totalCount: 0,
     currentPage: 1
   };
@@ -81,6 +81,14 @@ class SuiteList extends Component {
     }
     reqParams.page = queryParams.page ? Number(queryParams.page) : 1;
     return reqParams;
+  }
+
+  pushPage = (page) => {
+    let pushUrlQuery = `?page=${page}`;
+    if(this.state.selectedTeamId) {
+      pushUrlQuery = `?teamId=${this.state.selectedTeamId}&page=${page}`
+    }
+    return this.props.push(`/my-client/test-manager/test-suites${pushUrlQuery}`);
   }
 
   fetchData = async (options) => {
@@ -140,11 +148,7 @@ class SuiteList extends Component {
       if(this.state.testSuites.length === 0) {
         let page = this.state.currentPage-1;
         if(page > 1) {
-          let pushUrlQuery = `?page=${page}`;
-          if(this.state.selectedTeamId) {
-            pushUrlQuery = `?teamId=${this.state.selectedTeamId}&page=${page}`
-          }
-          return this.props.push(`/my-client/test-manager/test-suites${pushUrlQuery}`);
+          this.pushPage(page);
         }
       }
     } catch (e) {
@@ -237,13 +241,7 @@ class SuiteList extends Component {
                     total: this.state.totalCount,
                     pageSize: this.state.limit,
                     current: this.state.currentPage,
-                    onChange: (page) => {
-                      let pushUrlQuery = `?page=${page}`;
-                      if(this.state.selectedTeamId) {
-                        pushUrlQuery = `?teamId=${this.state.selectedTeamId}&page=${page}`
-                      }
-                      return push(`/my-client/test-manager/test-suites${pushUrlQuery}`);
-                    }
+                    onChange: this.pushPage
                   }}
                   columns={this.columns}
                   dataSource={this.state.testSuites}

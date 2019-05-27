@@ -52,7 +52,7 @@ class MemberList extends Component {
       if(this.state.data.length === 0) {
         let page = this.state.currentPage-1;
         if(page > 1) {
-          return this.props.push(`/my-agency/team/${teamId}/members?page=${page}`);
+          this.pushPage(page);
         }
       }
     } catch (e) {
@@ -101,6 +101,8 @@ class MemberList extends Component {
     return queryParams.page ? Number(queryParams.page) : 1;
   }
 
+  pushPage = (page) => this.props.push(`/my-agency/team/${this.props.match.params.teamId}/members?page=${page}`);
+
   render() {
     const { match, push } = this.props;
     const { teamId } = match.params;
@@ -120,7 +122,7 @@ class MemberList extends Component {
           total: this.state.totalCount,
           pageSize: this.state.limit,
           current: this.state.currentPage,
-          onChange: (page) => this.props.push(`/my-agency/team/${teamId}/members?page=${page}`)
+          onChange: this.pushPage
         }}
         rowKey="userId" />
     );

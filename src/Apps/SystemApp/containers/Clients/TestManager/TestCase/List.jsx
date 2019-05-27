@@ -84,6 +84,14 @@ class TestCaseList extends Component {
     return reqParams;
   }
 
+  pushPage = (page) => {
+    let pushUrlQuery = `?page=${page}`;
+    if (this.state.selectedSuiteId) {
+      pushUrlQuery = `?suiteId=${this.state.selectedSuiteId}&page=${page}`
+    }
+    return this.props.push(`/admin/client/${this.props.match.params.clientId}/test-manager/test-cases${pushUrlQuery}`);
+  }
+
   fetchTestCase = async (options) => {
     let { match } = this.props;
     try {
@@ -133,7 +141,12 @@ class TestCaseList extends Component {
       message.success("Test case deleted");
       //get test cases
       this.fetchTestCase(this.getFetchReqParams(this.props.search));
-      
+      if(this.state.testCases.length === 0) {
+        let page = this.state.currentPage-1;
+        if(page > 1) {
+          this.pushPage(page);
+        }
+      }
     } catch(e) {
       console.log(e);
       message.error("Problem occured.");
@@ -213,13 +226,7 @@ class TestCaseList extends Component {
                     total: this.state.totalCount,
                     pageSize: this.state.limit,
                     current: this.state.currentPage,
-                    onChange: (page) => {
-                      let pushUrlQuery = `?page=${page}`;
-                      if (this.state.selectedSuiteId) {
-                        pushUrlQuery = `?suiteId=${this.state.selectedSuiteId}&page=${page}`
-                      }
-                      return push(`/admin/client/${this.props.match.params.clientId}/test-manager/test-cases${pushUrlQuery}`);
-                    }
+                    onChange: this.pushPage
                   }}
                   columns={this.columns}
                   dataSource={this.state.testCases}
