@@ -84,7 +84,7 @@ class MemberList extends Component {
     return queryParams.page ? Number(queryParams.page) : 1;
   }
 
-  pushPage = (page) => this.props.push(`/admin/agency/team/${match.params.teamId}/members?page=${page}`);
+  pushPage = (page) => this.props.push(`/admin/agency/team/${this.props.match.params.teamId}/members?page=${page}`);
 
   deleteMember = async (teamId, userId) => {
     try {
