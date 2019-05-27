@@ -113,12 +113,15 @@ class SuiteList extends Component {
       };
       if (options.clientTeamId) {
         updateState.selectedTeamId = parseInt(options.clientTeamId, 10);
+      } else {
+        updateState.selectedTeamId = undefined;
       }
       this.setState(updateState);
     } catch (e) {
       this.setState({
         error: e,
       });
+      message.error('Something went wrong!');
     } finally {
       this.setState({
         loading: false
@@ -128,9 +131,15 @@ class SuiteList extends Component {
 
   handleTeamChange = (teamId) => {
     let { push, match } = this.props;
-    this.setState({
-      selectedTeamId: teamId,
-    }, () => push(`/admin/client/${match.params.clientId}/test-manager/test-suites?teamId=${teamId}`));
+    if(teamId === 'all') {  
+      this.setState({
+        selectedTeamId: undefined,
+      }, () => push(`/admin/client/${match.params.clientId}/test-manager/test-suites`));
+    } else {  
+      this.setState({
+        selectedTeamId: teamId,
+      }, () => push(`/admin/client/${match.params.clientId}/test-manager/test-suites?teamId=${teamId}`));
+    }
   }
 
   isTeamSelected = () => {
@@ -141,11 +150,11 @@ class SuiteList extends Component {
     try {
       await SWQAClient.deleteTestSuite(suiteId);
       message.success("Test suite deleted");
-      //fetch new set of test suties
+      //fetch new set of test suites
       this.fetchTestSuite(this.getFetchReqParams(this.props.search));
       if(this.state.testSuites.length === 0) {
         let page = this.state.currentPage-1;
-        if(page > 1) {
+        if(page > 0) {
           this.pushPage(page);
         }
       }
@@ -216,6 +225,9 @@ class SuiteList extends Component {
                           return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }}
                       >
+                        <Option key="all" value="all">
+                          All teams
+                        </Option>
                         {teamsOptions}
                       </Select>
                     </FormItem>

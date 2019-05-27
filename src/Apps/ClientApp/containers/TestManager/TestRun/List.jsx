@@ -110,7 +110,7 @@ class TestRunList extends Component {
         this.setState({
           error: e,
         });
-        message.error('Unable to fetch test runs');
+        message.error('Something went wrong!');
       } finally {
         this.setState({
           loading: false
@@ -121,7 +121,7 @@ class TestRunList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { push, goBack } = this.props;
+    const { goBack } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">

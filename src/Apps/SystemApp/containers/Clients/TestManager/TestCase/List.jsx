@@ -114,9 +114,12 @@ class TestCaseList extends Component {
       };
       if (options.testSuiteId) {
         updateState.selectedSuiteId = parseInt(options.testSuiteId, 10);
+      } else {
+        updateState.selectedSuiteId = undefined;
       }
       this.setState(updateState);
     } catch (e) {
+      message.error('Something went wrong!');
       this.setState({
         loading: false,
         error: e,
@@ -126,9 +129,15 @@ class TestCaseList extends Component {
 
   handleSuiteChange = (teamId) => {
     let { push, match } = this.props;
-    this.setState({
-      selectedTeamId: teamId,
-    }, () => push(`/admin/client/${match.params.clientId}/test-manager/test-cases?suiteId=${teamId}`));
+    if(teamId === 'all') {
+      this.setState({
+        selectedTeamId: undefined,
+      }, () => push(`/admin/client/${match.params.clientId}/test-manager/test-cases`));
+    } else {
+      this.setState({
+        selectedTeamId: teamId,
+      }, () => push(`/admin/client/${match.params.clientId}/test-manager/test-cases?suiteId=${teamId}`));
+    }
   }
 
   isSuiteSelected = () => {
@@ -143,13 +152,13 @@ class TestCaseList extends Component {
       this.fetchTestCase(this.getFetchReqParams(this.props.search));
       if(this.state.testCases.length === 0) {
         let page = this.state.currentPage-1;
-        if(page > 1) {
+        if(page > 0) {
           this.pushPage(page);
         }
       }
     } catch(e) {
       console.log(e);
-      message.error("Problem occured.");
+      message.error('Something went wrong!');
     }
   }
 
@@ -214,6 +223,9 @@ class TestCaseList extends Component {
                           return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }}
                       >
+                        <Option key={'all'} value="all">
+                          All Suites
+                        </Option>
                         {suitesOptions}
                       </Select>
                     </FormItem>

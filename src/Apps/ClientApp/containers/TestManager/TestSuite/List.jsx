@@ -116,6 +116,8 @@ class SuiteList extends Component {
         };
         if (options.clientTeamId) {
           updateState.selectedTeamId = parseInt(options.clientTeamId, 10);
+        } else {
+          updateState.selectedTeamId = undefined;
         }
         this.setState(updateState);
       } catch (e) {
@@ -123,16 +125,22 @@ class SuiteList extends Component {
           loading: false,
           error: e
         });
-        message.error('Unable to fetch test suites');
+        message.error('Something went wrong!');
       }
     }
   }
 
   handleTeamChange = (teamId) => {
     let { push } = this.props;
-    this.setState({
-      selectedTeamId: teamId,
-    }, () => push(`/my-client/test-manager/test-suites?teamId=${teamId}`));
+    if(teamId === 'all') {
+      this.setState({
+        selectedTeamId: undefined,
+      }, () => push(`/my-client/test-manager/test-suites`));
+    } else {
+      this.setState({
+        selectedTeamId: teamId,
+      }, () => push(`/my-client/test-manager/test-suites?teamId=${teamId}`));
+    }
   }
 
   isTeamSelected = () => {
@@ -147,7 +155,7 @@ class SuiteList extends Component {
       await this.fetchData(this.getFetchReqParams(this.props.search));
       if(this.state.testSuites.length === 0) {
         let page = this.state.currentPage-1;
-        if(page > 1) {
+        if(page > 0) {
           this.pushPage(page);
         }
       }
@@ -229,6 +237,9 @@ class SuiteList extends Component {
                           return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }}
                       >
+                        <Option key="all" value="all">
+                          All teams
+                        </Option>
                         {teamsOptions}
                       </Select>
                     </FormItem>

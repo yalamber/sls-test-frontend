@@ -126,7 +126,7 @@ class AssignedTestList extends Component {
         this.setState({
           error: e,
         });
-        message.error('Unable to fetch test queue');
+        message.error('Something went wrong!');
       } finally {
         this.setState({
           loading: false
@@ -143,7 +143,7 @@ class AssignedTestList extends Component {
       await this.fetchData(this.getFetchReqParams(this.props.location.search));
       if(this.state.testQueues.length === 0) {
         let page = this.state.currentPage-1;
-        if(page > 1) {
+        if(page > 0) {
           this.pushPage(page);
         }
       }
@@ -153,6 +153,7 @@ class AssignedTestList extends Component {
           error: e
         }
       });
+      message.error('Something went wrong!');
     } finally {
       this.setState({
         assignQueue: {
@@ -185,7 +186,7 @@ class AssignedTestList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { push, goBack } = this.props;
+    const { goBack } = this.props;
     const teamsOptions = this.state.teams.map(team => (
       <Menu.Item key={team.agencyTeamId}><Icon type="team" />{team.name}</Menu.Item>
     ));

@@ -68,7 +68,7 @@ class UserList extends Component {
       });
     } catch (e) {
       console.log(e);
-      message.error('Data fetch failed');
+      message.error('Something went wrong!');
     } finally {
       this.setState({
         loading: false

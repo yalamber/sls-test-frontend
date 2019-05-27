@@ -70,11 +70,11 @@ class UserList extends Component {
           currentPage: page
         });
       } catch (e) {
-        message.error('Data fetch failed');
         this.setState({
           loading: false,
           error: e
         });
+        message.error('Something went wrong!');
       }
     }
   }

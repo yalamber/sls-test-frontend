@@ -12,6 +12,7 @@ class MemberList extends Component {
   state = {
     loading: false,
     team: {},
+    error: null,
     data: [],
     limit: 10,
     totalCount: 0,
@@ -67,8 +68,8 @@ class MemberList extends Component {
       });
     } catch (e) {
       console.log(e);
-      message.error("Problem occured.");
-      this.setState({ loading: false });
+      message.error('Something went wrong!');
+      this.setState({ loading: false, error: e });
     }
   }
 
@@ -93,7 +94,7 @@ class MemberList extends Component {
       await this.fetchData(teamId, this.state.currentPage);
       if(this.state.users.length === 0) {
         let page = this.state.currentPage-1;
-        if(page > 1) {
+        if(page > 0) {
           this.pushPage(page);
         }
       }

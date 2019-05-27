@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Row, Col, Icon, Spin } from "antd";
+import { Row, Col, Icon, Spin, message } from "antd";
 import qs from 'qs';
 import { get } from 'lodash';
 import { push, goBack } from 'connected-react-router';
@@ -100,6 +100,7 @@ class CompletedTestList extends Component {
         this.setState({
           error: e,
         });
+        message.error('Something went wrong!');
       } finally {
         this.setState({
           loading: false
@@ -110,7 +111,7 @@ class CompletedTestList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { goBack, push } = this.props;
+    const { goBack } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">

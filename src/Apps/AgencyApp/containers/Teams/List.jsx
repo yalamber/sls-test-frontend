@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { push, goBack } from 'connected-react-router';
 import { get } from 'lodash';
 import qs from 'qs';
+import { message } from 'antd';
 import SWQAClient from '@helpers/apiClient';
 import ActionButtons from "./partials/ActionButtons";
 import TeamList from '@appComponents/Team/List';
@@ -66,6 +67,7 @@ class List extends Component {
           });
         } catch (e) {
           this.setState({ loading: false, data: [], error: e });
+          message.error('Something went wrong!');
         } 
       });
     }

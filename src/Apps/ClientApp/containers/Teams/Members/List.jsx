@@ -51,7 +51,7 @@ class MemberList extends Component {
       await this.fetchData(this.getPagefromLocation(this.props.search));
       if(this.state.data.length === 0) {
         let page = this.state.currentPage-1;
-        if(page > 1) {
+        if(page > 0) {
           this.pushPage(page);
         }
       }
@@ -78,7 +78,7 @@ class MemberList extends Component {
         currentPage: page
       });
     } catch (e) {
-      message.error("Problem occured.");
+      message.error('Something went wrong!');
       this.setState({ loading: false });
     }
   }

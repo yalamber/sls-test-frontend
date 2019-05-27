@@ -108,7 +108,7 @@ class RunningTestList extends Component {
         this.setState({
           error: e,
         });
-        message.error('Unable to fetch test queue');
+        message.error('Something went wrong!');
       } finally {
         this.setState({
           loading: false
@@ -125,7 +125,7 @@ class RunningTestList extends Component {
       this.fetchData(this.getFetchReqParams(this.props.location.search));
       if(this.state.testQueues.length === 0) {
         let page = this.state.currentPage-1;
-        if(page > 1) {
+        if(page > 0) {
           this.pushPage(page);
         }
       }
@@ -146,7 +146,7 @@ class RunningTestList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { goBack, push } = this.props;
+    const { goBack } = this.props;
     return (
       <LayoutWrapper>
         <Row style={rowStyle} gutter={gutter} justify="start">

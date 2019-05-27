@@ -73,16 +73,13 @@ class TestCaseList extends Component {
     }
   }
 
-  getFetchReqParams = (search, minusPage = false) => {
+  getFetchReqParams = (search) => {
     let queryParams = qs.parse(search, { ignoreQueryPrefix: true });
     let reqParams = {};
     if (queryParams.suiteId) {
       reqParams.testSuiteId = queryParams.suiteId;
     }
     reqParams.page = queryParams.page ? Number(queryParams.page) : 1;
-    if(minusPage > 1) {
-      reqParams.page = reqParams.page-1;
-    }
     return reqParams;
   }
 
@@ -120,6 +117,8 @@ class TestCaseList extends Component {
         };
         if (options.testSuiteId) {
           updateState.selectedSuiteId = parseInt(options.testSuiteId, 10);
+        } else {
+          updateState.selectedSuiteId = undefined;
         }
         this.setState(updateState);
       } catch (e) {
@@ -127,16 +126,22 @@ class TestCaseList extends Component {
           loading: false,
           error: e
         });
-        message.error('Unable to fetch test suites');
+        message.error('Something went wrong!');
       }
     }
   }
 
   handleSuiteChange = (suiteId) => {
     let { push } = this.props;
-    this.setState({
-      selectedSuiteId: suiteId,
-    }, () => push(`/my-client/test-manager/test-cases?suiteId=${suiteId}`));
+    if(suiteId === 'all') {      
+      this.setState({
+        selectedSuiteId: undefined,
+      }, () => push(`/my-client/test-manager/test-cases`));
+    } else{  
+      this.setState({
+        selectedSuiteId: suiteId,
+      }, () => push(`/my-client/test-manager/test-cases?suiteId=${suiteId}`));
+    }
   }
 
   isSuiteSelected = () => {
@@ -152,7 +157,7 @@ class TestCaseList extends Component {
       await this.fetchData(this.getFetchReqParams(this.props.search));
       if(this.state.testCases.length === 0) {
         let page = this.state.currentPage-1;
-        if(page > 1) {
+        if(page > 0) {
           this.pushPage(page);
         }
       }
@@ -227,6 +232,9 @@ class TestCaseList extends Component {
                           return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }}
                       >
+                        <Option key={'all'} value="all">
+                          All Suites
+                        </Option>
                         {suitesOptions}
                       </Select>
                     </FormItem>

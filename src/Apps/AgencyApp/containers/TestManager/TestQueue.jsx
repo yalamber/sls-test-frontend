@@ -110,7 +110,7 @@ class TestQueueList extends Component {
         this.setState({
           error: e,
         });
-        message.error('Unable to fetch test queue');
+        message.error('Something went wrong!');
       } finally {
         this.setState({
           loading: false
@@ -139,7 +139,7 @@ class TestQueueList extends Component {
       this.fetchData(this.getFetchReqParams(this.props.location.search));
       if(this.state.testQueues.length === 0) {
         let page = this.state.currentPage-1;
-        if(page > 1) {
+        if(page > 0) {
           this.pushPage(page);
         }
       }
@@ -150,6 +150,7 @@ class TestQueueList extends Component {
           error: e
         }
       });
+      message.error('Something went wrong!');
     } finally {
       this.setState({
         assignQueue: {
@@ -191,7 +192,7 @@ class TestQueueList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { push, goBack } = this.props;
+    const { goBack } = this.props;
     //table row selection
     const rowSelection = {
       selectedRowKeys: this.state.selectedQueue,

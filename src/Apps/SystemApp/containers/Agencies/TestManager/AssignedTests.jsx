@@ -105,7 +105,7 @@ class AssignedTestList extends Component {
 
   render() {
     const { rowStyle, colStyle, gutter } = basicStyle;
-    const { goBack, push } = this.props;
+    const { goBack } = this.props;
     return (
       <LayoutWrapper>
         <PageHeader>

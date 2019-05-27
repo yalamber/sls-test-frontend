@@ -94,7 +94,7 @@ class MemberList extends Component {
       await this.fetchData(teamId, this.state.currentPage);
       if(this.state.users.length === 0) {
         let page = this.state.currentPage-1;
-        if(page > 1) {
+        if(page > 0) {
           this.pushPage(page);
         }
       }

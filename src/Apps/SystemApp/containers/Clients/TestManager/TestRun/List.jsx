@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push, goBack } from 'connected-react-router';
-import { Row, Col, Icon, Spin } from "antd";
+import { Row, Col, Icon, Spin, message } from "antd";
 import { omit } from 'lodash';
 import qs from "qs";
 import LayoutWrapper from "@components/utility/layoutWrapper";
@@ -98,6 +98,7 @@ class TestRunList extends Component {
       this.setState({
         error: e,
       });
+      message.error('Something went wrong!');
     } finally {
       this.setState({
         loading: false
